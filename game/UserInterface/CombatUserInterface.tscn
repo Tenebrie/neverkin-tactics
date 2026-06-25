@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bpsu16vmy2ald"]
+
+[ext_resource type="Script" uid="uid://bkrqwrh14a1nx" path="res://game/UserInterface/CombatUserInterface.gd" id="1_82bxv"]
+[ext_resource type="PackedScene" uid="uid://ftb0bul2rcvt" path="res://game/UserInterface/CursorUserInterface.tscn" id="1_iippe"]
+
+[node name="CombatUI" type="Control" unique_id=1242906264]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_82bxv")
+
+[node name="CursorUI" parent="." unique_id=283925533 instance=ExtResource("1_iippe")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
