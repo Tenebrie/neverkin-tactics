@@ -20,7 +20,7 @@ size = Vector2(0.4, 0.4)
 height = 0.2
 radius = 0.2
 
-[node name="Godette" type="CharacterBody3D" unique_id=807014692]
+[node name="Godette" type="CharacterBody3D" unique_id=807014692 groups=["navigation_mesh_source_group"]]
 script = ExtResource("1_i1a14")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=405721016]

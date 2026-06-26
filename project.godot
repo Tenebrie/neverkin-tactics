@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GlobalControls="*uid://bc0txfe5vmcja"
 CombatUI="*uid://bpsu16vmy2ald"
+NavmeshManager="*uid://cdt3nwgodl7ts"
 
 [debug]
 
@@ -38,6 +39,10 @@ project/assembly_name="NeverkinTactics"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/asset-plugin/plugin.cfg", "res://addons/script-ide/plugin.cfg")
+
+[global_group]
+
+navigation_mesh_source_group=""
 
 [navigation]
 

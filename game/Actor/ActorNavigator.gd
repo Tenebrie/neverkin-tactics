@@ -23,6 +23,13 @@ func IsPathable(target: Vector3) -> bool:
 func IsMoving() -> bool:
 	return parent.velocity.length() > 0.001
 
+func Stop():
+	agent.target_position = parent.position
+
+func HardStop():
+	agent.target_position = parent.position
+	agent.get_next_path_position()
+
 func _process(delta: float) -> void:
 	if agent.is_navigation_finished():
 		var horizontal := Vector3(movementSpeed.x, 0.0, movementSpeed.z)
@@ -52,3 +59,21 @@ func _process(delta: float) -> void:
 	parent.velocity.z = movementSpeed.z
 	parent.velocity.y = 0.0
 	parent.move_and_slide()
+
+static func GetPathMovementCost(path: PackedVector3Array) -> float:
+	var totalLength := 0.0
+	for i in path.size() - 1:
+		totalLength += (path[i + 1] - path[i]).length()
+	return (roundf(totalLength * 1000) / 1000)
+
+func GetRemainingPathLength() -> float:
+	var navPath := agent.get_current_navigation_path()
+	if navPath.size() < 2:
+		return 0.0
+	var idx: int = agent.get_current_navigation_path_index()
+	idx = clampi(idx, 0, navPath.size() - 1)
+	var pos := parent.global_position
+	var total := pos.distance_to(navPath[idx])
+	for i in range(idx, navPath.size() - 1):
+		total += navPath[i].distance_to(navPath[i + 1])
+	return total

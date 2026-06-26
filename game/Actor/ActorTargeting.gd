@@ -24,6 +24,8 @@ func _process(_delta: float) -> void:
 
 	if parent.navigator.IsMoving():
 		agentPathCommitted.SetPath(parent.navigator.agent.get_current_navigation_path(), parent.position)
+	else:
+		agentPathCommitted.ClearPath()
 
 	if lockedMode != TargetMode.WalkPreview:
 		agentPathPreview.ClearPath()
@@ -33,7 +35,7 @@ func _process(_delta: float) -> void:
 
 	var previewPath := getLegalPathToMouse()
 	agentPathPreview.SetPath(previewPath, parent.position)
-	var apCount := parent.actions.GetMovementActionPointCost(getPathMovementCost(previewPath))
+	var apCount := parent.actions.GetMovementActionPointCost(ActorNavigator.GetPathMovementCost(previewPath))
 	var shownApCount := mini(apCount, parent.actions.ActionPointsAvailable)
 	CombatUI.cursor.ShowActionPointCost(shownApCount)
 	PredictedActionPointCost = shownApCount
@@ -47,6 +49,11 @@ func _input(event: InputEvent) -> void:
 	var isMouseClick = event.button_index == MOUSE_BUTTON_LEFT && event.is_pressed()
 	var isMouseRelease = event.button_index == MOUSE_BUTTON_LEFT && event.is_released()
 	var isRightMouseDown = event.button_index == MOUSE_BUTTON_RIGHT && event.is_pressed()
+
+	if parent.actions.IsPerformingAnyAction():
+		parent.actions.IssueOrder_Stop()
+		return
+
 	if isRightMouseDown:
 		lockedMode = TargetMode.None
 	elif isMouseClick:
@@ -55,9 +62,7 @@ func _input(event: InputEvent) -> void:
 		var path := getLegalPathToMouse()
 		if path.size() == 0:
 			return
-		var lastPoint := path[path.size() - 1]
-		parent.navigator.StartMovingTowards(lastPoint)
-		parent.actions.ConsumeMovement(getPathMovementCost(path))
+		parent.actions.IssueOrder_MoveTo(path)
 		lockedMode = TargetMode.None
 
 func getLegalPathToMouse() -> PackedVector3Array:
@@ -73,12 +78,6 @@ func getLegalPathToMouse() -> PackedVector3Array:
 
 	var truncatedPath := limitPathLength(previewPath, parent.actions.MovementAvailable)
 	return truncatedPath
-
-func getPathMovementCost(path: PackedVector3Array) -> float:
-	var totalLength := 0.0
-	for i in path.size() - 1:
-		totalLength += (path[i + 1] - path[i]).length()
-	return (roundf(totalLength * 1000) / 1000)
 
 #region Utilities
 func limitPathLength(points: PackedVector3Array, maxLength: float) -> PackedVector3Array:
