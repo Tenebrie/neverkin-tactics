@@ -1,15 +1,15 @@
 extends Component
 class_name ActorActions
 
-var ActionPointsUsed: int = 0
-var ActionPointsMax: int = 3
+@export var ActionPointsUsed: int = 0
+@export var ActionPointsMax: int = 3
 var ActionPointsSaved: int = 0
 var ActionPointsAvailable: int:
 	get:
 		return ActionPointsMax - ActionPointsUsed + ActionPointsSaved
 
 var MovementBuffer: float = 0.0
-var MovementSpeedPerAP: float = 1.0
+@export var MovementSpeedPerAP: float = 1.0
 var MovementAvailable: float:
 	get:
 		return MovementBuffer + MovementSpeedPerAP * ActionPointsAvailable

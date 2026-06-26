@@ -1,8 +1,12 @@
 extends Component
 class_name ActorTargeting
 
+@export var IsPlayerControlled: bool = false
+
 @onready var agentPathPreview: AgentPath = createChild(AgentPath)
 @onready var agentPathCommitted: AgentPath = createChild(AgentPath)
+
+var PredictedActionPointCost: int = 0
 
 enum TargetMode {
 	None,
@@ -15,12 +19,16 @@ func _ready() -> void:
 var lockedMode: TargetMode = TargetMode.None
 
 func _process(_delta: float) -> void:
+	if not IsPlayerControlled:
+		return
+
 	if parent.navigator.IsMoving():
 		agentPathCommitted.SetPath(parent.navigator.agent.get_current_navigation_path(), parent.position)
 
 	if lockedMode != TargetMode.WalkPreview:
 		agentPathPreview.ClearPath()
 		CombatUI.cursor.HideActionPointCost()
+		PredictedActionPointCost = 0
 		return
 
 	var previewPath := getLegalPathToMouse()
@@ -28,8 +36,12 @@ func _process(_delta: float) -> void:
 	var apCount := parent.actions.GetMovementActionPointCost(getPathMovementCost(previewPath))
 	var shownApCount := mini(apCount, parent.actions.ActionPointsAvailable)
 	CombatUI.cursor.ShowActionPointCost(shownApCount)
+	PredictedActionPointCost = shownApCount
 
 func _input(event: InputEvent) -> void:
+	if not IsPlayerControlled:
+		return
+
 	if event is not InputEventMouseButton:
 		return
 	var isMouseClick = event.button_index == MOUSE_BUTTON_LEFT && event.is_pressed()

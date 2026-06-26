@@ -12,7 +12,7 @@ config_version=5
 
 config/name="NeverkinTactics"
 run/main_scene="uid://br6t7ri07sgw2"
-config/features=PackedStringArray("4.7", "Forward Plus")
+config/features=PackedStringArray("4.8", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -22,6 +22,7 @@ CombatUI="*uid://bpsu16vmy2ald"
 
 [debug]
 
+gdscript/type_inference/infer_type_from_assignment=true
 shapes/navigation/3d/enable_edge_lines=false
 
 [display]
