@@ -1,11 +1,12 @@
 extends Component
 class_name ActorActions
 
-var ActionPointsUsed: float = 0.0
-var ActionPointsMax: float = 3.0
-var ActionPointsAvailable: float:
+var ActionPointsUsed: int = 0
+var ActionPointsMax: int = 3
+var ActionPointsSaved: int = 0
+var ActionPointsAvailable: int:
 	get:
-		return ActionPointsMax - ActionPointsUsed
+		return ActionPointsMax - ActionPointsUsed + ActionPointsSaved
 
 var MovementBuffer: float = 0.0
 var MovementSpeedPerAP: float = 1.0
@@ -19,21 +20,30 @@ func ConsumeMovement(value: float):
 			MovementBuffer -= value
 			return
 		MovementBuffer += MovementSpeedPerAP
-		ActionPointsUsed += 1
+		ConsumeActionPoints(1)
+		if ActionPointsAvailable == 0:
+			MessageLog.PrintMessage("Out of AP! Press Enter to end turn.")
 
 		if ActionPointsAvailable < 0:
 			MovementBuffer = 0.0
 			ActionPointsUsed = ActionPointsMax
 			return
 
-func GetMovementActionPointCost(value: float) -> float:
-	return maxf(0, ceil((value - MovementBuffer) / MovementSpeedPerAP))
+func GetMovementActionPointCost(value: float) -> int:
+	return maxi(0, ceil((value - MovementBuffer) / MovementSpeedPerAP))
 
-func ConsumeActionPoints(value: float):
+func ConsumeActionPoints(value: int):
+	while ActionPointsSaved > 0 && value > 0:
+		value -= 1
+		ActionPointsSaved -= 1
 	ActionPointsUsed += value
 
 func _input(event: InputEvent) -> void:
 	if (event is InputEventKey && event.keycode == Key.KEY_ENTER && event.is_pressed()):
 		MovementBuffer = 0.0
-		ActionPointsUsed = 0.0
-		print("Next turn")
+		if ActionPointsUsed < ActionPointsMax:
+			ActionPointsSaved = 1
+			MessageLog.PrintMessage("Next turn! 1 AP carried over.")
+		else:
+			MessageLog.PrintMessage("Next turn!")
+		ActionPointsUsed = 0

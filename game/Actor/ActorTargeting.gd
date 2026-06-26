@@ -26,7 +26,8 @@ func _process(_delta: float) -> void:
 	var previewPath := getLegalPathToMouse()
 	agentPathPreview.SetPath(previewPath, parent.position)
 	var apCount := parent.actions.GetMovementActionPointCost(getPathMovementCost(previewPath))
-	CombatUI.cursor.ShowActionPointCost(ceil(apCount))
+	var shownApCount := mini(apCount, parent.actions.ActionPointsAvailable)
+	CombatUI.cursor.ShowActionPointCost(shownApCount)
 
 func _input(event: InputEvent) -> void:
 	if event is not InputEventMouseButton:

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://itj2xxy42w04" path="res://scenes/StreetCentral/StreetCentral.tscn" id="1_vh257"]
 [ext_resource type="Script" uid="uid://bimanig80yrro" path="res://game/MainCamera.gd" id="2_cxv17"]
 [ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://actors/Ivera/Ivera.tscn" id="2_xy3my"]
+[ext_resource type="PackedScene" uid="uid://bnowp6ttp38gb" path="res://game/UserInterface/MessageLog/MessageLog.tscn" id="4_18ig4"]
 
 [sub_resource type="Environment" id="Environment_vh257"]
 glow_enabled = true
@@ -38,3 +39,5 @@ transform = Transform3D(0.90205246, -0.42702252, 0.06287445, 0, 0.14566869, 0.98
 
 [node name="Ivera" parent="." unique_id=911975107 instance=ExtResource("2_xy3my")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5336094, 0, 0.36182344)
+
+[node name="MessageLog" parent="." unique_id=1824792776 instance=ExtResource("4_18ig4")]
