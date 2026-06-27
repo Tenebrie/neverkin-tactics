@@ -44,12 +44,9 @@ func update() -> void:
 	$%HotkeyLabel.visible = true
 
 	hotkeyLabel.text = str(HotkeyIndex + 1)
-	iconButton.texture_normal = TrackedSkill.GetIcon()
-	#iconButton.self_modulate = Color.WHITE if TurnManager.Instance.CurrentActor == TrackedSkill else Color(0.3, 0.3, 0.3)
+	iconButton.texture_normal = TrackedSkill.Definition.IconTexture
 
 func updateModulate() -> void:
-	#if TrackedSkill == null:
-		#return
 	var isActive := TrackedSkill != null and TrackedSkill.Controller.SelectedSkill == TrackedSkill
 	var base := Color.WHITE if TrackedSkill != null else Color(0, 0, 0, 0.5)
 	if isHovered:

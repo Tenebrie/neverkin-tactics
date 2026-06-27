@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://b25jml2t7dg80"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/Skills/SkillDefinition.gd" id="1_bo7in"]
+[ext_resource type="Texture2D" uid="uid://qiqw5jfr3rkl" path="res://game/Skills/IveraClaws/IveraClaws.Icon.png" id="1_irexs"]
+
+[resource]
+script = ExtResource("1_bo7in")
+Name = "Kin Claws"
+IconTexture = ExtResource("1_irexs")
+TargetingMode = 1
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

@@ -31,7 +31,7 @@ func updateValues():
 	healthBar.Value = stats.HealthCurrent
 	healthBar.MaxValue = stats.HealthMaximum
 	healthBar.InhumanValue = stats.HealthHumanityThreshold
-	healthBar.ThreatValue = 0
+	healthBar.ThreatValue = stats.HealthThreatened
 
 	actionPointBar.Value = actions.ActionPointsAvailable
 	actionPointBar.MaxValue = max(actions.ActionPointsMax, actions.ActionPointsAvailable)

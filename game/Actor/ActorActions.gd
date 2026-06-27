@@ -90,4 +90,16 @@ func IssueOrder_Stop():
 
 	parent.navigator.HardStop()
 
+func IssueOrder_Cast(skill: Skill, targets: Skill.TargetData):
+	if skill.Definition.TargetingMode == Skill.TargetMode.ActorClick and not is_instance_valid(targets.actor):
+		printerr("Invalid cast order for skill %s. No ActorClick target provided."%skill)
+		return
+
+	var apCost = skill.ActionPointCost
+	if ActionPointsAvailable < apCost:
+		return
+
+	ConsumeActionPoints(apCost)
+	skill.Cast(targets)
+
 #endregion

@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://cxoxb77d1144u"]
 
 [ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/Actor/Actor.tscn" id="1_xj0r5"]
-[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://actors/Ivera/ivera.Token.webp" id="2_4o3iw"]
+[ext_resource type="Texture2D" uid="uid://byhwirkvtng2e" path="res://icon.svg" id="2_u3qed"]
 [ext_resource type="Resource" uid="uid://bpluyrx7ka0yv" path="res://actors/Godette/GodetteDefinition.tres" id="2_ys6q1"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ys6q1"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_57786"]
 resource_local_to_scene = true
 transparency = 1
-albedo_texture = ExtResource("2_4o3iw")
+albedo_texture = ExtResource("2_u3qed")
 texture_repeat = false
 point_size = 111.1
 
@@ -15,4 +15,4 @@ point_size = 111.1
 Definition = ExtResource("2_ys6q1")
 
 [node name="MeshInstance3D" parent="." index="0" unique_id=405721016]
-material_override = SubResource("StandardMaterial3D_ys6q1")
+material_override = SubResource("StandardMaterial3D_57786")

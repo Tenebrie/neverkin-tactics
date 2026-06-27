@@ -1,14 +1,14 @@
 extends Skill
 class_name IveraClaws
 
-func Cast() -> void:
+func _ready() -> void:
+	Definition = preload("res://game/Skills/IveraClaws/IveraClaws.tres")
+
+func Cast(targets: Skill.TargetData) -> void:
+	var actor = targets.actor
 	var effect = IveraClawsStrikeEffect.new()
-	add_child(effect)
+	get_parent().add_child(effect)
+	effect.global_position = actor.global_position
 	effect.position.y += 0.5
 	effect.Play()
-
-func GetIcon() -> Texture2D:
-	return preload("res://game/Skills/IveraClaws/IveraClaws.Icon.png")
-
-func GetTargetMode() -> TargetMode:
-	return TargetMode.DirectClick
+	actor.stats.DealDamage(1)

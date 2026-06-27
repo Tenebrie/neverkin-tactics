@@ -5,9 +5,6 @@ static var Instance: NavmeshManager:
 	get:
 		return NavmeshManagerInstance
 
-#func _ready() -> void:
-	#rebakeNavmesh.call_deferred([])
-
 func RebakeNavmeshForActor(actor: Actor) -> void:
 	rebakeNavmesh([actor])
 

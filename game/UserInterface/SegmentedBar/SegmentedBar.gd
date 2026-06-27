@@ -83,7 +83,7 @@ func render():
 
 	var unitWidth = size.x / _maxValue
 	threatBar.max_value = _maxValue
-	threatBar.value = _threatValue
+	threatBar.value = min(_threatValue, _value)
 	threatBar.position.x = (_value - _maxValue) * unitWidth
 
 	var bgStylebox: StyleBoxFlat = backgroundBar.get_theme_stylebox("background")

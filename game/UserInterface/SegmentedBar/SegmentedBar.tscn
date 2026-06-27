@@ -46,14 +46,9 @@ anchors_preset = 0
 offset_right = 200.0
 offset_bottom = 60.0
 script = ExtResource("1_piubw")
-Value = null
-MaxValue = null
-InhumanValue = null
-ThreatValue = null
-BackgroundColor = null
-FillColor = null
-InhumanColor = null
-ThreatColor = null
+Value = 8
+InhumanValue = 3
+ThreatValue = 2
 
 [node name="BackgroundBar" type="ProgressBar" parent="." unique_id=1284205580]
 layout_mode = 1
@@ -109,7 +104,7 @@ theme_override_styles/background = SubResource("StyleBoxEmpty_qp10u")
 theme_override_styles/fill = SubResource("StyleBoxFlat_qp10u")
 max_value = 10.0
 step = 1.0
-value = 1.0
+value = 2.0
 fill_mode = 1
 show_percentage = false
 

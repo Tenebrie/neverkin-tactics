@@ -38,6 +38,15 @@ func _process(_delta: float) -> void:
 	else:
 		agentPathCommitted.ClearPath()
 
+	## Skill target preview
+	if parent.Skills.SelectedSkill != null and parent.Skills.SelectedSkill.Definition.TargetingMode == Skill.TargetMode.ActorClick:
+		if Actor.Repository.Hovered.List.size() == 0:
+			return
+		var target = Actor.Repository.Hovered.List[0]
+		target.stats.ThreatenHealthForOneFrame(1)
+		#parent.Skills.SelectedSkill.CastOnActor(target)
+		return
+
 	## Show preview path
 	if lockedMode == TargetMode.WalkPreview:
 		var previewPath := getLegalPathToMouse()
@@ -62,17 +71,23 @@ func _unhandled_input(event: InputEvent) -> void:
 		parent.actions.IssueOrder_Stop()
 		return
 
-	## Some skill is chosen
-	if parent.Skills.SelectedSkill != null and isMouseClick:
-		parent.Skills.SelectedSkill.Cast()
-		return
+	var isSkillSelected = parent.Skills.SelectedSkill != null
 
-	## No skill chosen
 	if isRightMouseDown:
+		# Cancel current targeting
 		lockedMode = TargetMode.None
+		parent.Skills.Select(null)
+	elif isMouseClick and isSkillSelected:
+		# Cast selected skill
+		var targetData = Skill.TargetData.new()
+		if Actor.Repository.Hovered.List.size() > 0:
+			targetData.actor = Actor.Repository.Hovered.List[0]
+		parent.actions.IssueOrder_Cast(parent.Skills.SelectedSkill, targetData)
 	elif isMouseClick:
+		# Start movement preview
 		lockedMode = TargetMode.WalkPreview
 	elif isMouseRelease && lockedMode == TargetMode.WalkPreview:
+		# Commit movement
 		var path := getLegalPathToMouse()
 		if path.size() == 0:
 			return

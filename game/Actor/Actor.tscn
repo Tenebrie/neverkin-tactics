@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://c2oyq3jhwn2qr" path="res://game/Actor/ActorTargeting.gd" id="5_ijibt"]
 [ext_resource type="Script" uid="uid://dk1i4lds5ke56" path="res://game/Actor/ActorActions.gd" id="5_t3kgi"]
 [ext_resource type="PackedScene" uid="uid://dmghp7x8tk4pt" path="res://game/UserInterface/ActorOverheadStats/ActorOverheadStats.tscn" id="6_t3kgi"]
+[ext_resource type="Script" uid="uid://bibsejet712xq" path="res://game/Actor/ActorHoverArea.gd" id="9_m6v4q"]
 [ext_resource type="Script" uid="uid://bg4x5cqts33r6" path="res://game/Skills/SkillController.gd" id="10_nf3cw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
@@ -60,6 +61,7 @@ target_desired_distance = 0.1
 script = ExtResource("10_nf3cw")
 
 [node name="HoverArea" type="Area3D" parent="." unique_id=1667220557]
+script = ExtResource("9_m6v4q")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HoverArea" unique_id=933098665]
 shape = SubResource("SphereShape3D_kq5px")

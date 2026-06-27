@@ -30,27 +30,36 @@ func HasComponent(type: GDScript[Component]) -> bool:
 	return false
 
 func _ready() -> void:
-	Repository.Register(self)
+	Repository.All.Register(self)
 	if Definition != null:
 		var material: StandardMaterial3D = $MeshInstance3D.material_override
 		material.albedo_texture = Definition.TokenTexture
 
 func _exit_tree() -> void:
-	Repository.Unregister(self)
+	Repository.All.Unregister(self)
+
+func Destroy() -> void:
+	Repository.All.Unregister(self)
+	Repository.Hovered.Unregister(self)
+	queue_free()
 
 #region Repository
 class Repository:
-	static var AllActors: Array[Actor] = []
+	static var All: Implementation = Implementation.new()
+	static var Hovered: Implementation = Implementation.new()
 
-	static func Register(actor: Actor):
-		var index = AllActors.find(actor)
-		if index > 0:
-			return
-		AllActors.push_back(actor)
+	class Implementation:
+		var List: Array[Actor] = []
 
-	static func Unregister(actor: Actor):
-		var index = AllActors.find(actor)
-		if index < 0:
-			return
-		AllActors.remove_at(index)
+		func Register(actor: Actor):
+			var index = List.find(actor)
+			if index > 0:
+				return
+			List.push_back(actor)
+
+		func Unregister(actor: Actor):
+			var index = List.find(actor)
+			if index < 0:
+				return
+			List.remove_at(index)
 #endregion

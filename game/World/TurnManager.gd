@@ -13,7 +13,7 @@ signal CurrentActorChanged
 
 func _ready():
 	await get_tree().process_frame
-	for actor in Actor.Repository.AllActors:
+	for actor in Actor.Repository.All.List:
 		if actor.HasComponent(PlayerController):
 			PlayerControlledActors.push_back(actor)
 
@@ -40,7 +40,7 @@ func SelectCharacterByHotkey(index: int) -> void:
 		return
 
 	var selectedActor = PlayerControlledActors[index]
-	if selectedActor == null:
+	if selectedActor == null or CurrentActor == selectedActor:
 		return
 
 	CurrentActor = selectedActor
