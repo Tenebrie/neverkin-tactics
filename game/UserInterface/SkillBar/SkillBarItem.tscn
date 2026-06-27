@@ -6,7 +6,7 @@
 [sub_resource type="Shader" id="Shader_61go4"]
 code = "shader_type canvas_item;
 
-uniform float radius : hint_range(0.0, 256.0) = 48.0;
+uniform float radius : hint_range(0.0, 256.0) = 64.0;
 
 void fragment() {
 	vec2 size = 1.0 / TEXTURE_PIXEL_SIZE;        // texture size in pixels
@@ -20,7 +20,7 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bpnaq"]
 shader = SubResource("Shader_61go4")
-shader_parameter/radius = 24.0
+shader_parameter/radius = 16.00000076
 
 [node name="SkillBarItem" type="Control" unique_id=544254672]
 custom_minimum_size = Vector2(64, 64)
@@ -31,6 +31,20 @@ offset_right = 128.0
 offset_bottom = 128.0
 script = ExtResource("1_1gki0")
 
+[node name="TextureButton" type="TextureButton" parent="." unique_id=1706521116]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_bpnaq")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+texture_normal = ExtResource("2_1gki0")
+ignore_texture_size = true
+stretch_mode = 0
+
 [node name="Panel" type="Panel" parent="." unique_id=1931947988]
 layout_mode = 1
 anchors_preset = 15
@@ -39,24 +53,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureButton" type="TextureButton" parent="Panel" unique_id=1706521116]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_bpnaq")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-focus_mode = 0
-texture_normal = ExtResource("2_1gki0")
-ignore_texture_size = true
-stretch_mode = 0
-
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1985181292]
 layout_mode = 1
 anchors_preset = 3
@@ -64,15 +60,15 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -26.0
-offset_top = -39.0
+offset_left = -18.0
+offset_top = -31.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="HotkeyLabel" type="Label" parent="MarginContainer" unique_id=272396443]
 unique_name_in_owner = true

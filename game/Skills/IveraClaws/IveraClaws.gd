@@ -3,6 +3,7 @@ class_name IveraClaws
 
 func _ready() -> void:
 	Definition = preload("res://game/Skills/IveraClaws/IveraClaws.tres")
+	super._ready()
 
 func Cast(targets: Skill.TargetData) -> void:
 	var actor = targets.actor

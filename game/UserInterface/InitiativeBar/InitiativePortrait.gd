@@ -36,7 +36,7 @@ func update() -> void:
 
 	var controller: PlayerController = TrackedActor.GetComponent(PlayerController)
 	nameLabel.text = TrackedActor.stats.Name
-	hotkeyLabel.text = str(HotkeyIndex + 1)
+	hotkeyLabel.text = "F" + str(HotkeyIndex + 1)
 	portrait.texture_normal = controller.Portrait
 	portrait.self_modulate = Color.WHITE if TurnManager.Instance.CurrentActor == TrackedActor else Color(0.3, 0.3, 0.3)
 

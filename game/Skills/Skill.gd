@@ -5,6 +5,9 @@ class_name Skill
 
 @onready var Controller: SkillController = get_parent()
 
+func _ready() -> void:
+	name = Definition.Name
+
 var ActionPointCost: int:
 	get:
 		return Definition.ActionPointCost

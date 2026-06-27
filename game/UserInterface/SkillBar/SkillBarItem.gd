@@ -40,7 +40,9 @@ func update() -> void:
 	if TrackedSkill == null:
 		iconButton.texture_normal = null
 		$%HotkeyLabel.visible = false
+		$Panel.visible = true
 		return
+	$Panel.visible = false
 	$%HotkeyLabel.visible = true
 
 	hotkeyLabel.text = str(HotkeyIndex + 1)
@@ -49,13 +51,12 @@ func update() -> void:
 func updateModulate() -> void:
 	var isActive := TrackedSkill != null and TrackedSkill.Controller.SelectedSkill == TrackedSkill
 	var base := Color.WHITE if TrackedSkill != null else Color(0, 0, 0, 0.5)
+	if isActive:
+		base = base.blend(Color(0, 1, 0, 0.5))
 	if isHovered:
-		if isActive:
-			base = base.darkened(0.15)
-		else:
-			base = base.darkened(0.15)
+		base = base.darkened(0.15)
 	if iconButton.button_pressed:
 		base = base.darkened(0.2)
 
-	$Panel.self_modulate = base
+	#$Panel.self_modulate = base
 	iconButton.self_modulate = base
