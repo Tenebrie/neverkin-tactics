@@ -1,9 +1,17 @@
 extends Node
+class_name NavmeshManager
 
-func _ready() -> void:
-	_bake.call_deferred()
+static var Instance: NavmeshManager:
+	get:
+		return NavmeshManagerInstance
 
-func _bake() -> void:
+#func _ready() -> void:
+	#rebakeNavmesh.call_deferred([])
+
+func RebakeNavmeshForActor(actor: Actor) -> void:
+	rebakeNavmesh([actor])
+
+func rebakeNavmesh(exceptions: Array) -> void:
 	var total_start := Time.get_ticks_usec()
 
 	var characters := get_tree().current_scene.find_children("*", "Actor", true, false)
@@ -24,7 +32,7 @@ func _bake() -> void:
 
 		var inject_start := Time.get_ticks_usec()
 		for c: Actor in characters:
-			if c is Player:
+			if exceptions.has(c):
 				continue
 			var col: CollisionShape3D = c.get_node_or_null("CollisionShape3D")
 			if col and col.shape:

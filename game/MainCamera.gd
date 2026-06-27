@@ -7,7 +7,9 @@ extends Camera3D
 @export var offsetRangeMaxZ = 0.0
 
 func _process(delta: float) -> void:
-	var targetPosition := Player.Instance.position
+	if TurnManager.Instance.CurrentActor == null:
+		return
+	var targetPosition := TurnManager.Instance.CurrentActor.position
 	targetPosition.x = clamp(targetPosition.x, offsetRangeMinX, offsetRangeMaxX)
 	targetPosition.y = position.y
 	targetPosition.z = clamp(targetPosition.z, offsetRangeMinZ, offsetRangeMaxZ)

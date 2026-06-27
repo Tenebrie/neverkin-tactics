@@ -30,7 +30,7 @@ corner_detail = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h3jv7"]
 resource_local_to_scene = true
-bg_color = Color(0.35521987, 0.227815, 0.6435368, 1)
+bg_color = Color(0.54509807, 0, 0.54509807, 1)
 corner_radius_top_left = 6
 corner_radius_bottom_left = 6
 corner_detail = 6
@@ -46,9 +46,14 @@ anchors_preset = 0
 offset_right = 200.0
 offset_bottom = 60.0
 script = ExtResource("1_piubw")
-Value = 8
-InhumanValue = 3
-ThreatValue = 1
+Value = null
+MaxValue = null
+InhumanValue = null
+ThreatValue = null
+BackgroundColor = null
+FillColor = null
+InhumanColor = null
+ThreatColor = null
 
 [node name="BackgroundBar" type="ProgressBar" parent="." unique_id=1284205580]
 layout_mode = 1

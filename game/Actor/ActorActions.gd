@@ -61,18 +61,11 @@ func IsPerformingAnyAction() -> bool:
 	return actionQueue.size() > 0
 #endregion
 
-func _input(event: InputEvent) -> void:
-	if parent is not Player:
-		return
-
-	if (event is InputEventKey && event.keycode == Key.KEY_ENTER && event.is_pressed()):
-		MovementBuffer = 0.0
-		if ActionPointsUsed < ActionPointsMax:
-			ActionPointsSaved = 1
-			MessageLog.PrintMessage("Next turn! 1 AP carried over.")
-		else:
-			MessageLog.PrintMessage("Next turn!")
-		ActionPointsUsed = 0
+func EndTurn() -> void:
+	MovementBuffer = 0.0
+	if ActionPointsUsed < ActionPointsMax:
+		ActionPointsSaved = 1
+	ActionPointsUsed = 0
 
 #region Orders
 func IssueOrder_MoveTo(path: PackedVector3Array):

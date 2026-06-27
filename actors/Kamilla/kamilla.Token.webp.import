@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctn3qalpptmrd"
-path.bptc="res://.godot/imported/ivera.Token.webp-6298183ad5340f5183b11f2de2fb23a7.bptc.ctex"
+uid="uid://dvn23v5qlr8h2"
+path.s3tc="res://.godot/imported/kamilla.Token.webp-1bcd39c7bf3be0f1c8f01943f7c352ae.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,13 +11,13 @@ metadata={
 
 [deps]
 
-source_file="res://actors/Ivera/ivera.Token.webp"
-dest_files=["res://.godot/imported/ivera.Token.webp-6298183ad5340f5183b11f2de2fb23a7.bptc.ctex"]
+source_file="res://actors/Kamilla/kamilla.Token.webp"
+dest_files=["res://.godot/imported/kamilla.Token.webp-1bcd39c7bf3be0f1c8f01943f7c352ae.s3tc.ctex"]
 
 [params]
 
 compress/mode=2
-compress/high_quality=true
+compress/high_quality=false
 compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0

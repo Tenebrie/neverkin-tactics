@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://cj0ifr4pf1srw"]
+
+[ext_resource type="Script" uid="uid://dlpk1jf2ghjm2" path="res://game/Actor/Actor.gd" id="1_s4ik7"]
+[ext_resource type="Texture2D" uid="uid://dvn23v5qlr8h2" path="res://actors/Kamilla/kamilla.Token.webp" id="2_s4ik7"]
+[ext_resource type="Script" uid="uid://bwyipm7pkrsw1" path="res://game/Actor/ActorStats.gd" id="3_gsrg5"]
+[ext_resource type="Script" uid="uid://dk1i4lds5ke56" path="res://game/Actor/ActorActions.gd" id="4_ckru6"]
+[ext_resource type="Script" uid="uid://bs8vmait25uo8" path="res://game/Actor/ActorNavigator.gd" id="5_f3x7g"]
+[ext_resource type="Script" uid="uid://c2oyq3jhwn2qr" path="res://game/Actor/ActorTargeting.gd" id="6_gbkim"]
+[ext_resource type="PackedScene" uid="uid://dmghp7x8tk4pt" path="res://game/UserInterface/ActorOverheadStats/ActorOverheadStats.tscn" id="7_7yw1w"]
+[ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/Player/PlayerController.gd" id="8_o02g8"]
+[ext_resource type="Texture2D" uid="uid://dnx6v7s1conns" path="res://actors/Kamilla/kamilla.Avatar.webp" id="9_r172d"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
+transparency = 1
+albedo_texture = ExtResource("2_s4ik7")
+texture_repeat = false
+point_size = 111.1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_640ex"]
+size = Vector2(0.4, 0.4)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_05s0d"]
+height = 0.2
+radius = 0.2
+
+[node name="Kamilla" type="CharacterBody3D" unique_id=807014692]
+script = ExtResource("1_s4ik7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=405721016]
+material_override = SubResource("StandardMaterial3D_ukbnj")
+mesh = SubResource("PlaneMesh_640ex")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1364732436]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004760742, 0)
+shape = SubResource("CylinderShape3D_05s0d")
+
+[node name="ActorStats" type="Node" parent="." unique_id=1645121309]
+script = ExtResource("3_gsrg5")
+Name = "Kamilla"
+HealthMaximum = 5
+HealthHumanityThreshold = 1
+
+[node name="ActorActions" type="Node" parent="." unique_id=1857335080]
+script = ExtResource("4_ckru6")
+MovementSpeedPerAP = 1.5
+
+[node name="ActorNavigator" type="Node" parent="." unique_id=1960299382]
+script = ExtResource("5_f3x7g")
+
+[node name="ActorTargeting" type="Node" parent="." unique_id=1741065242]
+script = ExtResource("6_gbkim")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1615640899]
+path_desired_distance = 0.1
+target_desired_distance = 0.1
+
+[node name="ActorOverheadStats" parent="." unique_id=115536281 instance=ExtResource("7_7yw1w")]
+
+[node name="PlayerController" type="Node" parent="." unique_id=568777957]
+script = ExtResource("8_o02g8")
+Portrait = ExtResource("9_r172d")

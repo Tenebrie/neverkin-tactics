@@ -20,11 +20,24 @@ text = "Ivera"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
-FillColor = null
+Value = 8
+MaxValue = 10
+InhumanValue = 3
+ThreatValue = 2
+BackgroundColor = Color(0.102, 0.102, 0.102, 0.302)
+FillColor = Color(0, 0.39215687, 0, 1)
+InhumanColor = Color(0.54509807, 0, 0.54509807, 1)
+ThreatColor = Color(0.54509807, 0, 0, 1)
 
 [node name="ActionPointBar" parent="VBoxContainer" unique_id=1588530800 instance=ExtResource("2_171gv")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
-FillColor = null
-InhumanColor = Color(0.5073623, 0.25022164, 0.054183878, 1)
+Value = 8
+MaxValue = 10
+InhumanValue = 3
+ThreatValue = 2
+BackgroundColor = Color(0.102, 0.102, 0.102, 0.302)
+FillColor = Color(0, 0.39215687, 0, 1)
+InhumanColor = Color(0.54509807, 0, 0.54509807, 1)
+ThreatColor = Color(0.54509807, 0, 0, 1)

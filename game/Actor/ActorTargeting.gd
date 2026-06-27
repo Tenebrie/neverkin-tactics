@@ -1,8 +1,6 @@
 extends Component
 class_name ActorTargeting
 
-@export var IsPlayerControlled: bool = false
-
 @onready var agentPathPreview: AgentPath = createChild(AgentPath)
 @onready var agentPathCommitted: AgentPath = createChild(AgentPath)
 
@@ -15,11 +13,15 @@ enum TargetMode {
 
 func _ready() -> void:
 	agentPathPreview.LineColor = Color(0.0, 0.0, 0.0, 0.8)
+	TurnManager.Instance.CurrentActorChanged.connect(func():
+		agentPathPreview.ClearPath()
+		lockedMode = TargetMode.None
+	)
 
 var lockedMode: TargetMode = TargetMode.None
 
 func _process(_delta: float) -> void:
-	if not IsPlayerControlled:
+	if not parent.IsPlayerControlled:
 		return
 
 	if parent.navigator.IsMoving():
@@ -40,8 +42,8 @@ func _process(_delta: float) -> void:
 	CombatUI.cursor.ShowActionPointCost(shownApCount)
 	PredictedActionPointCost = shownApCount
 
-func _input(event: InputEvent) -> void:
-	if not IsPlayerControlled:
+func _unhandled_input(event: InputEvent) -> void:
+	if not parent.IsPlayerControlled:
 		return
 
 	if event is not InputEventMouseButton:
