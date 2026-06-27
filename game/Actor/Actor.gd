@@ -1,3 +1,4 @@
+@tool
 class_name Actor
 extends CharacterBody3D
 
@@ -30,6 +31,9 @@ func HasComponent(type: GDScript[Component]) -> bool:
 
 func _ready() -> void:
 	Repository.Register(self)
+	if Definition != null:
+		var material: StandardMaterial3D = $MeshInstance3D.material_override
+		material.albedo_texture = Definition.TokenTexture
 
 func _exit_tree() -> void:
 	Repository.Unregister(self)

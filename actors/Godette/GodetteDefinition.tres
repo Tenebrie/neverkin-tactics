@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://bpluyrx7ka0yv"]
+
+[ext_resource type="Texture2D" uid="uid://byhwirkvtng2e" path="res://icon.svg" id="1_bjopc"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/Actor/ActorDefinition.gd" id="4_6ui04"]
+
+[resource]
+script = ExtResource("4_6ui04")
+Name = "Godot"
+TokenTexture = ExtResource("1_bjopc")
+AvatarTexture = ExtResource("1_bjopc")
+HealthMaximum = 4
+ActionPointsMax = 2
+metadata/_custom_type_script = "uid://xdmrao02bm7l"

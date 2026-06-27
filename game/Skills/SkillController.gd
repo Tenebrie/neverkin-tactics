@@ -3,6 +3,10 @@ class_name SkillController
 
 var SelectedSkill: Skill = null
 
+func _ready() -> void:
+	for skill in parent.Definition.Skills:
+		Add(skill.new())
+
 func Add(ability: Skill) -> void:
 	add_child(ability)
 

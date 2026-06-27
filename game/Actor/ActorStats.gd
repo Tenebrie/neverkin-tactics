@@ -1,11 +1,14 @@
 extends Component
 class_name ActorStats
 
-@export var Name: String = "Unknown"
+var Name: String:
+	get: return parent.Definition.Name
 
-@export var HealthDamageTaken: int = 0
-@export var HealthMaximum: int = 3
-@export var HealthHumanityThreshold: int = 0
+var HealthDamageTaken: int = 0
+var HealthMaximum: int:
+	get: return parent.Definition.HealthMaximum
+var HealthHumanityThreshold: int:
+	get: return parent.Definition.HealthHumanityThreshold
 
 var HealthCurrent: int:
 	get:

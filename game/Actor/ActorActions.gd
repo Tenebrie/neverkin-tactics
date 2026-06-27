@@ -1,9 +1,12 @@
 extends Component
 class_name ActorActions
 
-@export var ActionPointsUsed: int = 0
-@export var ActionPointsMax: int = 3
+var ActionPointsUsed: int = 0
 var ActionPointsSaved: int = 0
+
+var ActionPointsMax: int:
+	get: return parent.Definition.ActionPointsMax
+
 var ActionPointsAvailable: int:
 	get:
 		return ActionPointsMax - ActionPointsUsed + ActionPointsSaved

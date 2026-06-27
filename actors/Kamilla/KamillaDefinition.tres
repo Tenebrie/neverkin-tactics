@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://86yotqi3o76i"]
+
+[ext_resource type="Texture2D" uid="uid://dnx6v7s1conns" path="res://actors/Kamilla/kamilla.Avatar.webp" id="1_kb7sr"]
+[ext_resource type="Texture2D" uid="uid://dvn23v5qlr8h2" path="res://actors/Kamilla/kamilla.Token.webp" id="3_4wdsm"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/Actor/ActorDefinition.gd" id="4_20xv1"]
+
+[resource]
+script = ExtResource("4_20xv1")
+IsControllable = true
+Name = "Kamilla"
+TokenTexture = ExtResource("3_4wdsm")
+AvatarTexture = ExtResource("1_kb7sr")
+HealthMaximum = 5
+HealthHumanityThreshold = 1
+RenderPriority = 8
+metadata/_custom_type_script = "uid://xdmrao02bm7l"

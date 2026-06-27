@@ -7,11 +7,10 @@
 [ext_resource type="Script" uid="uid://c2oyq3jhwn2qr" path="res://game/Actor/ActorTargeting.gd" id="5_ijibt"]
 [ext_resource type="Script" uid="uid://dk1i4lds5ke56" path="res://game/Actor/ActorActions.gd" id="5_t3kgi"]
 [ext_resource type="PackedScene" uid="uid://dmghp7x8tk4pt" path="res://game/UserInterface/ActorOverheadStats/ActorOverheadStats.tscn" id="6_t3kgi"]
-[ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/Player/PlayerController.gd" id="8_sidwq"]
-[ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://actors/Ivera/ivera.Avatar.webp" id="9_pnd04"]
 [ext_resource type="Script" uid="uid://bg4x5cqts33r6" path="res://game/Skills/SkillController.gd" id="10_nf3cw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
+resource_local_to_scene = true
 transparency = 1
 albedo_texture = ExtResource("1_bttaj")
 texture_repeat = false
@@ -23,6 +22,9 @@ size = Vector2(0.4, 0.4)
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_05s0d"]
 height = 0.2
 radius = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_kq5px"]
+radius = 0.25
 
 [node name="Actor" type="CharacterBody3D" unique_id=807014692]
 script = ExtResource("1_kq5px")
@@ -37,9 +39,6 @@ shape = SubResource("CylinderShape3D_05s0d")
 
 [node name="ActorStats" type="Node" parent="." unique_id=1645121309]
 script = ExtResource("3_2oekt")
-Name = "Ivera"
-HealthMaximum = 8
-HealthHumanityThreshold = 3
 
 [node name="ActorActions" type="Node" parent="." unique_id=1857335080]
 script = ExtResource("5_t3kgi")
@@ -57,10 +56,11 @@ target_desired_distance = 0.1
 
 [node name="ActorOverheadStats" parent="." unique_id=115536281 instance=ExtResource("6_t3kgi")]
 
-[node name="PlayerController" type="Node" parent="." unique_id=1218155566]
-script = ExtResource("8_sidwq")
-CharacterPriority = 10
-Portrait = ExtResource("9_pnd04")
-
 [node name="SkillController" type="Node3D" parent="." unique_id=1400504293]
 script = ExtResource("10_nf3cw")
+
+[node name="HoverArea" type="Area3D" parent="." unique_id=1667220557]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HoverArea" unique_id=933098665]
+shape = SubResource("SphereShape3D_kq5px")
+debug_color = Color(0.58431375, 0.54901963, 0, 0.21568628)

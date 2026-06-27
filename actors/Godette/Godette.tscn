@@ -1,59 +1,18 @@
-[gd_scene format=3 uid="uid://jky74bsybtgg"]
+[gd_scene format=3 uid="uid://cxoxb77d1144u"]
 
-[ext_resource type="Script" uid="uid://dlpk1jf2ghjm2" path="res://game/Actor/Actor.gd" id="1_i1a14"]
-[ext_resource type="Texture2D" uid="uid://byhwirkvtng2e" path="res://icon.svg" id="2_u3qed"]
-[ext_resource type="Script" uid="uid://bwyipm7pkrsw1" path="res://game/Actor/ActorStats.gd" id="3_7ghcg"]
-[ext_resource type="Script" uid="uid://dk1i4lds5ke56" path="res://game/Actor/ActorActions.gd" id="4_sxl4m"]
-[ext_resource type="Script" uid="uid://bs8vmait25uo8" path="res://game/Actor/ActorNavigator.gd" id="5_frd4r"]
-[ext_resource type="Script" uid="uid://c2oyq3jhwn2qr" path="res://game/Actor/ActorTargeting.gd" id="6_w3tn5"]
-[ext_resource type="PackedScene" uid="uid://dmghp7x8tk4pt" path="res://game/UserInterface/ActorOverheadStats/ActorOverheadStats.tscn" id="7_48e22"]
-[ext_resource type="Script" uid="uid://bg4x5cqts33r6" path="res://game/Skills/SkillController.gd" id="8_u3qed"]
+[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/Actor/Actor.tscn" id="1_xj0r5"]
+[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://actors/Ivera/ivera.Token.webp" id="2_4o3iw"]
+[ext_resource type="Resource" uid="uid://bpluyrx7ka0yv" path="res://actors/Godette/GodetteDefinition.tres" id="2_ys6q1"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ys6q1"]
+resource_local_to_scene = true
 transparency = 1
-albedo_texture = ExtResource("2_u3qed")
+albedo_texture = ExtResource("2_4o3iw")
+texture_repeat = false
 point_size = 111.1
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_640ex"]
-size = Vector2(0.4, 0.4)
+[node name="Godette" unique_id=807014692 instance=ExtResource("1_xj0r5")]
+Definition = ExtResource("2_ys6q1")
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_05s0d"]
-height = 0.2
-radius = 0.2
-
-[node name="Godette" type="CharacterBody3D" unique_id=807014692 groups=["navigation_mesh_source_group"]]
-script = ExtResource("1_i1a14")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=405721016]
-material_override = SubResource("StandardMaterial3D_ukbnj")
-mesh = SubResource("PlaneMesh_640ex")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1364732436]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004760742, 0)
-shape = SubResource("CylinderShape3D_05s0d")
-
-[node name="ActorStats" type="Node" parent="." unique_id=1645121309]
-script = ExtResource("3_7ghcg")
-Name = "Godot"
-HealthMaximum = 4
-
-[node name="ActorActions" type="Node" parent="." unique_id=1857335080]
-script = ExtResource("4_sxl4m")
-ActionPointsMax = 2
-MovementSpeedPerAP = 2.0
-
-[node name="ActorNavigator" type="Node" parent="." unique_id=1960299382]
-script = ExtResource("5_frd4r")
-
-[node name="ActorTargeting" type="Node" parent="." unique_id=1741065242]
-script = ExtResource("6_w3tn5")
-
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1615640899]
-path_desired_distance = 0.1
-target_desired_distance = 0.1
-
-[node name="ActorOverheadStats" parent="." unique_id=115536281 instance=ExtResource("7_48e22")]
-
-[node name="SkillController" type="Node3D" parent="." unique_id=609360389]
-script = ExtResource("8_u3qed")
-metadata/_custom_type_script = "uid://bg4x5cqts33r6"
+[node name="MeshInstance3D" parent="." index="0" unique_id=405721016]
+material_override = SubResource("StandardMaterial3D_ys6q1")

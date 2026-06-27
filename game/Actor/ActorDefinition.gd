@@ -1,3 +1,4 @@
+@tool
 extends Resource
 class_name ActorDefinition
 
@@ -12,3 +13,5 @@ class_name ActorDefinition
 @export var MovementSpeedPerActionPoint: float = 2.0
 
 @export var RenderPriority: int = 0
+
+@export var Skills: Array[GDScript[Skill]] = []
