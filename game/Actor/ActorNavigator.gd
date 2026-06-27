@@ -4,7 +4,7 @@ class_name ActorNavigator
 @onready var agent: NavigationAgent3D = parent.get_node("NavigationAgent3D")
 
 var maxMovementSpeed := 1.8
-var maxAcceleration := 10.0
+var maxAcceleration := 20.0
 var maxDeceleration := 20.0
 var movementSpeed := Vector3.ZERO
 

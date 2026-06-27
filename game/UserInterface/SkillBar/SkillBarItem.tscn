@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://u7dn2gxvlbkk"]
+
+[ext_resource type="Script" uid="uid://drubw221xpify" path="res://game/UserInterface/SkillBar/SkillBarItem.gd" id="1_1gki0"]
+[ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://actors/Ivera/ivera.Avatar.webp" id="2_1gki0"]
+
+[sub_resource type="Shader" id="Shader_61go4"]
+code = "shader_type canvas_item;
+
+uniform float radius : hint_range(0.0, 256.0) = 48.0;
+
+void fragment() {
+	vec2 size = 1.0 / TEXTURE_PIXEL_SIZE;        // texture size in pixels
+	vec2 pos = UV * size;
+	vec2 corner = min(pos, size - pos);          // dist to nearest edge per axis
+	if (corner.x < radius && corner.y < radius) {
+		float d = length(vec2(radius) - corner);
+		COLOR.a *= 1.0 - smoothstep(radius - 1.0, radius + 1.0, d);
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bpnaq"]
+shader = SubResource("Shader_61go4")
+shader_parameter/radius = 24.0
+
+[node name="SkillBarItem" type="Control" unique_id=544254672]
+custom_minimum_size = Vector2(64, 64)
+custom_maximum_size = Vector2(64, 64)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 128.0
+offset_bottom = 128.0
+script = ExtResource("1_1gki0")
+
+[node name="Panel" type="Panel" parent="." unique_id=1931947988]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureButton" type="TextureButton" parent="Panel" unique_id=1706521116]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_bpnaq")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+texture_normal = ExtResource("2_1gki0")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1985181292]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -26.0
+offset_top = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HotkeyLabel" type="Label" parent="MarginContainer" unique_id=272396443]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1

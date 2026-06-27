@@ -42,3 +42,37 @@ static func GetClassAncestors(script: GDScript) -> Dictionary:
 		cur = cur.get_base_script()
 	_classAncestorDict[script] = elementSet
 	return elementSet
+
+static func LimitPathLength(points: PackedVector3Array, maxLength: float) -> PackedVector3Array:
+	if points.size() < 2 or maxLength <= 0.0:
+		return PackedVector3Array() if points.is_empty() else PackedVector3Array([points[0]])
+
+	var result := PackedVector3Array([points[0]])
+	var remaining := maxLength
+
+	for i in range(1, points.size()):
+		var seg := points[i] - points[i - 1]
+		var seg_len := seg.length()
+
+		if seg_len <= remaining:
+			result.append(points[i])
+			remaining -= seg_len
+		else:
+			result.append(points[i - 1] + seg * (remaining / seg_len))
+			break
+
+	return result
+
+static func GetMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
+	var camera := viewport.get_camera_3d()
+	var mouse_pos := viewport.get_mouse_position()
+	var origin := camera.project_ray_origin(mouse_pos)
+	var direction := camera.project_ray_normal(mouse_pos)
+
+	# Intersect with Y=0 plane
+	var plane := Plane(Vector3.UP, 0.0)
+	var intersection: Vector3 = plane.intersects_ray(origin, direction)
+
+	if intersection:
+		return intersection
+	return Vector3.ZERO

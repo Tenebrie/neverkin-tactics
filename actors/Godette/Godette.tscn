@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://bs8vmait25uo8" path="res://game/Actor/ActorNavigator.gd" id="5_frd4r"]
 [ext_resource type="Script" uid="uid://c2oyq3jhwn2qr" path="res://game/Actor/ActorTargeting.gd" id="6_w3tn5"]
 [ext_resource type="PackedScene" uid="uid://dmghp7x8tk4pt" path="res://game/UserInterface/ActorOverheadStats/ActorOverheadStats.tscn" id="7_48e22"]
+[ext_resource type="Script" uid="uid://bg4x5cqts33r6" path="res://game/Skills/SkillController.gd" id="8_u3qed"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
 transparency = 1
@@ -52,3 +53,7 @@ path_desired_distance = 0.1
 target_desired_distance = 0.1
 
 [node name="ActorOverheadStats" parent="." unique_id=115536281 instance=ExtResource("7_48e22")]
+
+[node name="SkillController" type="Node3D" parent="." unique_id=609360389]
+script = ExtResource("8_u3qed")
+metadata/_custom_type_script = "uid://bg4x5cqts33r6"

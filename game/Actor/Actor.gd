@@ -1,10 +1,13 @@
 class_name Actor
 extends CharacterBody3D
 
+@export var Definition: ActorDefinition
+
 @onready var stats: ActorStats = $ActorStats
 @onready var actions: ActorActions = $ActorActions
 @onready var navigator: ActorNavigator = $ActorNavigator
 @onready var targeting: ActorTargeting = $ActorTargeting
+@onready var Skills: SkillController = $SkillController
 
 ## This actor is currently selected and being controlled by the player
 var IsPlayerControlled: bool:

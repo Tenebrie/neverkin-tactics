@@ -8,7 +8,7 @@ extends Node3D
 		material.albedo_color = value
 
 @export var LineWidth := 0.02
-@export var HeightOffset := -0.01
+@export var HeightOffset := -0.001
 
 var meshInstance: MeshInstance3D
 var immediateMesh: ImmediateMesh

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://dnf8uhhthqlbx"]
+
+[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://actors/Ivera/ivera.Token.webp" id="1_2wdr7"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/Actor/ActorDefinition.gd" id="1_n1w0k"]
+
+[resource]
+script = ExtResource("1_n1w0k")
+Name = "Ivera"
+TokenTexture = ExtResource("1_2wdr7")
+HealthMaximum = 7
+HealthHumanityThreshold = 3
+metadata/_custom_type_script = "uid://xdmrao02bm7l"

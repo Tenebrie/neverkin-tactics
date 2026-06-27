@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dmghp7x8tk4pt" path="res://game/UserInterface/ActorOverheadStats/ActorOverheadStats.tscn" id="7_7yw1w"]
 [ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/Player/PlayerController.gd" id="8_o02g8"]
 [ext_resource type="Texture2D" uid="uid://dnx6v7s1conns" path="res://actors/Kamilla/kamilla.Avatar.webp" id="9_r172d"]
+[ext_resource type="Script" uid="uid://bg4x5cqts33r6" path="res://game/Skills/SkillController.gd" id="10_witxp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
 transparency = 1
@@ -59,3 +60,6 @@ target_desired_distance = 0.1
 [node name="PlayerController" type="Node" parent="." unique_id=568777957]
 script = ExtResource("8_o02g8")
 Portrait = ExtResource("9_r172d")
+
+[node name="SkillController" type="Node3D" parent="." unique_id=667137167]
+script = ExtResource("10_witxp")

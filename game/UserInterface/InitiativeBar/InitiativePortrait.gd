@@ -26,7 +26,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is not InputEventKey or not event.is_pressed():
 		return
 
-	if event.keycode == Key.KEY_1 + HotkeyIndex:
+	if event.keycode == Key.KEY_F1 + HotkeyIndex:
 		onPortraitClick()
 
 func update() -> void:
