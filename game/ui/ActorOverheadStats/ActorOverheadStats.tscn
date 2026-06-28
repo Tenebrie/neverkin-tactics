@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dmghp7x8tk4pt"]
+
+[ext_resource type="Script" uid="uid://cmhowjgaa3w42" path="res://game/ui/ActorOverheadStats/ActorOverheadStats.gd" id="1_nmjte"]
+[ext_resource type="PackedScene" uid="uid://cs8ad3c61m1dk" path="res://game/ui/SegmentedBar/SegmentedBar.tscn" id="2_171gv"]
+
+[node name="ActorOverheadStats" type="CanvasLayer" unique_id=388092998]
+script = ExtResource("1_nmjte")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1394361799]
+custom_minimum_size = Vector2(150, 0)
+offset_right = 150.0
+offset_bottom = 29.0
+
+[node name="NameLabel" type="Label" parent="VBoxContainer" unique_id=1573864759]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Ivera"
+
+[node name="HealthBar" parent="VBoxContainer" unique_id=1014186041 instance=ExtResource("2_171gv")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="ActionPointBar" parent="VBoxContainer" unique_id=1588530800 instance=ExtResource("2_171gv")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2

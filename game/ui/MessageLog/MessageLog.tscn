@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bnowp6ttp38gb"]
+
+[ext_resource type="Script" uid="uid://c56q6jd10eeoa" path="res://game/ui/MessageLog/MessageLog.gd" id="1_sno24"]
+
+[node name="MessageLog" type="MarginContainer" unique_id=1824792776]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_right = 40.0
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+script = ExtResource("1_sno24")
+
+[node name="Messages" type="VBoxContainer" parent="." unique_id=934405727]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label1" type="Label" parent="Messages" unique_id=907203088]
+layout_mode = 2
+text = "Placeholder message 1"
+
+[node name="Label2" type="Label" parent="Messages" unique_id=666186707]
+layout_mode = 2
+text = "Placeholder message 2"
+
+[node name="Label3" type="Label" parent="Messages" unique_id=842738086]
+layout_mode = 2
+text = "Placeholder message 3"

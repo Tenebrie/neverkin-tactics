@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://i7uo3ra8dvfu"]
+
+[ext_resource type="Script" uid="uid://h5xoqghpsrmg" path="res://game/telegraphs/circular/CircularTelegraph.gd" id="1_5q0qf"]
+[ext_resource type="PackedScene" uid="uid://d0518ise2jvew" path="res://game/telegraphs/circular/CircleDecal.tscn" id="2_3jjub"]
+[ext_resource type="Shader" uid="uid://ccsr265pfvdgo" path="res://game/telegraphs/circular/CircleDecal.gdshader" id="3_fmm8w"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nrq6q"]
+render_priority = 0
+shader = ExtResource("3_fmm8w")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_14bhu"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_nrq6q")
+size = Vector2(1, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0hdw0"]
+
+[node name="CircularTelegraph" type="Node3D" unique_id=969002368]
+script = ExtResource("1_5q0qf")
+
+[node name="CircleDecal" parent="." unique_id=330940964 instance=ExtResource("2_3jjub")]
+mesh = SubResource("PlaneMesh_14bhu")
+
+[node name="Hitbox" type="Area3D" parent="." unique_id=266106607]
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=1771128307]
+shape = SubResource("SphereShape3D_0hdw0")

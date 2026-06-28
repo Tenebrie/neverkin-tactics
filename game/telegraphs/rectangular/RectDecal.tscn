@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://tk3jful5lm6r"]
+
+[ext_resource type="Script" uid="uid://bbqn40wgtd0ii" path="res://game/telegraphs/rectangular/RectDecal.gd" id="1_nsbf3"]
+[ext_resource type="Shader" uid="uid://dpi2kd6o15v8c" path="res://game/telegraphs/rectangular/RectDecal.gdshader" id="1_t8vyy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nrq6q"]
+render_priority = 0
+shader = ExtResource("1_t8vyy")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_8pqm6"]
+material = SubResource("ShaderMaterial_nrq6q")
+size = Vector2(1, 1)
+
+[node name="RectDecal" type="MeshInstance3D"]
+instance_shader_parameters/COLOR_B = 1.0
+instance_shader_parameters/COLOR_G = 1.0
+instance_shader_parameters/COLOR_R = 0.0
+instance_shader_parameters/OUTER_WIDTH = 0.05
+instance_shader_parameters/PROGRESS = 0.5
+instance_shader_parameters/SIZE_X = 0.5
+mesh = SubResource("PlaneMesh_8pqm6")
+script = ExtResource("1_nsbf3")

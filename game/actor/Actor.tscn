@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://bdgt33qjttv1o"]
+
+[ext_resource type="Script" uid="uid://dlpk1jf2ghjm2" path="res://game/actor/Actor.gd" id="1_ocm0e"]
+[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://actors/Ivera/ivera.Token.webp" id="2_1yc4f"]
+[ext_resource type="Script" uid="uid://bwyipm7pkrsw1" path="res://game/actor/ActorStats.gd" id="3_2qf6d"]
+[ext_resource type="Script" uid="uid://dk1i4lds5ke56" path="res://game/actor/ActorActions.gd" id="4_pe7q2"]
+[ext_resource type="Script" uid="uid://bs8vmait25uo8" path="res://game/actor/ActorNavigator.gd" id="5_gmr66"]
+[ext_resource type="Script" uid="uid://c2oyq3jhwn2qr" path="res://game/actor/ActorTargeting.gd" id="6_v5lek"]
+[ext_resource type="PackedScene" uid="uid://dmghp7x8tk4pt" path="res://game/ui/ActorOverheadStats/ActorOverheadStats.tscn" id="7_541ji"]
+[ext_resource type="Script" uid="uid://bg4x5cqts33r6" path="res://game/skills/SkillController.gd" id="8_ocm0e"]
+[ext_resource type="Script" uid="uid://bibsejet712xq" path="res://game/actor/ActorHoverArea.gd" id="9_m37al"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
+resource_local_to_scene = true
+transparency = 1
+albedo_texture = ExtResource("2_1yc4f")
+texture_repeat = false
+point_size = 111.1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_640ex"]
+size = Vector2(0.4, 0.4)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_05s0d"]
+height = 0.2
+radius = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_kq5px"]
+radius = 0.25
+
+[node name="Actor" type="CharacterBody3D" unique_id=807014692]
+script = ExtResource("1_ocm0e")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=405721016]
+material_override = SubResource("StandardMaterial3D_ukbnj")
+mesh = SubResource("PlaneMesh_640ex")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1364732436]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004760742, 0)
+shape = SubResource("CylinderShape3D_05s0d")
+
+[node name="ActorStats" type="Node" parent="." unique_id=1645121309]
+script = ExtResource("3_2qf6d")
+
+[node name="ActorActions" type="Node" parent="." unique_id=1857335080]
+script = ExtResource("4_pe7q2")
+MovementSpeedPerAP = 1.5
+
+[node name="ActorNavigator" type="Node" parent="." unique_id=1960299382]
+script = ExtResource("5_gmr66")
+
+[node name="ActorTargeting" type="Node" parent="." unique_id=1741065242]
+script = ExtResource("6_v5lek")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1615640899]
+path_desired_distance = 0.1
+target_desired_distance = 0.1
+
+[node name="ActorOverheadStats" parent="." unique_id=115536281 instance=ExtResource("7_541ji")]
+
+[node name="SkillController" type="Node3D" parent="." unique_id=1400504293]
+script = ExtResource("8_ocm0e")
+
+[node name="HoverArea" type="Area3D" parent="." unique_id=1667220557]
+script = ExtResource("9_m37al")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HoverArea" unique_id=933098665]
+shape = SubResource("SphereShape3D_kq5px")
+debug_color = Color(0.58431375, 0.54901963, 0, 0.21568628)

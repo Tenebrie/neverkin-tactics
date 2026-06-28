@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://h3ilmtoftd77"]
+
+[ext_resource type="Script" uid="uid://0wu8n6iycwe6" path="res://game/telegraphs/rectangular/RectangularTelegraph.gd" id="1_djgw1"]
+[ext_resource type="PackedScene" uid="uid://tk3jful5lm6r" path="res://game/telegraphs/rectangular/RectDecal.tscn" id="2_prlsc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6bur2"]
+
+[node name="RectangularTelegraph" type="Node3D" unique_id=1610440158]
+script = ExtResource("1_djgw1")
+
+[node name="RectDecal" parent="." unique_id=1725867902 instance=ExtResource("2_prlsc")]
+
+[node name="Hitbox" type="Area3D" parent="." unique_id=303486992]
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=449267521]
+shape = SubResource("BoxShape3D_6bur2")

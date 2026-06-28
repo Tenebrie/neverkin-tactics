@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://b0v2yj4jouojo"]
+
+[ext_resource type="Script" uid="uid://c5lclst24baif" path="res://game/ui/InitiativeBar/InitiativePortrait.gd" id="1_0nlr4"]
+[ext_resource type="Texture2D" uid="uid://dnx6v7s1conns" path="res://actors/Kamilla/kamilla.Avatar.webp" id="2_xmgn0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lqa7y"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_detail = 5
+
+[node name="InitiativePortrait" type="Control" unique_id=544254672]
+custom_minimum_size = Vector2(96, 96)
+custom_maximum_size = Vector2(96, 96)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 128.0
+offset_bottom = 128.0
+script = ExtResource("1_0nlr4")
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=1706521116]
+custom_minimum_size = Vector2(96, 96)
+custom_maximum_size = Vector2(96, 96)
+layout_mode = 1
+offset_right = 96.0
+offset_bottom = 96.0
+focus_mode = 0
+texture_normal = ExtResource("2_xmgn0")
+stretch_mode = 0
+
+[node name="Panel" type="Panel" parent="." unique_id=1651977254]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lqa7y")
+
+[node name="NameLabel" type="Label" parent="Panel" unique_id=624669307]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 14
+text = "Character"
+vertical_alignment = 1
+
+[node name="HotkeyLabel" type="Label" parent="Panel" unique_id=272396443]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 76.0
+offset_top = -1.0
+offset_right = -0.5
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+text = "F1"
+horizontal_alignment = 1
+vertical_alignment = 1

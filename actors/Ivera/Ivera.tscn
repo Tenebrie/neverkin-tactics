@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://ylc6aguob6mn"]
 
-[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/Actor/Actor.tscn" id="1_hssp6"]
+[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_hssp6"]
 [ext_resource type="Resource" uid="uid://dnf8uhhthqlbx" path="res://actors/Ivera/IveraDefinition.tres" id="2_puyvs"]
 [ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://actors/Ivera/ivera.Token.webp" id="3_05s0d"]
-[ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/Player/PlayerController.gd" id="4_ijibt"]
+[ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/player/PlayerController.gd" id="4_ijibt"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3kgi"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_05s0d"]
 resource_local_to_scene = true
 transparency = 1
 albedo_texture = ExtResource("3_05s0d")
@@ -16,7 +16,7 @@ point_size = 111.1
 Definition = ExtResource("2_puyvs")
 
 [node name="MeshInstance3D" parent="." index="0" unique_id=405721016]
-material_override = SubResource("StandardMaterial3D_t3kgi")
+material_override = SubResource("StandardMaterial3D_05s0d")
 
 [node name="PlayerController" type="Node" parent="." index="10" unique_id=80011005]
 script = ExtResource("4_ijibt")

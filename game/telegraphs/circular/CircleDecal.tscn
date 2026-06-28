@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://d0518ise2jvew"]
+
+[ext_resource type="Shader" uid="uid://ccsr265pfvdgo" path="res://game/telegraphs/circular/CircleDecal.gdshader" id="1_mgp7j"]
+[ext_resource type="Script" uid="uid://ox3ae2oau0mx" path="res://game/telegraphs/circular/CircleDecal.gd" id="1_sq4y0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nrq6q"]
+render_priority = 0
+shader = ExtResource("1_mgp7j")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_8pqm6"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_nrq6q")
+size = Vector2(1, 1)
+
+[node name="CircleDecal" type="MeshInstance3D"]
+instance_shader_parameters/COLOR_B = 0.7
+instance_shader_parameters/COLOR_G = 0.7
+instance_shader_parameters/COLOR_R = 0.0
+instance_shader_parameters/FADE = 1.0
+instance_shader_parameters/INNER_ALPHA = 1.0
+instance_shader_parameters/OUTER_WIDTH = 0.05
+instance_shader_parameters/PROGRESS = 0.5
+instance_shader_parameters/RADIUS = 0.5
+instance_shader_parameters/SCALE = 1.0
+instance_shader_parameters/SECTOR = 3.15
+mesh = SubResource("PlaneMesh_8pqm6")
+script = ExtResource("1_sq4y0")
