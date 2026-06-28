@@ -3,7 +3,12 @@ class_name SkillController
 
 var SelectedSkill: Skill = null
 
+signal SelectedSkillChanged(skill: Skill)
+
 func _ready() -> void:
+	TurnManager.Instance.CurrentActorChanged.connect(func():
+		Select(null)
+	)
 	for skill in parent.Definition.Skills:
 		Add(skill.new())
 
@@ -44,20 +49,8 @@ func GetByIndex(index: int) -> Skill:
 func SelectByIndex(index: int) -> void:
 	var skill = GetByIndex(index)
 	SelectedSkill = skill
+	SelectedSkillChanged.emit(skill)
 
 func Select(skill: Skill) -> void:
 	SelectedSkill = skill
-
-func GetMouseWorldPlanePosition() -> Vector3:
-	var camera := get_viewport().get_camera_3d()
-	var mouse_pos := get_viewport().get_mouse_position()
-	var origin := camera.project_ray_origin(mouse_pos)
-	var direction := camera.project_ray_normal(mouse_pos)
-
-	# Intersect with Y=0 plane
-	var plane := Plane(Vector3.UP, 0.0)
-	var intersection: Vector3 = plane.intersects_ray(origin, direction)
-
-	if intersection:
-		return intersection
-	return Vector3.ZERO
+	SelectedSkillChanged.emit(skill)

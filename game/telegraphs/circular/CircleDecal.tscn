@@ -12,7 +12,7 @@ resource_local_to_scene = true
 material = SubResource("ShaderMaterial_nrq6q")
 size = Vector2(1, 1)
 
-[node name="CircleDecal" type="MeshInstance3D"]
+[node name="CircleDecal" type="MeshInstance3D" unique_id=1910679414]
 instance_shader_parameters/COLOR_B = 0.7
 instance_shader_parameters/COLOR_G = 0.7
 instance_shader_parameters/COLOR_R = 0.0

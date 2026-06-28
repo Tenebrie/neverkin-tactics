@@ -4,7 +4,13 @@ class_name SkillBarItem
 @onready var hotkeyLabel: Label = $%HotkeyLabel
 @onready var iconButton: TextureButton = $%TextureButton
 
-var TrackedSkill: Skill = null
+var TrackedSkill: Skill:
+	set(value):
+		if TrackedSkill != null:
+			TrackedSkill.Controller.SelectedSkillChanged.disconnect(updateModulate)
+		TrackedSkill = value
+		if TrackedSkill != null:
+			TrackedSkill.Controller.SelectedSkillChanged.connect(updateModulate)
 var HotkeyIndex: int = 0
 
 var isHovered: bool = false
@@ -27,7 +33,6 @@ func onPortraitClick() -> void:
 		TrackedSkill.Controller.Select(null)
 	else:
 		TrackedSkill.Controller.SelectByIndex(HotkeyIndex)
-	updateModulate()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is not InputEventKey or not event.is_pressed():

@@ -39,12 +39,11 @@ func _process(_delta: float) -> void:
 		agentPathCommitted.ClearPath()
 
 	## Skill target preview
-	if parent.Skills.SelectedSkill != null and parent.Skills.SelectedSkill.Definition.TargetingMode == Skill.TargetMode.ActorClick:
+	if parent.Skills.SelectedSkill != null and parent.Skills.SelectedSkill.Definition.TargetingMode == Skill.TargetMode.ActorSingle:
 		if Actor.Repository.Hovered.List.size() == 0:
 			return
 		var target = Actor.Repository.Hovered.List[0]
 		target.stats.ThreatenHealthForOneFrame(1)
-		#parent.Skills.SelectedSkill.CastOnActor(target)
 		return
 
 	## Show preview path

@@ -9,7 +9,7 @@ var CurrentActor: Actor = null
 var PlayerControlledActors: Array[Actor] = []
 
 signal KnownActorsChanged
-signal CurrentActorChanged
+signal CurrentActorChanged(actor: Actor, previous: Actor)
 
 func _ready():
 	await get_tree().process_frame
@@ -20,10 +20,11 @@ func _ready():
 	if PlayerControlledActors.size() == 0:
 		return
 
+	var previousActor = CurrentActor
 	CurrentActor = PlayerControlledActors[0]
 	NavmeshManager.Instance.RebakeNavmeshForActor(CurrentActor)
 	KnownActorsChanged.emit()
-	CurrentActorChanged.emit()
+	CurrentActorChanged.emit(CurrentActor, previousActor)
 
 func EndTurn() -> void:
 	for actor in PlayerControlledActors:
@@ -43,9 +44,10 @@ func SelectCharacterByHotkey(index: int) -> void:
 	if selectedActor == null or CurrentActor == selectedActor:
 		return
 
+	var previousActor = CurrentActor
 	CurrentActor = selectedActor
 	NavmeshManager.Instance.RebakeNavmeshForActor(CurrentActor)
-	CurrentActorChanged.emit()
+	CurrentActorChanged.emit(CurrentActor, previousActor)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is not InputEventKey or not event.is_pressed():

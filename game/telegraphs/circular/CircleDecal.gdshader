@@ -50,16 +50,16 @@ void fragment()
 		if (d2 < 0.5)
 			ALPHA = max(ALPHA, min(1, toLimit * float(25)) * 0.5);
 	}
-	
+
 	if (dist < effectiveRadius)
 	{
 		ALBEDO = ALBEDO * vec3(COLOR_R * 0.5, COLOR_G * 0.5, COLOR_B * 0.5);
 		ALPHA = max(ALPHA, float(0.05 * INNER_ALPHA));
 	}
-	
+
 	vec3 world = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	vec3 pos = (inverse(MODEL_MATRIX) * vec4((world), 1.0)).xyz;
-	
+
 	// Sector / cone
 	if (SECTOR < PI)
 	{
@@ -72,10 +72,10 @@ void fragment()
 		{
 			vec3 leftLineVector = vec3(-sin(-SECTOR) * -1.0, 0.0, cos(-SECTOR) * -1.0);
 			vec3 rightLineVector = vec3(-sin(SECTOR) * -1.0, 0.0, cos(SECTOR) * -1.0);
-			
+
 			float distToLeft = dfLine(leftLineVector.xz, pos.xz);
 			float distToRight = dfLine(rightLineVector.xz, pos.xz);
-			
+
 			float distToCompare = angle < 0.0 ? distToLeft : distToRight;
 			if (distToCompare < (OUTER_WIDTH * 0.8))
 			{
@@ -88,7 +88,7 @@ void fragment()
 				{
 					ALPHA += (1.0 - d2) * 2.0;
 				}
-				
+
 				if (outerEdge)
 				{
 					float d3 = (dist - effectiveRadius + OUTER_WIDTH) * 1.0 / OUTER_WIDTH;
@@ -101,18 +101,17 @@ void fragment()
 			}
 		}
 	}
-	
+
 	ALPHA *= FADE;
 	EMISSION = ALBEDO * 2.0;
-	
+
 	if (dist > effectiveRadius)
 	{
 		ALPHA = 0.0;
 	}
-	
+
 	if (CULL_DIST > 0.0 && (world.x > CULL_DIST || world.x < -CULL_DIST || world.z > CULL_DIST || world.z < -CULL_DIST))
 	{
 		ALPHA = 0.0;
 	}
 }
-
