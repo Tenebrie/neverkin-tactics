@@ -22,7 +22,6 @@ func _ready():
 
 	var previousActor = CurrentActor
 	CurrentActor = PlayerControlledActors[0]
-	NavmeshManager.Instance.RebakeNavmeshForActor(CurrentActor)
 	KnownActorsChanged.emit()
 	CurrentActorChanged.emit(CurrentActor, previousActor)
 
@@ -46,7 +45,6 @@ func SelectCharacterByHotkey(index: int) -> void:
 
 	var previousActor = CurrentActor
 	CurrentActor = selectedActor
-	NavmeshManager.Instance.RebakeNavmeshForActor(CurrentActor)
 	CurrentActorChanged.emit(CurrentActor, previousActor)
 
 func _unhandled_input(event: InputEvent) -> void:

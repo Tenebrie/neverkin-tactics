@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("4_6ui04")
 Name = "Godot"
+PhysicalSize = null
 TokenTexture = ExtResource("1_bjopc")
 AvatarTexture = ExtResource("1_bjopc")
 Alliance = 2

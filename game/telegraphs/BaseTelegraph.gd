@@ -8,10 +8,11 @@ signal TargetEntered(target: Actor)
 signal TargetExited(target: Actor)
 signal TargetsChanged(targets: Array[Actor])
 
-var Alliance: Actor.Alliance = Actor.Alliance.Neutral:
+var Tint: Color = Color.GRAY:
 	set(value):
-		Alliance = value
-		updateColor()
+		Tint = value
+		if isReady:
+			setColor(value)
 
 var TargetValidator: Callable
 
@@ -28,12 +29,7 @@ var Targets: Array[Actor]:
 		return result
 
 func _ready():
-	updateColor()
-
-func updateColor():
-	if not isReady:
-		return
-	setColor(ActorUtils.GetAllianceColor(Alliance))
+	setColor(Tint)
 
 func onBodyEntered(body: Node3D):
 	if body is not Actor:

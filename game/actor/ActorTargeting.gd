@@ -77,9 +77,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif isMouseClick and isSkillSelected:
 		# Cast selected skill
 		var targetData = Skill.TargetData.new()
-		if Actor.Repository.Hovered.List.size() > 0:
-			targetData.actor = Actor.Repository.Hovered.List[0]
+		if TelegraphManager.Instance.Targets.size() > 0:
+			targetData.actor = TelegraphManager.Instance.Targets.get(0)
+		targetData.actors = TelegraphManager.Instance.Targets
+		targetData.mousePoint = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
 		parent.actions.IssueOrder_Cast(parent.Skills.SelectedSkill, targetData)
+		if parent.actions.ActionPointsAvailable <= 0:
+			parent.Skills.Select(null)
 	elif isMouseClick:
 		# Start movement preview
 		lockedMode = TargetMode.WalkPreview

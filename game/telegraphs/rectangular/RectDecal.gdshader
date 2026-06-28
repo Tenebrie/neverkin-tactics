@@ -4,6 +4,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 instance uniform float COLOR_R : hint_range(0.0, 1.0) = 0;
 instance uniform float COLOR_G : hint_range(0.0, 1.0) = 1;
 instance uniform float COLOR_B : hint_range(0.0, 1.0) = 1;
+instance uniform float COLOR_A : hint_range(0.0, 1.0) = 1;
 instance uniform float PROGRESS : hint_range(0.0, 1.0) = 0.5;
 instance uniform float SIZE_X : hint_range(0.01, 10.0) = 0.5;
 instance uniform float SIZE_Z : hint_range(0.01, 10.0) = 0.5;
@@ -23,7 +24,7 @@ void fragment()
 	float outerStartZ = SIZE_Z - OUTER_WIDTH;
 	bool leftRightEdge = (abs(pos.x) >= outerStartX && abs(pos.x) <= SIZE_X);
 	bool topBottomEdge = (abs(pos.z) >= outerStartZ && abs(pos.z) <= SIZE_Z);
-	
+
 	bool innerLeftRight = abs(pos.x) <= prog * SIZE_X;
 	bool innerTopBottom = abs(pos.z) <= prog * SIZE_Z;
 	bool innerCircle = (innerTopBottom && innerLeftRight);
@@ -77,7 +78,7 @@ void fragment()
 		float d2 = (abs(pos.z) - prog * SIZE_Z + smoothOver) / smoothOver;
 		float toLimit = prog - d2;
 		ALPHA = min(0.5, toLimit) * 1.0;
-		
+
 		float d3 = (abs(pos.x) - prog * SIZE_X + smoothOver) / smoothOver;
 		float toLimit2 = prog - d3;
 		ALPHA *= max(0, min(1, toLimit2) * 1.0);
@@ -98,23 +99,23 @@ void fragment()
 			ALBEDO = vec3(b, b, b);
 			ALPHA = max(0, a);
 		}
-		
+
 		transparent = true;
 	}
 	float a = 1.0;
-	
+
 	ALBEDO = ALBEDO * vec3(COLOR_R * 0.5, COLOR_G * 0.5, COLOR_B * 0.5);
 	if (!transparent)
 		ALPHA = max(ALPHA, float(0.05));
 	ALPHA = min(1.0, ALPHA);
 	EMISSION = ALBEDO * 2.0;
-	ALPHA *= FADE;
-	
+	ALPHA *= FADE * COLOR_A;
+
 	if (abs(pos.x) > SIZE_X || abs(pos.z) > SIZE_Z)
 	{
 		ALPHA = 0.0;
 	}
-	
+
 	if (CULL_DIST > 0.0 && (world.x > CULL_DIST || world.x < -CULL_DIST || world.z > CULL_DIST || world.z < -CULL_DIST))
 	{
 		ALPHA = 0.0;

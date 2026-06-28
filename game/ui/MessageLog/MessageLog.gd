@@ -26,7 +26,8 @@ func printMessage(message: String) -> void:
 		return
 	create_tween().tween_property(node, ^"modulate", Color.from_hsv(0, 0, 1, 0.0), 0.5)
 	await get_tree().create_timer(0.5).timeout
-	node.queue_free()
+	if is_instance_valid(node):
+		node.queue_free()
 
 static func PrintMessage(message: String) -> void:
 	instance.printMessage(message)

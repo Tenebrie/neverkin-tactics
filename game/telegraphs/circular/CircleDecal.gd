@@ -70,6 +70,7 @@ func SetColor(color: Color) -> void:
 	set_instance_shader_parameter(&"COLOR_R", color.r)
 	set_instance_shader_parameter(&"COLOR_G", color.g)
 	set_instance_shader_parameter(&"COLOR_B", color.b)
+	set_instance_shader_parameter(&"COLOR_A", color.a)
 
 func SetOuterWidth(value: float) -> void:
 	set_instance_shader_parameter(&"OUTER_WIDTH", value / 20.0)

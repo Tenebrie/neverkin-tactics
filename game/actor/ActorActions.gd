@@ -11,6 +11,11 @@ var ActionPointsAvailable: int:
 	get:
 		return ActionPointsMax - ActionPointsUsed + ActionPointsSaved
 
+var _actionPointsThreatenedFromSkill: int = 0
+var ActionPointsThreatened: int:
+	get:
+		return _actionPointsThreatenedFromSkill
+
 func ConsumeActionPoints(value: int):
 	while ActionPointsSaved > 0 && value > 0:
 		value -= 1
@@ -29,6 +34,15 @@ var MovementBuffer: float = 0.0
 var MovementAvailable: float:
 	get:
 		return MovementBuffer + MovementSpeedPerAP * ActionPointsAvailable
+
+func _ready() -> void:
+	await get_tree().process_frame
+	parent.Skills.SelectedSkillChanged.connect(func(skill):
+		if skill:
+			_actionPointsThreatenedFromSkill = skill.Definition.ActionPointCost
+		else:
+			_actionPointsThreatenedFromSkill = 0
+	)
 
 func ConsumeMovement(value: float):
 	for i in 50:
@@ -76,19 +90,10 @@ func IssueOrder_MoveTo(path: PackedVector3Array):
 	parent.navigator.StartMovingTowards(lastPoint)
 	var pathCost = ActorNavigator.GetPathMovementCost(path)
 	parent.actions.ConsumeMovement(pathCost)
-	actionQueue.push_back("value")
+	actionQueue.push_back("dummy value")
 	parent.navigator.agent.target_reached.connect(func():
 		actionQueue.pop_front(),
 	CONNECT_ONE_SHOT)
-
-func IssueOrder_Stop():
-	if actionQueue.size() == 0:
-		return
-	actionQueue.pop_front()
-	var toRefund = (roundf(parent.navigator.GetRemainingPathLength() * 1000) / 1000)
-	RefundMovement(maxf(0.0, toRefund - 0.1))
-
-	parent.navigator.HardStop()
 
 func IssueOrder_Cast(skill: Skill, targets: Skill.TargetData):
 	if skill.Definition.TargetingMode == Skill.TargetMode.ActorSingle and not is_instance_valid(targets.actor):
@@ -101,5 +106,14 @@ func IssueOrder_Cast(skill: Skill, targets: Skill.TargetData):
 
 	ConsumeActionPoints(apCost)
 	skill.Cast(targets)
+
+func IssueOrder_Stop():
+	if actionQueue.size() == 0:
+		return
+	actionQueue.pop_front()
+	var toRefund = (roundf(parent.navigator.GetRemainingPathLength() * 1000) / 1000)
+	RefundMovement(maxf(0.0, toRefund - 0.1))
+
+	parent.navigator.HardStop()
 
 #endregion

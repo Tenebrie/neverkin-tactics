@@ -24,3 +24,5 @@ enum TargetMode {
 
 class TargetData:
 	var actor: Actor
+	var actors: Array[Actor]
+	var mousePoint: Vector3

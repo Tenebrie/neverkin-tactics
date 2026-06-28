@@ -37,6 +37,7 @@ func setColor(color: Color):
 	decal.set_instance_shader_parameter(&"COLOR_R", color.r)
 	decal.set_instance_shader_parameter(&"COLOR_G", color.g)
 	decal.set_instance_shader_parameter(&"COLOR_B", color.b)
+	decal.set_instance_shader_parameter(&"COLOR_A", color.a)
 
 func cleanUp():
 	decal.cleanUp()

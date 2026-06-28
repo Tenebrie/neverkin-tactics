@@ -35,6 +35,13 @@ func _ready() -> void:
 		var material: StandardMaterial3D = $MeshInstance3D.material_override
 		material.albedo_texture = Definition.TokenTexture
 
+	TurnManager.Instance.CurrentActorChanged.connect(func(actor):
+		if actor == self:
+			$MeshInstance3D.position.y = 0.02
+		else:
+			$MeshInstance3D.position.y = -0.02
+	)
+
 func _exit_tree() -> void:
 	Repository.All.Unregister(self)
 

@@ -5,7 +5,11 @@ static var Instance: NavmeshManager:
 	get:
 		return NavmeshManagerInstance
 
+func _enter_tree() -> void:
+	TurnManager.Instance.CurrentActorChanged.connect(RebakeNavmeshForActor)
+
 func RebakeNavmeshForActor(actor: Actor) -> void:
+	await get_tree().process_frame
 	rebakeNavmesh([actor])
 
 func rebakeNavmesh(exceptions: Array) -> void:
@@ -42,13 +46,13 @@ func rebakeNavmesh(exceptions: Array) -> void:
 		var bake_us := Time.get_ticks_usec() - bake_start
 
 		var region_us := Time.get_ticks_usec() - region_start
-		print("[navbake] %s: parse %.2f ms | inject %.2f ms | bake %.2f ms | total %.2f ms" % [
-			region.name,
-			parse_us / 1000.0,
-			inject_us / 1000.0,
-			bake_us / 1000.0,
-			region_us / 1000.0,
-		])
+		#print("[navbake] %s: parse %.2f ms | inject %.2f ms | bake %.2f ms | total %.2f ms" % [
+			#region.name,
+			#parse_us / 1000.0,
+			#inject_us / 1000.0,
+			#bake_us / 1000.0,
+			#region_us / 1000.0,
+		#])
 
 	var total_ms := (Time.get_ticks_usec() - total_start) / 1000.0
 	print("[navbake] all regions done in %.2f ms" % total_ms)

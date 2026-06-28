@@ -4,6 +4,7 @@ render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specul
 instance uniform float COLOR_R : hint_range(0.0, 1.0) = 0;
 instance uniform float COLOR_G : hint_range(0.0, 1.0) = 1;
 instance uniform float COLOR_B : hint_range(0.0, 1.0) = 1;
+instance uniform float COLOR_A : hint_range(0.0, 1.0) = 1;
 instance uniform float PROGRESS : hint_range(0.0, 1.0) = 0.5;
 instance uniform float RADIUS : hint_range(0.01, 10.0) = 0.5;
 instance uniform float SCALE : hint_range(0.01, 10.0) = 1;
@@ -102,7 +103,7 @@ void fragment()
 		}
 	}
 
-	ALPHA *= FADE;
+	ALPHA *= FADE * COLOR_A;
 	EMISSION = ALBEDO * 2.0;
 
 	if (dist > effectiveRadius)
