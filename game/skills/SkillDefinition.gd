@@ -13,6 +13,7 @@ class_name SkillDefinition
 		TargetingMode = value
 		notify_property_list_changed()
 @export var TargetingMaxRange: float = 1.0
+@export var TargetingAllianceFilter: Array[Actor.Alliance] = [Actor.Alliance.Player, Actor.Alliance.Neutral, Actor.Alliance.Hostile]
 
 @export_group("Circle", "TargetingCircle")
 @export var TargetingCircleRadius: float = 1.0

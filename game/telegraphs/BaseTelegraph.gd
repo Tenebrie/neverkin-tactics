@@ -1,19 +1,58 @@
-@abstract class_name BaseTelegraph
+@abstract
+class_name BaseTelegraph
 extends Node3D
+
+@onready var isReady: bool = true
+
+signal TargetEntered(target: Actor)
+signal TargetExited(target: Actor)
+signal TargetsChanged(targets: Array[Actor])
 
 var Alliance: Actor.Alliance = Actor.Alliance.Neutral:
 	set(value):
 		Alliance = value
 		updateColor()
 
-var cleaningUp: bool = false
-var growPercentage: float = 0.0
+var TargetValidator: Callable
 
-func _ready() -> void:
+var growPercentage: float = 0.0
+var _targets: Array[Actor] = []
+var Targets: Array[Actor]:
+	get:
+		var result: Array[Actor] = []
+		for target in _targets:
+			if target != null and is_instance_valid(target):
+				if not TargetValidator.is_valid() or TargetValidator.call(target):
+					if not result.has(target):
+						result.append(target)
+		return result
+
+func _ready():
 	updateColor()
 
-func updateColor() -> void:
+func updateColor():
+	if not isReady:
+		return
 	setColor(ActorUtils.GetAllianceColor(Alliance))
 
-@abstract func setColor(_color: Color) -> void
+func onBodyEntered(body: Node3D):
+	if body is not Actor:
+		return
+	var actor = body as Actor
+	_targets.append(actor)
+	if not TargetValidator.is_valid() or TargetValidator.call(actor):
+		TargetEntered.emit(actor)
+		TargetsChanged.emit(_targets)
+
+func onBodyExited(body: Node3D):
+	if body is not Actor:
+		return
+	var actor = body as Actor
+	if not _targets.has(actor):
+		return
+	_targets.erase(actor)
+	TargetExited.emit(actor)
+	TargetsChanged.emit(_targets)
+
+@abstract func setColor(color: Color) -> void
 @abstract func cleanUp() -> void

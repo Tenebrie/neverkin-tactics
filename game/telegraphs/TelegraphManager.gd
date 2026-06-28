@@ -1,8 +1,27 @@
 extends Node
+class_name TelegraphManager
+
+static var Instance: TelegraphManager:
+	get:
+		return TelegraphManagerInstance
 
 var mouseTelegraph: BaseTelegraph
 var casterTelegraph: BaseTelegraph
 var casterToLineTelegraph: BaseTelegraph
+
+signal TargetEntered(target: Actor)
+signal TargetExited(target: Actor)
+signal TargetsChanged(targets: Array[Actor])
+
+var Targets: Array[Actor]:
+	get:
+		if is_instance_valid(mouseTelegraph):
+			return mouseTelegraph.Targets
+		elif is_instance_valid(casterTelegraph):
+			return casterTelegraph.Targets
+		elif is_instance_valid(casterToLineTelegraph):
+			return casterToLineTelegraph.Targets
+		return []
 
 func _ready() -> void:
 	TurnManager.Instance.CurrentActorChanged.connect(initialize)
@@ -40,27 +59,48 @@ func onSkillSelected(skill: Skill):
 	if skill == null:
 		return
 	var def = skill.Definition
+	var targetFilter = func(actor: Actor) -> bool:
+		return def.TargetingAllianceFilter.has(actor.stats.Alliance)
+
 	if def.TargetingMode == Skill.TargetMode.Self:
 		casterTelegraph = Asset.Instantiate(CircularTelegraph) as CircularTelegraph
-		skill.Parent.add_child(casterTelegraph)
 		casterTelegraph.growPercentage = 1.0
 		casterTelegraph.Alliance = Actor.Alliance.Player
+		connectSignals(casterTelegraph)
+		casterTelegraph.TargetValidator = targetFilter
+		skill.Parent.add_child(casterTelegraph)
 	elif def.TargetingMode == Skill.TargetMode.ActorSingle:
 		mouseTelegraph = Asset.Instantiate(CircularTelegraph) as CircularTelegraph
-		add_child(mouseTelegraph)
 		mouseTelegraph.growPercentage = 1.0
 		mouseTelegraph.radius = 0.05
 		mouseTelegraph.Alliance = Actor.Alliance.Player
+		connectSignals(mouseTelegraph)
+		mouseTelegraph.TargetValidator = targetFilter
+		add_child(mouseTelegraph)
 	elif def.TargetingMode == Skill.TargetMode.PointCircle:
 		mouseTelegraph = Asset.Instantiate(CircularTelegraph) as CircularTelegraph
-		add_child(mouseTelegraph)
 		mouseTelegraph.growPercentage = 1.0
 		mouseTelegraph.Alliance = Actor.Alliance.Player
+		connectSignals(mouseTelegraph)
+		mouseTelegraph.TargetValidator = targetFilter
+		add_child(mouseTelegraph)
 	elif def.TargetingMode == Skill.TargetMode.LineFromSelf:
 		casterToLineTelegraph = Asset.Instantiate(RectangularTelegraph) as RectangularTelegraph
-		skill.Parent.add_child(casterToLineTelegraph)
 		casterToLineTelegraph.growPercentage = 1.0
 		casterToLineTelegraph.Alliance = Actor.Alliance.Player
 		casterToLineTelegraph.width = def.TargetingLineWidth
 		casterToLineTelegraph.length = def.TargetingMaxRange
-		casterToLineTelegraph.lengthOrigin = RectangularTelegraph.Origin.START
+		casterToLineTelegraph.lengthOrigin = RectangularTelegraph.Origin.Start
+		connectSignals(casterToLineTelegraph)
+		casterToLineTelegraph.TargetValidator = targetFilter
+		skill.Parent.add_child(casterToLineTelegraph)
+
+func connectSignals(telegraph: BaseTelegraph):
+	telegraph.TargetEntered.connect(TargetEntered.emit)
+	telegraph.TargetExited.connect(TargetExited.emit)
+	telegraph.TargetsChanged.connect(TargetExited.emit)
+
+func disconnectSignals(telegraph: BaseTelegraph):
+	telegraph.TargetEntered.disconnect(TargetEntered.emit)
+	telegraph.TargetExited.disconnect(TargetExited.emit)
+	telegraph.TargetsChanged.disconnect(TargetExited.emit)

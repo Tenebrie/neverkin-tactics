@@ -8,6 +8,7 @@ script = ExtResource("4_6ui04")
 Name = "Godot"
 TokenTexture = ExtResource("1_bjopc")
 AvatarTexture = ExtResource("1_bjopc")
+Alliance = 2
 HealthMaximum = 4
 ActionPointsMax = 2
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

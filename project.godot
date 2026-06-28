@@ -21,7 +21,7 @@ GlobalControls="*uid://bc0txfe5vmcja"
 CombatUI="*uid://bpsu16vmy2ald"
 NavmeshManagerInstance="*uid://cdt3nwgodl7ts"
 TurnManagerInstance="*uid://dq3q74togyfy3"
-TelegraphManager="*uid://barnsaj3p6ik1"
+TelegraphManagerInstance="*uid://barnsaj3p6ik1"
 
 [debug]
 

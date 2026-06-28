@@ -3,6 +3,8 @@ class_name ActorStats
 
 var Name: String:
 	get: return parent.Definition.Name
+var Alliance: Actor.Alliance:
+	get: return parent.Definition.Alliance
 
 var HealthDamageTaken: int = 0
 var HealthMaximum: int:

@@ -7,10 +7,10 @@
 
 [resource]
 script = ExtResource("1_n1w0k")
-IsControllable = true
 Name = "Ivera"
 TokenTexture = ExtResource("1_2wdr7")
 AvatarTexture = ExtResource("1_4qsbl")
+Alliance = 0
 HealthMaximum = 8
 HealthHumanityThreshold = 3
 RenderPriority = 10
