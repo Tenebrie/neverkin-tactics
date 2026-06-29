@@ -79,3 +79,27 @@ func cleanUp():
 
 func EnableCulling():
 	decal.EnableCulling()
+
+## TODO: Check collision properly
+func IsPathable() -> bool:
+	var sampleCountX = 16
+	var sampleCountZ = 16
+	var map = get_world_3d().navigation_map
+
+	var originOffsetZ = 0.0
+	if lengthOrigin == Origin.Start:
+		originOffsetZ = -length / 2.0
+
+	var halfWidth = width / 2.0
+	var halfLength = length / 2.0
+	var localCenter = Vector3(0, 0, originOffsetZ)
+
+	for xi in sampleCountX:
+		for zi in sampleCountZ:
+			var tx = (float(xi) / (sampleCountX - 1)) * 2.0 - 1.0
+			var tz = (float(zi) / (sampleCountZ - 1)) * 2.0 - 1.0
+			var localPoint = localCenter + Vector3(tx * halfWidth, 0, tz * halfLength)
+			var worldPoint = global_transform * localPoint
+			if not isPointOnNavmesh(map, worldPoint):
+				return false
+	return true

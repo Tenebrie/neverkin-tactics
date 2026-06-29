@@ -43,3 +43,22 @@ func cleanUp():
 	decal.cleanUp()
 	decal.OnFadeOut = func():
 		queue_free()
+
+## TODO: Check collision properly
+func IsPathable() -> bool:
+	var sampleCount = 32
+	var map = get_world_3d().navigation_map
+	var center = global_position
+
+	# Check center
+	if not isPointOnNavmesh(map, center):
+		return false
+
+	# Check ring of points at the edge
+	for i in sampleCount:
+		var angle = (TAU / sampleCount) * i
+		var offset = Vector3(cos(angle), 0, sin(angle)) * radius
+		var point = center + offset
+		if not isPointOnNavmesh(map, point):
+			return false
+	return true

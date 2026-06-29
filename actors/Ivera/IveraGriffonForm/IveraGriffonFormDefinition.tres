@@ -10,6 +10,7 @@
 script = ExtResource("5_7bfqy")
 Name = "Winged Ivera"
 PhysicalSize = 0.4
+TokenOffset = Vector2(0, -0.03)
 TokenTexture = ExtResource("4_mpfqu")
 AvatarTexture = ExtResource("1_6x3wb")
 Alliance = 0

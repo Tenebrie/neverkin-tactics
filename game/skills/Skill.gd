@@ -37,3 +37,5 @@ class TargetData:
 
 	## World point under cursor
 	var mousePoint: Vector3
+
+	var isTravelAllowed: bool

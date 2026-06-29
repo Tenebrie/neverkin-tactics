@@ -97,17 +97,21 @@ func IssueOrder_MoveTo(path: PackedVector3Array):
 
 func IssueOrder_Cast(skill: Skill, targets: Skill.TargetData):
 	if skill.Definition.TargetingMode == Skill.TargetMode.ActorSingle and not is_instance_valid(targets.actor):
-		printerr("Invalid cast order for skill %s. No ActorSingle target provided."%skill)
+		MessageLog.PrintMessage("No target.")
 		return
 
 	if skill.Definition.TargetingMode == Skill.TargetMode.PointCircle:
 		var distToTarget = parent.global_position.distance_to(targets.mousePoint)
 		if distToTarget > skill.Definition.TargetingMaxRange + parent.PhysicalSize:
-			printerr("Invalid cast order for skill %s. Point is out of range."%skill)
+			MessageLog.PrintMessage("Target is out of range.")
 			return
 
 	if targets.exclusionActors.size() > 0:
-		printerr("Invalid cast order for skill %s. Someone is blocking the way."%skill)
+		MessageLog.PrintMessage("Someone is blocking the area.")
+		return
+
+	if skill.Definition.TargetingTravelAreaRequired > 0.0 and not targets.isTravelAllowed:
+		MessageLog.PrintMessage("Inner area obstructed.")
 		return
 
 	var apCost = skill.ActionPointCost

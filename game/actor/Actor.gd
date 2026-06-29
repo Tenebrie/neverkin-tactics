@@ -44,8 +44,7 @@ func HasComponent(type: GDScript[Component]) -> bool:
 func _ready() -> void:
 	Repository.All.Register(self)
 	if Definition != null:
-		var material: StandardMaterial3D = $MeshInstance3D.material_override
-		material.albedo_texture = Definition.TokenTexture
+		loadDefinition()
 
 	TurnManager.Instance.CurrentActorChanged.connect(func(actor):
 		if actor == self:
@@ -59,6 +58,8 @@ func loadDefinition():
 	material.albedo_texture = Definition.TokenTexture
 	var scaleMod = Definition.PhysicalSize / 0.2
 	create_tween().tween_property(self, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
+	$MeshInstance3D.position.x = Definition.TokenOffset.x
+	$MeshInstance3D.position.z = Definition.TokenOffset.y
 
 func _exit_tree() -> void:
 	Repository.All.Unregister(self)

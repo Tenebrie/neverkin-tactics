@@ -32,6 +32,12 @@ var ExclusionTargets: Array[Actor]:
 			return pointCircleExclusionTelegraph.Targets
 		return []
 
+var IsPathable: bool:
+	get:
+		if is_instance_valid(pointCircleExclusionTelegraph):
+			return pointCircleExclusionTelegraph.IsPathable()
+		return false
+
 func _ready() -> void:
 	TurnManager.Instance.CurrentActorChanged.connect(initialize)
 
@@ -63,7 +69,10 @@ func updateMouseTelegraph(telegraph: BaseTelegraph) -> Vector3:
 		and telegraph.global_position.distance_to(TurnManager.Instance.CurrentActor.global_position) > \
 			currentSkill.Definition.TargetingMaxRange + TurnManager.Instance.CurrentActor.PhysicalSize:
 		telegraph.Tint = OUT_OF_RANGE_COLOR
-
+	elif currentSkill.Definition.TargetingTravelAreaRequired > 0.0 \
+			and telegraph == pointCircleExclusionTelegraph \
+			and not pointCircleExclusionTelegraph.IsPathable():
+		telegraph.Tint = OBSTRUCTION_COLOR
 	elif telegraph.Targets.size() > 0 && currentSkill.Definition.TargetingMode == Skill.TargetMode.ActorSingle:
 		var targets = telegraph.Targets.slice(0)
 		var validTargets = targets.filter(func(actor) -> bool:
@@ -207,3 +216,5 @@ const OUT_OF_RANGE_COLOR = Color(0, 0, 1, 0.8)
 
 const EXCLUSION_EMPTY_COLOR = Color(0, 0.5, 0, 1.0)
 const EXCLUSION_NOPE_COLOR = Color(1, 0, 0, 1.0)
+
+const OBSTRUCTION_COLOR = Color(0, 0.25, 1, 0.8)

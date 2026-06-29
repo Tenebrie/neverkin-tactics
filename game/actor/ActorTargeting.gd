@@ -80,6 +80,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		targetData.actors = TelegraphManager.Instance.Targets
 		targetData.exclusionActors = TelegraphManager.Instance.ExclusionTargets
 		targetData.mousePoint = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
+		targetData.isTravelAllowed = TelegraphManager.Instance.IsPathable
 		parent.actions.IssueOrder_Cast(parent.Skills.SelectedSkill, targetData)
 		if parent.actions.ActionPointsAvailable < parent.Skills.SelectedSkill.ActionPointCost \
 			or not parent.Skills.Has(parent.Skills.SelectedSkill.get_script()):

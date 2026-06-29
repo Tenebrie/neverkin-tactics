@@ -4,6 +4,8 @@ class_name ActorDefinition
 
 @export var Name: String = "Unnamed"
 @export var PhysicalSize: float = 0.2
+@export var TokenOffset: Vector2 = Vector2.ZERO
+
 @export var TokenTexture: Texture2D
 @export var AvatarTexture: Texture2D
 @export var Alliance: Actor.Alliance = Actor.Alliance.Neutral
