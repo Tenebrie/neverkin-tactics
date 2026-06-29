@@ -10,6 +10,7 @@ script = ExtResource("1_nmjte")
 custom_minimum_size = Vector2(150, 0)
 offset_right = 150.0
 offset_bottom = 29.0
+mouse_filter = 2
 
 [node name="NameLabel" type="Label" parent="VBoxContainer" unique_id=1573864759]
 unique_name_in_owner = true
@@ -20,8 +21,14 @@ text = "Ivera"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
+mouse_filter = 2
+CornerRadius = 6
+TickColor = Color(0, 0, 0, 0.5)
 
 [node name="ActionPointBar" parent="VBoxContainer" unique_id=1588530800 instance=ExtResource("2_171gv")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
+mouse_filter = 2
+CornerRadius = 6
+TickColor = Color(0, 0, 0, 0.5)

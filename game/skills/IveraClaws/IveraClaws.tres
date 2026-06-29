@@ -7,8 +7,9 @@
 script = ExtResource("1_bo7in")
 Name = "Kin Claws"
 IconTexture = ExtResource("1_irexs")
+HealthDamage = 1
 TargetingMode = 1
-TargetingMaxRange = 0.5
+TargetingMaxRange = 0.25
 TargetingAllianceFilter = Array[int]([2])
-TargetingLineWidth = null
+TargetingTravelAreaRequired = null
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

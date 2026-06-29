@@ -40,8 +40,6 @@ func _process(_delta: float) -> void:
 
 	## Skill target preview
 	if parent.Skills.SelectedSkill != null:
-		for target in TelegraphManager.Instance.Targets:
-			target.stats.ThreatenHealthForOneFrame(1)
 		return
 
 	## Show preview path
@@ -80,9 +78,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		if TelegraphManager.Instance.Targets.size() > 0:
 			targetData.actor = TelegraphManager.Instance.Targets.get(0)
 		targetData.actors = TelegraphManager.Instance.Targets
+		targetData.exclusionActors = TelegraphManager.Instance.ExclusionTargets
 		targetData.mousePoint = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
 		parent.actions.IssueOrder_Cast(parent.Skills.SelectedSkill, targetData)
-		if parent.actions.ActionPointsAvailable <= 0:
+		if parent.actions.ActionPointsAvailable < parent.Skills.SelectedSkill.ActionPointCost \
+			or not parent.Skills.Has(parent.Skills.SelectedSkill.get_script()):
 			parent.Skills.Select(null)
 	elif isMouseClick:
 		# Start movement preview

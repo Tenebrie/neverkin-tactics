@@ -2,13 +2,25 @@
 class_name Actor
 extends CharacterBody3D
 
-@export var Definition: ActorDefinition
+signal DefinitionChanged(def: ActorDefinition)
+@export var Definition: ActorDefinition:
+	set(v):
+		Definition = v
+		if isReady:
+			loadDefinition()
+		DefinitionChanged.emit(v)
+		SignalBus.ActorDefinitionChanged.emit(self)
 
+@onready var isReady = true
 @onready var stats: ActorStats = $ActorStats
 @onready var actions: ActorActions = $ActorActions
 @onready var navigator: ActorNavigator = $ActorNavigator
 @onready var targeting: ActorTargeting = $ActorTargeting
 @onready var Skills: SkillController = $SkillController
+
+var PhysicalSize:
+	get:
+		return Definition.PhysicalSize
 
 ## This actor is currently selected and being controlled by the player
 var IsPlayerControlled: bool:
@@ -42,12 +54,19 @@ func _ready() -> void:
 			$MeshInstance3D.position.y = -0.02
 	)
 
+func loadDefinition():
+	var material: StandardMaterial3D = $MeshInstance3D.material_override
+	material.albedo_texture = Definition.TokenTexture
+	var scaleMod = Definition.PhysicalSize / 0.2
+	create_tween().tween_property(self, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
+
 func _exit_tree() -> void:
 	Repository.All.Unregister(self)
 
 func Destroy() -> void:
 	Repository.All.Unregister(self)
 	Repository.Hovered.Unregister(self)
+	SignalBus.ActorDestroyed.emit(self)
 	queue_free()
 
 #region Repository
@@ -76,3 +95,8 @@ enum Alliance {
 	Neutral,
 	Hostile,
 }
+
+static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
+class SignalBusImplementation:
+	signal ActorDefinitionChanged(actor: Actor)
+	signal ActorDestroyed(actor: Actor)

@@ -5,6 +5,7 @@ class_name InitiativeBarUI
 
 func _ready() -> void:
 	TurnManager.Instance.KnownActorsChanged.connect(rebuildPortraits)
+	Actor.SignalBus.ActorDefinitionChanged.connect(rebuildPortraits)
 
 func rebuildPortraits() -> void:
 	while portraitContainer.get_child_count() > 0:

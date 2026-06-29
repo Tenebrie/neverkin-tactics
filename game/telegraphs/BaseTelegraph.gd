@@ -30,25 +30,40 @@ var Targets: Array[Actor]:
 
 func _ready():
 	setColor(Tint)
+	set_notify_transform(true)
+
+func _physics_process(_d: float) -> void:
+	checkTargetsDiff()
+
+func checkTargetsDiff() -> void:
+	var current = Targets
+	for target in current:
+		if not previousSeenTargets.has(target):
+			TargetEntered.emit(target)
+	for target in previousSeenTargets:
+		if not current.has(target):
+			TargetExited.emit(target)
+	if current != previousSeenTargets:
+		TargetsChanged.emit(current)
+	previousSeenTargets = current
+
+var previousSeenTargets: Array[Actor] = []
 
 func onBodyEntered(body: Node3D):
 	if body is not Actor:
 		return
 	var actor = body as Actor
 	_targets.append(actor)
-	if not TargetValidator.is_valid() or TargetValidator.call(actor):
-		TargetEntered.emit(actor)
-		TargetsChanged.emit(_targets)
+	checkTargetsDiff()
 
 func onBodyExited(body: Node3D):
 	if body is not Actor:
 		return
 	var actor = body as Actor
-	if not _targets.has(actor):
-		return
-	_targets.erase(actor)
-	TargetExited.emit(actor)
-	TargetsChanged.emit(_targets)
+	if _targets.has(actor):
+		_targets.erase(actor)
+		checkTargetsDiff()
 
 @abstract func setColor(color: Color) -> void
 @abstract func cleanUp() -> void
+@abstract func isPathable() -> bool

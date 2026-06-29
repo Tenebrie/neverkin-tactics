@@ -5,6 +5,7 @@ class_name SkillDefinition
 @export var Name: String = "Unnamed"
 @export var IconTexture: Texture2D
 @export var ActionPointCost: int = 1
+@export var HealthDamage: int = 0
 
 
 @export_group("Skill Targeting", "Targeting")
@@ -21,6 +22,13 @@ class_name SkillDefinition
 @export_group("Line", "TargetingLine")
 @export var TargetingLineWidth: float = 0.2
 
+@export_group("Travel", "TargetingTravel")
+@export var TargetingTravelAreaRequired: float = 0.0
+
+
+@export_group("Shapeshifting", "Shapeshift")
+@export var ShapeshiftTargetActor: ActorDefinition
+
 
 func _validate_property(property: Dictionary):
 	if property.name == "TargetingMaxRange" and TargetingMode == Skill.TargetMode.Self:
@@ -28,4 +36,6 @@ func _validate_property(property: Dictionary):
 	if property.name == "TargetingCircleRadius" and TargetingMode != Skill.TargetMode.PointCircle:
 		property.usage &= ~PROPERTY_USAGE_EDITOR
 	if property.name == "TargetingLineWidth" and TargetingMode != Skill.TargetMode.LineFromSelf:
+		property.usage &= ~PROPERTY_USAGE_EDITOR
+	if property.name == "TargetingTravelAreaRequired" and TargetingMode != Skill.TargetMode.PointCircle:
 		property.usage &= ~PROPERTY_USAGE_EDITOR

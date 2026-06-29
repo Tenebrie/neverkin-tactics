@@ -18,6 +18,14 @@ var HealthCurrent: int:
 
 var HealthThreatened: int = 0
 
+func _ready() -> void:
+	TelegraphManager.Instance.TargetsChanged.connect(func(actors: Array[Actor]):
+		if actors.has(parent):
+			HealthThreatened = TelegraphManager.Instance.CurrentSkill.GetHealthDamage(parent)
+		else:
+			HealthThreatened = 0
+	)
+
 func DealDamage(damage: int):
 	HealthDamageTaken = clampi(HealthDamageTaken + damage, 0, HealthMaximum)
 	if HealthCurrent <= 0:
@@ -25,17 +33,3 @@ func DealDamage(damage: int):
 
 func RestoreHealth(healing: int):
 	HealthDamageTaken = clampi(HealthDamageTaken - healing, 0, HealthMaximum)
-
-var clearThreatTimer: Timer
-func ThreatenHealthForOneFrame(damage: int):
-	if clearThreatTimer != null:
-		clearThreatTimer.stop()
-		clearThreatTimer.queue_free()
-
-	HealthThreatened = damage
-	clearThreatTimer = Timer.new()
-	add_child(clearThreatTimer)
-	clearThreatTimer.start(0.01)
-	clearThreatTimer.timeout.connect(func():
-		HealthThreatened = 0
-	)

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://b4kk0xu3px88y"]
+
+[ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://actors/Ivera/ivera.Avatar.webp" id="1_in8uy"]
+[ext_resource type="Resource" uid="uid://dnf8uhhthqlbx" path="res://actors/Ivera/IveraDefinition.tres" id="2_in8uy"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="3_5vg0j"]
+
+[resource]
+script = ExtResource("3_5vg0j")
+Name = "Griffon Form"
+IconTexture = ExtResource("1_in8uy")
+ActionPointCost = 2
+HealthDamage = 1
+TargetingMaxRange = 3.0
+TargetingAllianceFilter = Array[int]([])
+TargetingCircleRadius = 0.2
+ShapeshiftTargetActor = ExtResource("2_in8uy")
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

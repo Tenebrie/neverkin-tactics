@@ -3,8 +3,17 @@ class_name SkillBar
 
 @onready var buttonContainer: Control = $%ButtonContainer
 
+@onready var CurrentActor = SignalTracker.new(
+	func(actor: Actor): return actor.Skills.SkillsChanged,
+	rebuildItems
+)
+
 func _ready() -> void:
+	TurnManager.Instance.CurrentActorChanged.connect(connectSignals)
 	TurnManager.Instance.CurrentActorChanged.connect(rebuildItems)
+
+func connectSignals(actor: Actor) -> void:
+	CurrentActor.Track(actor)
 
 func rebuildItems() -> void:
 	while buttonContainer.get_child_count() > 0:

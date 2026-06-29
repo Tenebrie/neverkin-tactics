@@ -15,4 +15,4 @@ func Cast(targets: Skill.TargetData) -> void:
 	effect.Play(furthestPoint)
 
 	for actor in targets.actors:
-		actor.stats.DealDamage(1)
+		actor.stats.DealDamage(GetHealthDamage(actor))

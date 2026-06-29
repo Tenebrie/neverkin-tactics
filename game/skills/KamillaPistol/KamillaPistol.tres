@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://cgqm3lyklt0uw"]
 
-[ext_resource type="Texture2D" uid="uid://byhwirkvtng2e" path="res://icon.svg" id="1_i00ue"]
+[ext_resource type="Texture2D" uid="uid://bpup52v6762fp" path="res://game/skills/KamillaPistol/KamillaPistolIcon.png" id="1_i00ue"]
 [ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_mibhb"]
 
 [resource]
@@ -8,6 +8,7 @@ script = ExtResource("2_mibhb")
 Name = "Pistol"
 IconTexture = ExtResource("1_i00ue")
 ActionPointCost = 2
+HealthDamage = 1
 TargetingMode = 3
 TargetingMaxRange = 5.0
 TargetingAllianceFilter = Array[int]([2])

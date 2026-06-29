@@ -100,6 +100,16 @@ func IssueOrder_Cast(skill: Skill, targets: Skill.TargetData):
 		printerr("Invalid cast order for skill %s. No ActorSingle target provided."%skill)
 		return
 
+	if skill.Definition.TargetingMode == Skill.TargetMode.PointCircle:
+		var distToTarget = parent.global_position.distance_to(targets.mousePoint)
+		if distToTarget > skill.Definition.TargetingMaxRange + parent.PhysicalSize:
+			printerr("Invalid cast order for skill %s. Point is out of range."%skill)
+			return
+
+	if targets.exclusionActors.size() > 0:
+		printerr("Invalid cast order for skill %s. Someone is blocking the way."%skill)
+		return
+
 	var apCost = skill.ActionPointCost
 	if ActionPointsAvailable < apCost:
 		return
