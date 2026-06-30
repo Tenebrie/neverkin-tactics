@@ -1,8 +1,14 @@
 extends Skill
 class_name IveraClaws
 
+const Damage = 1
+
 func _ready() -> void:
-	Definition = preload("res://game/skills/IveraClaws/IveraClaws.tres")
+	Definition = preload("res://game/skills/IveraClaws/IveraClaws.tres").duplicate()
+	Definition.Telegraphs = [
+		TelegraphPreset.MaxCastRange.new(),
+		TelegraphPreset.SingleActor.new().WithDamageToHostiles(Damage)
+	]
 	super._ready()
 
 func Cast(targets: Skill.TargetData) -> void:
@@ -13,4 +19,4 @@ func Cast(targets: Skill.TargetData) -> void:
 	effect.global_position = actor.global_position
 	effect.position.y += 0.5
 	effect.Play()
-	actor.stats.DealDamage(GetHealthDamage(actor))
+	actor.stats.DealDamage(Damage)

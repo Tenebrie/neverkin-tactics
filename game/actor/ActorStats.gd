@@ -20,10 +20,17 @@ var HealthThreatened: int = 0
 
 func _ready() -> void:
 	TelegraphManager.Instance.TargetsChanged.connect(func(actors: Array[Actor]):
-		if actors.has(parent):
-			HealthThreatened = TelegraphManager.Instance.CurrentSkill.GetHealthDamage(parent)
-		else:
+		if not actors.has(parent):
 			HealthThreatened = 0
+			return
+
+		var dict = TelegraphManager.Instance.TargetsPerTelegraph
+		var healthThreatened = 0
+		for telegraph in dict:
+			var targets = dict[telegraph]
+			if targets.has(parent):
+				healthThreatened += telegraph.Definition.HealthThreat
+		HealthThreatened = healthThreatened
 	)
 
 func DealDamage(damage: int):

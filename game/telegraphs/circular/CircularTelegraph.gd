@@ -1,5 +1,5 @@
 class_name CircularTelegraph
-extends BaseTelegraph
+extends Telegraph
 
 var decal: CircleDecal
 var hitbox: Area3D
@@ -43,6 +43,7 @@ func cleanUp():
 	decal.cleanUp()
 	decal.OnFadeOut = func():
 		queue_free()
+	super.cleanUp()
 
 ## TODO: Check collision properly
 func IsPathable() -> bool:

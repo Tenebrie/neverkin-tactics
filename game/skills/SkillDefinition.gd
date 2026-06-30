@@ -29,6 +29,10 @@ class_name SkillDefinition
 @export_group("Shapeshifting", "Shapeshift")
 @export var ShapeshiftTargetActor: ActorDefinition
 
+var Telegraphs: Array[TelegraphDefinition]
+
+
+
 
 func _validate_property(property: Dictionary):
 	if property.name == "TargetingMaxRange" and TargetingMode == Skill.TargetMode.Self:

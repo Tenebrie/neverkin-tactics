@@ -95,28 +95,20 @@ func IssueOrder_MoveTo(path: PackedVector3Array):
 		actionQueue.pop_front(),
 	CONNECT_ONE_SHOT)
 
-func IssueOrder_Cast(skill: Skill, targets: Skill.TargetData):
-	if skill.Definition.TargetingMode == Skill.TargetMode.ActorSingle and not is_instance_valid(targets.actor):
-		MessageLog.PrintMessage("No target.")
-		return
-
-	if skill.Definition.TargetingMode == Skill.TargetMode.PointCircle:
-		var distToTarget = parent.global_position.distance_to(targets.mousePoint)
-		if distToTarget > skill.Definition.TargetingMaxRange + parent.PhysicalSize:
-			MessageLog.PrintMessage("Target is out of range.")
-			return
-
-	if targets.exclusionActors.size() > 0:
-		MessageLog.PrintMessage("Someone is blocking the area.")
-		return
-
-	if skill.Definition.TargetingTravelAreaRequired > 0.0 and not targets.isTravelAllowed:
-		MessageLog.PrintMessage("Inner area obstructed.")
-		return
-
+func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	var apCost = skill.ActionPointCost
 	if ActionPointsAvailable < apCost:
+		MessageLog.PrintMessage("Unable to cast. Not enough AP.")
 		return
+
+	for telegraph in TelegraphManager.Instance.telegraphs:
+		for validator in telegraph.Definition.Validators:
+			var result: Variant = validator.call(telegraph)
+			if result is bool and result == false:
+				return
+			if result is Error:
+				MessageLog.PrintErrorObject("Unable to cast. ", result)
+				return
 
 	ConsumeActionPoints(apCost)
 	skill.Cast(targets)

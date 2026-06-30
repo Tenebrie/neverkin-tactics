@@ -1,5 +1,5 @@
 class_name RectangularTelegraph
-extends BaseTelegraph
+extends Telegraph
 
 enum Origin {
 	Center,
@@ -76,6 +76,7 @@ func setColor(color: Color):
 
 func cleanUp():
 	queue_free()
+	super.cleanUp()
 
 func EnableCulling():
 	decal.EnableCulling()

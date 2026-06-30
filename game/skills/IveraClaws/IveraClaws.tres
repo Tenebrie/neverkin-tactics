@@ -11,5 +11,4 @@ HealthDamage = 1
 TargetingMode = 1
 TargetingMaxRange = 0.25
 TargetingAllianceFilter = Array[int]([2])
-TargetingTravelAreaRequired = null
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

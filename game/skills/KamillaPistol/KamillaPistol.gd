@@ -1,8 +1,14 @@
 extends Skill
 class_name KamillaPistol
 
+var Damage = 1
+var HitboxWidth = 0.04
+
 func _ready() -> void:
-	Definition = preload("res://game/skills/KamillaPistol/KamillaPistol.tres")
+	Definition = preload("res://game/skills/KamillaPistol/KamillaPistol.tres").duplicate()
+	Definition.Telegraphs = [
+		TelegraphPreset.Projectile.new().WithDamageToHostiles(Damage).WithWidth(HitboxWidth)
+	]
 	super._ready()
 
 func Cast(targets: Skill.TargetData) -> void:
@@ -15,4 +21,4 @@ func Cast(targets: Skill.TargetData) -> void:
 	effect.Play(furthestPoint)
 
 	for actor in targets.actors:
-		actor.stats.DealDamage(GetHealthDamage(actor))
+		actor.stats.DealDamage(Damage)

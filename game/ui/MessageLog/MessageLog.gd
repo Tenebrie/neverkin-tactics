@@ -31,3 +31,6 @@ func printMessage(message: String) -> void:
 
 static func PrintMessage(message: String) -> void:
 	instance.printMessage(message)
+
+static func PrintErrorObject(prefix: String, error: Error) -> void:
+	instance.printMessage(prefix + " " + error.Message)

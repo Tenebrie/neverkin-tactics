@@ -2,8 +2,11 @@ extends Skill
 class_name IveraHumanForm
 
 func _ready() -> void:
-	Definition = load("res://game/skills/IveraHumanForm/IveraHumanForm.tres")
+	Definition = load("res://game/skills/IveraHumanForm/IveraHumanForm.tres").duplicate()
+	Definition.Telegraphs = [
+		TelegraphPreset.SelfCast.new()
+	]
 	super._ready()
 
-func Cast(targets: Skill.TargetData) -> void:
+func Cast(_targets: Skill.TargetData) -> void:
 	Parent.Definition = Definition.ShapeshiftTargetActor

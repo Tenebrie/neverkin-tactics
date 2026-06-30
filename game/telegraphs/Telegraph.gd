@@ -1,5 +1,5 @@
 @abstract
-class_name BaseTelegraph
+class_name Telegraph
 extends Node3D
 
 @onready var isReady: bool = true
@@ -7,6 +7,9 @@ extends Node3D
 signal TargetEntered(target: Actor)
 signal TargetExited(target: Actor)
 signal TargetsChanged(targets: Array[Actor])
+
+var ParentSkill: Skill
+var Definition: TelegraphDefinition
 
 var Tint: Color = Color.GRAY:
 	set(value):
@@ -18,15 +21,10 @@ var TargetValidator: Callable
 
 var growPercentage: float = 0.0
 var _targets: Array[Actor] = []
-var Targets: Array[Actor]:
+var UnfilteredTargets: Array[Actor]:
 	get:
-		var result: Array[Actor] = []
-		for target in _targets:
-			if target != null and is_instance_valid(target):
-				if not TargetValidator.is_valid() or TargetValidator.call(target):
-					if not result.has(target):
-						result.append(target)
-		return result
+		return _targets
+var Targets: Array[Actor]
 
 func _ready():
 	setColor(Tint)
@@ -36,6 +34,7 @@ func _physics_process(_d: float) -> void:
 	checkTargetsDiff()
 
 func checkTargetsDiff() -> void:
+	refreshFilteredTargets()
 	var current = Targets
 	for target in current:
 		if not previousSeenTargets.has(target):
@@ -48,6 +47,15 @@ func checkTargetsDiff() -> void:
 	previousSeenTargets = current
 
 var previousSeenTargets: Array[Actor] = []
+
+func refreshFilteredTargets():
+	var result: Array[Actor] = []
+	for target in _targets:
+		if target != null and is_instance_valid(target):
+			if not TargetValidator.is_valid() or TargetValidator.call(target):
+				if not result.has(target):
+					result.append(target)
+	Targets = result
 
 func onBodyEntered(body: Node3D):
 	if body is not Actor:
@@ -65,9 +73,23 @@ func onBodyExited(body: Node3D):
 		checkTargetsDiff()
 
 @abstract func setColor(color: Color) -> void
-@abstract func cleanUp() -> void
 @abstract func IsPathable() -> bool
+
+var IsLeaving = false
+func cleanUp() -> void:
+	IsLeaving = true
 
 func isPointOnNavmesh(map: RID, point: Vector3, threshold: float = 0.2) -> bool:
 	var closest = NavigationServer3D.map_get_closest_point(map, point)
 	return point.distance_to(closest) < threshold
+
+enum Shape {
+	Circle,
+	Rect,
+}
+
+enum Attachment {
+	None,
+	Mouse,
+	Caster,
+}

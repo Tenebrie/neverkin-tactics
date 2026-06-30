@@ -1,8 +1,32 @@
 extends Skill
 class_name IveraGriffonForm
 
+var Damage = 1
+
+var damageArea = TelegraphPreset.PointArea.new(0.6).WithDamageToHostiles(Damage)
+var exclusionArea = TelegraphPreset.PointArea.new(0.4)
+
 func _ready() -> void:
-	Definition = preload("res://game/skills/IveraGriffonForm/IveraGriffonForm.tres")
+	Definition = preload("res://game/skills/IveraGriffonForm/IveraGriffonForm.tres").duplicate()
+
+	damageArea.Validators.push_back(func(telegraph: Telegraph):
+		var exclusionAreaTelegraph = TelegraphManager.Instance.FindTelegraph(exclusionArea)
+		if not exclusionAreaTelegraph.IsPathable():
+			return Error.new("Not enough free space at destination.")
+	)
+
+	exclusionArea.Processors.push_back(func(telegraph: Telegraph):
+		if telegraph.IsPathable():
+			telegraph.Tint = TelegraphColor.ExclusionGood
+		else:
+			telegraph.Tint = TelegraphColor.ExclusionOccupied
+	)
+
+	Definition.Telegraphs = [
+		TelegraphPreset.MaxCastRange.new(),
+		damageArea,
+		exclusionArea,
+	]
 	super._ready()
 
 func Cast(targets: Skill.TargetData) -> void:
