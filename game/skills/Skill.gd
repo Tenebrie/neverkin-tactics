@@ -1,6 +1,10 @@
 @abstract extends Node3D
 class_name Skill
 
+signal BeforeCast(targets: TargetData)
+signal OnCast(targets: TargetData)
+signal AfterCast(targets: TargetData)
+
 @export var Definition: SkillDefinition
 
 @onready var Controller: SkillController = get_parent().get_parent()
@@ -14,10 +18,18 @@ func _ready() -> void:
 var ActionPointCost: int:
 	get:
 		return Definition.ActionPointCost
+var MovementRequired: float:
+	get:
+		return Definition.MovementRequired
 
-@abstract func Cast(targets: TargetData) -> void
-func GetHealthDamage(_actor: Actor) -> int:
-	return Definition.HealthDamage
+func PerformCast(targets: TargetData) -> void:
+	BeforeCast.emit(targets)
+	Cast(targets)
+	OnCast.emit(targets)
+	AfterCast.emit(targets)
+
+func Cast(targets: TargetData) -> void:
+	pass
 
 enum TargetMode {
 	Self,
@@ -32,10 +44,8 @@ class TargetData:
 	## Actors matching normal telegraphs
 	var actors: Array[Actor]
 
-	## Actors matching negative telegraphs (i.e. blocking the use of a travel ability)
-	var exclusionActors: Array[Actor]
-
 	## World point under cursor
 	var mousePoint: Vector3
 
-	var telegraphs: Array[Telegraph]
+	var perTelegraph: Dictionary[TelegraphDefinition, Array[Actor]]
+	var perTelegraphIndex: Array[Array[Actor]]

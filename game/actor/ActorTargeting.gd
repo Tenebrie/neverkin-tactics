@@ -11,10 +11,13 @@ enum TargetMode {
 	WalkPreview,
 }
 
-var lockedMode: TargetMode = TargetMode.None
+var lockedMode: TargetMode = TargetMode.None:
+	set(v):
+		lockedMode = v
+		LockedModeChanged.emit()
 signal LockedModeChanged
 
-func _ready() -> void:
+func _parentReady() -> void:
 	agentPathPreview.LineColor = Color(0.0, 0.0, 0.0, 0.8)
 	TurnManager.Instance.CurrentActorChanged.connect(func():
 		resetDisplayedElements()
@@ -27,6 +30,10 @@ func _ready() -> void:
 	)
 
 	LockedModeChanged.emit()
+	parent.Skills.SelectedSkillChanged.connect(func(skill):
+		if skill is SkillMove:
+			lockedMode = TargetMode.WalkPreview
+	)
 
 func _process(_delta: float) -> void:
 	if not parent.IsPlayerControlled:
@@ -39,7 +46,7 @@ func _process(_delta: float) -> void:
 		agentPathCommitted.ClearPath()
 
 	## Skill target preview
-	if parent.Skills.SelectedSkill != null:
+	if parent.Skills.SelectedSkill != null and parent.Skills.SelectedSkill is not SkillMove:
 		return
 
 	## Show preview path
@@ -60,43 +67,43 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	var isMouseClick = event.button_index == MOUSE_BUTTON_LEFT && event.is_pressed()
 	var isMouseRelease = event.button_index == MOUSE_BUTTON_LEFT && event.is_released()
-	var isRightMouseDown = event.button_index == MOUSE_BUTTON_RIGHT && event.is_pressed()
+	var isRightMouseClick = event.button_index == MOUSE_BUTTON_RIGHT && event.is_pressed()
+	var isRightMouseRelease = event.button_index == MOUSE_BUTTON_RIGHT && event.is_released()
 
-	if parent.actions.IsPerformingAnyAction():
+	if parent.actions.IsPerformingAnyAction() and (isMouseClick or isRightMouseClick):
 		parent.actions.IssueOrder_Stop()
 		return
 
 	var isSkillSelected = parent.Skills.SelectedSkill != null
 
-	if isRightMouseDown:
+	if isRightMouseClick and isSkillSelected:
 		# Cancel current targeting
 		lockedMode = TargetMode.None
 		parent.Skills.Select(null)
-	elif isMouseClick and isSkillSelected:
+	elif isMouseRelease and isSkillSelected:
 		# Cast selected skill
 		var targetData = Skill.TargetData.new()
 		if TelegraphManager.Instance.Targets.size() > 0:
 			targetData.actor = TelegraphManager.Instance.Targets.get(0)
 		targetData.actors = TelegraphManager.Instance.Targets
-		targetData.exclusionActors = TelegraphManager.Instance.ExclusionTargets
 		targetData.mousePoint = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
-		#targetData.isTravelAllowed = TelegraphManager.Instance.IsPathable
+		targetData.perTelegraph = TelegraphManager.Instance.TargetsPerTelegraphDefinition
+		targetData.perTelegraphIndex = targetData.perTelegraph.values()
 		parent.actions.IssueOrder_ConfirmCast(parent.Skills.SelectedSkill, targetData)
-		if parent.actions.ActionPointsAvailable < parent.Skills.SelectedSkill.ActionPointCost \
-			or not parent.Skills.Has(parent.Skills.SelectedSkill.get_script()):
-			parent.Skills.Select(null)
-	elif isMouseClick:
+
+	elif isMouseClick and lockedMode == TargetMode.WalkPreview and not isSkillSelected:
+		# Cancel movement
+		lockedMode = TargetMode.None
+	elif isRightMouseClick:
 		# Start movement preview
 		lockedMode = TargetMode.WalkPreview
-	elif isMouseRelease && lockedMode == TargetMode.WalkPreview:
+	elif isRightMouseRelease && lockedMode == TargetMode.WalkPreview:
 		# Commit movement
 		var path := getLegalPathToMouse()
 		if path.size() == 0:
 			return
 		parent.actions.IssueOrder_MoveTo(path)
 		lockedMode = TargetMode.None
-
-	LockedModeChanged.emit()
 
 func resetDisplayedElements() -> void:
 	agentPathPreview.ClearPath()

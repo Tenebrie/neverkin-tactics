@@ -1,25 +1,41 @@
 extends Component3D
 class_name SkillController
 
-var SelectedSkill: Skill = null
+var SelectedSkill: Skill = null:
+	set(v):
+		if v == SelectedSkill:
+			return
+		var previous = SelectedSkill
+		SelectedSkill = v
+		SelectedSkillChanged.emit(v, previous)
 
+@onready var commonSkillGroup: ControlGroup = ControlGroup.new()
 @onready var activeSkillGroup: ControlGroup = ControlGroup.new()
 @onready var inactiveSkillGroup: ControlGroup = ControlGroup.new()
 
 signal SkillsChanged
-signal SelectedSkillChanged(skill: Skill)
+signal SelectedSkillChanged(current: Skill, previous: Skill)
 
-func _ready() -> void:
+func _parentReady() -> void:
+	add_child(commonSkillGroup)
 	add_child(activeSkillGroup)
 	add_child(inactiveSkillGroup)
 	TurnManager.Instance.CurrentActorChanged.connect(func():
 		Select(null)
 	)
 
+	LoadCommonSkills()
 	LoadSkills()
 	parent.DefinitionChanged.connect(func():
 		LoadSkills()
 	)
+	parent.actions.ActionPointsChanged.connect(func(current):
+		if SelectedSkill != null and SelectedSkill.ActionPointCost > current:
+			Select(null)
+	)
+
+func LoadCommonSkills() -> void:
+	commonSkillGroup.Add(SkillMove.new())
 
 func LoadSkills() -> void:
 	for skillOrNode in activeSkillGroup.get_children():
@@ -64,6 +80,8 @@ func Activate(skill: Skill) -> bool:
 func Deactivate(skill: Skill) -> bool:
 	if skill.ControlGroup != activeSkillGroup:
 		return false
+	if skill != null and skill == SelectedSkill:
+		Select(null)
 	activeSkillGroup.remove_child(skill)
 	inactiveSkillGroup.add_child(skill)
 	return true
@@ -71,11 +89,9 @@ func Deactivate(skill: Skill) -> bool:
 func SelectByIndex(index: int) -> void:
 	var skill = GetByIndex(index)
 	SelectedSkill = skill
-	SelectedSkillChanged.emit(skill)
 
 func Select(skill: Skill) -> void:
 	SelectedSkill = skill
-	SelectedSkillChanged.emit(skill)
 
 class ControlGroup extends Node3D:
 	func Add(ability: Skill) -> void:

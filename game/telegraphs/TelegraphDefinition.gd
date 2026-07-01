@@ -3,13 +3,12 @@ class_name TelegraphDefinition
 
 @export var Shape: Telegraph.Shape = Telegraph.Shape.Circle
 @export var Attachment: Telegraph.Attachment = Telegraph.Attachment.None
-
-@export var ColorSelector: Callable = func(telegraph: Telegraph) -> Color: return Color.GRAY
+@export var Icon: Texture2D
 
 ## Returns whether the telegraph as a whole is valid
 @export var Validators: Array[Callable] = [func(_telegraph: Telegraph) -> bool: return true]
 ## Returns whether an individual actor is a valid target
-@export var TargetFilter: Callable = func(_actor: Actor) -> bool: return true
+@export var TargetFilters: Array[Callable] = [func(_actor: Actor) -> bool: return true]
 @export var HealthThreat: int = 0
 @export var HealthThreatSelector: Callable = func(_actor: Actor) -> int: return HealthThreat
 

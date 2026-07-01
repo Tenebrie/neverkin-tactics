@@ -19,6 +19,7 @@ var length: float = 1.0:
 	set(value):
 		length = value
 		updateSize()
+		updateOrigin()
 
 var height: float = 2.0:
 	set(value):
@@ -63,8 +64,8 @@ func updateOrigin():
 	if not isReady:
 		return
 	if lengthOrigin == Origin.Start:
-		var decalPos = decal.position
-		var shapePos = collisionShape.position
+		var decalPos = Vector3.ZERO
+		var shapePos = Vector3.ZERO
 		decal.position = Vector3(decalPos.x, decalPos.y, decalPos.z - length / 2.0)
 		collisionShape.position = Vector3(shapePos.x, shapePos.y, shapePos.z - length / 2.0)
 

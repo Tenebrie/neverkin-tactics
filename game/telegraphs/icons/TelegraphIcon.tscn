@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cwa6udg4yrsqy"]
+
+[ext_resource type="Script" uid="uid://hle8mrqytpre" path="res://game/telegraphs/icons/TelegraphIcon.gd" id="1_l1tnv"]
+[ext_resource type="Texture2D" uid="uid://ce762rlefaip" path="res://game/telegraphs/icons/common/target.png" id="1_sxi00"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_l1tnv"]
+size = Vector2(0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l1tnv"]
+resource_local_to_scene = true
+transparency = 1
+albedo_texture = ExtResource("1_sxi00")
+
+[node name="TelegraphIcon" type="MeshInstance3D" unique_id=860150819]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_l1tnv")
+surface_material_override/0 = SubResource("StandardMaterial3D_l1tnv")
+script = ExtResource("1_l1tnv")

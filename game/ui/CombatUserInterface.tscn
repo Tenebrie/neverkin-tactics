@@ -27,7 +27,7 @@ grow_vertical = 1
 [node name="InitiativeBar" parent="." unique_id=1277367613 instance=ExtResource("2_c4t08")]
 layout_mode = 1
 
-[node name="UISkillBar" parent="." unique_id=251878758 instance=ExtResource("4_3kiwj")]
+[node name="SkillBar" parent="." unique_id=251878758 instance=ExtResource("4_3kiwj")]
 layout_mode = 1
 
 [node name="EndTurnButton" parent="." unique_id=781460001 instance=ExtResource("5_vfpog")]

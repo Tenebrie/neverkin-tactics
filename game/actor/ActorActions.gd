@@ -1,6 +1,9 @@
 extends Component
 class_name ActorActions
 
+signal ActionPointsChanged(current: int)
+signal MovementPointsChanged(current: float)
+
 var ActionPointsUsed: int = 0
 var ActionPointsSaved: int = 0
 
@@ -21,28 +24,33 @@ func ConsumeActionPoints(value: int):
 		value -= 1
 		ActionPointsSaved -= 1
 	ActionPointsUsed += value
+	ActionPointsChanged.emit(ActionPointsAvailable)
 
 func RefundActionPoints(value: int):
 	while ActionPointsUsed > 0 && value > 0:
 		value -= 1
 		ActionPointsUsed -= 1
 	ActionPointsSaved += value
+	ActionPointsChanged.emit(ActionPointsAvailable)
 
 #region Movement
 @export var MovementSpeedPerAP: float = 1.0
-var MovementBuffer: float = 0.0
+var MovementBuffer: float = 0.0:
+	set(v):
+		MovementBuffer = v
+		MovementPointsChanged.emit(v)
 var MovementAvailable: float:
 	get:
 		return MovementBuffer + MovementSpeedPerAP * ActionPointsAvailable
 
-func _ready() -> void:
-	await get_tree().process_frame
+func _parentReady() -> void:
 	parent.Skills.SelectedSkillChanged.connect(func(skill):
 		if skill:
 			_actionPointsThreatenedFromSkill = skill.Definition.ActionPointCost
 		else:
 			_actionPointsThreatenedFromSkill = 0
 	)
+	TurnManager.Instance.PlayerTurnStarted.connect(onTurnStarted)
 
 func ConsumeMovement(value: float):
 	for i in 50:
@@ -78,7 +86,7 @@ func IsPerformingAnyAction() -> bool:
 	return actionQueue.size() > 0
 #endregion
 
-func EndTurn() -> void:
+func onTurnStarted() -> void:
 	MovementBuffer = 0.0
 	if ActionPointsUsed < ActionPointsMax:
 		ActionPointsSaved = 1
@@ -111,7 +119,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 				return
 
 	ConsumeActionPoints(apCost)
-	skill.Cast(targets)
+	skill.PerformCast(targets)
 
 func IssueOrder_Stop():
 	if actionQueue.size() == 0:

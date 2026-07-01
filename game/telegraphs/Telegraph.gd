@@ -17,14 +17,15 @@ var Tint: Color = Color.GRAY:
 		if isReady:
 			setColor(value)
 
+var GeneralValidator: Callable
 var TargetValidator: Callable
 
 var growPercentage: float = 0.0
 var _targets: Array[Actor] = []
-var UnfilteredTargets: Array[Actor]:
-	get:
-		return _targets
+## Both general and per-target validation
 var Targets: Array[Actor]
+## Per-target validation only
+var FilteredOnlyTargets: Array[Actor]
 
 func _ready():
 	setColor(Tint)
@@ -55,7 +56,11 @@ func refreshFilteredTargets():
 			if not TargetValidator.is_valid() or TargetValidator.call(target):
 				if not result.has(target):
 					result.append(target)
-	Targets = result
+	FilteredOnlyTargets = result
+	if GeneralValidator != null and GeneralValidator.call() == true:
+		Targets = FilteredOnlyTargets
+	else:
+		Targets = []
 
 func onBodyEntered(body: Node3D):
 	if body is not Actor:

@@ -1,7 +1,8 @@
 extends Control
 class_name SkillBar
 
-@onready var buttonContainer: Control = $%ButtonContainer
+@onready var commonBarContainer: Control = $%CommonBarContainer
+@onready var mainBarContainer: Control = $%MainBarContainer
 
 @onready var CurrentActor = SignalTracker.new(
 	func(actor: Actor): return actor.Skills.SkillsChanged,
@@ -16,12 +17,32 @@ func connectSignals(actor: Actor) -> void:
 	CurrentActor.Track(actor)
 
 func rebuildItems() -> void:
-	while buttonContainer.get_child_count() > 0:
-		buttonContainer.remove_child(buttonContainer.get_child(0))
+	for child in commonBarContainer.get_children():
+		child.queue_free()
+	for child in mainBarContainer.get_children():
+		child.queue_free()
 
 	var controller = TurnManager.Instance.CurrentActor.Skills
 	for i in range(8):
 		var newItem = Asset.Instantiate(SkillBarItem)
-		newItem.TrackedSkill = controller.GetByIndex(i)
-		newItem.HotkeyIndex = i
-		buttonContainer.add_child(newItem)
+		var skill = controller.commonSkillGroup.GetByIndex(i)
+		if skill:
+			newItem.TrackedSkill = controller.commonSkillGroup.GetByIndex(i)
+			if skill.Definition.Hotkey:
+				newItem.Hotkey = skill.Definition.Hotkey
+		else:
+			newItem.Transparent = true
+		commonBarContainer.add_child(newItem)
+
+	for i in range(8):
+		var newItem = Asset.Instantiate(SkillBarItem)
+		var skill = controller.GetByIndex(i)
+		if skill:
+			newItem.TrackedSkill = skill
+			if skill.Definition.Hotkey:
+				newItem.Hotkey = skill.Definition.Hotkey
+			else:
+				var hotkey = InputEventKey.new()
+				hotkey.keycode = KEY_1 + i as Key
+				newItem.Hotkey = hotkey
+		mainBarContainer.add_child(newItem)

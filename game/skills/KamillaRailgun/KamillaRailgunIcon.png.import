@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dlhfajtaat2d0"
-path="res://.godot/imported/KamillaBigGunIcon.PNG-1b0521dc1270e4471c723724248ceb13.ctex"
+uid="uid://br4wbialfc6ix"
+path="res://.godot/imported/KamillaRailgunIcon.png-7fe7235763f6c910f92965ae1b0f3cd9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/skills/KamillaPistol/KamillaBigGunIcon.PNG"
-dest_files=["res://.godot/imported/KamillaBigGunIcon.PNG-1b0521dc1270e4471c723724248ceb13.ctex"]
+source_file="res://game/skills/KamillaRailgun/KamillaRailgunIcon.png"
+dest_files=["res://.godot/imported/KamillaRailgunIcon.png-7fe7235763f6c910f92965ae1b0f3cd9.ctex"]
 
 [params]
 

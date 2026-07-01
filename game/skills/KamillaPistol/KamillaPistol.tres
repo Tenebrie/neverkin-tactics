@@ -7,10 +7,6 @@
 script = ExtResource("2_mibhb")
 Name = "Pistol"
 IconTexture = ExtResource("1_i00ue")
-ActionPointCost = 2
-HealthDamage = 1
-TargetingMode = 3
-TargetingMaxRange = 5.0
-TargetingAllianceFilter = Array[int]([2])
-TargetingLineWidth = 0.04
+MovementRequired = null
+TargetingMaxRange = 3.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

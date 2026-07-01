@@ -8,16 +8,23 @@ var TrackedSkill: Skill:
 	set(value):
 		if TrackedSkill != null:
 			TrackedSkill.Controller.SelectedSkillChanged.disconnect(updateModulate)
+			TrackedSkill.Controller.parent.actions.ActionPointsChanged.disconnect(updateModulate)
+			TrackedSkill.Controller.parent.actions.MovementPointsChanged.disconnect(updateModulate)
 		TrackedSkill = value
 		if TrackedSkill != null:
 			TrackedSkill.Controller.SelectedSkillChanged.connect(updateModulate)
-var HotkeyIndex: int = 0
+			TrackedSkill.Controller.parent.actions.ActionPointsChanged.connect(updateModulate)
+			TrackedSkill.Controller.parent.actions.MovementPointsChanged.connect(updateModulate)
+
+var Transparent: bool = false
+var Hotkey: InputEventKey
 
 var isHovered: bool = false
 
 func _ready():
 	update()
 	TurnManager.Instance.CurrentActorChanged.connect(update)
+	TurnManager.Instance.TurnChanged.connect(updateModulate)
 	iconButton.mouse_entered.connect(func(): isHovered = true; updateModulate())
 	iconButton.mouse_exited.connect(func(): isHovered = false; updateModulate())
 	iconButton.button_up.connect(updateModulate)
@@ -31,14 +38,15 @@ func onPortraitClick() -> void:
 
 	if TrackedSkill.Controller.SelectedSkill == TrackedSkill:
 		TrackedSkill.Controller.Select(null)
+	elif TrackedSkill.Parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
+		MessageLog.PrintMessage("Not enough movement")
+	elif TrackedSkill.Parent.actions.ActionPointsAvailable >= TrackedSkill.ActionPointCost:
+		TrackedSkill.Controller.Select(TrackedSkill)
 	else:
-		TrackedSkill.Controller.SelectByIndex(HotkeyIndex)
+		MessageLog.PrintMessage("Not enough AP")
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is not InputEventKey or not event.is_pressed():
-		return
-
-	if event.keycode == Key.KEY_1 + HotkeyIndex:
+	if Hotkey != null and event.is_match(Hotkey) and not event.is_echo() and event.is_pressed():
 		onPortraitClick()
 
 func update() -> void:
@@ -46,16 +54,34 @@ func update() -> void:
 		iconButton.texture_normal = null
 		$%HotkeyLabel.visible = false
 		$Panel.visible = true
+		setActionPointCost(0)
 		return
 	$Panel.visible = false
 	$%HotkeyLabel.visible = true
 
-	hotkeyLabel.text = str(HotkeyIndex + 1)
+	if Hotkey != null:
+		hotkeyLabel.text = Hotkey.as_text()
+	else:
+		hotkeyLabel.text = ""
 	iconButton.texture_normal = TrackedSkill.Definition.IconTexture
+	setActionPointCost(TrackedSkill.ActionPointCost)
+
+func setActionPointCost(cost: int):
+	var container = $%ActionPointCost
+	while container.get_child_count() > cost:
+		container.remove_child(container.get_child(0))
+	while container.get_child_count() < cost:
+		var point = Asset.Instantiate(SkillBarItemActionPoint)
+		container.add_child(point)
 
 func updateModulate() -> void:
+	if TrackedSkill == null and Transparent:
+		$Panel.self_modulate = Color.TRANSPARENT
+		return
+
 	var isActive := TrackedSkill != null and TrackedSkill.Controller.SelectedSkill == TrackedSkill
 	var base := Color.WHITE if TrackedSkill != null else Color(0, 0, 0, 0.5)
+
 	if isActive:
 		base = base.blend(Color(0, 1, 0, 0.5))
 	if isHovered:
@@ -63,5 +89,10 @@ func updateModulate() -> void:
 	if iconButton.button_pressed:
 		base = base.darkened(0.2)
 
-	#$Panel.self_modulate = base
+	if TrackedSkill != null:
+		if TrackedSkill.Parent.actions.ActionPointsAvailable < TrackedSkill.ActionPointCost:
+			base = Color(0.4, 0.4, 0.4)
+		if TrackedSkill.Parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
+			base = Color(0.4, 0.4, 0.4)
+
 	iconButton.self_modulate = base

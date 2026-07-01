@@ -10,6 +10,9 @@ var PlayerControlledActors: Array[Actor] = []
 
 signal KnownActorsChanged
 signal CurrentActorChanged(actor: Actor, previous: Actor)
+signal PlayerTurnStarted
+signal PlayerTurnEnded
+signal TurnChanged
 
 func _ready():
 	await get_tree().process_frame
@@ -31,9 +34,12 @@ func EndTurn() -> void:
 			MessageLog.PrintMessage("Wait for animation pls")
 			return
 
-	for actor in PlayerControlledActors:
-		actor.actions.EndTurn()
 	MessageLog.PrintMessage("Next turn!")
+	PlayerTurnEnded.emit()
+	TurnChanged.emit()
+	# Enemy turn here
+	PlayerTurnStarted.emit()
+	TurnChanged.emit()
 
 func SelectCharacterByHotkey(index: int) -> void:
 	if CurrentActor != null and CurrentActor.actions.IsPerformingAnyAction():

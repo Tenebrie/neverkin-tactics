@@ -57,7 +57,9 @@ func loadDefinition():
 	var material: StandardMaterial3D = $MeshInstance3D.material_override
 	material.albedo_texture = Definition.TokenTexture
 	var scaleMod = Definition.PhysicalSize / 0.2
-	create_tween().tween_property(self, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
+	var tween = create_tween().set_parallel()
+	tween.tween_property($MeshInstance3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
+	tween.tween_property($CollisionShape3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
 	$MeshInstance3D.position.x = Definition.TokenOffset.x
 	$MeshInstance3D.position.z = Definition.TokenOffset.y
 

@@ -1,6 +1,8 @@
 extends Skill
 class_name IveraCriticalClaws
 
+const Damage = 1
+
 func _ready() -> void:
 	Definition = load("res://game/skills/IveraClaws/IveraClaws.tres")
 	super._ready()
@@ -13,4 +15,4 @@ func Cast(targets: Skill.TargetData) -> void:
 	effect.global_position = actor.global_position
 	effect.position.y += 0.5
 	effect.Play()
-	actor.stats.DealDamage(GetHealthDamage(actor))
+	actor.stats.DealDamage(Damage)

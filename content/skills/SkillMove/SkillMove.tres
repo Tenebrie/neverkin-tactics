@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://h7he2kb5n51c"]
+
+[ext_resource type="Texture2D" uid="uid://cba8gqryv716k" path="res://content/skills/SkillMove/SkillMoveIcon.png" id="1_wvoif"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_5jy3r"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_wvoif"]
+device = -1
+keycode = 77
+unicode = 109
+
+[resource]
+script = ExtResource("2_5jy3r")
+Name = "Move"
+IconTexture = ExtResource("1_wvoif")
+ActionPointCost = 0
+MovementRequired = 0.01
+Hotkey = SubResource("InputEventKey_wvoif")
+TargetingMaxRange = 3.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"
