@@ -3,8 +3,8 @@ class_name IveraGriffonForm
 
 var Damage = 1
 
-var damageArea = TelegraphPreset.PointArea.new(0.6).WithDamageToHostiles(Damage)
-var exclusionArea = TelegraphPreset.PointArea.new(0.4)
+var damageArea = TelegraphPreset.PointArea.new(1.2).WithDamageToHostiles(Damage)
+var exclusionArea = TelegraphPreset.PointArea.new(0.8)
 
 func _ready() -> void:
 	Definition = preload("res://game/skills/IveraGriffonForm/IveraGriffonForm.tres").duplicate()

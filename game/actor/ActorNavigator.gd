@@ -3,9 +3,9 @@ class_name ActorNavigator
 
 @onready var agent: NavigationAgent3D = parent.get_node("NavigationAgent3D")
 
-var maxMovementSpeed := 1.8
-var maxAcceleration := 20.0
-var maxDeceleration := 20.0
+var maxMovementSpeed := 3.6
+var maxAcceleration := 40.0
+var maxDeceleration := 40.0
 var movementSpeed := Vector3.ZERO
 
 # Non-combat
@@ -13,13 +13,13 @@ var movementSpeed := Vector3.ZERO
 #var maxDeceleration := 6.0
 
 func StartMovingTowards(target: Vector3) -> void:
-	target.y = 0.1
+	target.y = 0.0
 	var map := agent.get_navigation_map()
 	target = NavigationServer3D.map_get_closest_point(map, target)
 	agent.target_position = target
 
 func IsPathable(target: Vector3) -> bool:
-	target.y = 0.1
+	target.y = 0.0
 	var map := agent.get_navigation_map()
 	var adjustedTarget := NavigationServer3D.map_get_closest_point(map, target)
 	return target.distance_squared_to(adjustedTarget) < 0.05

@@ -7,6 +7,6 @@
 script = ExtResource("1_bo7in")
 Name = "Kin Claws"
 IconTexture = ExtResource("1_irexs")
-TargetingMaxRange = 0.25
-TargetingTravelAreaRequired = 0.0
+MovementRequired = null
+TargetingMaxRange = 0.5
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

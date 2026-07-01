@@ -14,6 +14,7 @@ AvatarTexture = ExtResource("1_kb7sr")
 Alliance = 0
 HealthMaximum = 5
 HealthHumanityThreshold = 1
+MovementSpeedPerActionPoint = 5.0
 RenderPriority = 8
 Skills = Array[GDScript]([ExtResource("2_kb7sr"), ExtResource("3_12fl6")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

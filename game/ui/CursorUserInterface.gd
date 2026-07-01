@@ -8,7 +8,7 @@ func _process(_delta):
 	global_position = get_global_mouse_position() - Vector2($VBoxContainer.size.x / 2, 4)
 
 func ShowActionPointCost(value: float, dist: float):
-	$%Label2.text = "%.2fm"%[dist * 2]
+	$%Label2.text = "%.2fm"%[dist]
 	$%Label.text = "%d AP"%[value]
 	$%Label.visible = true
 	$%Label2.visible = true

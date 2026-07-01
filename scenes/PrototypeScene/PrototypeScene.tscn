@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://2ohwekfgbpuc"]
+
+[ext_resource type="Texture2D" uid="uid://b2cs0unkuwnh" path="res://addons/prototype-textures/dark/texture_08.png" id="1_cr8q8"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_wr5mt"]
+vertices = PackedVector3Array(0.921875, 0, -9.546875, -0.0234375, 0, -9.6015625, -0.921875, 0, -9.546875, 1.8515625, 0, -9.421875, 2.7734375, 0, -9.1875, 3.703125, 0, -8.859375, 4.5, 0, -8.4765625, 5.3203125, 0, -7.9921875, 6.0703125, 0, -7.4296875, 6.7734375, 0, -6.796875, 7.4296875, 0, -6.0703125, 7.96875, 0, -5.3515625, 8.4765625, 0, -4.5, 8.859375, 0, -3.703125, 9.1796875, 0, -2.796875, 9.40625, 0, -1.890625, 9.546875, 0, -0.921875, 9.59375, 0, 0, 9.546875, 0, 0.921875, 9.40625, 0, 1.890625, 9.1796875, 0, 2.796875, 8.859375, 0, 3.703125, 8.4765625, 0, 4.5, 7.96875, 0, 5.3515625, 7.4296875, 0, 6.0703125, 6.7734375, 0, 6.796875, 6.0703125, 0, 7.4296875, 5.3203125, 0, 7.9921875, 4.5, 0, 8.4765625, 3.703125, 0, 8.859375, 2.7734375, 0, 9.1875, 1.8515625, 0, 9.421875, 0.921875, 0, 9.546875, -0.0234375, 0, 9.6015625, -0.921875, 0, 9.546875, -1.8515625, 0, -9.421875, -2.7734375, 0, -9.1875, -3.703125, 0, -8.8515625, -4.5, 0, -8.4765625, -5.3203125, 0, -7.9921875, -6.0703125, 0, -7.4296875, -6.7734375, 0, -6.796875, -7.4296875, 0, -6.0703125, -7.96875, 0, -5.3515625, -8.46875, 0, -4.5, -1.8515625, 0, 9.421875, -2.7734375, 0, 9.1875, -3.703125, 0, 8.859375, -4.5, 0, 8.4765625, -5.3203125, 0, 7.9921875, -6.0703125, 0, 7.4296875, -6.7734375, 0, 6.796875, -7.4296875, 0, 6.0703125, -7.96875, 0, 5.3515625, -8.46875, 0, 4.5, -8.859375, 0, -3.703125, -9.1796875, 0, -2.796875, -9.40625, 0, -1.890625, -9.546875, 0, -0.921875, -9.59375, 0, 0, -9.546875, 0, 0.921875, -9.40625, 0, 1.890625, -9.1796875, 0, 2.796875, -8.859375, 0, 3.703125)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(2, 0, 3), PackedInt32Array(2, 3, 4), PackedInt32Array(2, 4, 5), PackedInt32Array(2, 5, 6), PackedInt32Array(2, 6, 7), PackedInt32Array(2, 7, 8), PackedInt32Array(2, 8, 9), PackedInt32Array(2, 9, 10), PackedInt32Array(2, 10, 11), PackedInt32Array(2, 11, 12), PackedInt32Array(2, 12, 13), PackedInt32Array(2, 13, 14), PackedInt32Array(2, 14, 15), PackedInt32Array(2, 15, 16), PackedInt32Array(2, 16, 17), PackedInt32Array(2, 17, 18), PackedInt32Array(2, 18, 19), PackedInt32Array(2, 19, 20), PackedInt32Array(2, 20, 21), PackedInt32Array(2, 21, 22), PackedInt32Array(2, 22, 23), PackedInt32Array(2, 23, 24), PackedInt32Array(2, 24, 25), PackedInt32Array(2, 25, 26), PackedInt32Array(2, 26, 27), PackedInt32Array(2, 27, 28), PackedInt32Array(2, 28, 29), PackedInt32Array(2, 29, 30), PackedInt32Array(2, 30, 31), PackedInt32Array(2, 31, 32), PackedInt32Array(2, 32, 33), PackedInt32Array(2, 33, 34), PackedInt32Array(35, 2, 34), PackedInt32Array(36, 35, 34), PackedInt32Array(37, 36, 34), PackedInt32Array(38, 37, 34), PackedInt32Array(39, 38, 34), PackedInt32Array(40, 39, 34), PackedInt32Array(41, 40, 34), PackedInt32Array(42, 41, 34), PackedInt32Array(43, 42, 34), PackedInt32Array(44, 43, 34), PackedInt32Array(44, 34, 45), PackedInt32Array(44, 45, 46), PackedInt32Array(44, 46, 47), PackedInt32Array(44, 47, 48), PackedInt32Array(44, 48, 49), PackedInt32Array(44, 49, 50), PackedInt32Array(44, 50, 51), PackedInt32Array(44, 51, 52), PackedInt32Array(44, 52, 53), PackedInt32Array(44, 53, 54), PackedInt32Array(55, 44, 54), PackedInt32Array(56, 55, 54), PackedInt32Array(57, 56, 54), PackedInt32Array(58, 57, 54), PackedInt32Array(59, 58, 54), PackedInt32Array(60, 59, 54), PackedInt32Array(61, 60, 54), PackedInt32Array(62, 61, 54), PackedInt32Array(63, 62, 54)]
+geometry_parsed_geometry_type = 1
+geometry_source_geometry_mode = 1
+cell_size = 0.05
+cell_height = 0.01
+agent_height = 1.0
+agent_radius = 0.4
+agent_max_climb = 1.0
+filter_low_hanging_obstacles = true
+filter_ledge_spans = true
+filter_walkable_low_height_spans = true
+filter_baking_aabb = AABB(-10, -1.755, -10, 20, 1.83, 20)
+baking_flat_enabled = true
+baking_flat_plane = Plane(0, 1, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6ytau"]
+albedo_texture = ExtResource("1_cr8q8")
+uv1_scale = Vector3(20, 20, 20)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2nx55"]
+material = SubResource("StandardMaterial3D_6ytau")
+top_radius = 10.0
+bottom_radius = 10.0
+height = 0.005
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_nvo6o"]
+height = 0.001
+radius = 10.0
+
+[node name="PrototypeScene" type="Node3D" unique_id=608149629]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=63940742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007748604, 0)
+navigation_mesh = SubResource("NavigationMesh_wr5mt")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1847546094 groups=["navigation_mesh_source_group"]]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=960394738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.10867834, 0)
+mesh = SubResource("CylinderMesh_2nx55")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Node3D" unique_id=782708052]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/StaticBody3D" unique_id=461484559]
+shape = SubResource("CylinderShape3D_nvo6o")

@@ -34,7 +34,9 @@ func RefundActionPoints(value: int):
 	ActionPointsChanged.emit(ActionPointsAvailable)
 
 #region Movement
-@export var MovementSpeedPerAP: float = 1.0
+var MovementSpeedPerAP: float:
+	get:
+		return parent.Definition.MovementSpeedPerActionPoint
 var MovementBuffer: float = 0.0:
 	set(v):
 		MovementBuffer = v

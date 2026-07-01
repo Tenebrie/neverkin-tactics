@@ -18,5 +18,6 @@ func Cast(targets: Skill.TargetData) -> void:
 	effect.global_transform = Transform3D.IDENTITY
 	effect.global_position = actor.global_position
 	effect.position.y += 0.5
+	effect.scale = Vector3(1.7,1.7,1.7)
 	effect.Play()
 	actor.stats.DealDamage(Damage)

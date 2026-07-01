@@ -3,7 +3,7 @@ extends Resource
 class_name ActorDefinition
 
 @export var Name: String = "Unnamed"
-@export var PhysicalSize: float = 0.2
+@export var PhysicalSize: float = 0.4
 @export var TokenOffset: Vector2 = Vector2.ZERO
 
 @export var TokenTexture: Texture2D

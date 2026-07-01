@@ -25,7 +25,7 @@ func PlayInverted() -> void:
 func createSwipeTrail(from: Vector3, to: Vector3, arc: float) -> void:
 	var trail := VaporTrail.new()
 	trail.position = from
-	trail.size = 0.05
+	trail.size = 0.07
 	trail.emitting = true
 	trail.num_points = 50
 	trail.update_interval = 0.003

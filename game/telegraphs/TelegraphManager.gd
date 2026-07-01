@@ -123,7 +123,7 @@ func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Telegraph:
 	if def.Icon != null:
 		var icon = Asset.Instantiate(TelegraphIcon)
 		icon.SetIcon(def.Icon)
-		icon.SetSize(Vector2(0.4, 0.4))
+		icon.SetSize(Vector2(0.8, 0.8))
 		telegraph.add_child(icon)
 	telegraph.ParentSkill = skill
 	return telegraph

@@ -1,4 +1,5 @@
-class_name MessageLog extends Control
+extends Control
+class_name MessageLog
 
 static var instance: MessageLog
 
