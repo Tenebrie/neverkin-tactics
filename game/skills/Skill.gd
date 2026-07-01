@@ -28,7 +28,7 @@ func PerformCast(targets: TargetData) -> void:
 	OnCast.emit(targets)
 	AfterCast.emit(targets)
 
-func Cast(targets: TargetData) -> void:
+func Cast(_targets: TargetData) -> void:
 	pass
 
 enum TargetMode {

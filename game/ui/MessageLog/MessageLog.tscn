@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c56q6jd10eeoa" path="res://game/ui/MessageLog/MessageLog.gd" id="1_sno24"]
 
 [node name="MessageLog" type="MarginContainer" unique_id=1824792776]
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_right = 40.0

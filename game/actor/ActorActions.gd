@@ -106,7 +106,7 @@ func IssueOrder_MoveTo(path: PackedVector3Array):
 func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	var apCost = skill.ActionPointCost
 	if ActionPointsAvailable < apCost:
-		MessageLog.PrintMessage("Unable to cast. Not enough AP.")
+		MessageLog.PrintMessage("Not enough AP")
 		return
 
 	for telegraph in TelegraphManager.Instance.telegraphs:
@@ -115,7 +115,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 			if result is bool and result == false:
 				return
 			if result is Error:
-				MessageLog.PrintErrorObject("Unable to cast. ", result)
+				MessageLog.PrintErrorObject(result)
 				return
 
 	ConsumeActionPoints(apCost)

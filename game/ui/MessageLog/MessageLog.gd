@@ -30,7 +30,15 @@ func printMessage(message: String) -> void:
 		node.queue_free()
 
 static func PrintMessage(message: String) -> void:
-	instance.printMessage(message)
+	#instance.printMessage(message)
+	var item = Asset.Instantiate(MessageLogFloatingItem)
+	item.text = message
+	item.global_position = instance.get_viewport().get_mouse_position() - Vector2(instance.get_viewport_rect().size.x / 2, 24)
+	instance.get_tree().root.add_child(item)
 
-static func PrintErrorObject(prefix: String, error: Error) -> void:
-	instance.printMessage(prefix + " " + error.Message)
+static func PrintErrorObject(error: Error) -> void:
+	#instance.printMessage(prefix + " " + error.Message)
+	var item = Asset.Instantiate(MessageLogFloatingItem)
+	item.text = error.Message
+	item.global_position = instance.get_viewport().get_mouse_position() - Vector2(instance.get_viewport_rect().size.x / 2, 24)
+	instance.get_tree().root.add_child(item)

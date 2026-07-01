@@ -77,6 +77,8 @@ func setActionPointCost(cost: int):
 func updateModulate() -> void:
 	if TrackedSkill == null and Transparent:
 		$Panel.self_modulate = Color.TRANSPARENT
+		$Panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		$%TextureButton.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		return
 
 	var isActive := TrackedSkill != null and TrackedSkill.Controller.SelectedSkill == TrackedSkill

@@ -53,9 +53,10 @@ func _process(_delta: float) -> void:
 	if lockedMode == TargetMode.WalkPreview:
 		var previewPath := getLegalPathToMouse()
 		agentPathPreview.SetPath(previewPath, parent.position)
-		var apCount := parent.actions.GetMovementActionPointCost(ActorNavigator.GetPathMovementCost(previewPath))
+		var movementCost = ActorNavigator.GetPathMovementCost(previewPath)
+		var apCount := parent.actions.GetMovementActionPointCost(movementCost)
 		var shownApCount := mini(apCount, parent.actions.ActionPointsAvailable)
-		CombatUI.cursor.ShowActionPointCost(shownApCount)
+		CombatUI.cursor.ShowActionPointCost(shownApCount, movementCost)
 		PredictedActionPointCost = shownApCount
 
 func _unhandled_input(event: InputEvent) -> void:

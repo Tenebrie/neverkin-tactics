@@ -22,6 +22,7 @@ anchor_bottom = 1.0
 offset_top = -112.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Margin" unique_id=276239300]
@@ -38,12 +39,15 @@ layout_mode = 2
 
 [node name="SkillBarItem" parent="Margin/VBoxContainer/CommonBar/CommonBarContainer" unique_id=1766322433 instance=ExtResource("2_7foaf")]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="SkillBarItem2" parent="Margin/VBoxContainer/CommonBar/CommonBarContainer" unique_id=1161219997 instance=ExtResource("2_7foaf")]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="SkillBarItem3" parent="Margin/VBoxContainer/CommonBar/CommonBarContainer" unique_id=121523233 instance=ExtResource("2_7foaf")]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="MainBar" type="HFlowContainer" parent="Margin/VBoxContainer" unique_id=1919647924]
 layout_mode = 2
@@ -55,15 +59,20 @@ layout_mode = 2
 
 [node name="SkillBarItem" parent="Margin/VBoxContainer/MainBar/MainBarContainer" unique_id=544254672 instance=ExtResource("2_7foaf")]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="SkillBarItem2" parent="Margin/VBoxContainer/MainBar/MainBarContainer" unique_id=435935898 instance=ExtResource("2_7foaf")]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="SkillBarItem3" parent="Margin/VBoxContainer/MainBar/MainBarContainer" unique_id=1774873766 instance=ExtResource("2_7foaf")]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="SkillBarItem4" parent="Margin/VBoxContainer/MainBar/MainBarContainer" unique_id=1287064813 instance=ExtResource("2_7foaf")]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="SkillBarItem5" parent="Margin/VBoxContainer/MainBar/MainBarContainer" unique_id=1883617568 instance=ExtResource("2_7foaf")]
 layout_mode = 2
+mouse_filter = 2

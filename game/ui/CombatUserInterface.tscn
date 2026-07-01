@@ -16,14 +16,6 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_82bxv")
 
-[node name="CursorUI" parent="." unique_id=283925533 instance=ExtResource("1_iippe")]
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-grow_horizontal = 1
-grow_vertical = 1
-
 [node name="InitiativeBar" parent="." unique_id=1277367613 instance=ExtResource("2_c4t08")]
 layout_mode = 1
 
@@ -41,3 +33,11 @@ offset_right = -32.0
 offset_bottom = -29.0
 grow_horizontal = 0
 grow_vertical = 0
+
+[node name="CursorUI" parent="." unique_id=283925533 instance=ExtResource("1_iippe")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
