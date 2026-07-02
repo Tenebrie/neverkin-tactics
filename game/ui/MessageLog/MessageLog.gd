@@ -30,6 +30,9 @@ func printMessage(message: String) -> void:
 	if is_instance_valid(node):
 		node.queue_free()
 
+static func PrintChatMessage(message: String) -> void:
+	instance.printMessage(message)
+
 static func PrintMessage(message: String) -> void:
 	#instance.printMessage(message)
 	var item = Asset.Instantiate(MessageLogFloatingItem)

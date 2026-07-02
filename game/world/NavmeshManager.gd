@@ -1,101 +1,165 @@
 extends Node
 class_name NavmeshManager
 
-const CIRCLE_SEGMENTS = 12
+const CIRCLE_SEGMENTS = 16
+
+signal BakeCompleted
+signal batchFinished
 
 static var Instance: NavmeshManager:
 	get:
 		return NavmeshManagerInstance
 
-@onready var TrackedActorSignal = SignalTracker.new(
-	func(actor: Actor): return actor.DefinitionChanged,
-	RebakeNavmeshForCurrentActor
-)
+var isBaking = false
+var hasPendingRequest = false
+var pendingActor: Actor = null
+var pendingExceptions: Array[Actor] = []
+var activeBakeCount = 0
 
-func _enter_tree() -> void:
-	TurnManager.Instance.CurrentActorChanged.connect(onCurrentActorChanged)
-	Actor.SignalBus.ActorDestroyed.connect(func(actor):
-		rebakeNavmesh(TurnManager.Instance.CurrentActor, [actor])
+func _enter_tree():
+	TurnManager.Instance.CurrentActorChanged.connect(func(actor: Actor):
+		if TurnManager.Instance.CurrentFaction == Actor.Alliance.Player:
+			rebakeNavmesh(actor, [])
+	)
+	TurnManager.Instance.CurrentNPCChanged.connect(func(actor: Actor):
+		rebakeNavmesh(actor, [])
+	)
+	Actor.SignalBus.ActorDestroyed.connect(func(actor: Actor):
+		if TurnManager.Instance.CurrentFaction == Actor.Alliance.Player:
+			rebakeNavmesh(TurnManager.Instance.CurrentActor, [actor])
+		else:
+			rebakeNavmesh(TurnManager.Instance.CurrentNPC, [actor])
+	)
+	TurnManager.Instance.FactionTurnStarted.connect(func():
+		if TurnManager.Instance.CurrentFaction == Actor.Alliance.Player:
+			rebakeNavmesh(TurnManager.Instance.CurrentActor, [])
+		else:
+			rebakeNavmesh(TurnManager.Instance.CurrentNPC, [])
 	)
 
-func RebakeNavmeshForCurrentActor():
-	rebakeNavmesh(TurnManager.Instance.CurrentActor, [])
+func WaitUntilReady():
+	while isBaking or hasPendingRequest:
+		await BakeCompleted
 
-func onCurrentActorChanged(actor: Actor) -> void:
-	await get_tree().process_frame
-	TrackedActorSignal.Track(actor)
-	rebakeNavmesh(actor, [])
+func rebakeNavmesh(actor: Actor, exceptions: Array[Actor]):
+	if actor == null:
+		return
+	pendingActor = actor
+	pendingExceptions = exceptions.duplicate()
+	hasPendingRequest = true
+	if not isBaking:
+		drainQueue()
 
-func rebakeNavmesh(actor: Actor, exceptions: Array[Actor]) -> void:
-	var total_start := Time.get_ticks_usec()
-	exceptions.push_back(actor)
-	var characters := get_tree().current_scene.find_children("*", "Actor", true, false)
-	var regions := get_tree().current_scene.find_children("*", "NavigationRegion3D", true, false)
+func drainQueue():
+	isBaking = true
+	while hasPendingRequest:
+		hasPendingRequest = false
+		if is_instance_valid(pendingActor):
+			var touchedMaps = await bakeOnce(pendingActor, pendingExceptions)
+			await waitForMapSync(touchedMaps)
+	isBaking = false
+	BakeCompleted.emit()
 
+func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
+	print("[navbake] dispatch for %s" % [actor.name])
+	var allExceptions: Array[Actor] = exceptions.duplicate()
+	allExceptions.push_back(actor)
+	var characters = get_tree().current_scene.find_children("*", "Actor", true, false)
+	var regions = get_tree().current_scene.find_children("*", "NavigationRegion3D", true, false)
+	var touchedMaps: Array[RID] = []
+	var seenMeshes = {}
+	activeBakeCount = 0
 	for region: NavigationRegion3D in regions:
-		region.navigation_mesh.agent_radius = actor.PhysicalSize
-		var nav_mesh := region.navigation_mesh
-		region.navigation_mesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
-		if nav_mesh == null:
+		var navMesh = region.navigation_mesh
+		if navMesh == null:
 			continue
-
-		var source := NavigationMeshSourceGeometryData3D.new()
-		NavigationServer3D.parse_source_geometry_data(nav_mesh, source, region)
-
+		if seenMeshes.has(navMesh):
+			continue
+		seenMeshes[navMesh] = region.name
+		if NavigationServer3D.is_baking_navigation_mesh(navMesh):
+			continue
+		navMesh.agent_radius = actor.PhysicalSize
+		navMesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
+		var source = NavigationMeshSourceGeometryData3D.new()
+		NavigationServer3D.parse_source_geometry_data(navMesh, source, region)
 		for c: Actor in characters:
-			if exceptions.has(c):
+			if allExceptions.has(c):
 				continue
 			var col: CollisionShape3D = c.get_node_or_null("CollisionShape3D")
 			if col and col.shape:
-				addObstruction(source, col, actor.PhysicalSize)
+				addObstruction(source, c, col, actor.PhysicalSize)
+		touchedMaps.push_back(region.get_navigation_map())
+		activeBakeCount += 1
+		NavigationServer3D.bake_from_source_geometry_data_async(navMesh, source, onRegionBakeFinished)
+	if activeBakeCount > 0:
+		await batchFinished
+	return touchedMaps
 
-		NavigationServer3D.bake_from_source_geometry_data_async(nav_mesh, source)
+func onRegionBakeFinished():
+	activeBakeCount -= 1
+	if activeBakeCount == 0:
+		batchFinished.emit()
 
-	var total_ms := (Time.get_ticks_usec() - total_start) / 1000.0
-	print("[navbake] all regions done in %.2f ms" % total_ms)
+func waitForMapSync(maps: Array[RID]):
+	var pending = {}
+	for m in maps:
+		pending[m] = true
+	while not pending.is_empty():
+		var synced: RID = await NavigationServer3D.map_changed
+		pending.erase(synced)
 
-func addObstruction(source: NavigationMeshSourceGeometryData3D, col: CollisionShape3D, agentRadius: float):
-	var shape := col.shape
-	var origin := col.global_position
-	var radius := 0.0
-	var height := 0.0
+func addObstruction(source: NavigationMeshSourceGeometryData3D, other: Actor, col: CollisionShape3D, agentRadius: float):
+	var shape = col.shape
+	var transform = col.global_transform
+	var origin = transform.origin
+	var colScale = transform.basis.get_scale()
+	var horizontalScale = maxf(absf(colScale.x), absf(colScale.z))
 
-	if shape is CapsuleShape3D:
-		radius = shape.radius
-		height = shape.height
-	elif shape is CylinderShape3D:
-		radius = shape.radius
-		height = shape.height
-	elif shape is SphereShape3D:
-		radius = shape.radius
-		height = radius * 2.0
-	elif shape is BoxShape3D:
-		height = shape.size.y
-		var half := shape.size * 0.5 + Vector3(agentRadius, 0, agentRadius)
-		var basis := col.global_transform.basis
-		var vertices := PackedVector3Array()
+	if shape is BoxShape3D:
+		var heightA = shape.size.y * absf(colScale.y)
+		var half = shape.size * 0.5 + Vector3(
+			agentRadius / maxf(absf(colScale.x), 0.001),
+			0,
+			agentRadius / maxf(absf(colScale.z), 0.001)
+		)
+		var basis = transform.basis
+		var verticesA = PackedVector3Array()
 		for corner in [
 			Vector3(-half.x, 0, -half.z),
 			Vector3(half.x, 0, -half.z),
 			Vector3(half.x, 0, half.z),
 			Vector3(-half.x, 0, half.z),
 		]:
-			var rotated := basis * corner
-			vertices.push_back(Vector3(origin.x + rotated.x, 0, origin.z + rotated.z))
-		source.add_projected_obstruction(vertices, origin.y - height * 0.5, height, true)
+			var rotated = basis * corner
+			verticesA.push_back(Vector3(origin.x + rotated.x, 0, origin.z + rotated.z))
+		source.add_projected_obstruction(verticesA, origin.y - heightA * 0.5, heightA, true)
 		return
+
+	var shapeRadius = 0.0
+	var height = 0.0
+	if shape is CapsuleShape3D:
+		shapeRadius = shape.radius
+		height = shape.height
+	elif shape is CylinderShape3D:
+		shapeRadius = shape.radius
+		height = shape.height
+	elif shape is SphereShape3D:
+		shapeRadius = shape.radius
+		height = shape.radius * 2.0
 	else:
 		push_warning("[navbake] Unsupported collision shape type: %s" % shape.get_class())
 		return
 
-	# Circular footprint for capsule/cylinder/sphere, inflated by agent radius
-	radius += agentRadius
-	var otherVertices := PackedVector3Array()
+	var footprint = maxf(shapeRadius * horizontalScale, other.PhysicalSize)
+	height = height * absf(colScale.y)
+
+	var carveRadius = footprint + agentRadius
+	var vertices = PackedVector3Array()
 	for i in CIRCLE_SEGMENTS:
-		var angle := TAU * i / CIRCLE_SEGMENTS
-		otherVertices.push_back(Vector3(
-			origin.x + cos(angle) * radius,
+		var angle = TAU * i / CIRCLE_SEGMENTS
+		vertices.push_back(Vector3(
+			origin.x + cos(angle) * carveRadius,
 			0,
-			origin.z + sin(angle) * radius
+			origin.z + sin(angle) * carveRadius
 		))
-	source.add_projected_obstruction(otherVertices, origin.y - height * 0.5, height, true)
+	source.add_projected_obstruction(vertices, origin.y - height * 0.5, height, true)

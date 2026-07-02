@@ -61,6 +61,12 @@ class Projectile extends TelegraphDefinition:
 		HealthThreat = damage
 		return self
 
+	func TargetingPlayer():
+		TargetFilters.push_back(func(actor: Actor) -> bool:
+			return actor.Definition.Alliance == Actor.Alliance.Player
+		)
+		return self
+
 	func TargetingHostiles():
 		TargetFilters.push_back(func(actor: Actor) -> bool:
 			return actor.Definition.Alliance == Actor.Alliance.Hostile

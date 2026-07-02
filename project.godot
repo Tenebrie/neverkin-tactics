@@ -24,6 +24,7 @@ TurnManagerInstance="*uid://dq3q74togyfy3"
 TelegraphManagerInstance="*uid://barnsaj3p6ik1"
 GameInstance="*uid://dge7jpvygd3jf"
 MessageLogInstance="*uid://bnowp6ttp38gb"
+NPCManagerInstance="*uid://b75fcywcxv6fi"
 
 [debug]
 

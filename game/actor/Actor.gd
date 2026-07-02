@@ -94,9 +94,13 @@ class Repository:
 #endregion
 
 enum Alliance {
-	Player,
-	Neutral,
-	Hostile,
+	None = -1,
+
+	Player = 0,
+	Neutral = 1,
+	Hostile = 2,
+
+	Max = 3
 }
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()

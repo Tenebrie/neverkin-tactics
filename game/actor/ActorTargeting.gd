@@ -103,7 +103,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		var path := getLegalPathToMouse()
 		if path.size() == 0:
 			return
-		parent.actions.IssueOrder_MoveTo(path)
+		parent.actions.IssueOrder_MoveThroughPath(path)
 		lockedMode = TargetMode.None
 
 func resetDisplayedElements() -> void:
@@ -114,11 +114,14 @@ func resetDisplayedElements() -> void:
 #region Utilities
 func getLegalPathToMouse() -> PackedVector3Array:
 	var worldMousePos = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
+	return getLegalPathTo(worldMousePos)
+
+func getLegalPathTo(target: Vector3) -> PackedVector3Array:
 	var map_rid := parent.navigator.agent.get_navigation_map()
 	var previewPath := NavigationServer3D.map_get_path(
 		map_rid,
 		parent.global_position,
-		worldMousePos,
+		target,
 		true,
 		parent.navigator.agent.navigation_layers
 	)

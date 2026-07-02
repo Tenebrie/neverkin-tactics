@@ -25,15 +25,15 @@ script = ExtResource("1_6ytau")
 [node name="StreetCentral" parent="." unique_id=608149629 instance=ExtResource("1_vh257")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 34, -0.03773588, 0)
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1185739265]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 2.565, 0)
+[node name="MainCamera" type="Camera3D" parent="." unique_id=1185739265]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -3.2408328, 2.565, 0)
 projection = 1
 size = 8.0
 script = ExtResource("2_cxv17")
-offsetRangeMinX = -1.4
-offsetRangeMaxX = 1.4
-offsetRangeMinZ = -0.75
-offsetRangeMaxZ = 0.75
+offsetRangeMinX = -3.0
+offsetRangeMaxX = 3.0
+offsetRangeMinZ = -6.0
+offsetRangeMaxZ = 6.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=941600512]
 environment = SubResource("Environment_vh257")
@@ -50,7 +50,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25074467, 0, 1.5746546)
 [node name="Ivera" parent="." unique_id=99942340 instance=ExtResource("2_xy3my")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.524639, 0, 0.038736463)
 
-[node name="Kamilla" parent="." unique_id=1855860234 instance=ExtResource("6_xs4ih")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9905386, 0.0002503097, 0.67975295)
-
 [node name="PrototypeScene" parent="." unique_id=1259424146 instance=ExtResource("7_6ytau")]
+
+[node name="Kamilla" parent="." unique_id=1326251066 instance=ExtResource("6_xs4ih")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2623677, 0.00049996376, 0.7915019)

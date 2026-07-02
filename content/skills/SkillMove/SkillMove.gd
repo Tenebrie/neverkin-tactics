@@ -8,7 +8,7 @@ func _ready() -> void:
 		var path = Parent.targeting.getLegalPathToMouse()
 		if path.size() == 0:
 			return
-		Parent.actions.IssueOrder_MoveTo(path)
+		Parent.actions.IssueOrder_MoveThroughPath(path)
 	)
 
 	AfterCast.connect(func():

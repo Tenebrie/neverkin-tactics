@@ -52,7 +52,7 @@ func _parentReady() -> void:
 		else:
 			_actionPointsThreatenedFromSkill = 0
 	)
-	TurnManager.Instance.PlayerTurnStarted.connect(onTurnStarted)
+	TurnManager.Instance.FactionTurnEnded.connect(onTurnEnded)
 
 func ConsumeMovement(value: float):
 	for i in 50:
@@ -82,27 +82,29 @@ func GetMovementActionPointCost(value: float) -> int:
 #endregion
 
 #region ActionQueue
-var actionQueue: Array[String] = []
+var ActionQueue: ActorActionQueue = ActorActionQueue.new()
 
 func IsPerformingAnyAction() -> bool:
-	return actionQueue.size() > 0
+	return ActionQueue.Busy()
 #endregion
 
-func onTurnStarted() -> void:
+func onTurnEnded(faction: Actor.Alliance) -> void:
+	if faction != parent.Definition.Alliance:
+		return
 	MovementBuffer = 0.0
 	if ActionPointsUsed < ActionPointsMax:
 		ActionPointsSaved = 1
 	ActionPointsUsed = 0
 
 #region Orders
-func IssueOrder_MoveTo(path: PackedVector3Array):
+func IssueOrder_MoveThroughPath(path: PackedVector3Array):
 	var lastPoint := path[path.size() - 1]
 	parent.navigator.StartMovingTowards(lastPoint)
 	var pathCost = ActorNavigator.GetPathMovementCost(path)
 	parent.actions.ConsumeMovement(pathCost)
-	actionQueue.push_back("dummy value")
+	ActionQueue.Push("dummy value")
 	parent.navigator.agent.target_reached.connect(func():
-		actionQueue.pop_front(),
+		ActionQueue.ConsumeFirst(),
 	CONNECT_ONE_SHOT)
 
 func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
@@ -124,12 +126,36 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	skill.PerformCast(targets)
 
 func IssueOrder_Stop():
-	if actionQueue.size() == 0:
+	if ActionQueue.Empty():
 		return
-	actionQueue.pop_front()
+	ActionQueue.Clear()
 	var toRefund = (roundf(parent.navigator.GetRemainingPathLength() * 1000) / 1000)
 	RefundMovement(maxf(0.0, toRefund - 0.1))
 
 	parent.navigator.HardStop()
 
 #endregion
+
+class ActorActionQueue:
+	signal StepCompleted
+	signal QueueEmptied
+
+	var queue: Array[String] = []
+
+	func Empty() -> bool:
+		return queue.size() == 0
+
+	func Busy() -> bool:
+		return queue.size() > 0
+
+	func Clear() -> void:
+		queue.pop_front()
+
+	func Push(action: String) -> void:
+		queue.push_back(action)
+
+	func ConsumeFirst() -> void:
+		queue.pop_front()
+		StepCompleted.emit()
+		if queue.size() == 0:
+			QueueEmptied.emit()
