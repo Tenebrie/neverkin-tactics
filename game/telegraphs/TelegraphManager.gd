@@ -47,7 +47,7 @@ func _process(_delta: float) -> void:
 	for telegraph in telegraphs:
 		if telegraph.Definition.Attachment == Telegraph.Attachment.Mouse:
 			var updatedTarget = target
-			updatedTarget.y = 0.05
+			updatedTarget.y = 1
 			telegraph.global_position = updatedTarget
 
 		telegraph.Tint = TelegraphColor.NoTarget
@@ -75,6 +75,7 @@ func onSkillSelected(skill: Skill):
 	for def in skill.Definition.Telegraphs:
 		def.Load(skill)
 		var telegraph = instantiateTelegraph(def, skill)
+		telegraph.position.y = RenderHeight.TelegraphBase
 		telegraphs.push_back(telegraph)
 		if def.Attachment == Telegraph.Attachment.Mouse:
 			add_child(telegraph)
@@ -125,5 +126,6 @@ func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Telegraph:
 		icon.SetIcon(def.Icon)
 		icon.SetSize(Vector2(0.8, 0.8))
 		telegraph.add_child(icon)
+		icon.position.y = RenderHeight.AboveWalls - RenderHeight.TelegraphBase
 	telegraph.ParentSkill = skill
 	return telegraph

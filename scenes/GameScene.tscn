@@ -10,6 +10,7 @@
 
 [sub_resource type="Environment" id="Environment_vh257"]
 glow_enabled = true
+glow_normalized = true
 glow_intensity = 6.26
 glow_strength = 2.0
 glow_bloom = 0.09
@@ -18,6 +19,14 @@ volumetric_fog_enabled = true
 volumetric_fog_density = 0.0263
 volumetric_fog_albedo = Color(0, 0, 0, 1)
 volumetric_fog_emission = Color(0.35307604, 0.09494003, 0.63956875, 1)
+volumetric_fog_ambient_inject = 16.0
+
+[sub_resource type="GDScript" id="GDScript_6ytau"]
+script/source = "extends DirectionalLight3D
+
+func _ready() -> void:
+	directional_shadow_max_distance = 5
+"
 
 [node name="GameScene" type="Node3D" unique_id=1981852205]
 script = ExtResource("1_6ytau")
@@ -29,6 +38,7 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 34, -0.03773588, 0)
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -3.2408328, 2.565, 0)
 projection = 1
 size = 8.0
+far = 5.0
 script = ExtResource("2_cxv17")
 offsetRangeMinX = -3.0
 offsetRangeMaxX = 3.0
@@ -38,19 +48,27 @@ offsetRangeMaxZ = 6.0
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=941600512]
 environment = SubResource("Environment_vh257")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1271153439]
-transform = Transform3D(0.90205246, -0.42702252, 0.06287445, 0, 0.14566869, 0.98933345, -0.4316265, -0.89243066, 0.13140078, 0, 20.72455, 0)
-
 [node name="Godette" parent="." unique_id=807014692 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9340408, -1.1920929e-07, 0.9422445)
-
-[node name="Godette2" parent="." unique_id=1080900565 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25074467, 0, 1.5746546)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9713984, -1.1920929e-07, 0.41811252)
 
 [node name="Ivera" parent="." unique_id=99942340 instance=ExtResource("2_xy3my")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.524639, 0, 0.038736463)
 
 [node name="PrototypeScene" parent="." unique_id=1259424146 instance=ExtResource("7_6ytau")]
 
+[node name="Godette2" parent="." unique_id=1080900565 instance=ExtResource("5_7s5hy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4774108, 0, 1.0505226)
+
 [node name="Kamilla" parent="." unique_id=1326251066 instance=ExtResource("6_xs4ih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2623677, 0.00049996376, 0.7915019)
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=1025560660]
+transform = Transform3D(0.4004945, 0.38302597, -0.83240336, 0, 0.90844053, 0.41801414, 0.9162992, -0.16741234, 0.3638254, -13.579832, 4.538994, 5.370343)
+light_energy = 2.0
+light_specular = 0.0
+shadow_enabled = true
+shadow_bias = 0.01
+directional_shadow_mode = 0
+directional_shadow_fade_start = 1.0
+directional_shadow_max_distance = 25.0
+script = SubResource("GDScript_6ytau")

@@ -13,6 +13,8 @@ func playAsFaction(faction: Actor.Alliance):
 	)
 
 	for actor in actors:
+		if not actor.Behaviour:
+			continue
 		TurnManager.Instance.SelectNonPlayableActor(actor)
 		await NavmeshManager.Instance.WaitUntilReady()
 

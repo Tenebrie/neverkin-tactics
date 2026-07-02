@@ -1,4 +1,4 @@
-extends Component3D
+extends Component
 class_name SkillController
 
 var SelectedSkill: Skill = null:

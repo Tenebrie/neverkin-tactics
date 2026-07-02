@@ -3,6 +3,7 @@ extends Telegraph
 
 var decal: CircleDecal
 var hitbox: Area3D
+var hitboxShape: CollisionShape3D
 
 var radius: float = 0.5:
 	set(value):
@@ -11,6 +12,7 @@ var radius: float = 0.5:
 
 func _enter_tree():
 	hitbox = get_node("Hitbox") as Area3D
+	hitboxShape = get_node("Hitbox/CollisionShape3D")
 	decal = get_node("CircleDecal") as CircleDecal
 
 	hitbox.body_entered.connect(onBodyEntered)
@@ -30,7 +32,7 @@ func _process(_delta: float):
 func updateRadius():
 	if not isReady:
 		return
-	hitbox.scale = Vector3(radius * 2.0, radius * 2.0, radius * 2.0)
+	hitboxShape.shape.radius = radius
 	decal.Radius = radius
 
 func setColor(color: Color):

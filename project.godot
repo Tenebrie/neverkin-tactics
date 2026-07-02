@@ -49,6 +49,12 @@ enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
 
 navigation_mesh_source_group=""
 
+[layer_names]
+
+3d_physics/layer_2="Layer 2 - Actor"
+3d_physics/layer_9="Layer 9 - Low Cover"
+3d_physics/layer_10="Layer 10 - High Cover"
+
 [navigation]
 
 3d/warnings/navmesh_cell_size_mismatch=false
@@ -62,4 +68,6 @@ navigation_mesh_source_group=""
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+lights_and_shadows/directional_shadow/size=8192
+lights_and_shadows/directional_shadow/16_bits=false
 anti_aliasing/quality/msaa_3d=2

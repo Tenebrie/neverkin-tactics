@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_hssp6"]
 [ext_resource type="Resource" uid="uid://dnf8uhhthqlbx" path="res://actors/Ivera/IveraDefinition.tres" id="2_puyvs"]
 [ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://actors/Ivera/ivera.Token.webp" id="3_05s0d"]
-[ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/player/PlayerController.gd" id="4_ijibt"]
+[ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/actor/behaviour/ActorBehaviourPlayerControlled.gd" id="4_ijibt"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_05s0d"]
 resource_local_to_scene = true
@@ -15,7 +15,7 @@ point_size = 111.1
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ijibt"]
 resource_local_to_scene = true
 height = 0.2
-radius = 0.2
+radius = 0.4
 
 [node name="Ivera" unique_id=807014692 instance=ExtResource("1_hssp6")]
 Definition = ExtResource("2_puyvs")

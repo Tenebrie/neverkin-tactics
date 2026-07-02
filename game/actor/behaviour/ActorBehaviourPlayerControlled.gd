@@ -1,5 +1,5 @@
-extends Component
-class_name PlayerController
+extends ActorBehaviour
+class_name ActorBehaviourPlayerControlled
 
 ## Highest priority character is selected by default
 var CharacterPriority: int:

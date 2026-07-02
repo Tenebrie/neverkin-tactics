@@ -21,7 +21,7 @@ var CurrentFaction: Actor.Alliance = Actor.Alliance.Player
 func _ready():
 	await get_tree().process_frame
 	for actor in Actor.Repository.All.List:
-		if actor.HasComponent(PlayerController):
+		if actor.HasComponent(ActorBehaviourPlayerControlled):
 			PlayerControlledActors.push_back(actor)
 
 	if PlayerControlledActors.size() == 0:

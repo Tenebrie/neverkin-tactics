@@ -28,6 +28,7 @@ radius = 0.4
 [sub_resource type="SphereShape3D" id="SphereShape3D_kq5px"]
 
 [node name="Actor" type="CharacterBody3D" unique_id=807014692]
+collision_layer = 3
 script = ExtResource("1_ocm0e")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=405721016]
@@ -44,7 +45,6 @@ script = ExtResource("3_2qf6d")
 
 [node name="ActorActions" type="Node" parent="." unique_id=1857335080]
 script = ExtResource("4_pe7q2")
-MovementSpeedPerAP = 1.5
 
 [node name="ActorNavigator" type="Node" parent="." unique_id=1960299382]
 script = ExtResource("5_gmr66")

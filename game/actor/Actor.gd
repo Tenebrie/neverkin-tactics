@@ -9,14 +9,16 @@ signal DefinitionChanged(def: ActorDefinition)
 		if isReady:
 			loadDefinition()
 		DefinitionChanged.emit(v)
-		SignalBus.ActorDefinitionChanged.emit(self)
+		if not Engine.is_editor_hint():
+			SignalBus.ActorDefinitionChanged.emit(self)
 
 @onready var isReady = true
-@onready var stats: ActorStats = $ActorStats
-@onready var actions: ActorActions = $ActorActions
-@onready var navigator: ActorNavigator = $ActorNavigator
-@onready var targeting: ActorTargeting = $ActorTargeting
-@onready var Skills: SkillController = $SkillController
+@onready var stats: ActorStats = GetComponent(ActorStats)
+@onready var actions: ActorActions = GetComponent(ActorActions)
+@onready var navigator: ActorNavigator = GetComponent(ActorNavigator)
+@onready var targeting: ActorTargeting = GetComponent(ActorTargeting)
+@onready var Skills: SkillController = GetComponent(SkillController)
+@onready var Behaviour: ActorBehaviour = GetComponent(ActorBehaviour)
 
 var PhysicalSize:
 	get:
@@ -42,29 +44,33 @@ func HasComponent(type: GDScript[Component]) -> bool:
 	return false
 
 func _ready() -> void:
-	Repository.All.Register(self)
 	if Definition != null:
 		loadDefinition()
 
+	if Engine.is_editor_hint():
+		return
+	Repository.All.Register(self)
 	TurnManager.Instance.CurrentActorChanged.connect(func(actor):
 		if actor == self:
-			$MeshInstance3D.position.y = 0.02
+			$MeshInstance3D.position.y = RenderHeight.SelectedActor
 		else:
 			$MeshInstance3D.position.y = -0.02
 	)
 
 func loadDefinition():
-	var material: StandardMaterial3D = $MeshInstance3D.material_override
-	material.albedo_texture = Definition.TokenTexture
-	var scaleMod = Definition.PhysicalSize / 0.4
-	var tween = create_tween().set_parallel()
-	tween.tween_property($MeshInstance3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
-	tween.tween_property($CollisionShape3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
-	$MeshInstance3D.position.x = Definition.TokenOffset.x
-	$MeshInstance3D.position.z = Definition.TokenOffset.y
+	if Definition.TokenTexture:
+		var material: StandardMaterial3D = $MeshInstance3D.material_override
+		material.albedo_texture = Definition.TokenTexture
+		var scaleMod = Definition.PhysicalSize / 0.4
+		var tween = create_tween().set_parallel()
+		tween.tween_property($MeshInstance3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
+		tween.tween_property($CollisionShape3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
+		$MeshInstance3D.position.x = Definition.TokenOffset.x
+		$MeshInstance3D.position.z = Definition.TokenOffset.y
 
 func _exit_tree() -> void:
-	Repository.All.Unregister(self)
+	if not Engine.is_editor_hint():
+		Repository.All.Unregister(self)
 
 func Destroy() -> void:
 	Repository.All.Unregister(self)

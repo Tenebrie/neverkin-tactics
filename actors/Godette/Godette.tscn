@@ -3,16 +3,28 @@
 [ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_xj0r5"]
 [ext_resource type="Texture2D" uid="uid://byhwirkvtng2e" path="res://icon.svg" id="2_u3qed"]
 [ext_resource type="Resource" uid="uid://bpluyrx7ka0yv" path="res://actors/Godette/GodetteDefinition.tres" id="2_ys6q1"]
+[ext_resource type="Script" uid="uid://crif7j0s216cf" path="res://game/actor/behaviour/ActorBehaviour.gd" id="4_ys6q1"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4o3iw"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ys6q1"]
 resource_local_to_scene = true
 transparency = 1
 albedo_texture = ExtResource("2_u3qed")
 texture_repeat = false
 point_size = 111.1
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_57786"]
+resource_local_to_scene = true
+height = 0.2
+radius = 0.4
+
 [node name="Godette" unique_id=807014692 instance=ExtResource("1_xj0r5")]
 Definition = ExtResource("2_ys6q1")
 
 [node name="MeshInstance3D" parent="." index="0" unique_id=405721016]
-material_override = SubResource("StandardMaterial3D_4o3iw")
+material_override = SubResource("StandardMaterial3D_ys6q1")
+
+[node name="CollisionShape3D" parent="." index="1" unique_id=1364732436]
+shape = SubResource("CylinderShape3D_57786")
+
+[node name="ActorController" type="Node" parent="." index="10" unique_id=1485092960]
+script = ExtResource("4_ys6q1")

@@ -13,7 +13,8 @@ resource_local_to_scene = true
 material = SubResource("ShaderMaterial_nrq6q")
 size = Vector2(1, 1)
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_0hdw0"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_nvo6o"]
+height = 4.0
 
 [node name="CircularTelegraph" type="Node3D" unique_id=969002368]
 script = ExtResource("1_5q0qf")
@@ -25,4 +26,4 @@ mesh = SubResource("PlaneMesh_14bhu")
 input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=1771128307]
-shape = SubResource("SphereShape3D_0hdw0")
+shape = SubResource("CylinderShape3D_nvo6o")
