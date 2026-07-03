@@ -4,10 +4,11 @@ class_name KamillaRailgun
 var Damage = 1
 var HitboxWidth = 0.1
 
-var damageTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth).AvoidingLowCover()
+var damageTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
 
 func _ready() -> void:
 	Definition = preload("res://game/skills/KamillaRailgun/KamillaRailgun.tres").duplicate()
+	damageTelegraph.PenetrationPower = 1
 	damageTelegraph.PiercingPower = 1
 	Definition.Telegraphs = [
 		damageTelegraph

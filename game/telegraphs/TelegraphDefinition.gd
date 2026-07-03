@@ -12,6 +12,9 @@ class_name TelegraphDefinition
 @export var HealthThreat: int = 0
 @export var HealthThreatSelector: Callable = func(_actor: Actor) -> int: return HealthThreat
 
+@export var PiercingPower = 0
+@export var PenetrationPower = 0
+
 @export var TargetSnapping: bool = false
 @export var LookAtMouse: bool = false
 

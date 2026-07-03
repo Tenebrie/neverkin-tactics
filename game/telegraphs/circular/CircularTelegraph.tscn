@@ -14,7 +14,8 @@ material = SubResource("ShaderMaterial_nrq6q")
 size = Vector2(1, 1)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_nvo6o"]
-height = 4.0
+resource_local_to_scene = true
+height = 8.0
 
 [node name="CircularTelegraph" type="Node3D" unique_id=969002368]
 script = ExtResource("1_5q0qf")

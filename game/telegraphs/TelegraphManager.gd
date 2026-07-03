@@ -113,6 +113,8 @@ func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Telegraph:
 	telegraph.TargetValidator = func(actor: Actor) -> bool:
 		if telegraph.IsLeaving:
 			return false
+		if actor.collision_layer & CollisionLayer.SKILL_TARGETABLE == 0:
+			return false
 		for filter in def.TargetFilters:
 			var result: Variant = filter.call(actor)
 			if result is bool and result == false:

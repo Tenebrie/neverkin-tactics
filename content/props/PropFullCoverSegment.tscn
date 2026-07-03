@@ -1,25 +1,27 @@
 [gd_scene format=3 uid="uid://wntn4ni6cd7h"]
 
-[ext_resource type="Texture2D" uid="uid://vfb2hllb2u55" path="res://addons/prototype-textures/dark/texture_03.png" id="1_nv0rl"]
-[ext_resource type="PackedScene" uid="uid://bvxvnc3sify1j" path="res://content/props/Prop.tscn" id="1_uaq0s"]
-[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="2_yelxp"]
+[ext_resource type="PackedScene" uid="uid://bvxvnc3sify1j" path="res://content/props/Prop.tscn" id="1_vxb7g"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="2_4f2ks"]
+[ext_resource type="Texture2D" uid="uid://bw1fcol7nmhx8" path="res://addons/prototype-textures/light/texture_03.png" id="3_3vya2"]
 
 [sub_resource type="Resource" id="Resource_gvuqy"]
-script = ExtResource("2_yelxp")
+script = ExtResource("2_4f2ks")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
-albedo_texture = ExtResource("1_nv0rl")
+albedo_texture = ExtResource("3_3vya2")
 uv1_scale = Vector3(2, 2, 2)
 uv1_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_yelxp"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_vqugx")
-size = Vector3(1, 1, 0.2)
+size = Vector3(0.2, 1, 0.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gvuqy"]
-size = Vector3(1, 1, 0.2)
+resource_local_to_scene = true
+size = Vector3(0.2, 1, 0.2)
 
-[node name="Prop" unique_id=842978226 instance=ExtResource("1_uaq0s")]
+[node name="PropFullCover" unique_id=842978226 instance=ExtResource("1_vxb7g")]
 collision_layer = 513
 Definition = SubResource("Resource_gvuqy")
 

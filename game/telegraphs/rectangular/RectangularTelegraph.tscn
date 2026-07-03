@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://tk3jful5lm6r" path="res://game/telegraphs/rectangular/RectDecal.tscn" id="2_prlsc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6bur2"]
+resource_local_to_scene = true
 
 [node name="RectangularTelegraph" type="Node3D" unique_id=1610440158]
 script = ExtResource("1_djgw1")

@@ -31,7 +31,7 @@ radius = 0.4
 collision_layer = 3
 script = ExtResource("1_ocm0e")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=405721016]
+[node name="TokenMeshInstance3D" type="MeshInstance3D" parent="." unique_id=405721016]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
 material_override = SubResource("StandardMaterial3D_ukbnj")
 mesh = SubResource("PlaneMesh_640ex")

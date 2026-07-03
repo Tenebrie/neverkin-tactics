@@ -4,36 +4,13 @@ class_name KamillaPistol
 var Damage = 1
 var HitboxWidth = 0.04
 
-var invisibleTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().Invisible().WithWidth(HitboxWidth).AvoidingLowCover()
-var damageTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithWidth(HitboxWidth).Invisible()
-var visualTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth).AvoidingLowCover()
+var damageTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
 
 func _ready() -> void:
 	Definition = preload("res://game/skills/KamillaPistol/KamillaPistol.tres").duplicate()
-	#visualTelegraph.Processors.push_back(func(telegraph: RectangularTelegraph):
-		#var allTargets = TelegraphManager.Instance.FindTelegraph(invisibleTelegraph).Targets
-		#if allTargets.size() == 0:
-			#telegraph.length = invisibleTelegraph.RectLength
-			#return
-		#allTargets.sort_custom(func(a: Actor, b: Actor) -> bool:
-			#return a.global_position.distance_squared_to(Parent.global_position) < b.global_position.distance_squared_to(Parent.global_position)
-		#)
-		#var closestTarget = allTargets[0]
-		#telegraph.length = closestTarget.global_position.distance_to(Parent.global_position)
-	#)
-	#visualTelegraph.TargetFilters.push_back(func(actor: Actor) -> bool:
-		#var allTargets = TelegraphManager.Instance.FindTelegraph(invisibleTelegraph).Targets
-		#if allTargets.size() <= 1:
-			#return true
-		#allTargets.sort_custom(func(a: Actor, b: Actor) -> bool:
-			#return a.global_position.distance_squared_to(Parent.global_position) < b.global_position.distance_squared_to(Parent.global_position)
-		#)
-		#return actor == allTargets[0]
-	#)
+
 	Definition.Telegraphs = [
-		invisibleTelegraph,
-		damageTelegraph,
-		visualTelegraph
+		damageTelegraph
 	]
 	super._ready()
 

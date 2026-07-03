@@ -20,7 +20,7 @@ radius = 0.4
 [node name="Ivera" unique_id=807014692 instance=ExtResource("1_hssp6")]
 Definition = ExtResource("2_puyvs")
 
-[node name="MeshInstance3D" parent="." index="0" unique_id=405721016]
+[node name="TokenMeshInstance3D" parent="." index="0" unique_id=405721016]
 material_override = SubResource("StandardMaterial3D_05s0d")
 
 [node name="CollisionShape3D" parent="." index="1" unique_id=1364732436]

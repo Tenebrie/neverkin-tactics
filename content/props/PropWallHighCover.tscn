@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://5ydgfyqxfb7y"]
+
+[ext_resource type="Script" uid="uid://dhli2awq6fw2a" path="res://content/props/PropWall.gd" id="1_7767w"]
+[ext_resource type="PackedScene" uid="uid://4utt3fyos7r6" path="res://content/props/PropHighCoverSegment.tscn" id="2_7767w"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="3_7163w"]
+
+[sub_resource type="Resource" id="Resource_7767w"]
+script = ExtResource("3_7163w")
+PhysicalSize = 0.1
+
+[node name="PropWallHighCover" type="Node3D" unique_id=1850641905]
+script = ExtResource("1_7767w")
+ObstacleWidth = 5
+
+[node name="PropHighCover" parent="." unique_id=842978226 instance=ExtResource("2_7767w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 0)
+Definition = SubResource("Resource_7767w")

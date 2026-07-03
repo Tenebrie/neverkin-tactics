@@ -84,7 +84,7 @@ var IsLeaving = false
 func cleanUp() -> void:
 	IsLeaving = true
 
-func isPointOnNavmesh(map: RID, point: Vector3, threshold: float = 0.01) -> bool:
+func isPointOnNavmesh(map: RID, point: Vector3, threshold: float = 0.4) -> bool:
 	var flattenedPoint = Vector3(point.x, RenderHeight.Navigation, point.z)
 	var closest = NavigationServer3D.map_get_closest_point(map, flattenedPoint)
 	return flattenedPoint.distance_to(closest) < threshold

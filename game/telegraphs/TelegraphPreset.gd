@@ -41,15 +41,11 @@ class SingleActor extends TelegraphDefinition:
 	func WithDamageToHostiles(damage: int):
 		HealthThreat = damage
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			print(actor, Actor.Repository.Hovered.List.has(actor))
 			return actor.Definition.Alliance != Actor.Alliance.Player and Actor.Repository.Hovered.List.has(actor)
 		)
 		return self
 
 class Projectile extends TelegraphDefinition:
-	var PiercingPower = 0
-	var PierceLowCover = 0
-
 	func _init():
 		Shape = Telegraph.Shape.Rect
 		Attachment = Telegraph.Attachment.Caster
@@ -57,65 +53,7 @@ class Projectile extends TelegraphDefinition:
 
 		Processors.push_back(TelegraphProcessor.LookAtMouse)
 		Processors.push_back(TelegraphProcessor.TargetAllianceTint)
-		Processors.push_back(func(telegraph: RectangularTelegraph):
-			var spaceState = telegraph.get_world_3d().direct_space_state
-			var origin = Vector3(telegraph.global_position.x, 0, telegraph.global_position.z)
-			var direction = -telegraph.global_basis.z
-			var targetVector = direction * RectLength
-			var mask = CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.ACTOR
-
-			var actorsFound = 0
-			var lowCoverFound = 0
-			var highCoverFound = 0
-			var rayOrigin = origin
-			var exclude: Array[RID] = [telegraph.ParentSkill.Parent.get_rid()]
-			var resolved = false
-
-			while true:
-				var query = PhysicsRayQueryParameters3D.create(rayOrigin, origin + targetVector)
-				query.collision_mask = mask
-				query.exclude = exclude
-				var result = spaceState.intersect_ray(query)
-				if not result:
-					break
-
-				var layer = result.collider.collision_layer
-
-				if layer & CollisionLayer.ACTOR and result.collider is Actor:
-					var isValidTarget = telegraph.TargetValidator.call(result.collider) as bool
-					if not isValidTarget:
-						exclude.append(result.rid)
-						rayOrigin = result.position + direction * 0.01
-						continue
-					actorsFound += 1
-					if PiercingPower >= actorsFound + highCoverFound:
-						exclude.append(result.rid)
-						rayOrigin = result.position + direction * 0.01
-						continue
-					var actorPos = result.collider.global_position
-					telegraph.length = origin.distance_to(Vector3(actorPos.x, 0, actorPos.z))
-					resolved = true
-					break
-				elif layer & CollisionLayer.HIGH_COVER:
-					highCoverFound += 1
-					if PiercingPower >= actorsFound + highCoverFound:
-						exclude.append(result.rid)
-						rayOrigin = result.position + direction * 0.01
-						continue
-					telegraph.length = origin.distance_to(result.position) + 0.1
-					resolved = true
-					break
-				elif layer & CollisionLayer.LOW_COVER:
-					lowCoverFound += 1
-					exclude.append(result.rid)
-					rayOrigin = result.position + direction * 0.01
-				else:
-					exclude.append(result.rid)
-					rayOrigin = result.position + direction * 0.01
-
-			if not resolved:
-				telegraph.length = RectLength
-		)
+		Processors.push_back(TelegraphProcessor.ApplyCollisionRules)
 
 	func Load(skill: Skill):
 		RectLength = skill.Definition.TargetingMaxRange
@@ -167,6 +105,6 @@ class PointArea extends TelegraphDefinition:
 	func WithDamageToHostiles(damage: int) -> TelegraphDefinition:
 		HealthThreat = damage
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.Definition.Alliance == Actor.Alliance.Hostile
+			return actor.Definition.Alliance != Actor.Alliance.Player
 		)
 		return self

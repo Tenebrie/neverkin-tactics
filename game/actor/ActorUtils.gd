@@ -68,10 +68,12 @@ static func GetMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
 	var mouse_pos := viewport.get_mouse_position()
 	var origin := camera.project_ray_origin(mouse_pos)
 	var direction := camera.project_ray_normal(mouse_pos)
+	if not origin or not direction:
+		return Vector3.ZERO
 
 	# Intersect with Y=0 plane
 	var plane := Plane(Vector3.UP, 0.0)
-	var intersection: Vector3 = plane.intersects_ray(origin, direction)
+	var intersection: Variant = plane.intersects_ray(origin, direction)
 
 	if intersection:
 		return intersection

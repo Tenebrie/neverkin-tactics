@@ -21,7 +21,7 @@ var length: float = 1.0:
 		updateSize()
 		updateOrigin()
 
-var height: float = 2.0:
+var height: float = 5.0:
 	set(value):
 		height = value
 		updateSize()
