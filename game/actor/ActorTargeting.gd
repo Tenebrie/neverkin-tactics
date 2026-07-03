@@ -100,11 +100,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func PerformAction_CastSelectedSkill():
 	var targetData = Skill.TargetData.new()
-	if TelegraphManager.Instance.Targets.size() > 0:
-		targetData.actor = TelegraphManager.Instance.Targets.get(0)
-	targetData.actors = TelegraphManager.Instance.Targets
+	if parent.Telegraphs.Targets.size() > 0:
+		targetData.actor = parent.Telegraphs.Targets.get(0)
+	targetData.actors = parent.Telegraphs.Targets
 	targetData.mousePoint = parent.InputProvider.CursorPosition
-	targetData.perTelegraph = TelegraphManager.Instance.TargetsPerTelegraphDefinition
+	targetData.perTelegraph = parent.Telegraphs.TargetsPerTelegraphDefinition
 	targetData.perTelegraphIndex = targetData.perTelegraph.values()
 	parent.actions.IssueOrder_ConfirmCast(parent.Skills.SelectedSkill, targetData)
 

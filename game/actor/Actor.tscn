@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dk1i4lds5ke56" path="res://game/actor/ActorActions.gd" id="4_pe7q2"]
 [ext_resource type="Script" uid="uid://bs8vmait25uo8" path="res://game/actor/ActorNavigator.gd" id="5_gmr66"]
 [ext_resource type="Script" uid="uid://c2oyq3jhwn2qr" path="res://game/actor/ActorTargeting.gd" id="6_v5lek"]
+[ext_resource type="Script" uid="uid://barnsaj3p6ik1" path="res://game/actor/ActorTelegraphs.gd" id="7_1yc4f"]
 [ext_resource type="PackedScene" uid="uid://dmghp7x8tk4pt" path="res://game/ui/ActorOverheadStats/ActorOverheadStats.tscn" id="7_541ji"]
 [ext_resource type="Script" uid="uid://bg4x5cqts33r6" path="res://game/skills/SkillController.gd" id="8_ocm0e"]
 [ext_resource type="Script" uid="uid://bibsejet712xq" path="res://game/actor/ActorHoverArea.gd" id="9_m37al"]
@@ -51,6 +52,9 @@ script = ExtResource("5_gmr66")
 
 [node name="ActorTargeting" type="Node" parent="." unique_id=1741065242]
 script = ExtResource("6_v5lek")
+
+[node name="ActorTelegraphs" type="Node" parent="." unique_id=1823962377]
+script = ExtResource("7_1yc4f")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1615640899]
 path_desired_distance = 0.1

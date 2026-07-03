@@ -4,7 +4,7 @@ class_name SkillPistolShot
 var Damage = 1
 var HitboxWidth = 0.04
 
-var damageTelegraph = TelegraphPreset.StandardProjectile.new().WithDamage(Damage).WithWidth(HitboxWidth)
+var damageTelegraph: TelegraphDefinition = TelegraphPreset.StandardProjectile.new().WithDamage(Damage).WithWidth(HitboxWidth)
 
 func _ready() -> void:
 	Definition = preload("res://content/skills/SkillPistolShot/SkillPistolShot.tres").duplicate()

@@ -20,6 +20,7 @@ signal DefinitionChanged(def: ActorDefinition)
 @onready var Skills: SkillController = GetComponent(SkillController)
 @onready var Behaviour: ActorBehaviour = GetComponent(ActorBehaviour)
 @onready var InputProvider: ActorInputProvider = GetComponent(ActorInputProvider)
+@onready var Telegraphs: ActorTelegraphs = GetComponent(ActorTelegraphs)
 
 var PhysicalSize:
 	get:

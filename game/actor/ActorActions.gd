@@ -113,7 +113,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		MessageLog.PrintMessage("Not enough AP")
 		return
 
-	for telegraph in TelegraphManager.Instance.telegraphs:
+	for telegraph in parent.Telegraphs.telegraphs:
 		for validator in telegraph.Definition.Validators:
 			var result: Variant = validator.call(telegraph)
 			if result is bool and result == false:

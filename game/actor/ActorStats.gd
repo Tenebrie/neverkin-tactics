@@ -19,12 +19,12 @@ var HealthCurrent: int:
 var HealthThreatened: int = 0
 
 func _ready() -> void:
-	TelegraphManager.Instance.TargetsChanged.connect(func(actors: Array[Actor]):
-		if not actors.has(parent):
+	ActorTelegraphs.SignalBus.TargetsChanged.connect(func(actor, allTargets):
+		if not allTargets.has(parent):
 			HealthThreatened = 0
 			return
 
-		var dict = TelegraphManager.Instance.TargetsPerTelegraph
+		var dict = actor.Telegraphs.TargetsPerTelegraph
 		var healthThreatened = 0
 		for telegraph in dict:
 			var targets = dict[telegraph]

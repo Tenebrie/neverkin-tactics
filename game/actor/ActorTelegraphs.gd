@@ -1,9 +1,5 @@
-extends Node
-class_name TelegraphManager
-
-static var Instance: TelegraphManager:
-	get:
-		return TelegraphManagerInstance
+extends Component
+class_name ActorTelegraphs
 
 var CurrentSkill: Skill
 
@@ -116,7 +112,9 @@ func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Telegraph:
 				return false
 		return true
 	telegraph.TargetsChanged.connect(func():
-		TargetsChanged.emit(Targets)
+		var targets = Targets
+		TargetsChanged.emit(targets)
+		SignalBus.TargetsChanged.emit(parent, targets)
 	)
 	if def.Icon != null:
 		var icon = Asset.Instantiate(TelegraphIcon)
@@ -126,3 +124,7 @@ func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Telegraph:
 		icon.position.y = RenderHeight.AboveWalls - RenderHeight.TelegraphBase
 	telegraph.ParentSkill = skill
 	return telegraph
+
+static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
+class SignalBusImplementation:
+	signal TargetsChanged(actor: Actor, targets: Array[Actor])
