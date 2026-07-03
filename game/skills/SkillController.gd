@@ -8,6 +8,7 @@ var SelectedSkill: Skill = null:
 		var previous = SelectedSkill
 		SelectedSkill = v
 		SelectedSkillChanged.emit(v, previous)
+		Actor.SignalBus.ActorSelectedSkillChanged.emit(parent, v, previous)
 
 @onready var commonSkillGroup: ControlGroup = ControlGroup.new()
 @onready var activeSkillGroup: ControlGroup = ControlGroup.new()
@@ -21,7 +22,8 @@ func _parentReady() -> void:
 	add_child(activeSkillGroup)
 	add_child(inactiveSkillGroup)
 	TurnManager.Instance.CurrentActorChanged.connect(func():
-		Select(null)
+		if parent.Behaviour is ActorBehaviourPlayerControlled:
+			Select(null)
 	)
 
 	LoadCommonSkills()

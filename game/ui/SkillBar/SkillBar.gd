@@ -10,11 +10,11 @@ class_name SkillBar
 )
 
 func _ready() -> void:
-	TurnManager.Instance.CurrentActorChanged.connect(connectSignals)
-	TurnManager.Instance.CurrentActorChanged.connect(rebuildItems)
+	TurnManager.Instance.CurrentPlayerActorChanged.connect(connectSignals)
 
 func connectSignals(actor: Actor) -> void:
 	CurrentActor.Track(actor)
+	rebuildItems()
 
 func rebuildItems() -> void:
 	for child in commonBarContainer.get_children():

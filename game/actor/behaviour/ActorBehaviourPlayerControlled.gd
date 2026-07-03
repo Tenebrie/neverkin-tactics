@@ -8,4 +8,7 @@ var Portrait: Texture2D:
 	get: return parent.Definition.AvatarTexture
 
 func _ready() -> void:
-	pass # Replace with function body.
+	var inputProvider = ActorPlayerInputProvider.new()
+	await get_tree().process_frame
+	parent.add_child(inputProvider)
+	parent.InputProvider = inputProvider

@@ -64,13 +64,13 @@ class Projectile extends TelegraphDefinition:
 
 	func TargetingPlayer() -> Projectile:
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.Definition.Alliance != Actor.Alliance.Hostile
+			return actor.Definition.Alliance != Actor.Alliance.Hostile && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
 		)
 		return self
 
 	func TargetingHostiles() -> Projectile:
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.Definition.Alliance != Actor.Alliance.Player
+			return actor.Definition.Alliance != Actor.Alliance.Player && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
 		)
 		return self
 

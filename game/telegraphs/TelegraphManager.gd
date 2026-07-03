@@ -39,12 +39,14 @@ func FindTelegraph(def: TelegraphDefinition) -> Telegraph:
 	return null
 
 func _ready() -> void:
-	TurnManager.Instance.CurrentActorChanged.connect(initialize)
+	TurnManager.Instance.CurrentActorChanged.connect(resetState)
+	Actor.SignalBus.ActorSelectedSkillChanged.connect(func(_a, skill):
+		onSkillSelected(skill)
+	)
 
 func _process(_delta: float) -> void:
-	var target = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
-
 	for telegraph in telegraphs:
+		var target = telegraph.ParentSkill.Parent.InputProvider.CursorPosition
 		if telegraph.Definition.Attachment == Telegraph.Attachment.Mouse:
 			var updatedTarget = target
 			updatedTarget.y = 1
@@ -53,13 +55,6 @@ func _process(_delta: float) -> void:
 		telegraph.Tint = TelegraphColor.NoTarget
 		for processor in telegraph.Definition.Processors:
 			processor.call(telegraph)
-
-func initialize(actor: Actor, previous: Actor) -> void:
-	resetState()
-	if previous != null and previous.Skills.is_connected(previous.Skills.SelectedSkillChanged.get_name(), onSkillSelected):
-		previous.Skills.SelectedSkillChanged.disconnect(onSkillSelected)
-	if actor != null:
-		actor.Skills.SelectedSkillChanged.connect(onSkillSelected)
 
 func resetState() -> void:
 	for telegraph in telegraphs:

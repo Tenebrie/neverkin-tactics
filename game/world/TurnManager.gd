@@ -7,11 +7,16 @@ static var Instance: TurnManager:
 
 var CurrentActor: Actor = null
 var CurrentNPC: Actor = null
+var ActorTakingTurn: Actor:
+	get:
+		if CurrentFaction == Actor.Alliance.Player:
+			return CurrentActor
+		return CurrentNPC
 var PlayerControlledActors: Array[Actor] = []
 
 signal KnownActorsChanged
 signal CurrentActorChanged(actor: Actor, previous: Actor)
-signal CurrentNPCChanged(actor: Actor, previous: Actor)
+signal CurrentPlayerActorChanged(actor: Actor, previous: Actor)
 signal FactionTurnStarted(faction: Actor.Alliance)
 signal FactionTurnEnded(faction: Actor.Alliance)
 signal TurnChanged
@@ -27,10 +32,10 @@ func _ready():
 	if PlayerControlledActors.size() == 0:
 		return
 
-	var previousActor = CurrentActor
 	CurrentActor = PlayerControlledActors[0]
 	KnownActorsChanged.emit()
-	CurrentActorChanged.emit(CurrentActor, previousActor)
+	CurrentActorChanged.emit(ActorTakingTurn, null)
+	CurrentPlayerActorChanged.emit(CurrentActor, null)
 	await get_tree().process_frame
 	startTurnForCurrentFaction()
 
@@ -47,12 +52,15 @@ func EndWorldTurn() -> void:
 	advanceTurn()
 
 func advanceTurn():
+	var previousActor = ActorTakingTurn
 	SelectNonPlayableActor(null)
 	FactionTurnEnded.emit(CurrentFaction)
 	CurrentFaction = (CurrentFaction + 1) as Actor.Alliance
 	if CurrentFaction >= Actor.Alliance.Max:
 		CurrentFaction = Actor.Alliance.Player
 	startTurnForCurrentFaction()
+	if ActorTakingTurn != previousActor:
+		CurrentActorChanged.emit(ActorTakingTurn, previousActor)
 
 func startTurnForCurrentFaction():
 	MessageLog.PrintChatMessage("Turn: %s"%CurrentFaction)
@@ -70,11 +78,12 @@ func SelectCharacterByHotkey(index: int) -> void:
 	var previousActor = CurrentActor
 	CurrentActor = selectedActor
 	CurrentActorChanged.emit(CurrentActor, previousActor)
+	CurrentPlayerActorChanged.emit(CurrentActor, previousActor)
 
 func SelectNonPlayableActor(actor: Actor) -> void:
 	var previousActor = CurrentNPC
 	CurrentNPC = actor
-	CurrentNPCChanged.emit(CurrentNPC, previousActor)
+	CurrentActorChanged.emit(CurrentNPC, previousActor)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is not InputEventKey or not event.is_pressed():

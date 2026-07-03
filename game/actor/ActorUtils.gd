@@ -63,6 +63,16 @@ static func LimitPathLength(points: PackedVector3Array, maxLength: float) -> Pac
 
 	return result
 
+static func GetPathLength(points: PackedVector3Array) -> float:
+	var result = 0.0
+
+	for i in range(1, points.size()):
+		var seg = points[i] - points[i - 1]
+		var seg_len = seg.length()
+		result += seg_len
+
+	return result
+
 static func GetMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
 	var camera := viewport.get_camera_3d()
 	var mouse_pos := viewport.get_mouse_position()

@@ -82,15 +82,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		lockedMode = TargetMode.None
 		parent.Skills.Select(null)
 	elif isMouseRelease and isSkillSelected:
-		# Cast selected skill
-		var targetData = Skill.TargetData.new()
-		if TelegraphManager.Instance.Targets.size() > 0:
-			targetData.actor = TelegraphManager.Instance.Targets.get(0)
-		targetData.actors = TelegraphManager.Instance.Targets
-		targetData.mousePoint = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
-		targetData.perTelegraph = TelegraphManager.Instance.TargetsPerTelegraphDefinition
-		targetData.perTelegraphIndex = targetData.perTelegraph.values()
-		parent.actions.IssueOrder_ConfirmCast(parent.Skills.SelectedSkill, targetData)
+		PerformAction_CastSelectedSkill()
 
 	elif isMouseClick and lockedMode == TargetMode.WalkPreview and not isSkillSelected:
 		# Cancel movement
@@ -106,6 +98,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		parent.actions.IssueOrder_MoveThroughPath(path)
 		lockedMode = TargetMode.None
 
+func PerformAction_CastSelectedSkill():
+	var targetData = Skill.TargetData.new()
+	if TelegraphManager.Instance.Targets.size() > 0:
+		targetData.actor = TelegraphManager.Instance.Targets.get(0)
+	targetData.actors = TelegraphManager.Instance.Targets
+	targetData.mousePoint = parent.InputProvider.CursorPosition
+	targetData.perTelegraph = TelegraphManager.Instance.TargetsPerTelegraphDefinition
+	targetData.perTelegraphIndex = targetData.perTelegraph.values()
+	parent.actions.IssueOrder_ConfirmCast(parent.Skills.SelectedSkill, targetData)
+
 func resetDisplayedElements() -> void:
 	agentPathPreview.ClearPath()
 	CombatUI.cursor.HideActionPointCost()
@@ -113,19 +115,20 @@ func resetDisplayedElements() -> void:
 
 #region Utilities
 func getLegalPathToMouse() -> PackedVector3Array:
-	var worldMousePos = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
-	return getLegalPathTo(worldMousePos)
+	return getLegalPathTo(parent.InputProvider.CursorPosition)
 
 func getLegalPathTo(target: Vector3) -> PackedVector3Array:
 	var map_rid := parent.navigator.agent.get_navigation_map()
-	var previewPath := NavigationServer3D.map_get_path(
-		map_rid,
-		parent.global_position,
-		target,
-		true,
-		parent.navigator.agent.navigation_layers
-	)
+	target = NavigationServer3D.map_get_closest_point(map_rid, target)
 
-	var truncatedPath := ActorUtils.LimitPathLength(previewPath, parent.actions.MovementAvailable)
+	var previewPath := NavigationServer3D.map_get_path(
+			map_rid,
+			parent.global_position,
+			target,
+			true,
+			parent.navigator.agent.navigation_layers
+	)
+	var truncatedPath = ActorUtils.LimitPathLength(previewPath, parent.actions.MovementAvailable)
 	return truncatedPath
+
 #endregion

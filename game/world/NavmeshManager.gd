@@ -18,23 +18,13 @@ var activeBakeCount = 0
 
 func _enter_tree():
 	TurnManager.Instance.CurrentActorChanged.connect(func(actor: Actor):
-		if TurnManager.Instance.CurrentFaction == Actor.Alliance.Player:
-			rebakeNavmesh(actor, [])
-	)
-	TurnManager.Instance.CurrentNPCChanged.connect(func(actor: Actor):
 		rebakeNavmesh(actor, [])
 	)
 	Actor.SignalBus.ActorDestroyed.connect(func(actor: Actor):
-		if TurnManager.Instance.CurrentFaction == Actor.Alliance.Player:
-			rebakeNavmesh(TurnManager.Instance.CurrentActor, [actor])
-		else:
-			rebakeNavmesh(TurnManager.Instance.CurrentNPC, [actor])
+		rebakeNavmesh(TurnManager.Instance.ActorTakingTurn, [actor])
 	)
 	TurnManager.Instance.FactionTurnStarted.connect(func():
-		if TurnManager.Instance.CurrentFaction == Actor.Alliance.Player:
-			rebakeNavmesh(TurnManager.Instance.CurrentActor, [])
-		else:
-			rebakeNavmesh(TurnManager.Instance.CurrentNPC, [])
+		rebakeNavmesh(TurnManager.Instance.ActorTakingTurn, [])
 	)
 
 func WaitUntilReady():
@@ -61,6 +51,7 @@ func drainQueue():
 	BakeCompleted.emit()
 
 func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
+	var bakeStartUsec := Time.get_ticks_usec()
 	print("[navbake] dispatch for %s" % [actor.name])
 	var allExceptions: Array[Actor] = exceptions.duplicate()
 	allExceptions.push_back(actor)
@@ -93,6 +84,8 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 		NavigationServer3D.bake_from_source_geometry_data_async(navMesh, source, onRegionBakeFinished)
 	if activeBakeCount > 0:
 		await batchFinished
+	var elapsedMs := (Time.get_ticks_usec() - bakeStartUsec) / 1000.0
+	print("[navbake] finished for %s in %.3f ms (%d region(s))" % [actor.name, elapsedMs, touchedMaps.size()])
 	return touchedMaps
 
 func onRegionBakeFinished():

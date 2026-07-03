@@ -31,7 +31,7 @@ static func NoTransparency(telegraph: Telegraph):
 	telegraph.Tint = Color(telegraph.Tint.r, telegraph.Tint.g, telegraph.Tint.b, 1.0)
 
 static func LookAtMouse(telegraph: Telegraph):
-	var target = ActorUtils.GetMouseWorldPlanePosition(telegraph.get_viewport())
+	var target = telegraph.ParentSkill.Parent.InputProvider.CursorPosition
 	target.y = telegraph.global_position.y
 	telegraph.look_at(target)
 
@@ -41,6 +41,9 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 	var direction = -basis.z
 	var origin = Vector3(telegraph.global_position.x, telegraph.height / 2.0, telegraph.global_position.z)
 	var mask = CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.ACTOR
+	var excludeMask = CollisionLayer.IGNORED_COVER
+
+	#var exclusionRadius: float = telegraph.ParentSkill.Parent.PhysicalSize * 2
 	var initialExclude: Array[RID] = [telegraph.ParentSkill.Parent.get_rid()]
 
 	var spaceState = telegraph.get_world_3d().direct_space_state
@@ -65,6 +68,9 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 		if collider is not Actor:
 			continue
 
+		if collider.collision_layer & excludeMask > 0:
+			continue
+
 		if isInHitGroup(collider, hitGroups):
 			continue
 
@@ -72,6 +78,9 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 
 		if isActor and not (telegraph.TargetValidator.call(collider) as bool):
 			continue
+
+		#if contact.Distance < exclusionRadius:
+			#continue
 
 		var isLowCover = collider.collision_layer & CollisionLayer.LOW_COVER != 0
 		var isHighCover = collider.collision_layer & CollisionLayer.HIGH_COVER != 0

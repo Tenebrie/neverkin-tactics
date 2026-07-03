@@ -23,7 +23,7 @@ var isHovered: bool = false
 
 func _ready():
 	update()
-	TurnManager.Instance.CurrentActorChanged.connect(update)
+	TurnManager.Instance.CurrentPlayerActorChanged.connect(update)
 	TurnManager.Instance.TurnChanged.connect(updateModulate)
 	iconButton.mouse_entered.connect(func(): isHovered = true; updateModulate())
 	iconButton.mouse_exited.connect(func(): isHovered = false; updateModulate())

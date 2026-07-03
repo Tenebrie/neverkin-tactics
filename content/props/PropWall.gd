@@ -19,11 +19,52 @@ extends Node3D
 		if is_node_ready():
 			rebuild()
 
+@export var CanBeIgnored: bool = true
+
 const xSpacing = 0.2
 const ySpacing = 0.2
 
 func _ready():
 	rebuild()
+	if CanBeIgnored and not Engine.is_editor_hint():
+		TurnManager.Instance.CurrentActorChanged.connect(checkDistances)
+		Actor.SignalBus.ActorSelectedSkillChanged.connect(checkDistances)
+
+func checkDistances():
+	var currentActor = TurnManager.Instance.ActorTakingTurn
+	if not currentActor:
+		return
+
+	if not currentActor.Skills.SelectedSkill:
+		setIgnored(false)
+		return
+
+	var actorPosition = currentActor.global_position
+	var distanceThreshold = pow(currentActor.PhysicalSize * 2, 2)
+
+	for child in get_children():
+		if child is not Node3D:
+			continue
+		if child.global_position.distance_squared_to(actorPosition) < distanceThreshold:
+			setIgnored(true)
+			return
+
+	setIgnored(false)
+
+func setIgnored(enabled: bool):
+	var groupName = "propwall_ignored"
+	if enabled and not is_in_group(groupName):
+		add_to_group(groupName)
+		for child in get_children():
+			if child.has_node("MeshInstance3D"):
+				child.get_node("MeshInstance3D").transparency = 0.95
+				(child as CharacterBody3D).collision_layer |= CollisionLayer.IGNORED_COVER
+	elif not enabled and is_in_group(groupName):
+		remove_from_group(groupName)
+		for child in get_children():
+			if child.has_node("MeshInstance3D"):
+				child.get_node("MeshInstance3D").transparency = 0
+				(child as CharacterBody3D).collision_layer &= ~CollisionLayer.IGNORED_COVER
 
 func rebuild():
 	var children = get_children()

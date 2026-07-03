@@ -34,6 +34,9 @@ func update() -> void:
 		portrait.texture_normal = null
 		return
 
+	if TrackedActor.Behaviour is not ActorBehaviourPlayerControlled:
+		return
+
 	var controller = TrackedActor.Behaviour as ActorBehaviourPlayerControlled
 	nameLabel.text = TrackedActor.stats.Name
 	hotkeyLabel.text = "F" + str(HotkeyIndex + 1)

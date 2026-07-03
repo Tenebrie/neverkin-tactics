@@ -14,10 +14,11 @@ func _ready() -> void:
 func Cast(targets: Skill.TargetData) -> void:
 	var actor = targets.actor
 	var effect = IveraClawsStrikeEffect.new()
-	get_parent().add_child(effect)
-	effect.global_transform = Transform3D.IDENTITY
+	get_tree().current_scene.add_child(effect)
 	effect.global_position = actor.global_position
-	effect.position.y += 0.5
+	effect.global_position.y = 2
 	effect.scale = Vector3(1.7,1.7,1.7)
 	effect.Play()
-	actor.stats.DealDamage(Damage)
+	get_tree().create_timer(0.1).timeout.connect(func():
+		actor.stats.DealDamage(Damage)
+	)

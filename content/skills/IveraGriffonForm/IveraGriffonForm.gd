@@ -35,9 +35,11 @@ func Cast(targets: Skill.TargetData) -> void:
 	await get_tree().create_timer(0.3).timeout
 	for target in targets.perTelegraphIndex[1]:
 		var effect = IveraClawsStrikeEffect.new()
-		get_parent().add_child(effect)
-		effect.global_transform = Transform3D.IDENTITY
+		get_tree().current_scene.add_child(effect)
 		effect.global_position = target.global_position
-		effect.position.y += 0.5
+		effect.global_position.y = 2
+		effect.scale = Vector3(1.7,1.7,1.7)
 		effect.Play()
-		target.stats.DealDamage(Damage)
+		get_tree().create_timer(0.1).timeout.connect(func():
+			target.stats.DealDamage(Damage)
+		)

@@ -19,6 +19,7 @@ signal DefinitionChanged(def: ActorDefinition)
 @onready var targeting: ActorTargeting = GetComponent(ActorTargeting)
 @onready var Skills: SkillController = GetComponent(SkillController)
 @onready var Behaviour: ActorBehaviour = GetComponent(ActorBehaviour)
+@onready var InputProvider: ActorInputProvider = GetComponent(ActorInputProvider)
 
 var PhysicalSize:
 	get:
@@ -115,3 +116,4 @@ static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 class SignalBusImplementation:
 	signal ActorDefinitionChanged(actor: Actor)
 	signal ActorDestroyed(actor: Actor)
+	signal ActorSelectedSkillChanged(actor: Actor, current: Skill, previous: Skill)

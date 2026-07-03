@@ -53,8 +53,8 @@ script = ExtResource("5_gmr66")
 script = ExtResource("6_v5lek")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1615640899]
-path_desired_distance = 0.2
-target_desired_distance = 0.2
+path_desired_distance = 0.1
+target_desired_distance = 0.1
 
 [node name="ActorOverheadStats" parent="." unique_id=115536281 instance=ExtResource("7_541ji")]
 
