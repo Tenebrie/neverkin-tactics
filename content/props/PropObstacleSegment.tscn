@@ -4,8 +4,9 @@
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="2_2vx1h"]
 [ext_resource type="Texture2D" uid="uid://vfb2hllb2u55" path="res://addons/prototype-textures/dark/texture_03.png" id="3_6whv4"]
 
-[sub_resource type="Resource" id="Resource_2vx1h"]
+[sub_resource type="Resource" id="Resource_slab6"]
 script = ExtResource("2_2vx1h")
+PhysicalSize = 0.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_6whv4")
@@ -22,10 +23,10 @@ resource_local_to_scene = true
 size = Vector3(0.2, 0.3, 0.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8twf3"]
-size = Vector3(0.25, 0.357, 0.25)
+size = Vector3(0.2, 0.357, 0.2)
 
 [node name="PropObstacle" unique_id=842978226 instance=ExtResource("1_6whv4")]
-Definition = SubResource("Resource_2vx1h")
+Definition = SubResource("Resource_slab6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="0" unique_id=1641116588]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)

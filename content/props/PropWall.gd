@@ -13,6 +13,12 @@ extends Node3D
 		if is_node_ready():
 			rebuild()
 
+@export var SegmentHealth: int = 3:
+	set(v):
+		SegmentHealth = v
+		if is_node_ready():
+			rebuild()
+
 const xSpacing = 0.2
 const ySpacing = 0.2
 
@@ -51,4 +57,6 @@ func rebuild():
 				yOffset + iy * ySpacing
 			)
 			add_child(clone)
+			if clone is Actor:
+				clone.Definition.HealthMaximum = SegmentHealth
 			clone.add_to_group(groupName)
