@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://dv4dmnjk2jygp"]
 
-[ext_resource type="Texture2D" uid="uid://br4wbialfc6ix" path="res://game/skills/KamillaRailgun/KamillaRailgunIcon.png" id="1_jo0yr"]
+[ext_resource type="Texture2D" uid="uid://br4wbialfc6ix" path="res://content/skills/SkillRailgunShot/SkillRailgunShotIcon.png" id="1_jo0yr"]
 [ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_hn53t"]
 
 [resource]

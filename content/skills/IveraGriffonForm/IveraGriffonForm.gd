@@ -7,7 +7,7 @@ var damageArea = TelegraphPreset.PointArea.new(1.2).WithDamageToHostiles(Damage)
 var exclusionArea = TelegraphPreset.PointArea.new(0.8)
 
 func _ready() -> void:
-	Definition = preload("res://game/skills/IveraGriffonForm/IveraGriffonForm.tres").duplicate()
+	Definition = preload("res://content/skills/IveraGriffonForm/IveraGriffonForm.tres").duplicate()
 
 	damageArea.Validators.push_back(func(_telegraph: Telegraph):
 		var exclusionAreaTelegraph = TelegraphManager.Instance.FindTelegraph(exclusionArea)

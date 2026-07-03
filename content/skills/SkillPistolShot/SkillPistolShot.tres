@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://bjwqafvh7oi1s"]
+
+[ext_resource type="Texture2D" uid="uid://bpup52v6762fp" path="res://content/skills/SkillPistolShot/SkillPistolShotIcon.png" id="1_tdkvl"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_lwnot"]
+
+[resource]
+script = ExtResource("2_lwnot")
+Name = "Pistol"
+IconTexture = ExtResource("1_tdkvl")
+TargetingMaxRange = 10.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

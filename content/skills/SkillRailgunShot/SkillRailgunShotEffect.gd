@@ -1,22 +1,24 @@
 @tool
 extends Node3D
-class_name KamillaPistolShotEffect
+class_name SkillRailgunShotEffect
 
-func Play(target: Vector3, duration: float = 0.2) -> void:
-	createSwipeTrail(Vector3.ZERO, target, 0, duration)
+var duration: float = 0.3
 
-func createSwipeTrail(from: Vector3, to: Vector3, arc: float, duration: float) -> void:
+func Play(target: Vector3) -> void:
+	createSwipeTrail(Vector3.ZERO, target, 0)
+
+func createSwipeTrail(from: Vector3, to: Vector3, arc: float) -> void:
 	var trail := VaporTrail.new()
 	trail.position = from
-	trail.size = 0.05
+	trail.size = 0.08
 	trail.emitting = true
 	trail.num_points = 50
-	trail.update_interval = 0.014
+	trail.update_interval = 0.025
 	trail.material = preload("res://addons/vaportrail/example/SmokyMaterial.tres")
-	trail.size_curve = preload("res://game/skills/KamillaPistol/KamillaPistolTrailCurve.tres")
-	trail.time_curve = preload("res://game/skills/KamillaPistol/KamillaPistolTrailTimeCurve.tres")
-	trail.color_gradient = preload("res://game/skills/KamillaPistol/KamillaPistolTrailGradient.tres")
-	trail.time_color_gradient = preload("res://game/skills/KamillaPistol/KamillaPistolTrailTimeGradient.tres")
+	trail.size_curve = preload("res://content/effects/KineticWeaponTrail/KineticWeaponTrailCurve.tres")
+	trail.time_curve = preload("res://content/effects/KineticWeaponTrail/KineticWeaponTrailTimeCurve.tres")
+	trail.color_gradient = preload("res://content/effects/KineticWeaponTrail/KineticWeaponTrailGradient.tres")
+	trail.time_color_gradient = preload("res://content/effects/KineticWeaponTrail/KineticWeaponTrailTimeGradient.tres")
 	add_child(trail)
 
 	var direction := (from - to).normalized()

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://br4wbialfc6ix"
-path="res://.godot/imported/KamillaRailgunIcon.png-7fe7235763f6c910f92965ae1b0f3cd9.ctex"
+path="res://.godot/imported/SkillRailgunShotIcon.png-17b9806836782888c77224c3b4aa1843.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/skills/KamillaRailgun/KamillaRailgunIcon.png"
-dest_files=["res://.godot/imported/KamillaRailgunIcon.png-7fe7235763f6c910f92965ae1b0f3cd9.ctex"]
+source_file="res://content/skills/SkillRailgunShot/SkillRailgunShotIcon.png"
+dest_files=["res://.godot/imported/SkillRailgunShotIcon.png-17b9806836782888c77224c3b4aa1843.ctex"]
 
 [params]
 

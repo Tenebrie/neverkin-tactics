@@ -68,12 +68,6 @@ class Projectile extends TelegraphDefinition:
 		)
 		return self
 
-	func AvoidingLowCover() -> Projectile:
-		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.collision_layer & CollisionLayer.LOW_COVER == 0
-		)
-		return self
-
 	func TargetingHostiles() -> Projectile:
 		TargetFilters.push_back(func(actor: Actor) -> bool:
 			return actor.Definition.Alliance != Actor.Alliance.Player
@@ -87,6 +81,14 @@ class Projectile extends TelegraphDefinition:
 	func Invisible() -> Projectile:
 		Processors.push_back(TelegraphProcessor.InvisibleTint)
 		return self
+
+class StandardProjectile extends Projectile:
+	func Load(skill: Skill):
+		super.Load(skill)
+		if skill.Parent.Definition.Alliance == Actor.Alliance.Player:
+			TargetingHostiles()
+		elif skill.Parent.Definition.Alliance == Actor.Alliance.Hostile:
+			TargetingPlayer()
 
 class PointArea extends TelegraphDefinition:
 	func _init(radius: float):

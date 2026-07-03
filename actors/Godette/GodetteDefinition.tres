@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://bpluyrx7ka0yv"]
 
 [ext_resource type="Texture2D" uid="uid://byhwirkvtng2e" path="res://icon.svg" id="1_bjopc"]
-[ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/HostileSkillPistolShot/HostileSkillPistolShot.gd" id="2_3mcjh"]
+[ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="2_3mcjh"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="4_6ui04"]
 
 [resource]

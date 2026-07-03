@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://actors/Ivera/ivera.Token.webp" id="1_2wdr7"]
 [ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://actors/Ivera/ivera.Avatar.webp" id="1_4qsbl"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="1_n1w0k"]
-[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://game/skills/IveraClaws/IveraClaws.gd" id="2_5mj32"]
-[ext_resource type="Script" uid="uid://owis1ce0c2b2" path="res://game/skills/IveraGriffonForm/IveraGriffonForm.gd" id="3_vtik3"]
+[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/skills/IveraClaws/IveraClaws.gd" id="2_5mj32"]
+[ext_resource type="Script" uid="uid://owis1ce0c2b2" path="res://content/skills/IveraGriffonForm/IveraGriffonForm.gd" id="3_vtik3"]
 
 [resource]
 script = ExtResource("1_n1w0k")

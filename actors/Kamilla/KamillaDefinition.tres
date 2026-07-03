@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://86yotqi3o76i"]
 
 [ext_resource type="Texture2D" uid="uid://dnx6v7s1conns" path="res://actors/Kamilla/kamilla.Avatar.webp" id="1_kb7sr"]
-[ext_resource type="Script" uid="uid://cdfio1ep7ik67" path="res://game/skills/KamillaPistol/KamillaPistol.gd" id="2_kb7sr"]
+[ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="2_4wdsm"]
 [ext_resource type="Texture2D" uid="uid://dvn23v5qlr8h2" path="res://actors/Kamilla/kamilla.Token.webp" id="3_4wdsm"]
-[ext_resource type="Script" uid="uid://7a2ajnl6rw8u" path="res://game/skills/KamillaRailgun/KamillaRailgun.gd" id="3_12fl6"]
+[ext_resource type="Script" uid="uid://7a2ajnl6rw8u" path="res://content/skills/SkillRailgunShot/SkillRailgunShot.gd" id="3_12fl6"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="4_20xv1"]
 
 [resource]
@@ -16,5 +16,5 @@ HealthMaximum = 5
 HealthHumanityThreshold = 1
 MovementSpeedPerActionPoint = 5.0
 RenderPriority = 8
-Skills = Array[GDScript]([ExtResource("2_kb7sr"), ExtResource("3_12fl6")])
+Skills = Array[GDScript]([ExtResource("2_4wdsm"), ExtResource("3_12fl6")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

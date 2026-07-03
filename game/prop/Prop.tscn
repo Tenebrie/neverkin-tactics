@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bvxvnc3sify1j"]
 
-[ext_resource type="Script" uid="uid://dmgbsibweufoj" path="res://content/props/Prop.gd" id="1_l3ak0"]
+[ext_resource type="Script" uid="uid://dmgbsibweufoj" path="res://game/prop/Prop.gd" id="1_l3ak0"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="2_o1alc"]
 [ext_resource type="Script" uid="uid://bwyipm7pkrsw1" path="res://game/actor/ActorStats.gd" id="3_o1alc"]
 [ext_resource type="Script" uid="uid://bibsejet712xq" path="res://game/actor/ActorHoverArea.gd" id="4_mki2f"]

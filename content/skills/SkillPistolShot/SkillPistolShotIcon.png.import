@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p0b7unaks37a"
-path="res://.godot/imported/IveraCriticalClaws.Icon.png-8f97b6f43fca7700830089dc2e2eba6f.ctex"
+uid="uid://bpup52v6762fp"
+path="res://.godot/imported/SkillPistolShotIcon.png-b1a3e0921aefefab064a3b67c3f49705.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/skills/IveraCriticalClaws/IveraCriticalClaws.Icon.png"
-dest_files=["res://.godot/imported/IveraCriticalClaws.Icon.png-8f97b6f43fca7700830089dc2e2eba6f.ctex"]
+source_file="res://content/skills/SkillPistolShot/SkillPistolShotIcon.png"
+dest_files=["res://.godot/imported/SkillPistolShotIcon.png-b1a3e0921aefefab064a3b67c3f49705.ctex"]
 
 [params]
 

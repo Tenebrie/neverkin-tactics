@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wman2lsal5wm"
-path="res://.godot/imported/IveraGriffonFormIcon.png-ea08668030ac586f6f87645c1e054d0e.ctex"
+uid="uid://p0b7unaks37a"
+path="res://.godot/imported/IveraCriticalClaws.Icon.png-086b5abce385c9aaed1def8459b178f3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/skills/IveraGriffonForm/IveraGriffonFormIcon.png"
-dest_files=["res://.godot/imported/IveraGriffonFormIcon.png-ea08668030ac586f6f87645c1e054d0e.ctex"]
+source_file="res://content/skills/IveraCriticalClaws/IveraCriticalClaws.Icon.png"
+dest_files=["res://.godot/imported/IveraCriticalClaws.Icon.png-086b5abce385c9aaed1def8459b178f3.ctex"]
 
 [params]
 

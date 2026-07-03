@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://cf753d6e68l0w"]
 
-[ext_resource type="Texture2D" uid="uid://p0b7unaks37a" path="res://game/skills/IveraCriticalClaws/IveraCriticalClaws.Icon.png" id="1_eoqaq"]
+[ext_resource type="Texture2D" uid="uid://p0b7unaks37a" path="res://content/skills/IveraCriticalClaws/IveraCriticalClaws.Icon.png" id="1_eoqaq"]
 [ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_cftdk"]
 
 [resource]

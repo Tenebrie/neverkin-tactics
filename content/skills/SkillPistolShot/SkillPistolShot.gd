@@ -1,5 +1,5 @@
 extends Skill
-class_name KamillaPistol
+class_name SkillPistolShot
 
 var Damage = 1
 var HitboxWidth = 0.04
@@ -7,7 +7,7 @@ var HitboxWidth = 0.04
 var damageTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
 
 func _ready() -> void:
-	Definition = preload("res://game/skills/KamillaPistol/KamillaPistol.tres").duplicate()
+	Definition = preload("res://content/skills/SkillPistolShot/SkillPistolShot.tres").duplicate()
 
 	Definition.Telegraphs = [
 		damageTelegraph
@@ -15,7 +15,7 @@ func _ready() -> void:
 	super._ready()
 
 func Cast(targets: Skill.TargetData) -> void:
-	var effect = KamillaPistolShotEffect.new()
+	var effect = SkillPistolShotEffect.new()
 	get_parent().add_child(effect)
 	effect.global_position = Parent.global_position
 	effect.position.y += 0.5
