@@ -5,14 +5,14 @@ signal ActionPointsChanged(current: int)
 signal MovementPointsChanged(current: float)
 
 var ActionPointsUsed: int = 0
-var ActionPointsSaved: int = 0
 
 var ActionPointsMax: int:
-	get: return parent.Definition.ActionPointsMax
+	get: return parent.Definition.ActionPointsMax + ActionPointsSavedMax
+var ActionPointsSavedMax: int = 0
 
 var ActionPointsAvailable: int:
 	get:
-		return ActionPointsMax - ActionPointsUsed + ActionPointsSaved
+		return ActionPointsMax - ActionPointsUsed
 
 var _actionPointsThreatenedFromSkill: int = 0
 var ActionPointsThreatened: int:
@@ -20,9 +20,6 @@ var ActionPointsThreatened: int:
 		return _actionPointsThreatenedFromSkill
 
 func ConsumeActionPoints(value: int):
-	while ActionPointsSaved > 0 && value > 0:
-		value -= 1
-		ActionPointsSaved -= 1
 	ActionPointsUsed += value
 	ActionPointsChanged.emit(ActionPointsAvailable)
 
@@ -30,7 +27,6 @@ func RefundActionPoints(value: int):
 	while ActionPointsUsed > 0 && value > 0:
 		value -= 1
 		ActionPointsUsed -= 1
-	ActionPointsSaved += value
 	ActionPointsChanged.emit(ActionPointsAvailable)
 
 #region Movement
@@ -93,7 +89,9 @@ func onTurnEnded(faction: Actor.Alliance) -> void:
 		return
 	MovementBuffer = 0.0
 	if ActionPointsUsed < ActionPointsMax:
-		ActionPointsSaved = 1
+		ActionPointsSavedMax = 1
+	else:
+		ActionPointsSavedMax = 0
 	ActionPointsUsed = 0
 
 #region Orders

@@ -11,7 +11,8 @@ func _ready():
 	healthBar.ThreatColor = Color(0.0, 0.4, 0.2)
 	healthBar.InhumanColor = Color(0.8, 0.6, 0.0)
 	actionPointBar.FillColor = Color(0.8, 0.8, 0.0)
-	actionPointBar.ThreatColor = Color(0.6, 0.6, 0.0)
+	actionPointBar.ThreatColor = Color(0.6, 0.4, 0.0)
+	actionPointBar.InhumanColor = Color(1.6, 0.6, 0.0)
 
 func _process(_delta: float):
 	updatePosition()
@@ -40,6 +41,6 @@ func updateValues():
 
 	actionPointBar.Value = actions.ActionPointsAvailable
 	actionPointBar.MaxValue = max(actions.ActionPointsMax, actions.ActionPointsAvailable)
-	actionPointBar.InhumanValue = 0
+	actionPointBar.InhumanValue = actions.ActionPointsSavedMax
 
 	actionPointBar.ThreatValue = parent.targeting.PredictedActionPointCost + actions.ActionPointsThreatened

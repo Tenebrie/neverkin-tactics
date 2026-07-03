@@ -13,6 +13,7 @@ signal DefinitionChanged(def: ActorDefinition)
 			SignalBus.ActorDefinitionChanged.emit(self)
 
 @onready var isReady = true
+@onready var Buffs: ActorBuffs = GetComponent(ActorBuffs)
 @onready var stats: ActorStats = GetComponent(ActorStats)
 @onready var actions: ActorActions = GetComponent(ActorActions)
 @onready var navigator: ActorNavigator = GetComponent(ActorNavigator)
@@ -44,6 +45,12 @@ func HasComponent(type: GDScript[Component]) -> bool:
 		if script != null and ActorUtils.GetClassAncestors(script).has(type):
 			return true
 	return false
+
+func RemoveComponent(type: GDScript[Component]):
+	for child in get_children():
+		var script: GDScript = child.get_script()
+		if script != null and ActorUtils.GetClassAncestors(script).has(type):
+			remove_child(child)
 
 func _ready() -> void:
 	if Definition != null:

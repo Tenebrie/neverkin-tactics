@@ -11,14 +11,15 @@ signal TargetsChanged(targets: Array[Actor])
 var ParentSkill: Skill
 var Definition: TelegraphDefinition
 
-var Tint: Color = Color.GRAY:
+@export var Tint: Color = Color.GRAY:
 	set(value):
 		Tint = value
 		if isReady:
 			setColor(value)
 
-var GeneralValidator: Callable
-var TargetValidator: Callable
+@export var GeneralValidator: Callable
+@export var TargetValidator: Callable
+@export var IgnoredObstacleGroups: Array[StringName]
 
 var growPercentage: float = 0.0
 var _targets: Array[Actor] = []
@@ -29,7 +30,6 @@ var FilteredOnlyTargets: Array[Actor]
 
 func _ready():
 	setColor(Tint)
-	set_notify_transform(true)
 
 func _physics_process(_d: float) -> void:
 	checkTargetsDiff()
@@ -40,9 +40,11 @@ func checkTargetsDiff() -> void:
 	for target in current:
 		if not previousSeenTargets.has(target):
 			TargetEntered.emit(target)
+			BuffHealthThreat.AddToActor(target, Definition.HealthThreat, self)
 	for target in previousSeenTargets:
 		if not current.has(target):
 			TargetExited.emit(target)
+			BuffHealthThreat.RemoveByOwner(target, self)
 	if current != previousSeenTargets:
 		TargetsChanged.emit(current)
 	previousSeenTargets = current

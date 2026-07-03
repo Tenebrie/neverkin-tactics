@@ -34,9 +34,12 @@ func FindTelegraph(def: TelegraphDefinition) -> Telegraph:
 			return telegraph
 	return null
 
-func _ready() -> void:
-	TurnManager.Instance.CurrentActorChanged.connect(resetState)
-	Actor.SignalBus.ActorSelectedSkillChanged.connect(func(_a, skill):
+func _parentReady() -> void:
+	TurnManager.Instance.CurrentActorChanged.connect(func(_a, previous):
+		if previous == parent and parent.Definition.Alliance == Actor.Alliance.Player:
+			resetState()
+	)
+	parent.Skills.SelectedSkillChanged.connect(func(skill):
 		onSkillSelected(skill)
 	)
 
@@ -106,6 +109,9 @@ func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Telegraph:
 			return false
 		if actor.collision_layer & CollisionLayer.SKILL_TARGETABLE == 0:
 			return false
+		for group in telegraph.IgnoredObstacleGroups:
+			if actor.is_in_group(group):
+				return false
 		for filter in def.TargetFilters:
 			var result: Variant = filter.call(actor)
 			if result is bool and result == false:
@@ -123,6 +129,8 @@ func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Telegraph:
 		telegraph.add_child(icon)
 		icon.position.y = RenderHeight.AboveWalls - RenderHeight.TelegraphBase
 	telegraph.ParentSkill = skill
+	if def.ShootFromCover:
+		telegraph.IgnoredObstacleGroups = PropWall.FindAllIgnoredFor(parent)
 	return telegraph
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()

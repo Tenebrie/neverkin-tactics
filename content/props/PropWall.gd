@@ -1,5 +1,6 @@
 @tool
 extends Node3D
+class_name PropWall
 
 @export var ObstacleWidth: int = 1:
 	set(v):
@@ -20,36 +21,53 @@ extends Node3D
 			rebuild()
 
 @export var CanBeIgnored: bool = true
+@onready var WallGroupName: StringName = "obstaclegroup_" + str(randi())
 
 const xSpacing = 0.2
 const ySpacing = 0.2
 
 func _ready():
 	rebuild()
+	Repository.Register(self)
 	if CanBeIgnored and not Engine.is_editor_hint():
 		TurnManager.Instance.CurrentActorChanged.connect(checkDistances)
 		Actor.SignalBus.ActorSelectedSkillChanged.connect(checkDistances)
 
-func checkDistances():
-	var currentActor = TurnManager.Instance.ActorTakingTurn
-	if not currentActor:
-		return
+func _exit_tree() -> void:
+	Repository.Unregister(self)
 
-	if not currentActor.Skills.SelectedSkill:
-		setIgnored(false)
-		return
+func IsIgnoredFor(actor: Actor) -> bool:
+	if not actor.Skills.SelectedSkill:
+		return false
 
-	var actorPosition = currentActor.global_position
-	var distanceThreshold = pow(currentActor.PhysicalSize * 2, 2)
+	var actorPosition = actor.global_position
+	var distanceThreshold = pow(actor.PhysicalSize * 2, 2)
 
 	for child in get_children():
 		if child is not Node3D:
 			continue
 		if child.global_position.distance_squared_to(actorPosition) < distanceThreshold:
-			setIgnored(true)
-			return
+			return true
+	return false
 
-	setIgnored(false)
+func checkDistances():
+	var currentActor = TurnManager.Instance.ActorTakingTurn
+	if not currentActor:
+		setIgnored(false)
+		return
+
+	var selectedSkill = currentActor.Skills.SelectedSkill
+	if not selectedSkill:
+		setIgnored(false)
+		return
+
+	var shootFromCover = selectedSkill.Definition.Telegraphs.any(func(telegraph: TelegraphDefinition) -> bool:
+		return telegraph.ShootFromCover
+	)
+	if shootFromCover:
+		setIgnored(IsIgnoredFor(currentActor))
+	else:
+		setIgnored(false)
 
 func setIgnored(enabled: bool):
 	var groupName = "propwall_ignored"
@@ -58,13 +76,13 @@ func setIgnored(enabled: bool):
 		for child in get_children():
 			if child.has_node("MeshInstance3D"):
 				child.get_node("MeshInstance3D").transparency = 0.95
-				(child as CharacterBody3D).collision_layer |= CollisionLayer.IGNORED_COVER
+				#(child as CharacterBody3D).collision_layer |= CollisionLayer.IGNORED_COVER
 	elif not enabled and is_in_group(groupName):
 		remove_from_group(groupName)
 		for child in get_children():
 			if child.has_node("MeshInstance3D"):
 				child.get_node("MeshInstance3D").transparency = 0
-				(child as CharacterBody3D).collision_layer &= ~CollisionLayer.IGNORED_COVER
+				#(child as CharacterBody3D).collision_layer &= ~CollisionLayer.IGNORED_COVER
 
 func rebuild():
 	var children = get_children()
@@ -79,8 +97,6 @@ func rebuild():
 		remove_child(clone)
 		clone.queue_free()
 
-	var groupName = "obstaclegroup_" + str(randi())
-
 	var xOffset = -(ObstacleWidth - 1) * xSpacing * 0.5
 	var yOffset = -(ObstacleDepth - 1) * ySpacing * 0.5
 
@@ -89,7 +105,7 @@ func rebuild():
 			if ix == 0 and iy == 0:
 				# reposition the prototype itself into the grid
 				prototype.position = Vector3(xOffset, prototype.position.y, yOffset)
-				prototype.add_to_group(groupName)
+				prototype.add_to_group(WallGroupName)
 				continue
 			var clone = prototype.duplicate() as Node3D
 			clone.position = Vector3(
@@ -100,4 +116,29 @@ func rebuild():
 			add_child(clone)
 			if clone is Actor:
 				clone.Definition.HealthMaximum = SegmentHealth
-			clone.add_to_group(groupName)
+			clone.add_to_group(WallGroupName)
+
+static var Repository = RepositoryImplementation.new()
+static func FindAllIgnoredFor(actor: Actor) -> Array[StringName]:
+	var ignored: Array[StringName]
+	for wall in Repository.List:
+		if wall.IsIgnoredFor(actor):
+			ignored.push_back(wall.WallGroupName)
+	return ignored
+
+#region Repository
+class RepositoryImplementation:
+	var List: Array[PropWall] = []
+
+	func Register(prop: PropWall):
+		var index = List.find(prop)
+		if index > 0:
+			return
+		List.push_back(prop)
+
+	func Unregister(prop: PropWall):
+		var index = List.find(prop)
+		if index < 0:
+			return
+		List.remove_at(index)
+#endregion

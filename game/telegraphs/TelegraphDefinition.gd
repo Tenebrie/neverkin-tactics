@@ -12,6 +12,9 @@ class_name TelegraphDefinition
 @export var HealthThreat: int = 0
 @export var HealthThreatSelector: Callable = func(_actor: Actor) -> int: return HealthThreat
 
+## While this telegraph is active, close cover is disabled
+@export var ShootFromCover: bool = false
+
 @export var PiercingPower = 0
 @export var PenetrationPower = 0
 

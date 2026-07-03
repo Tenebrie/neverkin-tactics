@@ -18,20 +18,11 @@ var HealthCurrent: int:
 
 var HealthThreatened: int = 0
 
-func _ready() -> void:
-	ActorTelegraphs.SignalBus.TargetsChanged.connect(func(actor, allTargets):
-		if not allTargets.has(parent):
-			HealthThreatened = 0
-			return
-
-		var dict = actor.Telegraphs.TargetsPerTelegraph
-		var healthThreatened = 0
-		for telegraph in dict:
-			var targets = dict[telegraph]
-			if targets.has(parent):
-				healthThreatened += telegraph.Definition.HealthThreat
-		HealthThreatened = healthThreatened
-	)
+func _parentReady() -> void:
+	if parent.Buffs:
+		parent.Buffs.Changed.connect(func():
+			HealthThreatened = BuffHealthThreat.Count(parent)
+		)
 
 func DealDamage(damage: int):
 	HealthDamageTaken = clampi(HealthDamageTaken + damage, 0, HealthMaximum)

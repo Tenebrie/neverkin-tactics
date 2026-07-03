@@ -50,6 +50,7 @@ class Projectile extends TelegraphDefinition:
 		Shape = Telegraph.Shape.Rect
 		Attachment = Telegraph.Attachment.Caster
 		RectOrigin = RectangularTelegraph.Origin.Start
+		ShootFromCover = true
 
 		Processors.push_back(TelegraphProcessor.LookAtMouse)
 		Processors.push_back(TelegraphProcessor.TargetAllianceTint)

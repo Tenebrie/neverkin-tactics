@@ -13,16 +13,27 @@ func playAsFaction(faction: Actor.Alliance):
 	)
 
 	for actor in actors:
+		if not actor.Behaviour or not actor.Skills.SelectedSkill:
+			continue
+		TurnManager.Instance.SelectNonPlayableActor(actor)
+		await NavmeshManager.Instance.WaitUntilReady()
+
+		await get_tree().create_timer(0.5).timeout
+		actor.targeting.PerformAction_CastSelectedSkill()
+		actor.Skills.Select(null)
+		await get_tree().create_timer(0.5).timeout
+
+	for actor in actors:
 		if not actor.Behaviour:
 			continue
 		TurnManager.Instance.SelectNonPlayableActor(actor)
 		await NavmeshManager.Instance.WaitUntilReady()
 
-		var wanderDist = 2
-		var targetPos = actor.global_position + Vector3(randf_range(-wanderDist, wanderDist), 0, randf_range(-wanderDist, wanderDist))
-		var path = actor.targeting.getLegalPathTo(targetPos)
-		actor.actions.IssueOrder_MoveThroughPath(path)
-		await actor.actions.ActionQueue.QueueEmptied
+		#var wanderDist = 2
+		#var targetPos = actor.global_position + Vector3(randf_range(-wanderDist, wanderDist), 0, randf_range(-wanderDist, wanderDist))
+		#var path = actor.targeting.getLegalPathTo(targetPos)
+		#actor.actions.IssueOrder_MoveThroughPath(path)
+		#await actor.actions.ActionQueue.QueueEmptied
 
 		var skill = actor.Skills.GetByIndex(0)
 

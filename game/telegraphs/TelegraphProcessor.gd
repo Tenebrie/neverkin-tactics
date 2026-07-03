@@ -60,6 +60,8 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 	var penetrationLeft = definition.PenetrationPower
 
 	var hitGroups: Dictionary[StringName, bool] = {}
+	for group in telegraph.IgnoredObstacleGroups:
+		hitGroups[group] = true
 
 	var slab = BoxShape3D.new()
 
