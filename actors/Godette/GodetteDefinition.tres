@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://byhwirkvtng2e" path="res://icon.svg" id="1_bjopc"]
 [ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="2_3mcjh"]
+[ext_resource type="Script" uid="uid://fvhx0f0syy6f" path="res://content/skills/SkillPistolShot/SkillPistolShotDouble.gd" id="3_i8sp2"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="4_6ui04"]
 
 [resource]
@@ -13,5 +14,5 @@ Alliance = 2
 HealthMaximum = 4
 ActionPointsMax = 2
 MovementSpeedPerActionPoint = 5.0
-Skills = Array[GDScript]([ExtResource("2_3mcjh")])
+Skills = Array[GDScript]([ExtResource("2_3mcjh"), ExtResource("3_i8sp2")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"
