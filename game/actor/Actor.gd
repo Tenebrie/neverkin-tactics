@@ -14,7 +14,7 @@ signal DefinitionChanged(def: ActorDefinition)
 
 @onready var isReady = true
 @onready var Buffs: ActorBuffs = GetComponent(ActorBuffs)
-@onready var stats: ActorStats = GetComponent(ActorStats)
+@onready var Stats: ActorStats = GetComponent(ActorStats)
 @onready var actions: ActorActions = GetComponent(ActorActions)
 @onready var navigator: ActorNavigator = GetComponent(ActorNavigator)
 @onready var targeting: ActorTargeting = GetComponent(ActorTargeting)
@@ -32,24 +32,25 @@ var IsPlayerControlled: bool:
 	get:
 		return TurnManager.Instance.CurrentActor == self
 
+var Alive: bool:
+	get:
+		return Stats.HealthCurrent > 0
+
 func GetComponent(type: GDScript[Component]) -> Component:
 	for child in get_children():
-		var script: GDScript = child.get_script()
-		if script != null and ActorUtils.GetClassAncestors(script).has(type):
+		if Utils.IsNodeDescendantOf(child, type):
 			return child
 	return null
 
 func HasComponent(type: GDScript[Component]) -> bool:
 	for child in get_children():
-		var script: GDScript = child.get_script()
-		if script != null and ActorUtils.GetClassAncestors(script).has(type):
+		if Utils.IsNodeDescendantOf(child, type):
 			return true
 	return false
 
 func RemoveComponent(type: GDScript[Component]):
 	for child in get_children():
-		var script: GDScript = child.get_script()
-		if script != null and ActorUtils.GetClassAncestors(script).has(type):
+		if Utils.IsNodeDescendantOf(child, type):
 			remove_child(child)
 
 func _ready() -> void:
@@ -87,7 +88,6 @@ func Destroy() -> void:
 	Repository.All.Unregister(self)
 	Repository.Hovered.Unregister(self)
 	SignalBus.ActorDestroyed.emit(self)
-	queue_free()
 
 #region Repository
 class Repository:
@@ -116,8 +116,19 @@ enum Alliance {
 	Player = 0,
 	Neutral = 1,
 	Hostile = 2,
+}
 
-	Max = 3
+enum ThreatLevel {
+	## Unarmed, not a combatant
+	Harmless,
+	## Human or common phenomena, armed
+	Concerning,
+	## Inhuman, or armed with high caliber weapons
+	Dangerous,
+	## Actively threatening, monstrous or infamous
+	Deadly,
+	## Immediate and undeniable existential crisis
+	Existential,
 }
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()

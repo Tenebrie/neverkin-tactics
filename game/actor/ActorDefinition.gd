@@ -6,6 +6,8 @@ class_name ActorDefinition
 @export var PhysicalSize: float = 0.4
 @export var TokenOffset: Vector2 = Vector2.ZERO
 
+@export var PerceivedThreat = Actor.ThreatLevel.Concerning
+
 @export var TokenTexture: Texture2D
 @export var AvatarTexture: Texture2D
 @export var Alliance: Actor.Alliance = Actor.Alliance.Neutral

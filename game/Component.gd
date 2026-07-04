@@ -1,11 +1,11 @@
 extends Node
 class_name Component
 
-var parent: Actor
+var Parent: Actor
 
 func _init():
 	tree_entered.connect(func():
-		parent = get_parent()
+		Parent = get_parent()
 		get_parent().ready.connect(_parentReady, CONNECT_ONE_SHOT)
 	, CONNECT_ONE_SHOT)
 

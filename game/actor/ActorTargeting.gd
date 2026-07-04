@@ -30,37 +30,37 @@ func _parentReady() -> void:
 	)
 
 	LockedModeChanged.emit()
-	parent.Skills.SelectedSkillChanged.connect(func(skill):
+	Parent.Skills.SelectedSkillChanged.connect(func(skill):
 		if skill is SkillMove:
 			lockedMode = TargetMode.WalkPreview
 	)
 
 func _process(_delta: float) -> void:
-	if not parent.IsPlayerControlled:
+	if not Parent.IsPlayerControlled:
 		return
 
 	## Show committed path (updated per frame)
-	if parent.navigator.IsMoving():
-		agentPathCommitted.SetPath(parent.navigator.agent.get_current_navigation_path(), parent.position)
+	if Parent.navigator.IsMoving():
+		agentPathCommitted.SetPath(Parent.navigator.agent.get_current_navigation_path(), Parent.position)
 	else:
 		agentPathCommitted.ClearPath()
 
 	## Skill target preview
-	if parent.Skills.SelectedSkill != null and parent.Skills.SelectedSkill is not SkillMove:
+	if Parent.Skills.SelectedSkill != null and Parent.Skills.SelectedSkill is not SkillMove:
 		return
 
 	## Show preview path
 	if lockedMode == TargetMode.WalkPreview:
 		var previewPath := getLegalPathToMouse()
-		agentPathPreview.SetPath(previewPath, parent.position)
+		agentPathPreview.SetPath(previewPath, Parent.position)
 		var movementCost = ActorNavigator.GetPathMovementCost(previewPath)
-		var apCount := parent.actions.GetMovementActionPointCost(movementCost)
-		var shownApCount := mini(apCount, parent.actions.ActionPointsAvailable)
+		var apCount := Parent.actions.GetMovementActionPointCost(movementCost)
+		var shownApCount := mini(apCount, Parent.actions.ActionPointsAvailable)
 		CombatUI.cursor.ShowActionPointCost(shownApCount, movementCost)
 		PredictedActionPointCost = shownApCount
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not parent.IsPlayerControlled:
+	if not Parent.IsPlayerControlled:
 		return
 
 	if event is not InputEventMouseButton:
@@ -71,16 +71,16 @@ func _unhandled_input(event: InputEvent) -> void:
 	var isRightMouseClick = event.button_index == MOUSE_BUTTON_RIGHT && event.is_pressed()
 	var isRightMouseRelease = event.button_index == MOUSE_BUTTON_RIGHT && event.is_released()
 
-	if parent.actions.IsPerformingAnyAction() and (isMouseClick or isRightMouseClick):
-		parent.actions.IssueOrder_Stop()
+	if Parent.actions.IsPerformingAnyAction() and (isMouseClick or isRightMouseClick):
+		Parent.actions.IssueOrder_Stop()
 		return
 
-	var isSkillSelected = parent.Skills.SelectedSkill != null
+	var isSkillSelected = Parent.Skills.SelectedSkill != null
 
 	if isRightMouseClick and isSkillSelected:
 		# Cancel current targeting
 		lockedMode = TargetMode.None
-		parent.Skills.Select(null)
+		Parent.Skills.Select(null)
 	elif isMouseRelease and isSkillSelected:
 		PerformAction_CastSelectedSkill()
 
@@ -95,18 +95,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		var path := getLegalPathToMouse()
 		if path.size() == 0:
 			return
-		parent.actions.IssueOrder_MoveThroughPath(path)
+		Parent.actions.IssueOrder_MoveThroughPath(path)
 		lockedMode = TargetMode.None
 
 func PerformAction_CastSelectedSkill():
 	var targetData = Skill.TargetData.new()
-	if parent.Telegraphs.Targets.size() > 0:
-		targetData.actor = parent.Telegraphs.Targets.get(0)
-	targetData.actors = parent.Telegraphs.Targets
-	targetData.mousePoint = parent.InputProvider.CursorPosition
-	targetData.perTelegraph = parent.Telegraphs.TargetsPerTelegraphDefinition
+	if Parent.Telegraphs.Targets.size() > 0:
+		targetData.actor = Parent.Telegraphs.Targets.get(0)
+	targetData.actors = Parent.Telegraphs.Targets
+	targetData.mousePoint = Parent.InputProvider.CursorPosition
+	targetData.perTelegraph = Parent.Telegraphs.TargetsPerTelegraphDefinition
 	targetData.perTelegraphIndex = targetData.perTelegraph.values()
-	parent.actions.IssueOrder_ConfirmCast(parent.Skills.SelectedSkill, targetData)
+	Parent.actions.IssueOrder_ConfirmCast(Parent.Skills.SelectedSkill, targetData)
 
 func resetDisplayedElements() -> void:
 	agentPathPreview.ClearPath()
@@ -115,20 +115,20 @@ func resetDisplayedElements() -> void:
 
 #region Utilities
 func getLegalPathToMouse() -> PackedVector3Array:
-	return getLegalPathTo(parent.InputProvider.CursorPosition)
+	return getLegalPathTo(Parent.InputProvider.CursorPosition)
 
 func getLegalPathTo(target: Vector3) -> PackedVector3Array:
-	var map_rid := parent.navigator.agent.get_navigation_map()
+	var map_rid := Parent.navigator.agent.get_navigation_map()
 	target = NavigationServer3D.map_get_closest_point(map_rid, target)
 
 	var previewPath := NavigationServer3D.map_get_path(
 			map_rid,
-			parent.global_position,
+			Parent.global_position,
 			target,
 			true,
-			parent.navigator.agent.navigation_layers
+			Parent.navigator.agent.navigation_layers
 	)
-	var truncatedPath = ActorUtils.LimitPathLength(previewPath, parent.actions.MovementAvailable)
+	var truncatedPath = ActorUtils.LimitPathLength(previewPath, Parent.actions.MovementAvailable)
 	return truncatedPath
 
 #endregion

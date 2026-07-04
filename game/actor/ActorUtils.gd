@@ -30,19 +30,6 @@ static func GetPathCompletedPercentage(path: PackedVector3Array, position: Vecto
 		lengthBeforeSegment += sqrt(lenSq)
 	return clampf(traversed / totalLength, 0.0, 1.0)
 
-static var _classAncestorDict: Dictionary[GDScript, Dictionary] = {}
-
-static func GetClassAncestors(script: GDScript) -> Dictionary:
-	if _classAncestorDict.has(script):
-		return _classAncestorDict[script]
-	var elementSet: Dictionary[GDScript, bool] = {}
-	var cur = script
-	while cur != null:
-		elementSet[cur] = true
-		cur = cur.get_base_script()
-	_classAncestorDict[script] = elementSet
-	return elementSet
-
 static func LimitPathLength(points: PackedVector3Array, maxLength: float) -> PackedVector3Array:
 	if points.size() < 2 or maxLength <= 0.0:
 		return PackedVector3Array() if points.is_empty() else PackedVector3Array([points[0]])
@@ -95,3 +82,36 @@ static func GetAllianceColor(alliance: Actor.Alliance) -> Color:
 	elif alliance == Actor.Alliance.Hostile:
 		return Color.DARK_RED
 	return Color.GRAY
+
+static func GetFactionName(faction: Actor.Alliance) -> String:
+	if faction == Actor.Alliance.Player:
+		return "Player"
+	elif faction == Actor.Alliance.Hostile:
+		return "Hostiles"
+	return "Neutral"
+
+static func GetThreatLevelColor(threatValue: float) -> Color:
+	var threat = floori(threatValue)
+	match threat:
+		Actor.ThreatLevel.Harmless:
+			return Color("e8e8e8")
+		Actor.ThreatLevel.Concerning:
+			return Color("f2d94e")
+		Actor.ThreatLevel.Dangerous:
+			return Color("f0932b")
+		Actor.ThreatLevel.Deadly:
+			return Color("eb4d4b")
+		_:
+			# Existential and beyond: shift toward a hot magenta/violet,
+			# getting brighter the further past Existential we go
+			var overcap = threat - Actor.ThreatLevel.Existential
+			var base = Color("c0392b")
+			var peak = Color("ff2fd0")
+			return base.lerp(peak, clampf(overcap * 0.25 + 0.4, 0.0, 1.0))
+
+static func GetThreatLevelName(threatValue: float) -> String:
+	var threat = floori(threatValue)
+	if threat <= Actor.ThreatLevel.Existential:
+		return Actor.ThreatLevel.keys()[clampi(threat, 0, Actor.ThreatLevel.Existential)]
+	var overcap = threat - Actor.ThreatLevel.Existential
+	return Actor.ThreatLevel.keys()[Actor.ThreatLevel.Existential] + "+".repeat(overcap)

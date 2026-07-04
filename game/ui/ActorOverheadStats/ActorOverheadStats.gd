@@ -29,7 +29,7 @@ func world_to_pixels(world_size: float) -> float:
 	return world_size * viewport_height / camera.size
 
 func updateValues():
-	var stats = parent.stats
+	var stats = parent.Stats
 	var actions = parent.actions
 
 	nameLabel.text = stats.Name

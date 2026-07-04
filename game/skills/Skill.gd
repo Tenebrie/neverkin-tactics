@@ -10,7 +10,7 @@ signal AfterCast(targets: TargetData)
 @onready var Controller: SkillController = get_parent().get_parent()
 @onready var ControlGroup: SkillController.ControlGroup:
 	get: return get_parent()
-@onready var Parent: Actor = Controller.parent
+@onready var Parent: Actor = Controller.Parent
 
 func _ready() -> void:
 	name = Definition.Name

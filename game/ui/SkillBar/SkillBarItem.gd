@@ -8,13 +8,13 @@ var TrackedSkill: Skill:
 	set(value):
 		if TrackedSkill != null:
 			TrackedSkill.Controller.SelectedSkillChanged.disconnect(updateModulate)
-			TrackedSkill.Controller.parent.actions.ActionPointsChanged.disconnect(updateModulate)
-			TrackedSkill.Controller.parent.actions.MovementPointsChanged.disconnect(updateModulate)
+			TrackedSkill.Controller.Parent.actions.ActionPointsChanged.disconnect(updateModulate)
+			TrackedSkill.Controller.Parent.actions.MovementPointsChanged.disconnect(updateModulate)
 		TrackedSkill = value
 		if TrackedSkill != null:
 			TrackedSkill.Controller.SelectedSkillChanged.connect(updateModulate)
-			TrackedSkill.Controller.parent.actions.ActionPointsChanged.connect(updateModulate)
-			TrackedSkill.Controller.parent.actions.MovementPointsChanged.connect(updateModulate)
+			TrackedSkill.Controller.Parent.actions.ActionPointsChanged.connect(updateModulate)
+			TrackedSkill.Controller.Parent.actions.MovementPointsChanged.connect(updateModulate)
 
 var Transparent: bool = false
 var Hotkey: InputEventKey

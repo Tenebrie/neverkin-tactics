@@ -6,13 +6,12 @@
 
 [sub_resource type="Resource" id="Resource_xily6"]
 script = ExtResource("3_5th6o")
-PhysicalSize = 0.1
 
 [node name="PropWallObstacleCover" type="Node3D" unique_id=1850641905]
 script = ExtResource("1_xily6")
 ObstacleWidth = 5
-CanBeIgnored = null
 
 [node name="PropObstacle" parent="." unique_id=842978226 instance=ExtResource("2_xily6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 0)
+Name = "Obstacle"
 Definition = SubResource("Resource_xily6")

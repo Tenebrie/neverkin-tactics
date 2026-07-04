@@ -125,7 +125,7 @@ static func _evaluateCandidate(
 
 	if canAttack:
 		for enemy in enemies:
-			if not is_instance_valid(enemy) or enemy.stats.HealthCurrent <= 0:
+			if not is_instance_valid(enemy) or enemy.Stats.HealthCurrent <= 0:
 				continue
 			if not _hasShot(actor, reachedPos, enemy, skill):
 				continue
@@ -178,7 +178,7 @@ static func _scoreTarget(actor: Actor, from: Vector3, enemy: Actor, skill: Skill
 	for tel in skill.Definition.Telegraphs:
 		damage = maxi(damage, tel.HealthThreat)
 	var maxHp: int = enemy.Definition.HealthMaximum
-	var currentHp: int = enemy.stats.HealthCurrent
+	var currentHp: int = enemy.Stats.HealthCurrent
 	var lethalBonus: float = 2.0 if damage >= currentHp else 0.0
 	var lowHealthBonus: float = 1.0 - clampf(float(currentHp) / float(maxi(maxHp, 1)), 0.0, 1.0)
 	var distance: float = from.distance_to(enemy.global_position)
@@ -245,7 +245,7 @@ static func _scoreCover(actor: Actor, candidate: Vector3, enemies: Array[Actor])
 	var total: float = 0.0
 	var counted: int = 0
 	for enemy in enemies:
-		if not is_instance_valid(enemy) or enemy.stats.HealthCurrent <= 0:
+		if not is_instance_valid(enemy) or enemy.Stats.HealthCurrent <= 0:
 			continue
 		counted += 1
 
@@ -320,7 +320,7 @@ static func _findEnemies(actor: Actor) -> Array[Actor]:
 			continue
 		if not _isHostileTo(other, actor):
 			continue
-		if other.stats.HealthCurrent <= 0:
+		if other.Stats.HealthCurrent <= 0:
 			continue
 		result.push_back(other)
 	return result

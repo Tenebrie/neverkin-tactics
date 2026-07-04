@@ -2,15 +2,16 @@ extends Component
 class_name ActorStats
 
 var Name: String:
-	get: return parent.Definition.Name
+	get: return Parent.Definition.Name
 var Alliance: Actor.Alliance:
-	get: return parent.Definition.Alliance
+	get: return Parent.Definition.Alliance
 
+#region Health
 var HealthDamageTaken: int = 0
 var HealthMaximum: int:
-	get: return parent.Definition.HealthMaximum
+	get: return Parent.Definition.HealthMaximum
 var HealthHumanityThreshold: int:
-	get: return parent.Definition.HealthHumanityThreshold
+	get: return Parent.Definition.HealthHumanityThreshold
 
 var HealthCurrent: int:
 	get:
@@ -19,15 +20,29 @@ var HealthCurrent: int:
 var HealthThreatened: int = 0
 
 func _parentReady() -> void:
-	if parent.Buffs:
-		parent.Buffs.Changed.connect(func():
-			HealthThreatened = BuffHealthThreat.Count(parent)
+	if Parent.Buffs:
+		Parent.Buffs.Changed.connect(func():
+			HealthThreatened = Parent.Buffs.Count(BuffHealthThreat)
 		)
 
 func DealDamage(damage: int):
 	HealthDamageTaken = clampi(HealthDamageTaken + damage, 0, HealthMaximum)
 	if HealthCurrent <= 0:
-		parent.Destroy()
+		Parent.Destroy()
 
 func RestoreHealth(healing: int):
 	HealthDamageTaken = clampi(HealthDamageTaken - healing, 0, HealthMaximum)
+#endregion
+#region Threat
+var ThreatCurrent: float:
+	get:
+		var inhumanVitalityThreat = 1 if HealthCurrent <= HealthHumanityThreshold else 0
+		return Parent.Definition.PerceivedThreat + ThreatGenerated + inhumanVitalityThreat
+var ThreatGenerated: float = 0
+
+func GenerateThreat(value: float):
+	ThreatGenerated = clampf(ThreatGenerated + value, 0.0, 10.0)
+
+func ReleaseThreat(value: float):
+	GenerateThreat(-value)
+#endregion

@@ -52,7 +52,7 @@ func drainQueue():
 
 func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 	var bakeStartUsec := Time.get_ticks_usec()
-	print("[navbake] dispatch for %s" % [actor.name])
+	#print("[navbake] dispatch for %s" % [actor.name])
 	var allExceptions: Array[Actor] = exceptions.duplicate()
 	allExceptions.push_back(actor)
 	var characters = get_tree().current_scene.find_children("*", "Actor", true, false)

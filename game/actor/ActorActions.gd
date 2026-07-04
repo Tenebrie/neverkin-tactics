@@ -7,7 +7,7 @@ signal MovementPointsChanged(current: float)
 var ActionPointsUsed: int = 0
 
 var ActionPointsMax: int:
-	get: return parent.Definition.ActionPointsMax + ActionPointsSavedMax
+	get: return Parent.Definition.ActionPointsMax + ActionPointsSavedMax
 var ActionPointsSavedMax: int = 0
 
 var ActionPointsAvailable: int:
@@ -32,7 +32,7 @@ func RefundActionPoints(value: int):
 #region Movement
 var MovementSpeedPerAP: float:
 	get:
-		return parent.Definition.MovementSpeedPerActionPoint
+		return Parent.Definition.MovementSpeedPerActionPoint
 var MovementBuffer: float = 0.0:
 	set(v):
 		MovementBuffer = v
@@ -42,7 +42,7 @@ var MovementAvailable: float:
 		return MovementBuffer + MovementSpeedPerAP * ActionPointsAvailable
 
 func _parentReady() -> void:
-	parent.Skills.SelectedSkillChanged.connect(func(skill):
+	Parent.Skills.SelectedSkillChanged.connect(func(skill):
 		if skill:
 			_actionPointsThreatenedFromSkill = skill.Definition.ActionPointCost
 		else:
@@ -85,7 +85,7 @@ func IsPerformingAnyAction() -> bool:
 #endregion
 
 func onTurnEnded(faction: Actor.Alliance) -> void:
-	if faction != parent.Definition.Alliance:
+	if faction != Parent.Definition.Alliance:
 		return
 	MovementBuffer = 0.0
 	if ActionPointsUsed < ActionPointsMax:
@@ -97,11 +97,11 @@ func onTurnEnded(faction: Actor.Alliance) -> void:
 #region Orders
 func IssueOrder_MoveThroughPath(path: PackedVector3Array):
 	var lastPoint := path[path.size() - 1]
-	parent.navigator.StartMovingTowards(lastPoint)
+	Parent.navigator.StartMovingTowards(lastPoint)
 	var pathCost = ActorNavigator.GetPathMovementCost(path)
-	parent.actions.ConsumeMovement(pathCost)
+	Parent.actions.ConsumeMovement(pathCost)
 	ActionQueue.Push("dummy value")
-	parent.navigator.agent.target_reached.connect(func():
+	Parent.navigator.agent.target_reached.connect(func():
 		ActionQueue.ConsumeFirst(),
 	CONNECT_ONE_SHOT)
 
@@ -111,7 +111,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		MessageLog.PrintMessage("Not enough AP")
 		return
 
-	for telegraph in parent.Telegraphs.telegraphs:
+	for telegraph in Parent.Telegraphs.telegraphs:
 		for validator in telegraph.Definition.Validators:
 			var result: Variant = validator.call(telegraph)
 			if result is bool and result == false:
@@ -127,10 +127,10 @@ func IssueOrder_Stop():
 	if ActionQueue.Empty():
 		return
 	ActionQueue.Clear()
-	var toRefund = (roundf(parent.navigator.GetRemainingPathLength() * 1000) / 1000)
+	var toRefund = (roundf(Parent.navigator.GetRemainingPathLength() * 1000) / 1000)
 	RefundMovement(maxf(0.0, toRefund - 0.1))
 
-	parent.navigator.HardStop()
+	Parent.navigator.HardStop()
 
 #endregion
 

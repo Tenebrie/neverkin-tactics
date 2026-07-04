@@ -36,10 +36,10 @@ func FindTelegraph(def: TelegraphDefinition) -> Telegraph:
 
 func _parentReady() -> void:
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a, previous):
-		if previous == parent and parent.Definition.Alliance == Actor.Alliance.Player:
+		if previous == Parent and Parent.Definition.Alliance == Actor.Alliance.Player:
 			resetState()
 	)
-	parent.Skills.SelectedSkillChanged.connect(func(skill):
+	Parent.Skills.SelectedSkillChanged.connect(func(skill):
 		onSkillSelected(skill)
 	)
 
@@ -120,7 +120,7 @@ func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Telegraph:
 	telegraph.TargetsChanged.connect(func():
 		var targets = Targets
 		TargetsChanged.emit(targets)
-		SignalBus.TargetsChanged.emit(parent, targets)
+		SignalBus.TargetsChanged.emit(Parent, targets)
 	)
 	if def.Icon != null:
 		var icon = Asset.Instantiate(TelegraphIcon)
@@ -130,7 +130,7 @@ func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Telegraph:
 		icon.position.y = RenderHeight.AboveWalls - RenderHeight.TelegraphBase
 	telegraph.ParentSkill = skill
 	if def.ShootFromCover:
-		telegraph.IgnoredObstacleGroups = PropWall.FindAllIgnoredFor(parent)
+		telegraph.IgnoredObstacleGroups = PropWall.FindAllIgnoredFor(Parent)
 	return telegraph
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()

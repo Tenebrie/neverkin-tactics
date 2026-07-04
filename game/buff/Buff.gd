@@ -1,6 +1,8 @@
 extends Component
 class_name Buff
 
+@export var Intensity: int = 1
+
 @export var Owner: Node:
 	set(v):
 		if Owner:

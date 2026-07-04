@@ -8,7 +8,7 @@ var SelectedSkill: Skill = null:
 		var previous = SelectedSkill
 		SelectedSkill = v
 		SelectedSkillChanged.emit(v, previous)
-		Actor.SignalBus.ActorSelectedSkillChanged.emit(parent, v, previous)
+		Actor.SignalBus.ActorSelectedSkillChanged.emit(Parent, v, previous)
 
 @onready var commonSkillGroup: ControlGroup = ControlGroup.new()
 @onready var activeSkillGroup: ControlGroup = ControlGroup.new()
@@ -22,16 +22,16 @@ func _parentReady() -> void:
 	add_child(activeSkillGroup)
 	add_child(inactiveSkillGroup)
 	TurnManager.Instance.CurrentActorChanged.connect(func():
-		if parent.Behaviour is ActorBehaviourPlayerControlled:
+		if Parent.Behaviour is ActorBehaviourPlayerControlled:
 			Select(null)
 	)
 
 	LoadCommonSkills()
 	LoadSkills()
-	parent.DefinitionChanged.connect(func():
+	Parent.DefinitionChanged.connect(func():
 		LoadSkills()
 	)
-	parent.actions.ActionPointsChanged.connect(func(current):
+	Parent.actions.ActionPointsChanged.connect(func(current):
 		if SelectedSkill != null and SelectedSkill.ActionPointCost > current:
 			Select(null)
 	)
@@ -47,7 +47,7 @@ func LoadSkills() -> void:
 			skillOrNode.queue_free()
 			activeSkillGroup.remove_child(skillOrNode)
 
-	for skillScript in parent.Definition.Skills:
+	for skillScript in Parent.Definition.Skills:
 		if skillScript == null:
 			activeSkillGroup.add_child(Node3D.new())
 			continue

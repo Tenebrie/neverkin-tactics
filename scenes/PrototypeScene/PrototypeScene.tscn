@@ -84,10 +84,12 @@ CanBeIgnored = false
 
 [node name="PropWallFullCover" parent="." unique_id=2011693064 instance=ExtResource("7_xgj7p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -0.1, 2.9)
+ObstacleWidth = 5
 CanBeIgnored = false
 
 [node name="PropWallFullCover2" parent="." unique_id=1775011020 instance=ExtResource("7_xgj7p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -0.1, -0.89999986)
+ObstacleWidth = 5
 CanBeIgnored = false
 
 [node name="PropWallHighCover" parent="." unique_id=1983465433 instance=ExtResource("5_25yxr")]
