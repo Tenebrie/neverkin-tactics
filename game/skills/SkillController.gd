@@ -95,6 +95,9 @@ func SelectByIndex(index: int) -> void:
 func Select(skill: Skill) -> void:
 	SelectedSkill = skill
 
+func Unselect() -> void:
+	SelectedSkill = null
+
 class ControlGroup extends Node3D:
 	func Add(ability: Skill) -> void:
 		add_child(ability)

@@ -1,22 +1,6 @@
 extends Node
-class_name EnemyBrain
+class_name BehaviourUtils
 
-## Utility-AI POC. Given an actor, samples candidate positions in a ring around it,
-## scores each on (a) whether an enemy can be shot from there, (b) how much cover
-## the position offers against enemy fire, (c) AP efficiency. Returns the best
-## Plan (destination path + selected skill + intended target).
-##
-## Two firing modes (see NPCManager for the toggle):
-## - Instant: enemy fires this turn, so movement + attack must fit in current AP.
-## - Delayed: enemy queues the skill via Skills.Select and it resolves at the
-##   start of their next turn. Movement uses this turn's AP; the queued attack
-##   uses next turn's AP. Preferred double-shot is chosen when we can afford to
-##   stay put and have 2 AP.
-enum Mode { Instant, Delayed }
-
-## Beam volume matches TelegraphProcessor.ApplyCollisionRules: a tall thin box swept
-## along the shot direction so both low props (~0.5m tall) and taller cover are
-## intersected uniformly.
 const BEAM_HEIGHT: float = 5.0
 const BEAM_WIDTH: float = 0.1
 const RING_ANGLES: int = 12
@@ -49,24 +33,28 @@ class Plan:
 		]
 
 ## Build a plan for an NPC on its turn.
-static func PlanTurn(actor: Actor, mode: Mode = Mode.Instant) -> Plan:
-	var enemies := _findEnemies(actor)
-	var candidates := _sampleCandidates(actor)
+static func PlanTurn(actor: Actor) -> Plan:
+	var behaviour = actor.Behaviour as ActorBehaviourWorldControlled
+	var allEnemies = findEnemies(actor)
+	var candidates = sampleCandidates(actor)
 
-	var best := Plan.new()
+	var best = Plan.new()
 	best.destination = actor.global_position
 
+	var focusEnemies: Array[Actor]
+	if behaviour.FocusedTarget:
+		focusEnemies.push_back(behaviour.FocusedTarget)
 	for candidate in candidates:
-		var evaluated := _evaluateCandidate(actor, candidate, enemies, mode)
+		var evaluated = evaluateCandidate(actor, candidate, focusEnemies, allEnemies)
 		if evaluated.score > best.score:
 			best = evaluated
 
 	return best
 
 #region Candidate sampling
-static func _sampleCandidates(actor: Actor) -> Array[Vector3]:
+static func sampleCandidates(actor: Actor) -> Array[Vector3]:
 	var out: Array[Vector3] = []
-	var origin := actor.global_position
+	var origin = actor.global_position
 	out.push_back(origin)
 
 	var maxMove: float = actor.actions.MovementAvailable
@@ -83,26 +71,26 @@ static func _sampleCandidates(actor: Actor) -> Array[Vector3]:
 		rings.push_back(maxMove)
 
 	for radius in rings:
-		var samples := RING_ANGLES_TIGHT if radius < step * 1.5 else RING_ANGLES
+		var samples = RING_ANGLES_TIGHT if radius < step * 1.5 else RING_ANGLES
 		for i in samples:
 			var angle: float = TAU * float(i) / float(samples)
-			var pos := origin + Vector3(cos(angle) * radius, 0.0, sin(angle) * radius)
+			var pos = origin + Vector3(cos(angle) * radius, 0.0, sin(angle) * radius)
 			out.push_back(pos)
 
 	return out
 #endregion
 
 #region Candidate evaluation
-static func _evaluateCandidate(
+static func evaluateCandidate(
 	actor: Actor,
 	candidate: Vector3,
-	enemies: Array[Actor],
-	mode: Mode,
+	focusEnemies: Array[Actor],
+	allEnemies: Array[Actor]
 ) -> Plan:
-	var plan := Plan.new()
+	var plan = Plan.new()
 	plan.destination = candidate
 
-	var path := actor.targeting.getLegalPathTo(candidate)
+	var path = actor.targeting.getLegalPathTo(candidate)
 	if path.size() == 0:
 		plan.score = PENALTY_UNREACHABLE
 		return plan
@@ -111,25 +99,24 @@ static func _evaluateCandidate(
 	plan.destination = reachedPos
 	plan.path = path
 
-	var pathCost := ActorNavigator.GetPathMovementCost(path)
+	var pathCost = ActorNavigator.GetPathMovementCost(path)
 	plan.apMoveCost = actor.actions.GetMovementActionPointCost(pathCost)
 
-	var wouldMove: bool = plan.apMoveCost > 0
-	var skill := _pickAttackSkill(actor, wouldMove, mode)
+	var skill = pickAttackSkill(actor)
 
-	var canAttack: bool = skill != null and _canAffordAttack(actor, skill, plan.apMoveCost, mode)
+	var canAttack = skill != null and canAffordAttack(actor, skill, plan.apMoveCost)
 
 	var bestTarget: Actor = null
-	var bestTargetScore: float = -INF
-	var attackScore: float = 0.0
+	var bestTargetScore = -INF
+	var attackScore = 0.0
 
 	if canAttack:
-		for enemy in enemies:
+		for enemy in focusEnemies:
 			if not is_instance_valid(enemy) or enemy.Stats.HealthCurrent <= 0:
 				continue
-			if not _hasShot(actor, reachedPos, enemy, skill):
+			if not hasShot(actor, reachedPos, enemy, skill):
 				continue
-			var targetScore := _scoreTarget(actor, reachedPos, enemy, skill)
+			var targetScore = scoreTarget(reachedPos, enemy, skill)
 			if targetScore > bestTargetScore:
 				bestTargetScore = targetScore
 				bestTarget = enemy
@@ -139,13 +126,13 @@ static func _evaluateCandidate(
 			plan.chosenSkill = skill
 			plan.target = bestTarget
 
-	var coverScore: float = _scoreCover(actor, reachedPos, enemies)
-	var apPenalty: float = float(plan.apMoveCost) * WEIGHT_AP_COST
-	var reachPenalty: float = 0.0
+	var coverScore = scoreCover(actor, reachedPos, allEnemies)
+	var apPenalty = float(plan.apMoveCost) * WEIGHT_AP_COST
+	var reachPenalty = 0.0
 
 	if not canAttack or bestTarget == null:
-		var enemyReachable := enemies.any(func(e: Actor) -> bool:
-			return skill != null and reachedPos.distance_to(e.global_position) <= skill.Definition.TargetingMaxRange
+		var enemyReachable = focusEnemies.any(func(enemy):
+			return skill != null and reachedPos.distance_to(enemy.global_position) <= skill.Definition.TargetingMaxRange
 		)
 		if not enemyReachable:
 			reachPenalty = PENALTY_NO_TARGET_IN_RANGE
@@ -153,27 +140,13 @@ static func _evaluateCandidate(
 	plan.score = attackScore + coverScore * WEIGHT_COVER - apPenalty - reachPenalty
 	return plan
 
-## In Delayed mode the queued skill fires on the next turn's AP budget, so a
-## stationary Godette (2 max AP + 1 saved carry-over) can afford the 2-AP
-## double-shot. Any planned movement forfeits that: fall back to the single-shot.
-static func _pickAttackSkill(actor: Actor, wouldMove: bool, mode: Mode) -> Skill:
-	if mode == Mode.Delayed and not wouldMove and actor.actions.ActionPointsAvailable >= 2:
-		var double := actor.Skills.Get(SkillPistolShotDouble)
-		if double != null:
-			return double
-	return _pickPrimaryAttackSkill(actor)
+static func pickAttackSkill(actor: Actor) -> Skill:
+	return pickPrimaryAttackSkill(actor)
 
-## Instant needs AP now for both move + cast. Delayed only needs enough AP
-## next turn to fire the queued skill (base + saved carry-over).
-static func _canAffordAttack(actor: Actor, skill: Skill, apMoveCost: int, mode: Mode) -> bool:
-	if mode == Mode.Instant:
-		return actor.actions.ActionPointsAvailable - apMoveCost >= skill.ActionPointCost
-	var apUsedThisTurn: int = actor.actions.ActionPointsUsed + apMoveCost
-	var willSave: int = 1 if apUsedThisTurn < actor.actions.ActionPointsMax else 0
-	var nextTurnAp: int = actor.Definition.ActionPointsMax + willSave
-	return nextTurnAp >= skill.ActionPointCost
+static func canAffordAttack(actor: Actor, skill: Skill, apMoveCost: int) -> bool:
+	return actor.actions.ActionPointsAvailable - apMoveCost >= skill.ActionPointCost
 
-static func _scoreTarget(actor: Actor, from: Vector3, enemy: Actor, skill: Skill) -> float:
+static func scoreTarget(from: Vector3, enemy: Actor, skill: Skill) -> float:
 	var damage: int = 0
 	for tel in skill.Definition.Telegraphs:
 		damage = maxi(damage, tel.HealthThreat)
@@ -188,14 +161,10 @@ static func _scoreTarget(actor: Actor, from: Vector3, enemy: Actor, skill: Skill
 #endregion
 
 #region Physics: shot & cover checks
-## Would `actor`, if standing at `from`, land the shot on `target` with `skill`?
-## Mirrors TelegraphProcessor.ApplyCollisionRules with piercing/penetration=0:
-## walks the sorted beam contacts and any actor/cover in the way blocks. Walls
-## whose PropWall would be ignored from `from` are excluded (shoot-from-cover).
-static func _hasShot(actor: Actor, from: Vector3, target: Actor, skill: Skill) -> bool:
+static func hasShot(actor: Actor, from: Vector3, target: Actor, skill: Skill) -> bool:
 	var maxRange: float = skill.Definition.TargetingMaxRange
-	var flatFrom := Vector3(from.x, 0.0, from.z)
-	var flatTarget := Vector3(target.global_position.x, 0.0, target.global_position.z)
+	var flatFrom = Vector3(from.x, 0.0, from.z)
+	var flatTarget = Vector3(target.global_position.x, 0.0, target.global_position.z)
 	var distance: float = flatFrom.distance_to(flatTarget)
 	if distance > maxRange + actor.PhysicalSize + target.PhysicalSize:
 		return false
@@ -203,20 +172,20 @@ static func _hasShot(actor: Actor, from: Vector3, target: Actor, skill: Skill) -
 	var world = actor.get_world_3d()
 	if world == null:
 		return false
-	var space := world.direct_space_state
+	var space = world.direct_space_state
 
 	var direction: Vector3 = (flatTarget - flatFrom)
 	if direction.length_squared() < 0.0001:
 		return true
 	direction = direction.normalized()
 
-	var basis := Basis.looking_at(direction, Vector3.UP)
-	var beamOrigin := Vector3(flatFrom.x, BEAM_HEIGHT / 2.0, flatFrom.z)
-	var mask := CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.ACTOR
+	var basis = Basis.looking_at(direction, Vector3.UP)
+	var beamOrigin = Vector3(flatFrom.x, BEAM_HEIGHT / 2.0, flatFrom.z)
+	var mask = CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.ACTOR
 	var initialExclude: Array[RID] = [actor.get_rid()]
-	initialExclude.append_array(_ignoredWallRidsAt(from, actor.PhysicalSize))
+	initialExclude.append_array(ignoredWallRidsAt(from, actor.PhysicalSize))
 
-	var contacts := RaycastUtils.GatherBeamContacts(
+	var contacts = RaycastUtils.GatherBeamContacts(
 		space, Vector2(BEAM_WIDTH, BEAM_HEIGHT), basis, beamOrigin, direction,
 		distance, mask, initialExclude,
 	)
@@ -231,16 +200,13 @@ static func _hasShot(actor: Actor, from: Vector3, target: Actor, skill: Skill) -
 
 	return false
 
-## For each enemy, would the enemy have a clean shot at `candidate` (with a
-## shot-shaped beam from enemy → candidate)? If blocked, we're in cover; the
-## blocker's cover type sets the score. Averaged over enemies.
-static func _scoreCover(actor: Actor, candidate: Vector3, enemies: Array[Actor]) -> float:
+static func scoreCover(actor: Actor, candidate: Vector3, enemies: Array[Actor]) -> float:
 	if enemies.is_empty():
 		return 0.0
 	var world = actor.get_world_3d()
 	if world == null:
 		return 0.0
-	var space := world.direct_space_state
+	var space = world.direct_space_state
 
 	var total: float = 0.0
 	var counted: int = 0
@@ -249,21 +215,21 @@ static func _scoreCover(actor: Actor, candidate: Vector3, enemies: Array[Actor])
 			continue
 		counted += 1
 
-		var flatEnemy := Vector3(enemy.global_position.x, 0.0, enemy.global_position.z)
-		var flatCandidate := Vector3(candidate.x, 0.0, candidate.z)
+		var flatEnemy = Vector3(enemy.global_position.x, 0.0, enemy.global_position.z)
+		var flatCandidate = Vector3(candidate.x, 0.0, candidate.z)
 		var direction: Vector3 = flatCandidate - flatEnemy
 		var distance: float = direction.length()
 		if distance < 0.01:
 			continue
 		direction = direction.normalized()
 
-		var basis := Basis.looking_at(direction, Vector3.UP)
-		var beamOrigin := Vector3(flatEnemy.x, BEAM_HEIGHT / 2.0, flatEnemy.z)
-		var mask := CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.FULL_COVER | CollisionLayer.ACTOR
+		var basis = Basis.looking_at(direction, Vector3.UP)
+		var beamOrigin = Vector3(flatEnemy.x, BEAM_HEIGHT / 2.0, flatEnemy.z)
+		var mask = CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.FULL_COVER | CollisionLayer.ACTOR
 		var initialExclude: Array[RID] = [enemy.get_rid(), actor.get_rid()]
-		initialExclude.append_array(_ignoredWallRidsAt(enemy.global_position, enemy.PhysicalSize))
+		initialExclude.append_array(ignoredWallRidsAt(enemy.global_position, enemy.PhysicalSize))
 
-		var contacts := RaycastUtils.GatherBeamContacts(
+		var contacts = RaycastUtils.GatherBeamContacts(
 			space, Vector2(BEAM_WIDTH, BEAM_HEIGHT), basis, beamOrigin, direction,
 			distance, mask, initialExclude,
 		)
@@ -291,7 +257,7 @@ static func _scoreCover(actor: Actor, candidate: Vector3, enemies: Array[Actor])
 ## RIDs. If any segment of a wall is within (physicalSize * 2) of `at`, the
 ## whole wall's segments are excluded (matching how ApplyCollisionRules ignores
 ## by obstaclegroup_ group name).
-static func _ignoredWallRidsAt(at: Vector3, physicalSize: float) -> Array[RID]:
+static func ignoredWallRidsAt(at: Vector3, physicalSize: float) -> Array[RID]:
 	var out: Array[RID] = []
 	var threshold: float = pow(physicalSize * 2.0, 2)
 	for wall in PropWall.Repository.List:
@@ -313,28 +279,21 @@ static func _ignoredWallRidsAt(at: Vector3, physicalSize: float) -> Array[RID]:
 #endregion
 
 #region Helpers
-static func _findEnemies(actor: Actor) -> Array[Actor]:
+static func findEnemies(actor: Actor) -> Array[Actor]:
 	var result: Array[Actor] = []
 	for other in Actor.Repository.All.List:
 		if other == actor:
 			continue
-		if not _isHostileTo(other, actor):
+		if not ActorUtils.IsHostileTo(other, actor):
 			continue
-		if other.Stats.HealthCurrent <= 0:
+		if not other.IsAlive:
 			continue
 		result.push_back(other)
 	return result
 
-static func _isHostileTo(a: Actor, b: Actor) -> bool:
-	var aa: Actor.Alliance = a.Definition.Alliance
-	var bb: Actor.Alliance = b.Definition.Alliance
-	if aa == Actor.Alliance.Neutral or bb == Actor.Alliance.Neutral:
-		return false
-	return aa != bb
-
-static func _pickPrimaryAttackSkill(actor: Actor) -> Skill:
+static func pickPrimaryAttackSkill(actor: Actor) -> Skill:
 	for i in 16:
-		var skill := actor.Skills.GetByIndex(i)
+		var skill = actor.Skills.GetByIndex(i)
 		if skill == null:
 			continue
 		var hasDamage: bool = skill.Definition.Telegraphs.any(func(t): return t.HealthThreat > 0)

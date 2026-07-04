@@ -1,7 +1,7 @@
 extends Skill
 class_name IveraGriffonForm
 
-var Damage = 1
+var Damage = 3
 
 var damageArea = TelegraphPreset.PointArea.new(1.2).WithDamageToHostiles(Damage)
 var exclusionArea = TelegraphPreset.PointArea.new(0.8)
@@ -41,5 +41,5 @@ func Cast(targets: Skill.TargetData) -> void:
 		effect.scale = Vector3(1.7,1.7,1.7)
 		effect.Play()
 		get_tree().create_timer(0.1).timeout.connect(func():
-			target.Stats.DealDamage(Damage)
+			target.Stats.DealDamage(Damage, Parent)
 		)

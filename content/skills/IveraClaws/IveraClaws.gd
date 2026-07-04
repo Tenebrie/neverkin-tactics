@@ -20,5 +20,5 @@ func Cast(targets: Skill.TargetData) -> void:
 	effect.scale = Vector3(1.7,1.7,1.7)
 	effect.Play()
 	get_tree().create_timer(0.1).timeout.connect(func():
-		actor.Stats.DealDamage(Damage)
+		actor.Stats.DealDamage(Damage, Parent)
 	)

@@ -1,7 +1,7 @@
 extends Skill
 class_name SkillRailgunShot
 
-var Damage = 1
+var Damage = 3
 var HitboxWidth = 0.1
 
 var damageTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
@@ -25,4 +25,4 @@ func Cast(targets: Skill.TargetData) -> void:
 	effect.Play(furthestPoint)
 
 	for actor in targets.perTelegraph[damageTelegraph]:
-		actor.Stats.DealDamage(Damage)
+		actor.Stats.DealDamage(Damage, Parent)

@@ -11,6 +11,7 @@ class_name SkillDefinition
 
 @export_group("Skill Targeting", "Targeting")
 @export var TargetingMaxRange: float = 1.0
+@export var TargetingResolvesNextTurn: bool = false
 
 @export_group("Shapeshifting", "Shapeshift")
 @export var ShapeshiftTargetActor: ActorDefinition

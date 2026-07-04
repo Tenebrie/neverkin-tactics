@@ -32,7 +32,7 @@ var IsPlayerControlled: bool:
 	get:
 		return TurnManager.Instance.CurrentActor == self
 
-var Alive: bool:
+var IsAlive: bool:
 	get:
 		return Stats.HealthCurrent > 0
 
@@ -88,6 +88,7 @@ func Destroy() -> void:
 	Repository.All.Unregister(self)
 	Repository.Hovered.Unregister(self)
 	SignalBus.ActorDestroyed.emit(self)
+	queue_free()
 
 #region Repository
 class Repository:

@@ -5,7 +5,12 @@ class_name ActorBehaviourWorldControlled
 @export var EnableFear = true
 @export var FearThreshold = Actor.ThreatLevel.Deadly
 
-var FocusedTarget
+var FocusedTarget: Actor = null
+var FocusedTargetReasons: Dictionary[String, float] = {}
+
+class ExplainedThreatValue:
+	var Total: float = 0.0
+	var Highlights: Dictionary[String, float] = {}
 
 func _ready() -> void:
 	var inputProvider = ActorInputProvider.new()
@@ -15,33 +20,51 @@ func _ready() -> void:
 
 func UpdateFocusedTarget() -> void:
 	var targets = Actor.Repository.All.List.filter(func(actor):
-		return actor.Definition.Alliance != Actor.Alliance.Player
+		return ActorUtils.IsHostileTo(actor, Parent)
 	)
 	if targets.size() == 0:
 		FocusedTarget = null
 		return
 
-	var targetToThreat: Dictionary[Actor, float]
-	var targetToValue: Dictionary[Actor, float]
+	var targetToThreat: Dictionary[Actor, ExplainedThreatValue]
+	var targetToReason: Dictionary[Actor, ExplainedThreatValue]
 	for actor in targets:
 		targetToThreat[actor] = evaluateTargetThreat(actor)
-		targetToValue[actor] = evaluateTargetValue(actor)
+		targetToReason[actor] = evaluateTargetValue(actor)
 
 	var fearThresholdReached = targets.any(func(actor):
-		return targetToThreat[actor] >= FearThreshold
+		return targetToThreat[actor].Total >= FearThreshold
 	)
 
 	var parentPosition = Parent.global_position
-	var scoreOf: Dictionary[Actor, float] = targetToThreat if fearThresholdReached else targetToValue
+	var scoreOf = func(actor):
+		return targetToThreat[actor].Total if fearThresholdReached else targetToReason[actor].Total
 
 	targets.sort_custom(func(a, b):
-		if scoreOf[a] != scoreOf[b]:
-			return scoreOf[a] > scoreOf[b]
+		if scoreOf.call(a) != scoreOf.call(b):
+			return scoreOf.call(a) > scoreOf.call(b)
 		return a.global_position.distance_squared_to(parentPosition) < b.global_position.distance_squared_to(parentPosition)
 	)
 	FocusedTarget = targets[0]
+	FocusedTargetReasons = targetToThreat[FocusedTarget].Highlights if fearThresholdReached else targetToReason[FocusedTarget].Highlights
 
-func evaluateTargetThreat(actor: Actor) -> float:
-	return actor.Stats.ThreatCurrent
+func GetFocusedTargetReasonsImmediate() -> ExplainedThreatValue:
+	if not FocusedTarget:
+		return
 
-@abstract func evaluateTargetValue(actor: Actor) -> float
+	var targetToThreat: Dictionary[Actor, ExplainedThreatValue]
+	var targetToReason: Dictionary[Actor, ExplainedThreatValue]
+	targetToThreat[FocusedTarget] = evaluateTargetThreat(FocusedTarget)
+	targetToReason[FocusedTarget] = evaluateTargetValue(FocusedTarget)
+
+	var fearThresholdReached = targetToThreat[FocusedTarget].Total >= FearThreshold
+
+	return targetToThreat[FocusedTarget] if fearThresholdReached else targetToReason[FocusedTarget]
+
+func evaluateTargetThreat(actor: Actor) -> ExplainedThreatValue:
+	var value = ExplainedThreatValue.new()
+	value.Total = actor.Stats.ThreatCurrent
+	value.Highlights["Scary!"] = actor.Stats.ThreatCurrent
+	return value
+
+@abstract func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue

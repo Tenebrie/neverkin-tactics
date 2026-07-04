@@ -78,9 +78,9 @@ static func GetMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
 
 static func GetAllianceColor(alliance: Actor.Alliance) -> Color:
 	if alliance == Actor.Alliance.Player:
-		return Color.DARK_GREEN
+		return Color("4deb4b")
 	elif alliance == Actor.Alliance.Hostile:
-		return Color.DARK_RED
+		return Color("eb4d4b")
 	return Color.GRAY
 
 static func GetFactionName(faction: Actor.Alliance) -> String:
@@ -115,3 +115,10 @@ static func GetThreatLevelName(threatValue: float) -> String:
 		return Actor.ThreatLevel.keys()[clampi(threat, 0, Actor.ThreatLevel.Existential)]
 	var overcap = threat - Actor.ThreatLevel.Existential
 	return Actor.ThreatLevel.keys()[Actor.ThreatLevel.Existential] + "+".repeat(overcap)
+
+static func IsHostileTo(a: Actor, b: Actor) -> bool:
+	var aa: Actor.Alliance = a.Definition.Alliance
+	var bb: Actor.Alliance = b.Definition.Alliance
+	if aa == Actor.Alliance.Neutral or bb == Actor.Alliance.Neutral:
+		return false
+	return aa != bb
