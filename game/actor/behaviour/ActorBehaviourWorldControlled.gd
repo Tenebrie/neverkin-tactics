@@ -6,11 +6,22 @@ class_name ActorBehaviourWorldControlled
 @export var FearThreshold = Actor.ThreatLevel.Deadly
 
 var FocusedTarget: Actor = null
+var FocusedTargetTotal: float = 0.0
 var FocusedTargetReasons: Dictionary[String, float] = {}
+
+var UpcomingFocusedTarget: Actor:
+	get:
+		return Ranking[0].Target if not Ranking.is_empty() else null
+
+var Ranking: Array[RankedTarget] = []
 
 class ExplainedThreatValue:
 	var Total: float = 0.0
 	var Highlights: Dictionary[String, float] = {}
+
+class RankedTarget:
+	var Target: Actor
+	var Value: ExplainedThreatValue
 
 func _ready() -> void:
 	var inputProvider = ActorInputProvider.new()
@@ -18,13 +29,26 @@ func _ready() -> void:
 	Parent.add_child(inputProvider)
 	Parent.InputProvider = inputProvider
 
+func _process(_delta: float) -> void:
+	Ranking = computeRanking()
+
 func UpdateFocusedTarget() -> void:
+	if Ranking.is_empty():
+		FocusedTarget = null
+		FocusedTargetTotal = 0.0
+		FocusedTargetReasons = {}
+		return
+	FocusedTarget = Ranking[0].Target
+	FocusedTargetTotal = Ranking[0].Value.Total
+	FocusedTargetReasons = Ranking[0].Value.Highlights
+
+func computeRanking() -> Array[RankedTarget]:
+	var result: Array[RankedTarget] = []
 	var targets = Actor.Repository.All.List.filter(func(actor):
 		return ActorUtils.IsHostileTo(actor, Parent)
 	)
 	if targets.size() == 0:
-		FocusedTarget = null
-		return
+		return result
 
 	var targetToThreat: Dictionary[Actor, ExplainedThreatValue]
 	var targetToReason: Dictionary[Actor, ExplainedThreatValue]
@@ -45,21 +69,13 @@ func UpdateFocusedTarget() -> void:
 			return scoreOf.call(a) > scoreOf.call(b)
 		return a.global_position.distance_squared_to(parentPosition) < b.global_position.distance_squared_to(parentPosition)
 	)
-	FocusedTarget = targets[0]
-	FocusedTargetReasons = targetToThreat[FocusedTarget].Highlights if fearThresholdReached else targetToReason[FocusedTarget].Highlights
 
-func GetFocusedTargetReasonsImmediate() -> ExplainedThreatValue:
-	if not FocusedTarget:
-		return
-
-	var targetToThreat: Dictionary[Actor, ExplainedThreatValue]
-	var targetToReason: Dictionary[Actor, ExplainedThreatValue]
-	targetToThreat[FocusedTarget] = evaluateTargetThreat(FocusedTarget)
-	targetToReason[FocusedTarget] = evaluateTargetValue(FocusedTarget)
-
-	var fearThresholdReached = targetToThreat[FocusedTarget].Total >= FearThreshold
-
-	return targetToThreat[FocusedTarget] if fearThresholdReached else targetToReason[FocusedTarget]
+	for actor in targets:
+		var ranked = RankedTarget.new()
+		ranked.Target = actor
+		ranked.Value = targetToThreat[actor] if fearThresholdReached else targetToReason[actor]
+		result.push_back(ranked)
+	return result
 
 func evaluateTargetThreat(actor: Actor) -> ExplainedThreatValue:
 	var value = ExplainedThreatValue.new()

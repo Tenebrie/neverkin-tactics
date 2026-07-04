@@ -6,6 +6,9 @@ extends CanvasLayer
 @onready var healthBar: SegmentedBar = $%HealthBar
 @onready var actionPointBar: SegmentedBar = $%ActionPointBar
 
+@onready var focusTargetCount: Control = %CurrentFocusTargetCount
+@onready var nextFocusTargetCount: Control = %NextFocusTargetCount
+
 func _ready():
 	healthBar.FillColor = Color(0.0, 0.6, 0.2)
 	healthBar.ThreatColor = Color(0.0, 0.4, 0.2)
@@ -44,3 +47,20 @@ func updateValues():
 	actionPointBar.InhumanValue = actions.ActionPointsSavedMax
 
 	actionPointBar.ThreatValue = parent.targeting.PredictedActionPointCost + actions.ActionPointsThreatened
+
+	var focusedTargets = Actor.Repository.All.List.filter(func(actor):
+		if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
+			return behaviour.FocusedTarget == parent
+		return false
+	)
+	var nextFocusedTargets = Actor.Repository.All.List.filter(func(actor):
+		if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
+			return behaviour.UpcomingFocusedTarget == parent
+		return false
+	)
+	focusTargetCount.visible = focusedTargets.size() > 0
+	if focusTargetCount.visible:
+		focusTargetCount.get_node("Label").text = str(focusedTargets.size())
+	nextFocusTargetCount.visible = nextFocusedTargets.size() > 0
+	if nextFocusTargetCount.visible:
+		nextFocusTargetCount.get_node("Label").text = str(nextFocusedTargets.size())

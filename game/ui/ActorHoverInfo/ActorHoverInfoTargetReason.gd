@@ -15,3 +15,4 @@ class_name ActorHoverInfoTargetReason
 func _ready():
 	TargetReason = TargetReason
 	TargetValue = TargetValue
+	$Value.visible = Input.is_key_pressed(KEY_SHIFT)

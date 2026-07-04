@@ -6,7 +6,7 @@ const HIGHLIGHT_THRESHOLD: float = 2.0
 
 @export var WEIGHT_LOW_HEALTH: float = 2.0
 @export var WEIGHT_HIGH_HEALTH: float = 1.0
-@export var WEIGHT_THREAT: float = 1.0
+@export var WEIGHT_THREAT: float = 3.0
 @export var WEIGHT_PROXIMITY: float = 1.0
 @export var WEIGHT_GRUDGE: float = 1.0
 
@@ -49,7 +49,7 @@ func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 	addHighlight(result, "Unhurt", unhurtValue)
 	addHighlight(result, "%s threat" % ActorUtils.GetThreatLevelName(actor.Stats.ThreatCurrent), threatValue)
 	addHighlight(result, "Within reach", proximityValue)
-	addHighlight(result, "Owes me blood", grudgeValue)
+	addHighlight(result, "Attacked me!", grudgeValue)
 
 	return result
 

@@ -10,6 +10,9 @@ extends CanvasLayer
 @onready var focusTargetValue: Label = %FocusTargetValue
 @onready var targetReasonContainer: VBoxContainer = %TargetReasonContainer
 
+const REASON_INDENT: int = 16
+const SECTION_HEADER_COLOR: Color = Color(0.65, 0.65, 0.72)
+
 var trackedActor: Actor
 
 func _ready() -> void:
@@ -37,41 +40,110 @@ func _process(_delta: float):
 	offset.x = clampf(offset.x, 0, get_viewport().get_visible_rect().size.x - $PanelContainer.size.x)
 	offset.y = clampf(offset.y, 0, get_viewport().get_visible_rect().size.y)
 
+func _input(event: InputEvent):
+	if event is not InputEventKey or not trackedActor:
+		return
+	if event.keycode == KEY_SHIFT or event.keycode == KEY_ALT:
+		if trackedActor.Behaviour is ActorBehaviourWorldControlled behaviour:
+			renderBehaviourSection(behaviour)
+			$PanelContainer.reset_size()
+
 func loadActorData(actor: Actor):
 	if actor == trackedActor:
 		return
 
 	trackedActor = actor
+
 	nameLabel.text = actor.Definition.Name
 	factionLabel.text = ActorUtils.GetFactionName(actor.Stats.Alliance)
 	factionLabel.add_theme_color_override("font_color", ActorUtils.GetAllianceColor(actor.Stats.Alliance))
 	threatLabel.text = ActorUtils.GetThreatLevelName(actor.Stats.ThreatCurrent)
 	threatLabel.add_theme_color_override("font_color", ActorUtils.GetThreatLevelColor(actor.Stats.ThreatCurrent))
 	movementSpeedLabel.visible = actor.Definition.MovementSpeedPerActionPoint > 0
-	movementSpeedLabel.text = "Speed: %.1f m/a"%actor.Definition.MovementSpeedPerActionPoint
+	movementSpeedLabel.text = "Speed: %.1f m/a" % actor.Definition.MovementSpeedPerActionPoint
 
 	if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
 		npcBehaviourSection.visible = true
-		if behaviour.FocusedTarget:
-			focusTargetValue.visible = true
-			focusTargetLabel.text = "Focused on:"
-			focusTargetValue.text = behaviour.FocusedTarget.Definition.Name
-			focusTargetValue.add_theme_color_override("font_color", ActorUtils.GetAllianceColor(behaviour.FocusedTarget.Stats.Alliance))
-			targetReasonContainer.visible = true
-			for child in targetReasonContainer.get_children():
-				targetReasonContainer.remove_child(child)
-				child.queue_free()
-			var dict = behaviour.GetFocusedTargetReasonsImmediate().Highlights
-			for reason in dict.keys():
-				var line = Asset.Instantiate(ActorHoverInfoTargetReason)
-				line.TargetReason = reason
-				line.TargetValue = dict[reason]
-				targetReasonContainer.add_child(line)
-		else:
-			focusTargetLabel.text = "Regrouping"
-			targetReasonContainer.visible = false
+		renderBehaviourSection(behaviour)
 	else:
 		npcBehaviourSection.visible = false
 
 	$PanelContainer.reset_size()
 	visible = true
+
+func renderBehaviourSection(behaviour: ActorBehaviourWorldControlled) -> void:
+	clearContainer(targetReasonContainer)
+	focusTargetLabel.get_parent().visible = false
+
+	if not behaviour.FocusedTarget:
+		addSectionHeader("Regrouping")
+		return
+
+	var ranking = behaviour.Ranking
+
+	if Input.is_key_pressed(KEY_ALT):
+		addSectionHeader("Ranking (Alt):")
+		for i in ranking.size():
+			if i > 0:
+				addSeparator()
+			var ranked = ranking[i]
+			addTargetRow(ranked.Target, ranked.Value.Total)
+			addSortedReasons(ranked.Value.Highlights)
+		return
+
+	#addSectionHeader("Focused on:")
+	addTargetRow(behaviour.FocusedTarget, behaviour.FocusedTargetTotal)
+	addSortedReasons(behaviour.FocusedTargetReasons)
+
+	if ranking.is_empty():
+		return
+	var nextPick = ranking[0]
+	if nextPick.Target == behaviour.FocusedTarget:
+		return
+	addSeparator()
+	#addSectionHeader("Will focus next:")
+	addTargetRow(nextPick.Target, nextPick.Value.Total)
+	addSortedReasons(nextPick.Value.Highlights)
+
+func addSectionHeader(text: String) -> void:
+	var label = Label.new()
+	label.text = text
+	label.add_theme_color_override("font_color", SECTION_HEADER_COLOR)
+	targetReasonContainer.add_child(label)
+
+func addSeparator() -> void:
+	var sep = HSeparator.new()
+	targetReasonContainer.add_child(sep)
+
+func addTargetRow(actor: Actor, total: float) -> void:
+	var row = HBoxContainer.new()
+	var rowNameLabel = Label.new()
+	rowNameLabel.text = actor.Definition.Name
+	rowNameLabel.add_theme_color_override("font_color", ActorUtils.GetAllianceColor(actor.Stats.Alliance))
+	rowNameLabel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(rowNameLabel)
+	if Input.is_key_pressed(KEY_SHIFT):
+		var value = Label.new()
+		value.text = "+%.2f" % total
+		row.add_child(value)
+	targetReasonContainer.add_child(row)
+
+func addSortedReasons(dict: Dictionary) -> void:
+	if not Input.is_key_pressed(KEY_ALT):
+		return
+	var keys = dict.keys()
+	keys.sort_custom(func(a, b): return dict[a] > dict[b])
+	for reason in keys:
+		var wrapper = MarginContainer.new()
+		wrapper.add_theme_constant_override("margin_left", REASON_INDENT)
+		var line = Asset.Instantiate(ActorHoverInfoTargetReason)
+		line.TargetReason = reason
+		if Input.is_key_pressed(KEY_SHIFT):
+			line.TargetValue = dict[reason]
+		wrapper.add_child(line)
+		targetReasonContainer.add_child(wrapper)
+
+func clearContainer(container: Node) -> void:
+	for child in container.get_children():
+		container.remove_child(child)
+		child.queue_free()
