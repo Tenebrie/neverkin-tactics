@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cqb3jdy018beh"]
+
+[ext_resource type="Script" uid="uid://cxqkpak3rxncv" path="res://game/ui/common/HLabeledValueContainer.gd" id="1_txj0y"]
+
+[node name="HLabeledValueContainer" type="HBoxContainer" unique_id=1312582885]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -2341.0
+offset_bottom = -1414.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_txj0y")
+LabelText = "Label"
+ValueText = "Value"
+
+[node name="Label" type="Label" parent="." unique_id=406790302]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Label"
+
+[node name="Value" type="Label" parent="." unique_id=1021336073]
+layout_mode = 2
+text = "Value"

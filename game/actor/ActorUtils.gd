@@ -94,7 +94,7 @@ static func GetThreatLevelColor(threatValue: float) -> Color:
 	var threat = floori(threatValue)
 	match threat:
 		Actor.ThreatLevel.Harmless:
-			return Color("e8e8e8")
+			return Color("a8a8a8")
 		Actor.ThreatLevel.Concerning:
 			return Color("f2d94e")
 		Actor.ThreatLevel.Dangerous:
