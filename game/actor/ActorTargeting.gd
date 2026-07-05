@@ -92,7 +92,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		lockedMode = TargetMode.WalkPreview
 	elif isRightMouseRelease && lockedMode == TargetMode.WalkPreview:
 		# Commit movement
-		var path := getLegalPathToMouse()
+		var path = getLegalPathToMouse()
 		if path.size() == 0:
 			return
 		Parent.actions.IssueOrder_MoveThroughPath(path)
@@ -100,12 +100,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func PerformAction_CastSelectedSkill():
 	var targetData = Skill.TargetData.new()
+	targetData.SourceSkill = Parent.Skills.SelectedSkill
 	if Parent.Telegraphs.Targets.size() > 0:
 		targetData.actor = Parent.Telegraphs.Targets.get(0)
 	targetData.actors = Parent.Telegraphs.Targets
 	targetData.mousePoint = Parent.InputProvider.CursorPosition
-	targetData.perTelegraph = Parent.Telegraphs.TargetsPerTelegraphDefinition
-	targetData.perTelegraphIndex = targetData.perTelegraph.values()
+	targetData.PerTelegraph = Parent.Telegraphs.TargetsPerTelegraphDefinition
+	targetData.PerTelegraphIndex = targetData.PerTelegraph.values()
 	Parent.actions.IssueOrder_ConfirmCast(Parent.Skills.SelectedSkill, targetData)
 
 func resetDisplayedElements() -> void:

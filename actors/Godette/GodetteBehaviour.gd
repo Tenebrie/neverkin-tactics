@@ -2,7 +2,7 @@ extends ActorBehaviourWorldControlled
 
 const METERS_PER_AP: float = 5.0
 const ENGAGEMENT_REFERENCE_METERS: float = 20.0
-const HIGHLIGHT_THRESHOLD: float = 2.0
+const HIGHLIGHT_THRESHOLD: float = 1.0
 
 @export var WEIGHT_LOW_HEALTH: float = 2.0
 @export var WEIGHT_HIGH_HEALTH: float = 1.0
@@ -14,8 +14,8 @@ var Grudges: Dictionary[Actor, float] = {}
 
 func _parentReady() -> void:
 	super._parentReady()
-	Parent.Stats.DamageTaken.connect(func(value, source):
-		RecordGrudge(source, value)
+	Parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
+		RecordGrudge(damage.SourceActor, damage.Value)
 	)
 
 func RecordGrudge(against: Actor, swings: float) -> void:
@@ -43,7 +43,6 @@ func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 	var grudgeValue = Grudges.get(actor, 0.0) * WEIGHT_GRUDGE
 
 	var result = ExplainedThreatValue.new()
-	result.Total = woundedValue + unhurtValue + threatValue + proximityValue + grudgeValue
 
 	addHighlight(result, "Wounded", woundedValue)
 	addHighlight(result, "Unhurt", unhurtValue)
@@ -54,5 +53,7 @@ func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 	return result
 
 func addHighlight(result: ExplainedThreatValue, label: String, value: float) -> void:
+	result.Total += floori(value)
+	result.TotalPrecise += value
 	if value >= HIGHLIGHT_THRESHOLD:
 		result.Highlights[label] = value

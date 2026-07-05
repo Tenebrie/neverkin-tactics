@@ -17,8 +17,7 @@ func Cast(targets: Skill.TargetData) -> void:
 	get_tree().current_scene.add_child(effect)
 	effect.global_position = actor.global_position
 	effect.global_position.y = 2
-	effect.scale = Vector3(1.7,1.7,1.7)
 	effect.Play()
 	get_tree().create_timer(0.1).timeout.connect(func():
-		actor.Stats.DealDamage(Damage, Parent)
+		actor.Stats.DealSkillDamage(targets)
 	)

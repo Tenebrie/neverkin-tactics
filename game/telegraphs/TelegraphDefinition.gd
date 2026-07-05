@@ -6,11 +6,11 @@ class_name TelegraphDefinition
 @export var Icon: Texture2D
 
 ## Returns whether the telegraph as a whole is valid
-@export var Validators: Array[Callable] = [func(_telegraph: Telegraph) -> bool: return true]
+@export var Validators: Array[func(Telegraph) -> bool] = [func(_t): return true]
 ## Returns whether an individual actor is a valid target
-@export var TargetFilters: Array[Callable] = [func(_actor: Actor) -> bool: return true]
+@export var TargetFilters: Array[func(Actor) -> bool] = [func(_a): return true]
 @export var HealthThreat: int = 0
-@export var HealthThreatSelector: Callable = func(_actor: Actor) -> int: return HealthThreat
+@export var HealthThreatSelector = func(_actor: Actor) -> int: return HealthThreat
 
 ## While this telegraph is active, close cover is disabled
 @export var ShootFromCover: bool = false

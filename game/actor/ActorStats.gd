@@ -1,7 +1,7 @@
 extends Component
 class_name ActorStats
 
-signal DamageTaken(value: int, source: Actor)
+signal DamageTaken(damage: DamageInstance)
 
 var Name: String:
 	get: return Parent.Definition.Name
@@ -27,14 +27,14 @@ func _parentReady() -> void:
 			HealthThreatened = Parent.Buffs.Count(BuffHealthThreat)
 		)
 
-func DealDamage(damage: int, source: Actor):
-	HealthDamageTaken = clampi(HealthDamageTaken + damage, 0, HealthMaximum)
+func DealDamage(damage: DamageInstance):
+	HealthDamageTaken = clampi(HealthDamageTaken + damage.Value, 0, HealthMaximum)
 	if HealthCurrent <= 0:
 		Parent.Destroy()
-	DamageTaken.emit(damage, source)
+	DamageTaken.emit(damage)
 
-func RestoreHealth(healing: int):
-	HealthDamageTaken = clampi(HealthDamageTaken - healing, 0, HealthMaximum)
+func DealSkillDamage(targets: Skill.TargetData):
+	DealDamage(DamageInstance.ForSkillCast(Parent, targets))
 #endregion
 #region Threat
 var ThreatCurrent: float:

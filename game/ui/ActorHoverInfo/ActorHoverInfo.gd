@@ -84,22 +84,8 @@ func renderBehaviourSection(behaviour: ActorBehaviourWorldControlled) -> void:
 	addSectionHeader("Threats")
 	for i in ranking.size():
 		var ranked = ranking[i]
-		addTargetRow(ranked.Target, ranked.Value.Total, behaviour)
+		addTargetRow(ranked.Target, ranked.Value.Total, behaviour, i)
 		addSortedReasons(ranked.Value.Highlights)
-	return
-
-	addTargetRow(behaviour.FocusedTarget, behaviour.FocusedTargetTotal, behaviour)
-	addSortedReasons(behaviour.FocusedTargetReasons)
-
-	if ranking.is_empty():
-		return
-	var nextPick = ranking[0]
-	if nextPick.Target == behaviour.FocusedTarget:
-		return
-	#addSeparator()
-	#addSectionHeader("Will focus next:")
-	addTargetRow(nextPick.Target, nextPick.Value.Total, behaviour)
-	addSortedReasons(nextPick.Value.Highlights)
 
 func addSectionHeader(text: String) -> void:
 	var label = Label.new()
@@ -111,10 +97,12 @@ func addSeparator() -> void:
 	var sep = HSeparator.new()
 	targetReasonContainer.add_child(sep)
 
-func addTargetRow(actor: Actor, total: float, behaviour: ActorBehaviourWorldControlled) -> void:
+func addTargetRow(actor: Actor, total: float, behaviour: ActorBehaviourWorldControlled, index: int) -> void:
 	var row = HBoxContainer.new()
+	var rowIndexLabel = Label.new()
+	rowIndexLabel.text = str(index + 1) + "."
+	row.add_child(rowIndexLabel)
 	var rowNameLabel = Label.new()
-	#rowNameLabel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	rowNameLabel.text = actor.Definition.Name
 	rowNameLabel.add_theme_color_override("font_color", ActorUtils.GetAllianceColor(actor.Stats.Alliance))
 	row.add_child(rowNameLabel)
@@ -124,15 +112,9 @@ func addTargetRow(actor: Actor, total: float, behaviour: ActorBehaviourWorldCont
 		icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH
 		icon.self_modulate = Color("f34e4a")
 		row.add_child(icon)
-	if behaviour.UpcomingFocusedTarget == actor:
-		var icon = TextureRect.new()
-		icon.texture = preload("res://assets/icons/eye-target-64.svg")
-		icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH
-		icon.self_modulate = Color("ffd761")
-		row.add_child(icon)
 	if Input.is_key_pressed(KEY_SHIFT):
 		var value = Label.new()
-		value.text = "+%.2f" % total
+		value.text = "+%d" % total
 		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		row.add_child(value)

@@ -30,16 +30,19 @@ func _ready() -> void:
 	super._ready()
 
 func Cast(targets: Skill.TargetData) -> void:
+	for target in targets.PerTelegraph[damageArea]:
+		StartSequence()
+			.AddStep(0.3, func():
+				var effect = IveraClawsStrikeEffect.new()
+				get_tree().current_scene.add_child(effect)
+				effect.global_position = target.global_position
+				effect.global_position.y = 2
+				effect.Play())
+			.AddStep(0.4, func(): target.Stats.DealSkillDamage(targets))
+
 	Parent.Definition = Definition.ShapeshiftTargetActor
 	create_tween().tween_property(Parent, "global_position", targets.mousePoint, 0.3)
+	var collision = Parent.collision_layer
+	Parent.collision_layer = 0
 	await get_tree().create_timer(0.3).timeout
-	for target in targets.perTelegraphIndex[1]:
-		var effect = IveraClawsStrikeEffect.new()
-		get_tree().current_scene.add_child(effect)
-		effect.global_position = target.global_position
-		effect.global_position.y = 2
-		effect.scale = Vector3(1.7,1.7,1.7)
-		effect.Play()
-		get_tree().create_timer(0.1).timeout.connect(func():
-			target.Stats.DealDamage(Damage, Parent)
-		)
+	Parent.collision_layer = collision

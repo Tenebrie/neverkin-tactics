@@ -10,7 +10,7 @@ class_name ActorHoverInfoTargetReason
 	set(v):
 		TargetValue = v
 		if is_node_ready():
-			$Value.text = "+%.2f"%v
+			$Value.text = "+%d"%floori(v)
 
 func _ready():
 	TargetReason = TargetReason

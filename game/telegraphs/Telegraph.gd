@@ -40,7 +40,7 @@ func checkTargetsDiff() -> void:
 	for target in current:
 		if not previousSeenTargets.has(target):
 			TargetEntered.emit(target)
-			BuffHealthThreat.AddToActor(target, Definition.HealthThreat, self)
+			BuffHealthThreat.AddToActor(target, Definition.HealthThreatSelector.call(target), self)
 	for target in previousSeenTargets:
 		if not current.has(target):
 			TargetExited.emit(target)

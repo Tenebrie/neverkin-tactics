@@ -8,6 +8,9 @@ var hello_world := func() -> void:
 
 var duration: float = 0.3
 
+func _init() -> void:
+	scale = Vector3(1.7,1.7,1.7)
+
 func Play() -> void:
 	createSwipeTrail(Vector3(-0.3, 0, -0.33), Vector3(0.2, 0, 0.2), 0.1)
 	await get_tree().create_timer(0.01).timeout

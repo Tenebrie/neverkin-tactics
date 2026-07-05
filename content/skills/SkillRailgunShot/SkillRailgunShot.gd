@@ -24,5 +24,5 @@ func Cast(targets: Skill.TargetData) -> void:
 	var furthestPoint = (targets.mousePoint - Parent.global_position).normalized() * Definition.TargetingMaxRange
 	effect.Play(furthestPoint)
 
-	for actor in targets.perTelegraph[damageTelegraph]:
-		actor.Stats.DealDamage(Damage, Parent)
+	for actor in targets.PerTelegraph[damageTelegraph]:
+		actor.Stats.DealSkillDamage(targets)

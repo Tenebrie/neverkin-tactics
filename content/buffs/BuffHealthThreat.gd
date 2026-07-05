@@ -1,15 +1,13 @@
 extends Buff
 class_name BuffHealthThreat
 
-@export var ThreatValue: int = 1
-
 static func AddToActor(actor: Actor, value: int, buffOwner: Node):
 	if not actor.Buffs:
 		return
 
 	var node = BuffHealthThreat.new()
 	node.Owner = buffOwner
-	node.ThreatValue = value
+	node.Intensity = value
 	actor.Buffs.Add(node)
 
 static func RemoveByOwner(actor: Actor, targetOwner: Node):

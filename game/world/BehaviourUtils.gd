@@ -149,7 +149,7 @@ static func canAffordAttack(actor: Actor, skill: Skill, apMoveCost: int) -> bool
 static func scoreTarget(from: Vector3, enemy: Actor, skill: Skill) -> float:
 	var damage: int = 0
 	for tel in skill.Definition.Telegraphs:
-		damage = maxi(damage, tel.HealthThreat)
+		damage = maxi(damage, tel.HealthThreatSelector.call(enemy))
 	var maxHp: int = enemy.Definition.HealthMaximum
 	var currentHp: int = enemy.Stats.HealthCurrent
 	var lethalBonus: float = 2.0 if damage >= currentHp else 0.0

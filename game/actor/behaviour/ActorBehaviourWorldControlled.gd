@@ -9,14 +9,11 @@ var FocusedTarget: Actor = null
 var FocusedTargetTotal: float = 0.0
 var FocusedTargetReasons: Dictionary[String, float] = {}
 
-var UpcomingFocusedTarget: Actor:
-	get:
-		return Ranking[0].Target if not Ranking.is_empty() else null
-
 var Ranking: Array[RankedTarget] = []
 
 class ExplainedThreatValue:
-	var Total: float = 0.0
+	var Total: int = 0
+	var TotalPrecise: float = 0.0
 	var Highlights: Dictionary[String, float] = {}
 
 class RankedTarget:
@@ -31,8 +28,6 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	Ranking = computeRanking()
-
-func UpdateFocusedTarget() -> void:
 	if Ranking.is_empty():
 		FocusedTarget = null
 		FocusedTargetTotal = 0.0

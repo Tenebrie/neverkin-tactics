@@ -31,6 +31,9 @@ func PerformCast(targets: TargetData) -> void:
 func Cast(_targets: TargetData) -> void:
 	pass
 
+func StartSequence() -> Sequencer:
+	return Sequencer.Start(self)
+
 enum TargetMode {
 	Self,
 	ActorSingle,
@@ -39,6 +42,7 @@ enum TargetMode {
 }
 
 class TargetData:
+	var SourceSkill: Skill
 	var actor: Actor
 
 	## Actors matching normal telegraphs
@@ -47,5 +51,5 @@ class TargetData:
 	## World point under cursor
 	var mousePoint: Vector3
 
-	var perTelegraph: Dictionary[TelegraphDefinition, Array[Actor]]
-	var perTelegraphIndex: Array[Array[Actor]]
+	var PerTelegraph: Dictionary[TelegraphDefinition, Array[Actor]]
+	var PerTelegraphIndex: Array[Array[Actor]]

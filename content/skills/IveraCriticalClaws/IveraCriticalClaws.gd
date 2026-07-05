@@ -15,4 +15,4 @@ func Cast(targets: Skill.TargetData) -> void:
 	effect.global_position = actor.global_position
 	effect.position.y += 0.5
 	effect.Play()
-	actor.Stats.DealDamage(Damage, Parent)
+	actor.Stats.DealSkillDamage(targets)

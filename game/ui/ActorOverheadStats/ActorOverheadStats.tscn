@@ -14,10 +14,29 @@ offset_right = 150.0
 offset_bottom = 29.0
 mouse_filter = 2
 
-[node name="NameLabel" type="Label" parent="VBoxContainer" unique_id=1573864759]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1456027749]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1573864759]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Ivera"
+
+[node name="CurrentFocusTargetCount" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=1598203069]
+unique_name_in_owner = true
+modulate = Color(0.95468724, 0.3055162, 0.28918967, 1)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/CurrentFocusTargetCount" unique_id=437123913]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_l7a6n")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/CurrentFocusTargetCount" unique_id=375868735]
+layout_mode = 2
+text = "2"
 
 [node name="HealthBar" parent="VBoxContainer" unique_id=1014186041 instance=ExtResource("2_171gv")]
 unique_name_in_owner = true
@@ -34,43 +53,3 @@ layout_mode = 2
 mouse_filter = 2
 CornerRadius = 6
 TickColor = Color(0, 0, 0, 0.5)
-
-[node name="TargetPreviewContainer" type="HBoxContainer" parent="." unique_id=2145530226]
-offset_left = 61.0
-offset_right = 149.0
-offset_bottom = 24.0
-alignment = 2
-
-[node name="CurrentFocusTargetCount" type="HBoxContainer" parent="TargetPreviewContainer" unique_id=1598203069]
-unique_name_in_owner = true
-modulate = Color(0.95468724, 0.3055162, 0.28918967, 1)
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="TargetPreviewContainer/CurrentFocusTargetCount" unique_id=437123913]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("3_l7a6n")
-expand_mode = 2
-
-[node name="Label" type="Label" parent="TargetPreviewContainer/CurrentFocusTargetCount" unique_id=375868735]
-layout_mode = 2
-text = "2"
-
-[node name="NextFocusTargetCount" type="HBoxContainer" parent="TargetPreviewContainer" unique_id=1261467533]
-unique_name_in_owner = true
-modulate = Color(1, 0.84283847, 0.38109186, 1)
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="TargetPreviewContainer/NextFocusTargetCount" unique_id=1592454300]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("3_l7a6n")
-expand_mode = 2
-
-[node name="Label" type="Label" parent="TargetPreviewContainer/NextFocusTargetCount" unique_id=767762450]
-layout_mode = 2
-text = "2"
