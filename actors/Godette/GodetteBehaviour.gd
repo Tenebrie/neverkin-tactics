@@ -6,7 +6,7 @@ const HIGHLIGHT_THRESHOLD: float = 2.0
 
 @export var WEIGHT_LOW_HEALTH: float = 2.0
 @export var WEIGHT_HIGH_HEALTH: float = 1.0
-@export var WEIGHT_THREAT: float = 3.0
+@export var WEIGHT_THREAT: float = 2.0
 @export var WEIGHT_PROXIMITY: float = 1.0
 @export var WEIGHT_GRUDGE: float = 1.0
 

@@ -15,4 +15,5 @@ HealthMaximum = 4
 ActionPointsMax = 2
 MovementSpeedPerActionPoint = 5.0
 Skills = Array[GDScript]([ExtResource("2_3mcjh"), ExtResource("3_i8sp2")])
+TestStuff = Array[GDScript]([])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

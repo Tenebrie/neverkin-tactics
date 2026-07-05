@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_bo7in")
 Name = "Kin Claws"
+Description = "This amazing griffon claw attack deals $Damage damage."
 IconTexture = ExtResource("1_irexs")
-MovementRequired = null
 TargetingMaxRange = 0.5
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"
