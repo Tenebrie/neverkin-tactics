@@ -41,7 +41,7 @@ func _ready():
 
 func EndPlayerTurn() -> void:
 	for actor in PlayerControlledActors:
-		if actor.actions.IsPerformingAnyAction():
+		if is_instance_valid(actor) and actor.actions.IsPerformingAnyAction():
 			MessageLog.PrintMessage("Wait for animation pls")
 			return
 
@@ -77,6 +77,8 @@ func SelectCharacterByHotkey(index: int) -> void:
 
 	var previousActor = CurrentActor
 	CurrentActor = selectedActor
+	if not is_instance_valid(previousActor):
+		previousActor = null
 	CurrentActorChanged.emit(CurrentActor, previousActor)
 	CurrentPlayerActorChanged.emit(CurrentActor, previousActor)
 

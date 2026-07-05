@@ -4,16 +4,19 @@
 [ext_resource type="PackedScene" uid="uid://wntn4ni6cd7h" path="res://content/props/PropFullCoverSegment.tscn" id="2_4llw4"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="3_sy50v"]
 
-[sub_resource type="Resource" id="Resource_8234t"]
+[sub_resource type="Resource" id="Resource_4llw4"]
 script = ExtResource("3_sy50v")
+Name = "Wall"
 PhysicalSize = 0.1
 PerceivedThreat = 0
+HealthMaximum = 9999
 MovementSpeedPerActionPoint = 0.0
 
 [node name="PropWallFullCover" type="Node3D" unique_id=1850641905]
 script = ExtResource("1_4llw4")
+SegmentHealth = 9999
+CanBeIgnored = false
 
 [node name="PropFullCover" parent="." unique_id=842978226 instance=ExtResource("2_4llw4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 0)
 Name = "Wall"
-Definition = SubResource("Resource_8234t")
+Definition = SubResource("Resource_4llw4")

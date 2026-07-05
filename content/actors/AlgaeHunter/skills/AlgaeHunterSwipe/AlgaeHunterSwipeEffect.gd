@@ -15,28 +15,28 @@ func Play() -> void:
 	createSwipeTrail(Vector3(-0.3, 0, -0.33), Vector3(0.2, 0, 0.2), 0.1)
 	await get_tree().create_timer(0.01).timeout
 	createSwipeTrail(Vector3(-0.22, 0, -0.4), Vector3(0.28, 0, 0.13), 0.1)
-	await get_tree().create_timer(0.01).timeout
-	createSwipeTrail(Vector3(-0.14, 0, -0.47), Vector3(0.36, 0, 0.06), 0.1)
+	#await get_tree().create_timer(0.01).timeout
+	#createSwipeTrail(Vector3(-0.14, 0, -0.47), Vector3(0.36, 0, 0.06), 0.1)
 
 func PlayInverted() -> void:
 	createSwipeTrail(Vector3(-0.3, 0, -0.33), Vector3(0.2, 0, 0.2), -0.1)
 	await get_tree().create_timer(0.01).timeout
 	createSwipeTrail(Vector3(-0.25, 0, -0.36), Vector3(0.24, 0, 0.1), -0.08)
-	await get_tree().create_timer(0.01).timeout
-	createSwipeTrail(Vector3(-0.2, 0, -0.39), Vector3(0.28, 0, 0.0), -0.05)
+	#await get_tree().create_timer(0.01).timeout
+	#createSwipeTrail(Vector3(-0.2, 0, -0.39), Vector3(0.28, 0, 0.0), -0.05)
 
 func createSwipeTrail(from: Vector3, to: Vector3, arc: float) -> void:
 	var trail := VaporTrail.new()
 	trail.position = from
-	trail.size = 0.12
+	trail.size = 0.17
 	trail.emitting = true
 	trail.num_points = 50
 	trail.update_interval = 0.003
 	trail.material = preload("res://addons/vaportrail/example/SmokyMaterial.tres")
-	trail.size_curve = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailCurve.tres")
-	trail.time_curve = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailTimeCurve.tres")
-	trail.color_gradient = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailGradient.tres")
-	trail.time_color_gradient = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailTimeGradient.tres")
+	trail.size_curve = preload("res://content/effects/AlgaeClawTrail/AlgaeClawTrailCurve.tres")
+	trail.time_curve = preload("res://content/effects/AlgaeClawTrail/AlgaeClawTrailTimeCurve.tres")
+	trail.color_gradient = preload("res://content/effects/AlgaeClawTrail/AlgaeClawTrailGradient.tres")
+	trail.time_color_gradient = preload("res://content/effects/AlgaeClawTrail/AlgaeClawTrailTimeGradient.tres")
 	add_child(trail)
 
 	var direction := (from - to).normalized()

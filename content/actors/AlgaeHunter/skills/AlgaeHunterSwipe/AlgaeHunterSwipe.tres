@@ -1,14 +1,11 @@
 [gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://b02mvcro27kg5"]
 
-[ext_resource type="Texture2D" uid="uid://dfs5s6sbr4kij" path="res://content/actors/AlgaeHunter/skills/AlgaeHunterSwipe/AlgaeHunterSwipeIcon.png" id="1_2eghh"]
-[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_ymtpn"]
+[ext_resource type="Texture2D" uid="uid://qiqw5jfr3rkl" path="res://content/skills/IveraClaws/IveraClawsIcon.png" id="1_vypqy"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_xlvr3"]
 
 [resource]
-script = ExtResource("2_ymtpn")
-Name = "Kin Claws"
-Description = "This amazing griffon claw attack deals $Damage damage."
-IconTexture = ExtResource("1_2eghh")
+script = ExtResource("2_xlvr3")
+Name = "Hunter Swipe"
+IconTexture = ExtResource("1_vypqy")
 TargetingMaxRange = 0.75
-BehaviourRequireLineOfSight = null
-BehaviourTargetsGround = null
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

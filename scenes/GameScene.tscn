@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bimanig80yrro" path="res://game/MainCamera.gd" id="2_cxv17"]
 [ext_resource type="PackedScene" uid="uid://ylc6aguob6mn" path="res://actors/Ivera/Ivera.tscn" id="2_xy3my"]
 [ext_resource type="PackedScene" uid="uid://cxoxb77d1144u" path="res://actors/Godette/Godette.tscn" id="5_7s5hy"]
+[ext_resource type="PackedScene" uid="uid://4seydnc3rhjm" path="res://content/actors/AlgaeHunter/AlgaeHunter.tscn" id="6_6ytau"]
 [ext_resource type="PackedScene" uid="uid://dmyet57hfpj6u" path="res://actors/Kamilla/Kamilla.tscn" id="6_xs4ih"]
 [ext_resource type="PackedScene" uid="uid://2ohwekfgbpuc" path="res://scenes/PrototypeScene/PrototypeScene.tscn" id="7_6ytau"]
 
@@ -37,10 +38,10 @@ projection = 1
 size = 8.0
 far = 5.0
 script = ExtResource("2_cxv17")
-offsetRangeMinX = -3.0
-offsetRangeMaxX = 3.0
-offsetRangeMinZ = -6.0
-offsetRangeMaxZ = 6.0
+offsetRangeMinX = -10.0
+offsetRangeMaxX = 10.0
+offsetRangeMinZ = -12.0
+offsetRangeMaxZ = 12.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=941600512]
 environment = SubResource("Environment_vh257")
@@ -58,17 +59,20 @@ directional_shadow_fade_start = 1.0
 directional_shadow_max_distance = 25.0
 script = SubResource("GDScript_6ytau")
 
-[node name="Godette" parent="." unique_id=807014692 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.194403, 0.00049996376, 2.0088701)
-
-[node name="Godette2" parent="." unique_id=265834909 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.778326, 0, 1.4662055)
-
-[node name="Godette3" parent="." unique_id=1630013362 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 0, 1)
-
 [node name="Ivera" parent="." unique_id=197562730 instance=ExtResource("2_xy3my")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.00763, 0.00049996376, 0.250049)
 
 [node name="Kamilla" parent="." unique_id=220179378 instance=ExtResource("6_xs4ih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3753443, 0.00049996376, 0.886884)
+
+[node name="AlgaeHunter" parent="." unique_id=2072888492 instance=ExtResource("6_6ytau")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.243965, 0.0005002022, -3.1883798)
+
+[node name="AlgaeHunter2" parent="." unique_id=807014692 instance=ExtResource("6_6ytau")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.135082, 0.0005002022, -3.991129)
+
+[node name="Godette" parent="." unique_id=709077820 instance=ExtResource("5_7s5hy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.199303, 0.0005002022, 0.5743197)
+
+[node name="Godette2" parent="." unique_id=1227995685 instance=ExtResource("5_7s5hy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4794645, 0.0005002022, 1.7911685)

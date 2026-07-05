@@ -52,14 +52,6 @@ class Projectile extends TelegraphDefinition:
 		RectOrigin = RectangularTelegraph.Origin.Start
 		ShootFromCover = true
 
-		Processors.push_back(func(telegraph: RectangularTelegraph):
-			var target = telegraph.ParentSkill.Parent.InputProvider.CursorPosition
-			var origin = telegraph.ParentSkill.Parent.global_position
-			var forward = (target - origin).normalized()
-			forward.y = 0.0
-			telegraph.global_position = origin + forward * telegraph.ParentSkill.Parent.PhysicalSize
-			telegraph.global_position.y = RenderHeight.AboveWalls
-		)
 		Processors.push_back(TelegraphProcessor.LookAtMouse)
 		Processors.push_back(TelegraphProcessor.TargetAllianceTint)
 		Processors.push_back(TelegraphProcessor.ApplyCollisionRules)

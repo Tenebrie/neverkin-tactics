@@ -13,9 +13,10 @@ func _ready() -> void:
 	)
 
 func performPlayerTurnStart():
-	var npcActors = Actor.Repository.All.List.filter(func(actor):
-		return actor.Stats.Alliance != Actor.Alliance.Player
-	)
+	pass
+	#var npcActors = Actor.Repository.All.List.filter(func(actor):
+		#return actor.Stats.Alliance != Actor.Alliance.Player
+	#)
 	#for actor in npcActors:
 		#if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
 			#behaviour.UpdateFocusedTarget()
@@ -67,13 +68,8 @@ func executePlan(actor: Actor, plan: BehaviourUtils.Plan) -> bool:
 	if plan.chosenSkill and plan.target and is_instance_valid(plan.target):
 		actor.Skills.Select(plan.chosenSkill)
 		MessageLog.PrintActorMessage(plan.chosenSkill.Definition.Name, actor)
-		create_tween().tween_property(
-			actor.InputProvider,
-			"CursorPosition",
-			plan.castPoint,
-			FACE_TARGET_TIME
-		)
-		await get_tree().create_timer(FACE_TARGET_TIME + 0.2).timeout
+		actor.InputProvider.CursorPosition = plan.castPoint
+		await get_tree().create_timer(FACE_TARGET_TIME).timeout
 
 		## Delayed skill will get resolved next turn
 		## TODO: Prepay the AP cost

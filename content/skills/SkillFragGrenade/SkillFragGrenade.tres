@@ -7,7 +7,7 @@
 script = ExtResource("2_42eyi")
 Name = "Fragmentation Grenade"
 IconTexture = ExtResource("1_lu6fx")
-ActionPointCost = 2
+ActionPointCost = 0
 TargetingMaxRange = 5.0
 BehaviourTargetsGround = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

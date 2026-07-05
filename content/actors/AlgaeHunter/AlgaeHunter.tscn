@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://4seydnc3rhjm"]
 
 [ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_8v85i"]
-[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://actors/Ivera/ivera.Token.webp" id="2_b37b2"]
+[ext_resource type="Resource" uid="uid://byi3o26on4m4f" path="res://content/actors/AlgaeHunter/AlgaeHunterDefinition.tres" id="2_nkocr"]
+[ext_resource type="Texture2D" uid="uid://oj88kx5hagc2" path="res://content/actors/AlgaeHunter/AlgaeHunterToken.webp" id="3_s6oeb"]
+[ext_resource type="Script" uid="uid://c2acdvtvn7la1" path="res://content/actors/AlgaeHunter/AlgaeHunterBehaviour.gd" id="4_s6oeb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rjlor"]
 resource_local_to_scene = true
 transparency = 1
-albedo_texture = ExtResource("2_b37b2")
+albedo_texture = ExtResource("3_s6oeb")
 texture_repeat = false
 point_size = 111.1
 
@@ -16,9 +18,19 @@ height = 0.2
 radius = 0.4
 
 [node name="AlgaeHunter" unique_id=807014692 instance=ExtResource("1_8v85i")]
+Definition = ExtResource("2_nkocr")
 
 [node name="TokenMeshInstance3D" parent="." index="0" unique_id=405721016]
 material_override = SubResource("StandardMaterial3D_rjlor")
 
 [node name="CollisionShape3D" parent="." index="1" unique_id=1364732436]
 shape = SubResource("CylinderShape3D_i6sii")
+
+[node name="AlgaeHunterBehaviour" type="Node" parent="." index="12" unique_id=755838438]
+script = ExtResource("4_s6oeb")
+PreferredRange = 1.0
+PreferredRangeTolerance = 1.0
+WeightTargetDamage = 2.0
+WeightCluster = 0.0
+WeightMovementCostPerAp = 5.0
+WeightChasePerMeter = 2.0

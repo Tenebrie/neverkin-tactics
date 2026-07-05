@@ -24,7 +24,8 @@ func _enter_tree():
 		rebakeNavmesh(TurnManager.Instance.ActorTakingTurn, [actor])
 	)
 	TurnManager.Instance.FactionTurnStarted.connect(func():
-		rebakeNavmesh(TurnManager.Instance.ActorTakingTurn, [])
+		if is_instance_valid(TurnManager.Instance.ActorTakingTurn):
+			rebakeNavmesh(TurnManager.Instance.ActorTakingTurn, [])
 	)
 
 func WaitUntilReady():

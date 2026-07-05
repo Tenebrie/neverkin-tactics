@@ -1,7 +1,7 @@
 extends Skill
 class_name SkillFragGrenade
 
-var Damage = 2
+var Damage = 3
 var Radius = 1.5
 
 var damageTelegraph: TelegraphDefinition = TelegraphPreset.PointArea.new(Radius).WithDamageToHostiles(Damage)
@@ -44,7 +44,8 @@ func Cast(targets: Skill.TargetData) -> void:
 
 	if Parent.Stats.Alliance == Actor.Alliance.Player:
 		for target in targets.PerTelegraph[damageTelegraph]:
-			target.Stats.DealSkillDamage(targets)
+			if is_instance_valid(target):
+				target.Stats.DealSkillDamage(targets)
 		effect.PlayExplosionEffect()
 		effect.queue_free()
 	else:

@@ -12,8 +12,14 @@ const WEIGHT_RANGE: float = 40.0
 const WEIGHT_TARGET_DAMAGE: float = 20.0
 const WEIGHT_MOVEMENT_COST_PER_AP: float = 10.0
 const WEIGHT_UNSPENT_AP: float = 50.0
-const PENALTY_NO_TARGET_IN_RANGE: float = 25.0
+const WEIGHT_CLUSTER: float = 25.0
+## Penalty per metre the candidate lands short of any attack skill's range against the focus target.
+## Creates a directional gradient toward the enemy when no shot is possible from this candidate.
+const WEIGHT_CHASE_PER_METER: float = 15.0
 const PENALTY_UNREACHABLE: float = -INF
+
+## Distance (m) inside which allies who have already acted this turn contribute a cluster penalty.
+const CLUSTER_RADIUS: float = 3.0
 
 const RANGE_FOCUS_MULT: float = 3.0
 ## Safety margin (m) shaved off max-range calculations so the AI never plans a shot that fails
@@ -137,30 +143,34 @@ static func evaluateCandidate(
 				bestSkill = skill
 
 	if bestTarget:
-		attackScore = WEIGHT_HAS_SHOT + bestTargetScore * WEIGHT_TARGET_DAMAGE
+		attackScore = WEIGHT_HAS_SHOT * behaviour.WeightHasShot + bestTargetScore * WEIGHT_TARGET_DAMAGE * behaviour.WeightTargetDamage
 		plan.chosenSkill = bestSkill
 		plan.target = bestTarget
 		plan.castPoint = computeCastPoint(actor, reachedPos, bestTarget, bestSkill)
 
 	var coverScore = scoreCover(actor, reachedPos, allEnemies)
 	var rangeScore = scoreRange(reachedPos, focusEnemies, allEnemies, behaviour.PreferredRange, behaviour.PreferredRangeTolerance)
-	var apPenalty = float(plan.apMoveCost) * WEIGHT_MOVEMENT_COST_PER_AP
+	var clusterPenalty = scoreCluster(actor, reachedPos) * WEIGHT_CLUSTER * behaviour.WeightCluster
+	var apPenalty = float(plan.apMoveCost) * WEIGHT_MOVEMENT_COST_PER_AP * behaviour.WeightMovementCostPerAp
 	var skillApCost: int = plan.chosenSkill.ActionPointCost if plan.chosenSkill else 0
 	var apUnspent: int = maxi(0, actor.actions.ActionPointsAvailable - plan.apMoveCost - skillApCost)
-	var unspentPenalty = float(apUnspent) * WEIGHT_UNSPENT_AP
+	var unspentPenalty = float(apUnspent) * WEIGHT_UNSPENT_AP * behaviour.WeightUnspentAp
 	var reachPenalty = 0.0
 
-	if bestTarget == null:
+	if bestTarget == null and focusEnemies.size() > 0:
 		var maxRange: float = 0.0
-		for skill in affordableSkills:
+		for skill in gatherAttackSkills(actor):
 			maxRange = maxf(maxRange, skill.Definition.TargetingMaxRange)
-		var enemyReachable = affordableSkills.size() > 0 and focusEnemies.any(func(enemy):
-			return reachedPos.distance_to(enemy.global_position) <= maxRange
-		)
-		if not enemyReachable:
-			reachPenalty = PENALTY_NO_TARGET_IN_RANGE
+		var closestDist: float = INF
+		for enemy in focusEnemies:
+			if not is_instance_valid(enemy) or enemy.Stats.HealthCurrent <= 0:
+				continue
+			closestDist = minf(closestDist, reachedPos.distance_to(enemy.global_position))
+		if closestDist != INF:
+			var shortfall: float = maxf(0.0, closestDist - maxRange)
+			reachPenalty = shortfall * WEIGHT_CHASE_PER_METER * behaviour.WeightChasePerMeter
 
-	plan.score = attackScore + coverScore * WEIGHT_COVER + rangeScore * WEIGHT_RANGE - apPenalty - reachPenalty - unspentPenalty
+	plan.score = attackScore + coverScore * WEIGHT_COVER * behaviour.WeightCover + rangeScore * WEIGHT_RANGE * behaviour.WeightRange - apPenalty - reachPenalty - unspentPenalty - clusterPenalty
 	return plan
 
 ## Largest circular blast radius across the skill's damage telegraphs. 0 if none.
@@ -292,6 +302,25 @@ static func scoreRange(
 	if totalWeight <= 0.0:
 		return 0.0
 	return weightedFit / totalWeight
+
+## Sums a linear falloff penalty for each same-faction ally that has already spent AP this turn
+## and is within CLUSTER_RADIUS of the candidate. Encourages spreading out to reduce AoE risk.
+static func scoreCluster(actor: Actor, candidate: Vector3) -> float:
+	var total: float = 0.0
+	for other in Actor.Repository.All.List:
+		if other == actor:
+			continue
+		if not other.IsAlive:
+			continue
+		if other.Definition.Alliance != actor.Definition.Alliance:
+			continue
+		if other.actions.ActionPointsUsed == 0:
+			continue
+		var distance: float = candidate.distance_to(other.global_position)
+		if distance >= CLUSTER_RADIUS:
+			continue
+		total += 1.0 - distance / CLUSTER_RADIUS
+	return total
 
 static func scoreCover(actor: Actor, candidate: Vector3, enemies: Array[Actor]) -> float:
 	if enemies.is_empty():

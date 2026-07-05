@@ -28,5 +28,7 @@ shape = SubResource("CylinderShape3D_57786")
 
 [node name="GodetteBehaviour" type="Node" parent="." index="12" unique_id=1872545288]
 script = ExtResource("4_ys6q1")
-PreferredRange = 7.0
+PreferredRange = 5.0
 PreferredRangeTolerance = 2.5
+WeightCover = 4.0
+WeightMovementCostPerAp = 5.0

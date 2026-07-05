@@ -63,8 +63,6 @@ shape = SubResource("CylinderShape3D_nvo6o")
 
 [node name="PropLowCover3" parent="Node3D" unique_id=1850641905 instance=ExtResource("2_1352n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, -0.1, 0)
-ObstacleWidth = 16
-ObstacleDepth = 8
 SegmentHealth = 1
 
 [node name="PropLowCover6" parent="Node3D" unique_id=564359953 instance=ExtResource("2_1352n")]
@@ -86,12 +84,10 @@ CanBeIgnored = false
 [node name="PropWallFullCover" parent="." unique_id=2011693064 instance=ExtResource("7_xgj7p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -0.1, 2.9)
 ObstacleWidth = 5
-CanBeIgnored = false
 
 [node name="PropWallFullCover2" parent="." unique_id=1775011020 instance=ExtResource("7_xgj7p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -0.1, -0.89999986)
 ObstacleWidth = 5
-CanBeIgnored = false
 
 [node name="PropWallHighCover" parent="." unique_id=1983465433 instance=ExtResource("5_25yxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, -0.1, 2.9)

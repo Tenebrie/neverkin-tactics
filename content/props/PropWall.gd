@@ -37,6 +37,8 @@ func _exit_tree() -> void:
 	Repository.Unregister(self)
 
 func IsIgnoredFor(actor: Actor) -> bool:
+	if not CanBeIgnored:
+		return false
 	if not actor.Skills.SelectedSkill:
 		return false
 
@@ -76,13 +78,11 @@ func setIgnored(enabled: bool):
 		for child in get_children():
 			if child.has_node("MeshInstance3D"):
 				child.get_node("MeshInstance3D").transparency = 0.95
-				#(child as CharacterBody3D).collision_layer |= CollisionLayer.IGNORED_COVER
 	elif not enabled and is_in_group(groupName):
 		remove_from_group(groupName)
 		for child in get_children():
 			if child.has_node("MeshInstance3D"):
 				child.get_node("MeshInstance3D").transparency = 0
-				#(child as CharacterBody3D).collision_layer &= ~CollisionLayer.IGNORED_COVER
 
 func rebuild():
 	var children = get_children()

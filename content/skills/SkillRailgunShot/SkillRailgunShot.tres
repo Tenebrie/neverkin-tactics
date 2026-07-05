@@ -10,4 +10,5 @@ IconTexture = ExtResource("1_jo0yr")
 ActionPointCost = 2
 TargetingMaxRange = 10.0
 BehaviourRequireLineOfSight = null
+BehaviourTargetsGround = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

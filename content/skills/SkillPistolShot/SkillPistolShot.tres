@@ -8,4 +8,5 @@ script = ExtResource("2_lwnot")
 Name = "Pistol"
 IconTexture = ExtResource("1_tdkvl")
 TargetingMaxRange = 10.0
+BehaviourTargetsGround = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

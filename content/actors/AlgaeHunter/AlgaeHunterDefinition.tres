@@ -1,7 +1,16 @@
 [gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://byi3o26on4m4f"]
 
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="1_c536d"]
+[ext_resource type="Texture2D" uid="uid://oj88kx5hagc2" path="res://content/actors/AlgaeHunter/AlgaeHunterToken.webp" id="1_lfkse"]
+[ext_resource type="Script" uid="uid://cxd50231e4o0v" path="res://content/actors/AlgaeHunter/skills/AlgaeHunterSwipe/AlgaeHunterSwipe.gd" id="1_qchsh"]
 
 [resource]
 script = ExtResource("1_c536d")
+Name = "Algae Hunter"
+TokenTexture = ExtResource("1_lfkse")
+Alliance = 2
+HealthMaximum = 10
+HealthHumanityThreshold = 7
+ActionPointsMax = 4
+Skills = Array[GDScript]([ExtResource("1_qchsh")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

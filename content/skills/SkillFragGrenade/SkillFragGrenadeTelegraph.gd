@@ -6,7 +6,7 @@ var Radius: float = 1.0
 var TriggeringSkill: Skill
 
 var apSpentTotal = 0.0
-var fuseDuration = 2.0 # action points
+var fuseDuration = 1.0 # action points
 var fuse: CircularTelegraph
 
 func EnableFuse(origin: Vector3):

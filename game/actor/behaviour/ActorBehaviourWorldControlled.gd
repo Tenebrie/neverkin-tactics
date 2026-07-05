@@ -10,6 +10,25 @@ class_name ActorBehaviourWorldControlled
 ## Sigma of the bell curve around PreferredRange. Larger = more forgiving.
 @export var PreferredRangeTolerance: float = 3.0
 
+## Per-actor multipliers on top of the base weights in BehaviourUtils. 1.0 = default, 0 = disabled.
+@export_group("Behaviour Weights", "Weight")
+## How badly this actor wants any valid shot at all vs. positioning for future turns.
+@export var WeightHasShot: float = 1.0
+## How much target quality (damage dealt, threat, low-HP finishing) sways skill and target choice.
+@export var WeightTargetDamage: float = 1.0
+## How eagerly this actor takes cover against enemy line of sight.
+@export var WeightCover: float = 1.0
+## How strictly this actor tries to stay at its PreferredRange from enemies.
+@export var WeightRange: float = 1.0
+## How much this actor avoids standing near allies who have already acted (AoE risk).
+@export var WeightCluster: float = 1.0
+## How reluctant this actor is to burn AP on movement.
+@export var WeightMovementCostPerAp: float = 1.0
+## How much this actor dislikes ending its turn with unspent AP.
+@export var WeightUnspentAp: float = 1.0
+## How strongly this actor is pulled toward the enemy when no shot is available from the current candidate.
+@export var WeightChasePerMeter: float = 1.0
+
 var FocusedTarget: Actor = null
 var FocusedTargetTotal: float = 0.0
 var FocusedTargetReasons: Dictionary[String, float] = {}
