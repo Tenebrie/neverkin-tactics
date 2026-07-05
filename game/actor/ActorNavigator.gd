@@ -35,6 +35,9 @@ func HardStop():
 	agent.get_next_path_position()
 
 func _process(delta: float) -> void:
+	if agent.is_navigation_finished() and abs(movementSpeed.x) < 0.001 and abs(movementSpeed.y) < 0.001:
+		return
+
 	if agent.is_navigation_finished():
 		var horizontal := Vector3(movementSpeed.x, 0.0, movementSpeed.z)
 		horizontal = horizontal.move_toward(Vector3.ZERO, maxDeceleration * delta)
@@ -44,6 +47,7 @@ func _process(delta: float) -> void:
 		Parent.velocity.z = movementSpeed.z
 		Parent.velocity.y = 0.0
 		Parent.move_and_slide()
+		SignalBus.ActorTraversed.emit(Parent, movementSpeed.length() * delta)
 		Parent.velocity = Vector3.ZERO
 		return
 
@@ -63,6 +67,7 @@ func _process(delta: float) -> void:
 	Parent.velocity.z = movementSpeed.z
 	Parent.velocity.y = 0.0
 	Parent.move_and_slide()
+	SignalBus.ActorTraversed.emit(Parent, movementSpeed.length() * delta)
 
 static func GetPathMovementCost(path: PackedVector3Array) -> float:
 	var totalLength := 0.0
@@ -81,3 +86,7 @@ func GetRemainingPathLength() -> float:
 	for i in range(idx, navPath.size() - 1):
 		total += navPath[i].distance_to(navPath[i + 1])
 	return total
+
+static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
+class SignalBusImplementation extends NodeSignalBus:
+	signal ActorTraversed(actor: Actor, distance: float)

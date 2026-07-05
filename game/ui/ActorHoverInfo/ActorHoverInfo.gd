@@ -43,9 +43,11 @@ func _process(_delta: float):
 	offset.y = clampf(offset.y, 0, get_viewport().get_visible_rect().size.y)
 
 func _input(event: InputEvent):
-	if event is not InputEventKey or not trackedActor:
+	if not trackedActor:
 		return
-	if event.keycode == KEY_SHIFT or event.keycode == KEY_ALT:
+	var isMouseButton = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT
+	var isModifierKey = event is InputEventKey and (event.keycode == KEY_SHIFT or event.keycode == KEY_ALT)
+	if isMouseButton or isModifierKey:
 		renderSectionVisibility()
 		if trackedActor.Behaviour is ActorBehaviourWorldControlled behaviour:
 			renderBehaviourSection(behaviour)
@@ -84,11 +86,13 @@ func loadActorData(actor: Actor):
 		npcBehaviourSection.visible = false
 
 	$PanelContainer.reset_size()
-	visible = true
+	visible = not Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 
 func renderSectionVisibility() -> void:
 	if not trackedActor:
 		return
+
+	visible = not Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 	healthLabel.visible = Input.is_key_pressed(KEY_ALT)
 	movementSpeedLabel.visible = Input.is_key_pressed(KEY_ALT) and trackedActor.Definition.MovementSpeedPerActionPoint > 0
 	%AltToSeeMoreLabel.visible = not Input.is_key_pressed(KEY_ALT)

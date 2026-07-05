@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dj83ev7acdul6"]
+
+[ext_resource type="Script" uid="uid://bsblefhyfbgsb" path="res://content/skills/SkillFragGrenade/SkillFragGrenadeTelegraph.gd" id="1_nd5wl"]
+[ext_resource type="Texture2D" uid="uid://b8337t8lc4sto" path="res://content/skills/SkillFragGrenade/SkillFragGrenadeSprite.png" id="2_wqx5h"]
+
+[node name="SkillFragGrenadeTelegraph" type="Node3D" unique_id=544973553]
+script = ExtResource("1_nd5wl")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1811600141]
+transform = Transform3D(0.25, 0, 0, 0, -1.0927847e-08, 0.25, 0, -0.25, -1.0927847e-08, 0, 0, 0)
+texture = ExtResource("2_wqx5h")

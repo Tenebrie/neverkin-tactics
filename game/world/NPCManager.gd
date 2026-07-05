@@ -52,7 +52,7 @@ func takeTurn(actor: Actor) -> void:
 		if actor.actions.ActionPointsAvailable <= 0:
 			break
 		var plan = BehaviourUtils.PlanTurn(actor)
-		MessageLog.PrintChatMessage("[AI:instant] %s -> %s" % [actor.Definition.Name, plan.Describe()])
+		#MessageLog.PrintChatMessage("[AI:instant] %s -> %s" % [actor.Definition.Name, plan.Describe()])
 		var didAct = await executePlan(actor, plan)
 		if not didAct:
 			break
@@ -66,10 +66,11 @@ func executePlan(actor: Actor, plan: BehaviourUtils.Plan) -> bool:
 
 	if plan.chosenSkill and plan.target and is_instance_valid(plan.target):
 		actor.Skills.Select(plan.chosenSkill)
+		MessageLog.PrintActorMessage(plan.chosenSkill.Definition.Name, actor)
 		create_tween().tween_property(
 			actor.InputProvider,
 			"CursorPosition",
-			plan.target.global_position,
+			plan.castPoint,
 			FACE_TARGET_TIME
 		)
 		await get_tree().create_timer(FACE_TARGET_TIME + 0.2).timeout

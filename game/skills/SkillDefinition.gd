@@ -17,4 +17,8 @@ class_name SkillDefinition
 @export_group("Shapeshifting", "Shapeshift")
 @export var ShapeshiftTargetActor: ActorDefinition
 
+@export_group("NPC Behaviour", "Behaviour")
+@export var BehaviourRequireLineOfSight = true
+@export var BehaviourTargetsGround = false
+
 var Telegraphs: Array[TelegraphDefinition]

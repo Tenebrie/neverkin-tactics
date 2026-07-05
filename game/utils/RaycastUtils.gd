@@ -23,7 +23,7 @@ static func GatherBeamContacts(
 	length: float,
 	collisionMask: int,
 	initialExclude: Array[RID] = [],
-	maxResults: int = 32,
+	maxResults: int = 120,
 ) -> Array[ShapeContact]:
 	var volume = BoxShape3D.new()
 	volume.size = Vector3(crossSection.x, crossSection.y, length)

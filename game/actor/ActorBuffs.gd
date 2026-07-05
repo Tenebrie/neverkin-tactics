@@ -1,7 +1,7 @@
 extends Component
 class_name ActorBuffs
 
-signal Changed
+signal Changed()
 
 func Add(buff: Buff) -> void:
 	Parent.add_child(buff)

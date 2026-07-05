@@ -53,6 +53,7 @@ navigation_mesh_source_group=""
 3d_physics/layer_2="Layer 2 - Actor"
 3d_physics/layer_9="Layer 9 - Low Cover"
 3d_physics/layer_10="Layer 10 - High Cover"
+3d_physics/layer_11="Layer 11 - Full Cover"
 
 [navigation]
 

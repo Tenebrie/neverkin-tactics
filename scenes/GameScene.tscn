@@ -62,7 +62,7 @@ script = SubResource("GDScript_6ytau")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.194403, 0.00049996376, 2.0088701)
 
 [node name="Godette2" parent="." unique_id=265834909 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.778326, 0, 0.8389317)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.778326, 0, 1.4662055)
 
 [node name="Godette3" parent="." unique_id=1630013362 instance=ExtResource("5_7s5hy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 0, 1)

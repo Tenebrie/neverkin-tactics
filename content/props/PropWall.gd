@@ -106,6 +106,8 @@ func rebuild():
 				# reposition the prototype itself into the grid
 				prototype.position = Vector3(xOffset, prototype.position.y, yOffset)
 				prototype.add_to_group(WallGroupName)
+				if prototype is Actor:
+					prototype.Definition.HealthMaximum = SegmentHealth
 				continue
 			var clone = prototype.duplicate() as Node3D
 			clone.position = Vector3(

@@ -8,6 +8,6 @@ script = ExtResource("2_hn53t")
 Name = "Railgun"
 IconTexture = ExtResource("1_jo0yr")
 ActionPointCost = 2
-MovementRequired = null
 TargetingMaxRange = 10.0
+BehaviourRequireLineOfSight = null
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

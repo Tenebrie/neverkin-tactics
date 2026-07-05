@@ -5,6 +5,11 @@ class_name ActorBehaviourWorldControlled
 @export var EnableFear = true
 @export var FearThreshold = Actor.ThreatLevel.Deadly
 
+## Ideal distance from enemies. 0 disables preferred-range scoring. Reward falls off symmetrically on either side.
+@export var PreferredRange: float = 0.0
+## Sigma of the bell curve around PreferredRange. Larger = more forgiving.
+@export var PreferredRangeTolerance: float = 3.0
+
 var FocusedTarget: Actor = null
 var FocusedTargetTotal: float = 0.0
 var FocusedTargetReasons: Dictionary[String, float] = {}
@@ -27,6 +32,8 @@ func _ready() -> void:
 	Parent.InputProvider = inputProvider
 
 func _process(_delta: float) -> void:
+	if TurnManager.Instance.CurrentFaction != Actor.Alliance.Player:
+		return
 	Ranking = computeRanking()
 	if Ranking.is_empty():
 		FocusedTarget = null

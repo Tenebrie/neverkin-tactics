@@ -122,3 +122,19 @@ static func IsHostileTo(a: Actor, b: Actor) -> bool:
 	if aa == Actor.Alliance.Neutral or bb == Actor.Alliance.Neutral:
 		return false
 	return aa != bb
+
+static func FlatPositionOf(node: Node3D) -> Vector3:
+	return Vector3(node.global_position.x, 0.0, node.global_position.z)
+
+static func FlatDistanceBetween(a: Node3D, b: Node3D) -> float:
+	return FlatPositionOf(a).distance_to(FlatPositionOf(b))
+
+static func FlatDistanceTo(node: Node3D, point: Vector3) -> float:
+	point.y = 0.0
+	return FlatPositionOf(node).distance_to(point)
+
+static func FlatDirectionTo(from: Actor, toPoint: Vector3) -> Vector3:
+	var origin = from.global_position
+	origin.y = 0.0
+	toPoint.y = 0.0
+	return origin.direction_to(toPoint)

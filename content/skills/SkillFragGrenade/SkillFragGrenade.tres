@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://b5fxiot3cmvtg"]
+
+[ext_resource type="Texture2D" uid="uid://rvahdmvd6mw8" path="res://content/skills/SkillFragGrenade/SkillFragGrenadeIcon.png" id="1_lu6fx"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_42eyi"]
+
+[resource]
+script = ExtResource("2_42eyi")
+Name = "Fragmentation Grenade"
+IconTexture = ExtResource("1_lu6fx")
+ActionPointCost = 2
+TargetingMaxRange = 5.0
+BehaviourTargetsGround = true
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

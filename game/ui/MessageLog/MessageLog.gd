@@ -46,3 +46,13 @@ static func PrintErrorObject(error: Error) -> void:
 	item.text = error.Message
 	item.global_position = instance.get_viewport().get_mouse_position() - Vector2(instance.get_viewport_rect().size.x / 2, 24)
 	instance.get_tree().root.add_child(item)
+
+static func PrintWorldMessage(message: String, point: Vector3, viewport: Viewport) -> void:
+	var screenPosition = viewport.get_camera_3d().unproject_position(point)
+	var item = Asset.Instantiate(MessageLogFloatingItem)
+	item.text = message
+	item.global_position = screenPosition - Vector2(instance.get_viewport_rect().size.x / 2, 24)
+	instance.get_tree().root.add_child(item)
+
+static func PrintActorMessage(message: String, actor: Actor) -> void:
+	PrintWorldMessage(message, actor.global_position, actor.get_viewport())

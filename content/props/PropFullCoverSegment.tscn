@@ -6,7 +6,10 @@
 
 [sub_resource type="Resource" id="Resource_vxb7g"]
 script = ExtResource("2_4f2ks")
+Name = "Unnamed Prop"
 PhysicalSize = 0.1
+PerceivedThreat = 0
+MovementSpeedPerActionPoint = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_3vya2")
@@ -23,7 +26,7 @@ resource_local_to_scene = true
 size = Vector3(0.2, 1, 0.2)
 
 [node name="PropFullCover" unique_id=842978226 instance=ExtResource("1_vxb7g")]
-collision_layer = 513
+collision_layer = 1025
 Definition = SubResource("Resource_vxb7g")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="0" unique_id=1419426634]

@@ -52,6 +52,14 @@ class Projectile extends TelegraphDefinition:
 		RectOrigin = RectangularTelegraph.Origin.Start
 		ShootFromCover = true
 
+		Processors.push_back(func(telegraph: RectangularTelegraph):
+			var target = telegraph.ParentSkill.Parent.InputProvider.CursorPosition
+			var origin = telegraph.ParentSkill.Parent.global_position
+			var forward = (target - origin).normalized()
+			forward.y = 0.0
+			telegraph.global_position = origin + forward * telegraph.ParentSkill.Parent.PhysicalSize
+			telegraph.global_position.y = RenderHeight.AboveWalls
+		)
 		Processors.push_back(TelegraphProcessor.LookAtMouse)
 		Processors.push_back(TelegraphProcessor.TargetAllianceTint)
 		Processors.push_back(TelegraphProcessor.ApplyCollisionRules)
@@ -104,6 +112,13 @@ class PointArea extends TelegraphDefinition:
 
 	func Load(_skill: Skill):
 		pass
+
+	func WithDamageToPlayer(damage: int) -> TelegraphDefinition:
+		HealthThreat = damage
+		TargetFilters.push_back(func(actor: Actor) -> bool:
+			return actor.Definition.Alliance != Actor.Alliance.Hostile
+		)
+		return self
 
 	func WithDamageToHostiles(damage: int) -> TelegraphDefinition:
 		HealthThreat = damage

@@ -41,6 +41,8 @@ func checkTargetsDiff() -> void:
 		if not previousSeenTargets.has(target):
 			TargetEntered.emit(target)
 			BuffHealthThreat.AddToActor(target, Definition.HealthThreatSelector.call(target), self)
+		else:
+			BuffHealthThreat.EnsureIntensity(target, Definition.HealthThreatSelector.call(target), self)
 	for target in previousSeenTargets:
 		if not current.has(target):
 			TargetExited.emit(target)
@@ -55,11 +57,11 @@ func refreshFilteredTargets():
 	var result: Array[Actor] = []
 	for target in _targets:
 		if target != null and is_instance_valid(target):
-			if not TargetValidator.is_valid() or TargetValidator.call(target):
+			if not TargetValidator or TargetValidator.call(target):
 				if not result.has(target):
 					result.append(target)
 	FilteredOnlyTargets = result
-	if GeneralValidator != null and GeneralValidator.call() == true:
+	if not GeneralValidator or GeneralValidator.call() == true:
 		Targets = FilteredOnlyTargets
 	else:
 		Targets = []

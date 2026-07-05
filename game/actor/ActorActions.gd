@@ -22,6 +22,11 @@ var ActionPointsThreatened: int:
 func ConsumeActionPoints(value: int):
 	ActionPointsUsed += value
 	ActionPointsChanged.emit(ActionPointsAvailable)
+	SignalBus.ActionPointsConsumedPermanently.emit(Parent, value)
+
+func ConsumeActionPointsRefundable(value: int):
+	ActionPointsUsed += value
+	ActionPointsChanged.emit(ActionPointsAvailable)
 
 func RefundActionPoints(value: int):
 	while ActionPointsUsed > 0 && value > 0:
@@ -56,7 +61,7 @@ func ConsumeMovement(value: float):
 			MovementBuffer -= value
 			return
 		MovementBuffer += MovementSpeedPerAP
-		ConsumeActionPoints(1)
+		ConsumeActionPointsRefundable(1)
 
 		if ActionPointsAvailable < 0:
 			MovementBuffer = 0.0
@@ -157,3 +162,7 @@ class ActorActionQueue:
 		StepCompleted.emit()
 		if queue.size() == 0:
 			QueueEmptied.emit()
+
+static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
+class SignalBusImplementation:
+	signal ActionPointsConsumedPermanently(actor: Actor, value: int)

@@ -53,3 +53,14 @@ class TargetData:
 
 	var PerTelegraph: Dictionary[TelegraphDefinition, Array[Actor]]
 	var PerTelegraphIndex: Array[Array[Actor]]
+
+	static func Collect(actor: Actor) -> Skill.TargetData:
+		var targetData = Skill.TargetData.new()
+		targetData.SourceSkill = actor.Skills.SelectedSkill
+		if actor.Telegraphs.Targets.size() > 0:
+			targetData.actor = actor.Telegraphs.Targets.get(0)
+		targetData.actors = actor.Telegraphs.Targets
+		targetData.mousePoint = actor.InputProvider.CursorPosition
+		targetData.PerTelegraph = actor.Telegraphs.TargetsPerTelegraphDefinition
+		targetData.PerTelegraphIndex = targetData.PerTelegraph.values()
+		return targetData

@@ -31,7 +31,9 @@ static func NoTransparency(telegraph: Telegraph):
 	telegraph.Tint = Color(telegraph.Tint.r, telegraph.Tint.g, telegraph.Tint.b, 1.0)
 
 static func LookAtMouse(telegraph: Telegraph):
-	var target = telegraph.ParentSkill.Parent.InputProvider.CursorPosition
+	var parent = telegraph.ParentSkill.Parent
+	var direction = ActorUtils.FlatDirectionTo(parent, parent.InputProvider.CursorPosition)
+	var target = ActorUtils.FlatPositionOf(parent) + direction
 	target.y = telegraph.global_position.y
 	telegraph.look_at(target)
 
@@ -40,7 +42,7 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 	var basis = telegraph.global_basis.orthonormalized()
 	var direction = -basis.z
 	var origin = Vector3(telegraph.global_position.x, telegraph.height / 2.0, telegraph.global_position.z)
-	var mask = CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.ACTOR
+	var mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.ACTOR
 	var excludeMask = CollisionLayer.IGNORED_COVER
 
 	#var exclusionRadius: float = telegraph.ParentSkill.Parent.PhysicalSize * 2
@@ -86,6 +88,7 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 
 		var isLowCover = collider.collision_layer & CollisionLayer.LOW_COVER != 0
 		var isHighCover = collider.collision_layer & CollisionLayer.HIGH_COVER != 0
+		var isFullCover = collider.collision_layer & CollisionLayer.FULL_COVER != 0
 
 		if isActor and piercingLeft > 0:
 			piercingLeft -= 1
@@ -96,17 +99,14 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 			penetrationLeft -= 1
 			rememberGroups(collider, hitGroups)
 			continue
-		if isLowCover and piercingLeft > 0:
-			piercingLeft -= 1
-			rememberGroups(collider, hitGroups)
-			continue
 
 		if isHighCover and penetrationLeft >= 2:
 			penetrationLeft -= 2
 			rememberGroups(collider, hitGroups)
 			continue
-		if isHighCover and piercingLeft > 0:
-			piercingLeft -= 1
+
+		if isFullCover and penetrationLeft >= 4:
+			penetrationLeft -= 4
 			rememberGroups(collider, hitGroups)
 			continue
 
