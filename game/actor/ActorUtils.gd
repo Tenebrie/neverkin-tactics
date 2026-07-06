@@ -77,11 +77,11 @@ static func EvaluateCoverScore(actor: Actor) -> float:
 	var targets = threats
 	if actor.Behaviour is ActorBehaviourWorldControlled npcBehaviour:
 		targets = [npcBehaviour.FocusedTarget]
-	return BehaviourUtils.EvaluateCoverScoreAtLocation(actor, actor.global_position, targets, threats)
+	return BehaviourUtils.EvaluateCoverScoreAtLocation(actor, actor.global_position, targets, threats, BehaviourUtils.CoverMapCache.new())
 
-static func IsPointReachable(actor: Actor, point: Vector3, actionLimit: int) -> float:
+static func IsPointReachable(actor: Actor, point: Vector3, actionLimit: int) -> bool:
 	var length = GetPathLength(GetPathTo(actor, point))
-	return length <= actor.Definition.MovementSpeedPerActionPoint * actionLimit
+	return length <= (actor.Definition.MovementSpeedPerActionPoint * actionLimit)
 
 static func GetMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
 	var camera := viewport.get_camera_3d()

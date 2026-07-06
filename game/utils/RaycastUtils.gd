@@ -14,6 +14,7 @@ class ShapeContact:
 ## Gathers all colliders overlapping a beam volume in a single query, sorted near-to-far
 ## by the projection of each collider's center onto [param direction]. One query total.
 ## [param basis] must be orthonormal.
+static var beamContactVolumeInstance = BoxShape3D.new()
 static func GatherBeamContacts(
 	spaceState: PhysicsDirectSpaceState3D,
 	crossSection: Vector2,
@@ -25,11 +26,10 @@ static func GatherBeamContacts(
 	initialExclude: Array[RID] = [],
 	maxResults: int = 120,
 ) -> Array[ShapeContact]:
-	var volume = BoxShape3D.new()
-	volume.size = Vector3(crossSection.x, crossSection.y, length)
+	beamContactVolumeInstance.size = Vector3(crossSection.x, crossSection.y, length)
 
 	var query = PhysicsShapeQueryParameters3D.new()
-	query.shape = volume
+	query.shape = beamContactVolumeInstance
 	query.transform = Transform3D(basis, origin + direction * (length / 2.0))
 	query.collision_mask = collisionMask
 	query.exclude = initialExclude

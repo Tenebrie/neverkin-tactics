@@ -3,7 +3,7 @@ class_name NavmeshSampler
 class NavmeshSample:
 	var points: Array[Vector3]
 
-static func CollectNavmeshPoints(actor: Actor, outputDensity: float, oversample: float = 0.0) -> NavmeshSample:
+static func CollectNavmeshPoints(actor: Actor, outputDensity: float, samplingDensity: float = 1.0, oversample: float = 0.0) -> NavmeshSample:
 	var currentMapRid = actor.navigator.agent.get_navigation_map()
 	var currentRegionRid = NavigationServer3D.map_get_closest_point_owner(currentMapRid, actor.global_position)
 
@@ -18,8 +18,9 @@ static func CollectNavmeshPoints(actor: Actor, outputDensity: float, oversample:
 	var maxDistSquared = pow(movementSpeed + oversample, 2)
 	var boxSize = Vector3(movementSpeed, 0, movementSpeed)
 	var aabb = AABB(actor.global_position - boxSize, boxSize * 2)
-	var rawSurfaces = sampleSurfacePoints(currentMapRid, aabb, clampf((movementSpeed - oversample) / 8.0, 0.5, 10.0))
-	var rawEdges = sampleEdgePoints(navMesh, 0.5)
+	#print(clampf(((movementSpeed - oversample) / 8.0) / samplingDensity, 0.5, 10.0))
+	var rawSurfaces = sampleSurfacePoints(currentMapRid, aabb, actor.Definition.PhysicalSize * 1.5)
+	var rawEdges = sampleEdgePoints(navMesh, actor.Definition.PhysicalSize * 1.5)
 
 	var sample = NavmeshSample.new()
 

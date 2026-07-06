@@ -26,6 +26,8 @@ class_name PropWall
 const xSpacing = 0.2
 const ySpacing = 0.2
 
+var boundingCircleRadius = 0.0
+
 func _ready():
 	rebuild()
 	Repository.Register(self)
@@ -100,6 +102,8 @@ func rebuild():
 	var xOffset = -(ObstacleWidth - 1) * xSpacing * 0.5
 	var yOffset = -(ObstacleDepth - 1) * ySpacing * 0.5
 
+	boundingCircleRadius = max(xSpacing, ySpacing) * max(ObstacleWidth, ObstacleDepth)
+
 	for ix in range(ObstacleWidth):
 		for iy in range(ObstacleDepth):
 			if ix == 0 and iy == 0:
@@ -125,6 +129,10 @@ static func GetIgnoredWallRidsAt(at: Vector3, physicalSize: float) -> Array[RID]
 	var out: Array[RID] = []
 	var threshold: float = pow(physicalSize * 2.0, 2)
 	for wall in PropWall.Repository.List:
+		var minimalDistance = wall.boundingCircleRadius + physicalSize * 2.0
+		if wall.global_position.distance_to(at) > minimalDistance:
+			continue
+
 		if not wall.CanBeIgnored:
 			continue
 		var wallIsClose: bool = false

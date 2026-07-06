@@ -5,6 +5,24 @@ const BEAM_HEIGHT: float = 5.0
 const BEAM_WIDTH: float = 0.1
 
 #region Cover Check
+class CoverMapCache:
+	var actorIgnoredWalls: Dictionary[Actor, Array[RID]]
+	var actorAttackSkills: Dictionary[Actor, Array[Skill]]
+
+	func GetActorIgnoredWalls(actor: Actor):
+		if actorIgnoredWalls.has(actor):
+			return actorIgnoredWalls[actor]
+		var value = PropWall.GetIgnoredWallRidsAt(actor.global_position, actor.Definition.PhysicalSize)
+		actorIgnoredWalls[actor] = value
+		return value
+
+	func GetActorAttackSkills(actor: Actor):
+		if actorAttackSkills.has(actor):
+			return actorAttackSkills[actor]
+		var value = BehaviourUtils.gatherAttackSkills(actor)
+		actorAttackSkills[actor] = value
+		return value
+
 static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 	var currentMapRid = actor.navigator.agent.get_navigation_map()
 	var currentRegionRid = NavigationServer3D.map_get_closest_point_owner(currentMapRid, actor.global_position)
@@ -16,24 +34,25 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 
 	## Collect interesting points to evaluate
 	var gridSize = 0.25
-	var navmeshSample = NavmeshSampler.CollectNavmeshPoints(actor, gridSize, 1.0)
+	var navmeshSample = NavmeshSampler.CollectNavmeshPoints(actor, gridSize, 1.0, 0.0)
 
 	## NPCs evaluate against their focus target. Otherwise, check all enemies.
-	var threats = BehaviourUtils.findEnemies(actor)
+	var threats = findEnemies(actor)
 	var targets = threats
 	if actor.Behaviour is ActorBehaviourWorldControlled npcBehaviour:
 		targets = [npcBehaviour.FocusedTarget]
 
 	var values: Dictionary[Vector2i, float]
+	var cache = CoverMapCache.new()
 
 	## Populate initial values
 	for point in navmeshSample.points:
-		var coverScore = BehaviourUtils.EvaluateCoverScoreAtLocation(actor, point, targets, threats)
+		var coverScore = EvaluateCoverScoreAtLocation(actor, point, targets, threats, cache)
 		var cell = toCellCoordinates(point, gridSize)
 		values[cell] = coverScore
 
 	## Find each point's neighbours
-	var neighbourDist = actor.Definition.PhysicalSize * 2 - 0.05
+	var neighbourDist = pow(actor.Definition.PhysicalSize * 2 - 0.05, 2)
 	var neighboursOfCell: Dictionary[Vector2i, Array[Vector3]]
 	for point in navmeshSample.points:
 		var cell = toCellCoordinates(point, gridSize)
@@ -41,7 +60,7 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 			continue
 		var validNeighbours: Array[Vector3]
 		for other in navmeshSample.points:
-			if other.distance_to(point) < neighbourDist and point != other:
+			if other.distance_squared_to(point) < neighbourDist and point != other:
 				validNeighbours.push_back(other)
 		neighboursOfCell[cell] = validNeighbours
 
@@ -61,12 +80,26 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 		values = nextValues
 		nextValues = {}
 
-	return FloatFieldMap.Build(values, navmeshSample.points, gridSize)
+	## Produce a sorted array to easily access the best positions
+	var scored: Array[FloatFieldMap.ScoredPoint] = []
+	for point in navmeshSample.points:
+		scored.push_back(FloatFieldMap.ScoredPoint.new(point, values[toCellCoordinates(point, gridSize)]))
+	scored.sort_custom(func(a, b):
+		return a.Score > b.Score
+	)
+
+	return FloatFieldMap.Build(values, navmeshSample.points, gridSize, scored)
 
 static func toCellCoordinates(point: Vector3, gridSize: float) -> Vector2i:
 	return Vector2i(int(floor(point.x / gridSize)), int(floor(point.z / gridSize)))
 
-static func EvaluateCoverScoreAtLocation(actor: Actor, candidate: Vector3, targets: Array[Actor], threats: Array[Actor]) -> float:
+static func EvaluateCoverScoreAtLocation(
+			actor: Actor,
+			candidate: Vector3,
+			targets: Array[Actor],
+			threats: Array[Actor],
+			cache: CoverMapCache
+		) -> float:
 	if targets.is_empty() and threats.is_empty():
 		return 0.0
 	var world = actor.get_world_3d()
@@ -74,7 +107,7 @@ static func EvaluateCoverScoreAtLocation(actor: Actor, candidate: Vector3, targe
 		return 0.0
 	var space = world.direct_space_state
 
-	var actorSkills = gatherAttackSkills(actor)
+	var actorSkills = cache.GetActorAttackSkills(actor)
 
 	var score = 0.0
 
@@ -85,10 +118,8 @@ static func EvaluateCoverScoreAtLocation(actor: Actor, candidate: Vector3, targe
 		weightAvoidLineOfSight = behaviour.WeightAvoidLineOfSight
 
 	## Agent shooting at the focused targets
+	var ignoredWallsAtCandidate = PropWall.GetIgnoredWallRidsAt(candidate, actor.Definition.PhysicalSize)
 	for enemy in targets:
-		if not is_instance_valid(enemy) or enemy.Stats.HealthCurrent <= 0:
-			continue
-
 		var actorShot = ShotContext.new()
 		actorShot.space = space
 		actorShot.from = candidate
@@ -96,14 +127,12 @@ static func EvaluateCoverScoreAtLocation(actor: Actor, candidate: Vector3, targe
 		actorShot.shooter = actor
 		actorShot.target = enemy
 		actorShot.shooterSize = actor.PhysicalSize
+		actorShot.IgnoredWalls = ignoredWallsAtCandidate
 		for skill in actorSkills:
 			score += scoreSkillUsable(actorShot, skill) * weightHasShot
 
 	## Enemies shooting at the agent
 	for enemy in threats:
-		if not is_instance_valid(enemy) or enemy.Stats.HealthCurrent <= 0:
-			continue
-
 		var enemyShot = ShotContext.new()
 		enemyShot.space = space
 		enemyShot.from = enemy.global_position
@@ -111,7 +140,8 @@ static func EvaluateCoverScoreAtLocation(actor: Actor, candidate: Vector3, targe
 		enemyShot.shooter = enemy
 		enemyShot.target = actor
 		enemyShot.shooterSize = enemy.PhysicalSize
-		if hasLineOfSight(enemyShot):
+		enemyShot.IgnoredWalls = cache.GetActorIgnoredWalls(enemy)
+		if canBeShotBy(enemyShot):
 			score -= weightAvoidLineOfSight * enemy.Stats.ThreatCurrent
 
 	return score
@@ -123,6 +153,7 @@ class ShotContext:
 	var shooter: Actor
 	var target: Actor
 	var shooterSize: float
+	var IgnoredWalls: Array[RID]
 
 	var flatDistance: float:
 		get:
@@ -136,6 +167,7 @@ class ShotContext:
 		context.shooter = shootingActor
 		context.target = targetActor
 		context.shooterSize = shootingActor.Definition.PhysicalSize
+		context.IgnoredWalls = PropWall.GetIgnoredWallRidsAt(context.from, context.shooterSize)
 		return context
 
 static func scoreSkillUsable(shot: ShotContext, skill: Skill) -> float:
@@ -160,7 +192,7 @@ static func hasLineOfSight(shot: ShotContext) -> bool:
 	var mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
 
 	var exclude: Array[RID] = [shot.shooter.get_rid(), shot.target.get_rid()]
-	exclude.append_array(PropWall.GetIgnoredWallRidsAt(shot.from, shot.shooterSize))
+	exclude.append_array(shot.IgnoredWalls)
 
 	var contacts = RaycastUtils.GatherBeamContacts(
 		shot.space, Vector2(BEAM_WIDTH, BEAM_HEIGHT), basis, beamOrigin, direction,
@@ -173,6 +205,25 @@ static func hasLineOfSight(shot: ShotContext) -> bool:
 			continue
 		return false
 	return true
+
+static func canBeShotBy(shot: ShotContext) -> bool:
+	var flatFrom = Vector3(shot.from.x, 0.2, shot.from.z)
+	var flatTo = Vector3(shot.to.x, 0.2, shot.to.z)
+	var distance = (flatTo - flatFrom).length_squared()
+	if distance < 0.0001:
+		return true
+	var mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
+
+	var exclude: Array[RID] = [shot.shooter.get_rid(), shot.target.get_rid()]
+	exclude.append_array(shot.IgnoredWalls)
+
+	var query = PhysicsRayQueryParameters3D.new()
+	query.from = flatFrom
+	query.to = flatTo
+	query.collision_mask = mask
+	query.exclude = exclude
+	var result = shot.space.intersect_ray(query)
+	return result.is_empty()
 
 #endregion
 

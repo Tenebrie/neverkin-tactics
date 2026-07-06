@@ -70,19 +70,21 @@ func planMovementAction() -> TurnAction:
 		printerr("No cover points in the map")
 		return TurnAction.Skip()
 
-	var points = coverMap.Points.filter(func(point): return ActorUtils.IsPointReachable(Parent, point, 1))
-	points.sort_custom(func(a, b):
-		return coverMap.Read(a) > coverMap.Read(b)
+	var bestPointIndex = coverMap.ScoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
+		return ActorUtils.IsPointReachable(Parent, point.Point, 1)
 	)
+	if bestPointIndex == -1:
+		printerr("No reachable points in the map")
+		return TurnAction.Skip()
+	var bestPoint = coverMap.ScoredPoints[bestPointIndex].Point
+	print(coverMap.ScoredPoints[bestPointIndex].Score)
 	var currentCover = coverMap.Read(Parent.global_position)
-	var bestCover = coverMap.Read(points[0])
+	var bestCover = coverMap.Read(bestPoint)
 
 	if bestCover < currentCover:
-		print("Staying: ", currentCover, " / ", bestCover)
 		return TurnAction.UseSkillOnSelf(SkillHunkerDown)
 
-	print("Moving: ", currentCover, " / ", bestCover)
-	return TurnAction.MoveTo(points[0])
+	return TurnAction.MoveTo(bestPoint)
 
 func planCombatAction() -> TurnAction:
 	var dist = ActorUtils.FlatDistanceBetween(Parent, FocusedTarget) - Parent.Definition.PhysicalSize
