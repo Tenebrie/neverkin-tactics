@@ -57,3 +57,39 @@ func addHighlight(result: ExplainedThreatValue, label: String, value: float) -> 
 	result.TotalPrecise += value
 	if value >= HIGHLIGHT_THRESHOLD:
 		result.Highlights[label] = value
+
+func PlanTurnActions() -> Array[TurnAction]:
+	if Parent.actions.ActionPointsUsed == 0:
+		return [planMovementAction()]
+
+	return [planCombatAction()]
+
+func planMovementAction() -> TurnAction:
+	var coverMap = BehaviourUtils.CreateActorCoverMap(Parent)
+	if coverMap.Points.size() == 0:
+		printerr("No cover points in the map")
+		return TurnAction.Skip()
+
+	var points = coverMap.Points.filter(func(point): return ActorUtils.IsPointReachable(Parent, point, 1))
+	points.sort_custom(func(a, b):
+		return coverMap.Read(a) > coverMap.Read(b)
+	)
+	var currentCover = coverMap.Read(Parent.global_position)
+	var bestCover = coverMap.Read(points[0])
+
+	if bestCover < currentCover:
+		print("Staying: ", currentCover, " / ", bestCover)
+		return TurnAction.UseSkillOnSelf(SkillHunkerDown)
+
+	print("Moving: ", currentCover, " / ", bestCover)
+	return TurnAction.MoveTo(points[0])
+
+func planCombatAction() -> TurnAction:
+	var dist = ActorUtils.FlatDistanceBetween(Parent, FocusedTarget) - Parent.Definition.PhysicalSize
+	var pistolRange = Parent.Skills.Get(SkillPistolShot).Definition.TargetingMaxRange
+	var grenadeRange = Parent.Skills.Get(SkillFragGrenade).Definition.TargetingMaxRange
+	if dist < pistolRange and ActorUtils.HasLineOfSight(Parent, FocusedTarget):
+		return TurnAction.UseSkillOnActor(SkillPistolShot, FocusedTarget)
+	elif dist < grenadeRange:
+		return TurnAction.UseSkillOnActor(SkillFragGrenade, FocusedTarget)
+	return TurnAction.Skip()

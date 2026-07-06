@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://bpsu16vmy2ald"]
+
+[ext_resource type="Script" uid="uid://bkrqwrh14a1nx" path="res://content/ui/combat/CombatUserInterface.gd" id="1_82bxv"]
+[ext_resource type="PackedScene" uid="uid://ftb0bul2rcvt" path="res://content/ui/combat/CursorUserInterface.tscn" id="1_iippe"]
+[ext_resource type="PackedScene" uid="uid://dflx8s8e2a77i" path="res://content/ui/combat/InitiativeBar/InitiativeBarUI.tscn" id="2_c4t08"]
+[ext_resource type="PackedScene" uid="uid://s0s4ja4rwqxf" path="res://content/ui/combat/SkillBar/SkillBar.tscn" id="4_3kiwj"]
+[ext_resource type="PackedScene" uid="uid://doytmrc7mbay2" path="res://content/ui/combat/EndTurnButton/EndTurnButton.tscn" id="5_vfpog"]
+[ext_resource type="PackedScene" uid="uid://dgo6nljeqthco" path="res://content/ui/combat/ActorHoverInfo/ActorHoverInfo.tscn" id="6_h0psq"]
+
+[node name="CombatUI" type="Control" unique_id=1242906264]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_82bxv")
+
+[node name="InitiativeBar" parent="." unique_id=1277367613 instance=ExtResource("2_c4t08")]
+layout_mode = 1
+
+[node name="SkillBar" parent="." unique_id=251878758 instance=ExtResource("4_3kiwj")]
+layout_mode = 1
+
+[node name="EndTurnButton" parent="." unique_id=781460001 instance=ExtResource("5_vfpog")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+offset_left = -134.0
+offset_top = -83.0
+offset_right = -32.0
+offset_bottom = -29.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="CursorUI" parent="." unique_id=283925533 instance=ExtResource("1_iippe")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="ActorHoverInfo" parent="." unique_id=388092998 instance=ExtResource("6_h0psq")]

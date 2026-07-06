@@ -100,14 +100,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func PerformAction_CastSelectedSkill():
 	var targetData = Skill.TargetData.Collect(Parent)
-	#var targetData = Skill.TargetData.new()
-	#targetData.SourceSkill = Parent.Skills.SelectedSkill
-	#if Parent.Telegraphs.Targets.size() > 0:
-		#targetData.actor = Parent.Telegraphs.Targets.get(0)
-	#targetData.actors = Parent.Telegraphs.Targets
-	#targetData.mousePoint = Parent.InputProvider.CursorPosition
-	#targetData.PerTelegraph = Parent.Telegraphs.TargetsPerTelegraphDefinition
-	#targetData.PerTelegraphIndex = targetData.PerTelegraph.values()
 	Parent.actions.IssueOrder_ConfirmCast(Parent.Skills.SelectedSkill, targetData)
 
 func resetDisplayedElements() -> void:
@@ -123,7 +115,7 @@ func getLegalPathTo(target: Vector3) -> PackedVector3Array:
 	var map_rid := Parent.navigator.agent.get_navigation_map()
 	target = NavigationServer3D.map_get_closest_point(map_rid, target)
 
-	var previewPath := NavigationServer3D.map_get_path(
+	var previewPath = NavigationServer3D.map_get_path(
 			map_rid,
 			Parent.global_position,
 			target,

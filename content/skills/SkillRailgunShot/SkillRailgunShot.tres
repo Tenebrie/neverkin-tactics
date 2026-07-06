@@ -9,6 +9,6 @@ Name = "Railgun"
 IconTexture = ExtResource("1_jo0yr")
 ActionPointCost = 2
 TargetingMaxRange = 10.0
-BehaviourRequireLineOfSight = null
+BehaviourUsagePreference = 2.0
 BehaviourTargetsGround = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

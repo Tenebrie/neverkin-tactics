@@ -9,5 +9,6 @@ Name = "Fragmentation Grenade"
 IconTexture = ExtResource("1_lu6fx")
 ActionPointCost = 2
 TargetingMaxRange = 5.0
+BehaviourUsagePreference = 2.0
 BehaviourTargetsGround = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

@@ -120,6 +120,29 @@ func rebuild():
 				clone.Definition.HealthMaximum = SegmentHealth
 			clone.add_to_group(WallGroupName)
 
+#region Static Helpers
+static func GetIgnoredWallRidsAt(at: Vector3, physicalSize: float) -> Array[RID]:
+	var out: Array[RID] = []
+	var threshold: float = pow(physicalSize * 2.0, 2)
+	for wall in PropWall.Repository.List:
+		if not wall.CanBeIgnored:
+			continue
+		var wallIsClose: bool = false
+		for segment in wall.get_children():
+			if segment is not Node3D:
+				continue
+			if segment.global_position.distance_squared_to(at) < threshold:
+				wallIsClose = true
+				break
+		if not wallIsClose:
+			continue
+		for segment in wall.get_children():
+			if segment is CollisionObject3D:
+				out.push_back((segment as CollisionObject3D).get_rid())
+	return out
+#endregion
+
+#region Repository
 static var Repository = RepositoryImplementation.new()
 static func FindAllIgnoredFor(actor: Actor) -> Array[StringName]:
 	var ignored: Array[StringName]
@@ -128,7 +151,6 @@ static func FindAllIgnoredFor(actor: Actor) -> Array[StringName]:
 			ignored.push_back(wall.WallGroupName)
 	return ignored
 
-#region Repository
 class RepositoryImplementation:
 	var List: Array[PropWall] = []
 

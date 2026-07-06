@@ -32,3 +32,4 @@ class_name TelegraphDefinition
 @export var RectOrigin: RectangularTelegraph.Origin = RectangularTelegraph.Origin.Center
 
 @abstract func Load(skill: Skill) -> void
+var ParentSkill: Skill

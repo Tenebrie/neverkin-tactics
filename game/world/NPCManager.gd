@@ -49,36 +49,56 @@ func resolveQueuedAttacks(actors: Array[Actor]) -> void:
 		await get_tree().create_timer(POST_ACTION_PAUSE).timeout
 
 func takeTurn(actor: Actor) -> void:
+	var behaviour = actor.Behaviour as ActorBehaviourWorldControlled
 	for step in 4:
 		if actor.actions.ActionPointsAvailable <= 0:
 			break
-		var plan = BehaviourUtils.PlanTurn(actor)
-		#MessageLog.PrintChatMessage("[AI:instant] %s -> %s" % [actor.Definition.Name, plan.Describe()])
-		var didAct = await executePlan(actor, plan)
-		if not didAct:
-			break
+		var start = Time.get_ticks_usec()
+		var plan = behaviour.PlanTurnActions()
+		var elapsed = Time.get_ticks_usec() - start
+		for action in plan:
+			if actor.actions.ActionPointsAvailable <= 0:
+				return
+			await executeAction(actor, action)
+			await get_tree().create_timer(POST_ACTION_PAUSE).timeout
+			if action.variant == ActorBehaviour.ActionVariant.EndTurn:
+				return
 
-func executePlan(actor: Actor, plan: BehaviourUtils.Plan) -> bool:
-	var moved = false
-	if plan.path.size() > 1 and plan.apMoveCost > 0:
-		actor.actions.IssueOrder_MoveThroughPath(plan.path)
-		await actor.actions.ActionQueue.QueueEmptied
-		moved = true
+func executeAction(actor: Actor, action: ActorBehaviour.TurnAction):
+	match(action.variant):
+		ActorBehaviour.ActionVariant.Skip: await executeSkipAction(actor)
+		ActorBehaviour.ActionVariant.MoveTo: await executeMoveToAction(actor, action.moveToParams)
+		ActorBehaviour.ActionVariant.UseSkill: await executeUseSkillAction(actor, action.useSkillParams)
+		ActorBehaviour.ActionVariant.EndTurn: await executeEndTurnAction(actor)
+		_: printerr("Unsupported action %s"%action)
 
-	if plan.chosenSkill and plan.target and is_instance_valid(plan.target):
-		actor.Skills.Select(plan.chosenSkill)
-		MessageLog.PrintActorMessage(plan.chosenSkill.Definition.Name, actor)
-		actor.InputProvider.CursorPosition = plan.castPoint
-		await get_tree().create_timer(FACE_TARGET_TIME).timeout
+func executeSkipAction(actor: Actor):
+	MessageLog.PrintActorMessage("Waiting...", actor)
 
-		## Delayed skill will get resolved next turn
-		## TODO: Prepay the AP cost
-		#if plan.chosenSkill.Definition.TargetingResolvesNextTurn:
-			#return true
+func executeMoveToAction(actor: Actor, params: ActorBehaviour.TurnAction.MoveToParams):
+	var path = ActorUtils.GetPathTo(actor, params.point)
+	actor.actions.IssueOrder_MoveThroughPath(path)
+	await actor.actions.ActionQueue.QueueEmptied
 
-		actor.targeting.PerformAction_CastSelectedSkill()
-		actor.Skills.Unselect()
-		await get_tree().create_timer(POST_ACTION_PAUSE).timeout
-		return true
+func executeUseSkillAction(actor: Actor, params: ActorBehaviour.TurnAction.UseSkillParams):
+	var skill = actor.Skills.Get(params.skill)
+	if not skill:
+		printerr("Actor %s does not have skill %s"%[actor, params.skill])
+		return
+	actor.Skills.Select(skill)
+	MessageLog.PrintActorMessage(skill.Definition.Name, actor)
+	actor.InputProvider.CursorPosition = params.targetPoint
+	await get_tree().create_timer(FACE_TARGET_TIME).timeout
 
-	return moved
+	## Delayed skill will get resolved next turn
+	## TODO: Prepay the AP cost
+	#if plan.chosenSkill.Definition.TargetingResolvesNextTurn:
+		#return true
+
+	actor.targeting.PerformAction_CastSelectedSkill()
+	actor.Skills.Unselect()
+	await get_tree().create_timer(POST_ACTION_PAUSE).timeout
+	return true
+
+func executeEndTurnAction(actor: Actor):
+	MessageLog.PrintActorMessage("End turn", actor)

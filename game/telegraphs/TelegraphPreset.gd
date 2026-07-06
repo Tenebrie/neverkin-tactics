@@ -63,15 +63,9 @@ class Projectile extends TelegraphDefinition:
 		HealthThreat = damage
 		return self
 
-	func TargetingPlayer() -> Projectile:
-		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.Definition.Alliance != Actor.Alliance.Hostile && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
-		)
-		return self
-
 	func TargetingHostiles() -> Projectile:
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.Definition.Alliance != Actor.Alliance.Player && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
+			return ActorUtils.IsTargetableBy(actor, ParentSkill.Parent) && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
 		)
 		return self
 
@@ -86,10 +80,7 @@ class Projectile extends TelegraphDefinition:
 class StandardProjectile extends Projectile:
 	func Load(skill: Skill):
 		super.Load(skill)
-		if skill.Parent.Definition.Alliance == Actor.Alliance.Player:
-			TargetingHostiles()
-		elif skill.Parent.Definition.Alliance == Actor.Alliance.Hostile:
-			TargetingPlayer()
+		TargetingHostiles()
 
 class PointArea extends TelegraphDefinition:
 	func _init(radius: float):
@@ -105,16 +96,9 @@ class PointArea extends TelegraphDefinition:
 	func Load(_skill: Skill):
 		pass
 
-	func WithDamageToPlayer(damage: int) -> TelegraphDefinition:
-		HealthThreat = damage
-		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.Definition.Alliance != Actor.Alliance.Hostile
-		)
-		return self
-
 	func WithDamageToHostiles(damage: int) -> TelegraphDefinition:
 		HealthThreat = damage
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.Definition.Alliance != Actor.Alliance.Player
+			return ActorUtils.IsTargetableBy(actor, ParentSkill.Parent)
 		)
 		return self

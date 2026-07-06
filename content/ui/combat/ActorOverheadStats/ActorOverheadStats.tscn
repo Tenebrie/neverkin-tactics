@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://dmghp7x8tk4pt"]
+
+[ext_resource type="Script" uid="uid://cmhowjgaa3w42" path="res://content/ui/combat/ActorOverheadStats/ActorOverheadStats.gd" id="1_nmjte"]
+[ext_resource type="PackedScene" uid="uid://cs8ad3c61m1dk" path="res://content/ui/combat/SegmentedBar/SegmentedBar.tscn" id="2_171gv"]
+[ext_resource type="Texture2D" uid="uid://cy4i31224wr1f" path="res://assets/icons/eye-target-64.svg" id="3_l7a6n"]
+
+[node name="ActorOverheadStats" type="CanvasLayer" unique_id=388092998]
+layer = -1
+script = ExtResource("1_nmjte")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1394361799]
+custom_minimum_size = Vector2(150, 0)
+offset_right = 150.0
+offset_bottom = 29.0
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1456027749]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1573864759]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ivera"
+
+[node name="CurrentFocusTargetCount" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=1598203069]
+unique_name_in_owner = true
+modulate = Color(0.95468724, 0.3055162, 0.28918967, 1)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/CurrentFocusTargetCount" unique_id=437123913]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_l7a6n")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/CurrentFocusTargetCount" unique_id=375868735]
+layout_mode = 2
+text = "2"
+
+[node name="HealthBar" parent="VBoxContainer" unique_id=1014186041 instance=ExtResource("2_171gv")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+mouse_filter = 2
+CornerRadius = 6
+TickColor = Color(0, 0, 0, 0.5)
+
+[node name="ActionPointBar" parent="VBoxContainer" unique_id=1588530800 instance=ExtResource("2_171gv")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+mouse_filter = 2
+CornerRadius = 6
+TickColor = Color(0, 0, 0, 0.5)

@@ -56,3 +56,6 @@ func addHighlight(result: ExplainedThreatValue, label: String, value: float) -> 
 	result.TotalPrecise += value
 	if value >= HIGHLIGHT_THRESHOLD:
 		result.Highlights[label] = value
+
+func PlanTurnActions() -> Array[TurnAction]:
+	return [TurnAction.EndTurn()]

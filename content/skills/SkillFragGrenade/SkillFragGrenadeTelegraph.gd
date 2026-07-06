@@ -15,7 +15,7 @@ func EnableFuse(origin: Vector3):
 	fuse.global_position = origin
 	fuse.radius = Radius
 	fuse.setColor(Color.RED)
-	fuse.Definition = TelegraphPreset.PointArea.new(Radius).WithDamageToPlayer(Damage)
+	fuse.Definition = TelegraphPreset.PointArea.new(Radius).WithDamageToHostiles(Damage)
 
 	ActorActions.SignalBus.ActionPointsConsumedPermanently.connect(func(actor: Actor, apConsumed):
 		if actor.Stats.Alliance != Actor.Alliance.Player or fuse.IsLeaving:

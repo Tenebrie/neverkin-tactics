@@ -67,6 +67,7 @@ func onSkillSelected(skill: Skill):
 		return
 
 	for def in skill.Definition.Telegraphs:
+		def.ParentSkill = skill
 		def.Load(skill)
 		var telegraph = instantiateTelegraph(def, skill)
 		telegraph.position.y = RenderHeight.TelegraphBase

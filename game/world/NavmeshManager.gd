@@ -90,6 +90,20 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 		print("[navbake] finished for %s in %.3f ms (%d region(s))" % [actor.name, elapsedMs, touchedMaps.size()])
 	return touchedMaps
 
+func GetRegion(rid: RID) -> NavigationRegion3D:
+	var regions = GetAllRegions()
+	var index = regions.find_custom(func(region):
+		return region.get_rid() == rid
+	)
+	if index == -1:
+		return null
+	return regions[index]
+
+func GetAllRegions() -> Array[NavigationRegion3D]:
+	var result: Array[NavigationRegion3D] = []
+	result.assign(get_tree().current_scene.find_children("*", "NavigationRegion3D", true, false))
+	return result
+
 func onRegionBakeFinished():
 	activeBakeCount -= 1
 	if activeBakeCount == 0:

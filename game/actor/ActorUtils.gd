@@ -60,6 +60,29 @@ static func GetPathLength(points: PackedVector3Array) -> float:
 
 	return result
 
+static func GetPathTo(actor: Actor, point: Vector3) -> PackedVector3Array:
+	var mapRid = actor.navigator.agent.get_navigation_map()
+	var target = NavigationServer3D.map_get_closest_point(mapRid, point)
+
+	return NavigationServer3D.map_get_path(
+		mapRid,
+		actor.global_position,
+		target,
+		true,
+		actor.navigator.agent.navigation_layers
+	)
+
+static func EvaluateCoverScore(actor: Actor) -> float:
+	var threats = BehaviourUtils.findEnemies(actor)
+	var targets = threats
+	if actor.Behaviour is ActorBehaviourWorldControlled npcBehaviour:
+		targets = [npcBehaviour.FocusedTarget]
+	return BehaviourUtils.EvaluateCoverScoreAtLocation(actor, actor.global_position, targets, threats)
+
+static func IsPointReachable(actor: Actor, point: Vector3, actionLimit: int) -> float:
+	var length = GetPathLength(GetPathTo(actor, point))
+	return length <= actor.Definition.MovementSpeedPerActionPoint * actionLimit
+
 static func GetMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
 	var camera := viewport.get_camera_3d()
 	var mouse_pos := viewport.get_mouse_position()
@@ -79,15 +102,19 @@ static func GetMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
 static func GetAllianceColor(alliance: Actor.Alliance) -> Color:
 	if alliance == Actor.Alliance.Player:
 		return Color("4deb4b")
-	elif alliance == Actor.Alliance.Hostile:
+	elif alliance == Actor.Alliance.CityThugs:
 		return Color("eb4d4b")
+	elif alliance == Actor.Alliance.Algae:
+		return Color("4b4deb")
 	return Color.GRAY
 
 static func GetFactionName(faction: Actor.Alliance) -> String:
 	if faction == Actor.Alliance.Player:
 		return "Player"
-	elif faction == Actor.Alliance.Hostile:
-		return "Hostiles"
+	elif faction == Actor.Alliance.CityThugs:
+		return "Thugs"
+	elif faction == Actor.Alliance.Algae:
+		return "Bloom"
 	return "Neutral"
 
 static func GetThreatLevelColor(threatValue: float) -> Color:
@@ -116,6 +143,13 @@ static func GetThreatLevelName(threatValue: float) -> String:
 	var overcap = threat - Actor.ThreatLevel.Existential
 	return Actor.ThreatLevel.keys()[Actor.ThreatLevel.Existential] + "+".repeat(overcap)
 
+static func IsTargetableBy(a: Actor, b: Actor) -> bool:
+	var aa: Actor.Alliance = a.Definition.Alliance
+	var bb: Actor.Alliance = b.Definition.Alliance
+	if aa == Actor.Alliance.Neutral or bb == Actor.Alliance.Neutral:
+		return true
+	return aa != bb
+
 static func IsHostileTo(a: Actor, b: Actor) -> bool:
 	var aa: Actor.Alliance = a.Definition.Alliance
 	var bb: Actor.Alliance = b.Definition.Alliance
@@ -138,3 +172,7 @@ static func FlatDirectionTo(from: Actor, toPoint: Vector3) -> Vector3:
 	origin.y = 0.0
 	toPoint.y = 0.0
 	return origin.direction_to(toPoint)
+
+static func HasLineOfSight(actor: Actor, target: Actor) -> bool:
+	var shot = BehaviourUtils.ShotContext.FromLiveState(actor, target)
+	return BehaviourUtils.hasLineOfSight(shot)

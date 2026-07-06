@@ -9,4 +9,5 @@ Name = "Kin Claws"
 Description = "This amazing griffon claw attack deals $Damage damage."
 IconTexture = ExtResource("1_irexs")
 TargetingMaxRange = 0.75
+BehaviourRequireLineOfSight = false
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

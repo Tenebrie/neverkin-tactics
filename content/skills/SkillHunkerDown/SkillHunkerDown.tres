@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://c1xdn1j6mpfse"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_pgdg4"]
+
+[resource]
+script = ExtResource("1_pgdg4")
+Name = "Hunker Down"
+BehaviourUsagePreference = 0.0
+BehaviourRequireLineOfSight = false
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

@@ -18,6 +18,7 @@ class_name SkillDefinition
 @export var ShapeshiftTargetActor: ActorDefinition
 
 @export_group("NPC Behaviour", "Behaviour")
+@export var BehaviourUsagePreference: float = 1.0
 @export var BehaviourRequireLineOfSight = true
 @export var BehaviourTargetsGround = false
 

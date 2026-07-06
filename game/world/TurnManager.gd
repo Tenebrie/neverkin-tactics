@@ -56,7 +56,7 @@ func advanceTurn():
 	SelectNonPlayableActor(null)
 	FactionTurnEnded.emit(CurrentFaction)
 	CurrentFaction = (CurrentFaction + 1) as Actor.Alliance
-	if CurrentFaction > Actor.Alliance.Hostile:
+	if CurrentFaction >= Actor.Alliance.size() - 1:
 		CurrentFaction = Actor.Alliance.Player
 	startTurnForCurrentFaction()
 	if ActorTakingTurn != previousActor:

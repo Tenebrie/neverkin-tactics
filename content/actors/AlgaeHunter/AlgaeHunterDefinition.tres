@@ -8,9 +8,10 @@
 script = ExtResource("1_c536d")
 Name = "Algae Hunter"
 TokenTexture = ExtResource("1_lfkse")
-Alliance = 2
+Alliance = 3
 HealthMaximum = 10
 HealthHumanityThreshold = 7
 ActionPointsMax = 4
+MovementSpeedPerActionPoint = 6.0
 Skills = Array[GDScript]([ExtResource("1_qchsh")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

@@ -24,6 +24,8 @@ TurnManagerInstance="*uid://dq3q74togyfy3"
 GameInstance="*uid://dge7jpvygd3jf"
 MessageLogInstance="*uid://bnowp6ttp38gb"
 NPCManagerInstance="*uid://b75fcywcxv6fi"
+CoverVisualizationLayer="*uid://c4kmoemm6iqu1"
+ReachableVisualizationLayer="*uid://cd5xxxahr1i53"
 
 [debug]
 

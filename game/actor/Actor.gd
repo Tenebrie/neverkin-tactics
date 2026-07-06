@@ -116,7 +116,8 @@ enum Alliance {
 
 	Player = 0,
 	Neutral = 1,
-	Hostile = 2,
+	CityThugs = 2,
+	Algae = 3,
 }
 
 enum ThreatLevel {

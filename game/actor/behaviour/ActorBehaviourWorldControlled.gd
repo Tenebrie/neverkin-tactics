@@ -12,12 +12,14 @@ class_name ActorBehaviourWorldControlled
 
 ## Per-actor multipliers on top of the base weights in BehaviourUtils. 1.0 = default, 0 = disabled.
 @export_group("Behaviour Weights", "Weight")
-## How badly this actor wants any valid shot at all vs. positioning for future turns.
-@export var WeightHasShot: float = 1.0
-## How much target quality (damage dealt, threat, low-HP finishing) sways skill and target choice.
-@export var WeightTargetDamage: float = 1.0
-## How eagerly this actor takes cover against enemy line of sight.
+## How valuable is cover for this actor
 @export var WeightCover: float = 1.0
+
+## How badly this actor wants to be able to attack
+@export var WeightHasShot: float = 1.0
+## How much does this actor try to break line of sight to threats
+@export var WeightAvoidLineOfSight: float = 1.0
+
 ## How strictly this actor tries to stay at its PreferredRange from enemies.
 @export var WeightRange: float = 1.0
 ## How much this actor avoids standing near allies who have already acted (AoE risk).
@@ -105,3 +107,4 @@ func evaluateTargetThreat(actor: Actor) -> ExplainedThreatValue:
 	return value
 
 @abstract func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue
+@abstract func PlanTurnActions() -> Array[TurnAction]
