@@ -68,11 +68,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3753443, 0.00049996376, 0.
 [node name="AlgaeHunter" parent="." unique_id=2072888492 instance=ExtResource("6_6ytau")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.243965, 0.0005002022, -3.1883798)
 
-[node name="AlgaeHunter2" parent="." unique_id=807014692 instance=ExtResource("6_6ytau")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.135082, 0.0005002022, -3.991129)
-
 [node name="Godette" parent="." unique_id=709077820 instance=ExtResource("5_7s5hy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.199303, 0.0005002022, 0.5743197)
+
+[node name="AlgaeHunter2" parent="." unique_id=807014692 instance=ExtResource("6_6ytau")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.135082, 0.0005002022, -3.991129)
 
 [node name="Godette2" parent="." unique_id=1227995685 instance=ExtResource("5_7s5hy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4794645, 0.0005002022, 1.7911685)

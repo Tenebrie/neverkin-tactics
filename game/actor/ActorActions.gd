@@ -21,6 +21,7 @@ var ActionPointsThreatened: int:
 
 func ConsumeActionPoints(value: int):
 	ActionPointsUsed += value
+	MovementBuffer = 0.0
 	ActionPointsChanged.emit(ActionPointsAvailable)
 	SignalBus.ActionPointsConsumedPermanently.emit(Parent, value)
 

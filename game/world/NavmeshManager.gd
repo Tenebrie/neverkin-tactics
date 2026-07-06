@@ -86,7 +86,8 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 	if activeBakeCount > 0:
 		await batchFinished
 	var elapsedMs := (Time.get_ticks_usec() - bakeStartUsec) / 1000.0
-	print("[navbake] finished for %s in %.3f ms (%d region(s))" % [actor.name, elapsedMs, touchedMaps.size()])
+	if is_instance_valid(actor):
+		print("[navbake] finished for %s in %.3f ms (%d region(s))" % [actor.name, elapsedMs, touchedMaps.size()])
 	return touchedMaps
 
 func onRegionBakeFinished():
