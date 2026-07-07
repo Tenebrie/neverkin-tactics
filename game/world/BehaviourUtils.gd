@@ -34,24 +34,34 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 
 	## Collect interesting points to evaluate
 	var gridSize = 0.25
+	var start = Time.get_ticks_usec()
 	var navmeshSample = NavmeshSampler.CollectNavmeshPoints(actor, gridSize, 1.0, 0.0)
+	var elapsed = Time.get_ticks_usec() - start
+	print("- Collecting points: %.2f ms" % [elapsed / 1000.0])
 
+	start = Time.get_ticks_usec()
 	## NPCs evaluate against their focus target. Otherwise, check all enemies.
 	var threats = findEnemies(actor)
 	var targets = threats
 	if actor.Behaviour is ActorBehaviourWorldControlled npcBehaviour:
 		targets = [npcBehaviour.FocusedTarget]
+	elapsed = Time.get_ticks_usec() - start
+	print("- Collecting enemies: %.2f ms" % [elapsed / 1000.0])
 
 	var values: Dictionary[Vector2i, float]
 	var cache = CoverMapCache.new()
 
 	## Populate initial values
+	start = Time.get_ticks_usec()
 	for point in navmeshSample.points:
 		var coverScore = EvaluateCoverScoreAtLocation(actor, point, targets, threats, cache)
 		var cell = toCellCoordinates(point, gridSize)
 		values[cell] = coverScore
+	elapsed = Time.get_ticks_usec() - start
+	print("- Collecting initial values: %.2f ms" % [elapsed / 1000.0])
 
 	## Find each point's neighbours
+	start = Time.get_ticks_usec()
 	var neighbourDist = pow(actor.Definition.PhysicalSize * 2 - 0.05, 2)
 	var neighboursOfCell: Dictionary[Vector2i, Array[Vector3]]
 	for point in navmeshSample.points:
@@ -63,8 +73,11 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 			if other.distance_squared_to(point) < neighbourDist and point != other:
 				validNeighbours.push_back(other)
 		neighboursOfCell[cell] = validNeighbours
+	elapsed = Time.get_ticks_usec() - start
+	print("- Collecting neighbours: %.2f ms" % [elapsed / 1000.0])
 
 	## Gaussian blur (kind of) the point values
+	start = Time.get_ticks_usec()
 	for i in range(3):
 		var nextValues: Dictionary[Vector2i, float]
 		for point in navmeshSample.points:
@@ -79,14 +92,19 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 
 		values = nextValues
 		nextValues = {}
+	elapsed = Time.get_ticks_usec() - start
+	print("- Applying blur: %.2f ms" % [elapsed / 1000.0])
 
 	## Produce a sorted array to easily access the best positions
+	start = Time.get_ticks_usec()
 	var scored: Array[FloatFieldMap.ScoredPoint] = []
 	for point in navmeshSample.points:
 		scored.push_back(FloatFieldMap.ScoredPoint.new(point, values[toCellCoordinates(point, gridSize)]))
 	scored.sort_custom(func(a, b):
 		return a.Score > b.Score
 	)
+	elapsed = Time.get_ticks_usec() - start
+	print("- Sorting points: %.2f ms" % [elapsed / 1000.0])
 
 	return FloatFieldMap.Build(values, navmeshSample.points, gridSize, scored)
 

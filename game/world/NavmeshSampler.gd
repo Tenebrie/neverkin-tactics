@@ -18,9 +18,8 @@ static func CollectNavmeshPoints(actor: Actor, outputDensity: float, samplingDen
 	var maxDistSquared = pow(movementSpeed + oversample, 2)
 	var boxSize = Vector3(movementSpeed, 0, movementSpeed)
 	var aabb = AABB(actor.global_position - boxSize, boxSize * 2)
-	#print(clampf(((movementSpeed - oversample) / 8.0) / samplingDensity, 0.5, 10.0))
-	var rawSurfaces = sampleSurfacePoints(currentMapRid, aabb, actor.Definition.PhysicalSize * 1.5)
-	var rawEdges = sampleEdgePoints(navMesh, actor.Definition.PhysicalSize * 1.5)
+	var rawSurfaces = sampleSurfacePoints(currentMapRid, aabb, actor.Definition.PhysicalSize * 1.5 / samplingDensity)
+	var rawEdges = sampleEdgePoints(navMesh, actor.Definition.PhysicalSize * 1.5 / samplingDensity)
 
 	var sample = NavmeshSample.new()
 
@@ -32,7 +31,6 @@ static func CollectNavmeshPoints(actor: Actor, outputDensity: float, samplingDen
 			continue
 		if tryClaim(gridState, point, outputDensity):
 			sample.points.push_back(point)
-			#print(toCellCoordinates(point, outputDensity))
 
 	for point in rawSurfaces:
 		if point.distance_squared_to(actor.global_position) > maxDistSquared:

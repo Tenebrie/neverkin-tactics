@@ -65,6 +65,7 @@ func PlanTurnActions() -> Array[TurnAction]:
 	return [planCombatAction()]
 
 func planMovementAction() -> TurnAction:
+	print("Plan move")
 	var coverMap = BehaviourUtils.CreateActorCoverMap(Parent)
 	if coverMap.Points.size() == 0:
 		printerr("No cover points in the map")
@@ -77,13 +78,13 @@ func planMovementAction() -> TurnAction:
 		printerr("No reachable points in the map")
 		return TurnAction.Skip()
 	var bestPoint = coverMap.ScoredPoints[bestPointIndex].Point
-	print(coverMap.ScoredPoints[bestPointIndex].Score)
 	var currentCover = coverMap.Read(Parent.global_position)
 	var bestCover = coverMap.Read(bestPoint)
 
-	if bestCover < currentCover:
+	if bestCover <= currentCover:
 		return TurnAction.UseSkillOnSelf(SkillHunkerDown)
 
+	print("Diff is ", bestCover - currentCover)
 	return TurnAction.MoveTo(bestPoint)
 
 func planCombatAction() -> TurnAction:
