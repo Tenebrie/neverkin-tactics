@@ -1,5 +1,5 @@
 extends Node
-class_name BehaviourUtils
+class_name BehaviourUtilsAsync
 
 const BEAM_HEIGHT: float = 5.0
 const BEAM_WIDTH: float = 0.1
@@ -23,6 +23,10 @@ class CoverMapCache:
 		actorAttackSkills[actor] = value
 		return value
 
+class MapTask:
+	var weightHasShot = 1.0
+	var weightAvoidLineOfSight = 1.0
+
 static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 	## Collect interesting points to evaluate
 	var gridSize = 0.25
@@ -44,8 +48,6 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 	var cache = CoverMapCache.new()
 
 	## Populate initial values
-	canBeShotByCheckCount = 0
-	RaycastUtils.beamContactCount = 0
 	start = Time.get_ticks_usec()
 	for point in navmeshSample.points:
 		var coverScore = EvaluateCoverScoreAtLocation(actor, point, targets, threats, cache)
@@ -99,8 +101,6 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 	)
 	elapsed = Time.get_ticks_usec() - start
 	print("- Sorting points: %.2f ms" % [elapsed / 1000.0])
-	print("Raycasts ran: ", str(canBeShotByCheckCount))
-	print("Shapecasts ran: ", str(RaycastUtils.beamContactCount))
 
 	return FloatFieldMap.Build(values, navmeshSample.points, gridSize, scored)
 
@@ -220,8 +220,6 @@ static func hasLineOfSight(shot: ShotContext) -> bool:
 		return false
 	return true
 
-static var canBeShotByCheckCount = 0
-
 static func canBeShotBy(shot: ShotContext) -> bool:
 	var flatFrom = Vector3(shot.from.x, 0.2, shot.from.z)
 	var flatTo = Vector3(shot.to.x, 0.2, shot.to.z)
@@ -230,7 +228,6 @@ static func canBeShotBy(shot: ShotContext) -> bool:
 		return true
 	var mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
 
-	canBeShotByCheckCount += 1
 	var exclude: Array[RID] = [shot.shooter.get_rid(), shot.target.get_rid()]
 	exclude.append_array(shot.IgnoredWalls)
 

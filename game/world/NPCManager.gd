@@ -54,7 +54,7 @@ func takeTurn(actor: Actor) -> void:
 		if actor.actions.ActionPointsAvailable <= 0:
 			break
 		var start = Time.get_ticks_usec()
-		var plan = behaviour.PlanTurnActions()
+		var plan = await behaviour.PlanTurnActions()
 		var elapsed = Time.get_ticks_usec() - start
 		print("AI planning phase took %.2f ms" % [elapsed / 1000.0])
 		for action in plan:

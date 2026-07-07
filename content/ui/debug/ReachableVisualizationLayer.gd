@@ -1,9 +1,10 @@
 extends VisualizationLayer
 
 var lastSeenActor: Actor
+var isRendering = false
 
 func updateRender():
-	if not visible:
+	if isRendering or not visible:
 		return
 
 	if not TurnManager.Instance.ActorTakingTurn:
@@ -16,8 +17,10 @@ func updateRender():
 	super.updateRender()
 	lastSeenActor = actor
 
-	var coverMap = BehaviourUtils.CreateActorCoverMap(actor)
+	isRendering = true
+	var coverMap = await BehaviourUtils.CreateActorCoverMap(actor)
 	var points = coverMap.Points.filter(func(point): return ActorUtils.IsPointReachable(actor, point, 1))
 
 	for point in points:
 		setPointValue(coverMap.Read(point), point)
+	isRendering = false

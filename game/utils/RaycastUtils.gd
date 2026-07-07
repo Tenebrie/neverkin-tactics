@@ -15,6 +15,7 @@ class ShapeContact:
 ## by the projection of each collider's center onto [param direction]. One query total.
 ## [param basis] must be orthonormal.
 static var beamContactVolumeInstance = BoxShape3D.new()
+static var beamContactCount = 0
 static func GatherBeamContacts(
 	spaceState: PhysicsDirectSpaceState3D,
 	crossSection: Vector2,
@@ -27,6 +28,7 @@ static func GatherBeamContacts(
 	maxResults: int = 120,
 ) -> Array[ShapeContact]:
 	beamContactVolumeInstance.size = Vector3(crossSection.x, crossSection.y, length)
+	beamContactCount += 1
 
 	var query = PhysicsShapeQueryParameters3D.new()
 	query.shape = beamContactVolumeInstance

@@ -148,6 +148,44 @@ static func GetIgnoredWallRidsAt(at: Vector3, physicalSize: float) -> Array[RID]
 			if segment is CollisionObject3D:
 				out.push_back((segment as CollisionObject3D).get_rid())
 	return out
+
+static func collectPhysicsFieldObstacles() -> Array[PhysicsField.Obstacle]:
+	var out: Array[PhysicsField.Obstacle]
+	for wall in PropWall.Repository.List:
+		var obstacle = PhysicsField.Obstacle.new()
+		obstacle.transform = Transform2D(-wall.global_rotation.y, Vector2(wall.global_position.x, wall.global_position.z))
+		for segmentNode in wall.get_children():
+			if segmentNode is CollisionObject3D node:
+				var segment = PhysicsField.ObstacleSegment.new()
+				var shape = PhysicsShape.Rect.new()
+				shape.size = Vector2(xSpacing, ySpacing)
+				obstacle.collisionLayer = obstacle.collisionLayer | node.collision_layer
+				segment.shape = shape
+				segment.transform = Transform2D(-node.rotation.y, Vector2(node.position.x, node.position.z))
+				obstacle.segments.push_back(segment)
+
+		if obstacle.segments.is_empty():
+			continue
+
+		for index in obstacle.segments.size():
+			var segment = obstacle.segments[index]
+			var halfSize = Vector2(xSpacing / 2, ySpacing / 2)
+			var localCorners = [
+				Vector2(-halfSize.x, -halfSize.y),
+				Vector2( halfSize.x, -halfSize.y),
+				Vector2( halfSize.x,  halfSize.y),
+				Vector2(-halfSize.x,  halfSize.y),
+			]
+			var worldTransform = obstacle.transform * segment.transform
+			for corner in localCorners:
+				var world = worldTransform * corner
+				if index == 0 and corner == localCorners[0]:
+					obstacle.aabb = Rect2(world, Vector2.ZERO)
+				else:
+					obstacle.aabb = obstacle.aabb.expand(world)
+
+		out.push_back(obstacle)
+	return out
 #endregion
 
 #region Repository

@@ -3,53 +3,79 @@ class_name NavmeshSampler
 class NavmeshSample:
 	var points: Array[Vector3]
 
-static func CollectNavmeshPoints(actor: Actor, outputDensity: float, samplingDensity: float = 1.0, oversample: float = 0.0) -> NavmeshSample:
+class Params:
+	var navigationMap: RID
+	var navigationMesh: NavigationMesh
+	var origin: Vector3
+	var sampleSpacing: float
+	var outputSpacing: float
+	var aabb: AABB
+	var maximumDistance: float
+
+class SignalBox:
+	signal done(sample: NavmeshSample)
+
+static func CollectNavmeshPoints(actor: Actor, gridSize: float, samplingDensity: float = 1.0, oversample: float = 0.0):
 	var currentMapRid = actor.navigator.agent.get_navigation_map()
 	var currentRegionRid = NavigationServer3D.map_get_closest_point_owner(currentMapRid, actor.global_position)
+	var region = NavmeshManager.Instance.GetRegion(currentRegionRid)
+	var movementSpeed = actor.Definition.MovementSpeedPerActionPoint + oversample
+	var boxSize = Vector3(movementSpeed, 0, movementSpeed)
 
-	var navMesh = NavmeshManager.Instance.GetRegion(currentRegionRid)
-	if not navMesh:
-		MessageLog.PrintMessage("Unable to find navmesh to collect points")
-		return null
+	var params = Params.new()
+	params.navigationMap = currentMapRid
+	params.navigationMesh = region.navigation_mesh
+	params.origin = actor.global_position
+	params.sampleSpacing = actor.Definition.PhysicalSize * 1.5 / samplingDensity
+	params.outputSpacing = gridSize
+	params.aabb = AABB(params.origin - boxSize, boxSize * 2)
+	params.maximumDistance = movementSpeed
+
+	var signalBox = SignalBox.new()
+	WorkerThreadPool.add_task(func():
+		var sample = CollectNavmeshPointsAsync(params)
+		signalBox.done.emit.call_deferred(sample)
+	)
+	var data: NavmeshSample = await signalBox.done
+	return data
+
+static func CollectNavmeshPointsAsync(params: Params) -> NavmeshSample:
+	var currentMapRid = params.navigationMap
+	var currentRegionRid = NavigationServer3D.map_get_closest_point_owner(currentMapRid, params.origin)
 
 	var gridState: Dictionary[Vector2i, Vector3]
 
-	var movementSpeed = actor.Definition.MovementSpeedPerActionPoint + oversample
-	var maxDistSquared = pow(movementSpeed + oversample, 2)
-	var boxSize = Vector3(movementSpeed, 0, movementSpeed)
-	var aabb = AABB(actor.global_position - boxSize, boxSize * 2)
-	var rawSurfaces = sampleSurfacePoints(currentMapRid, aabb, actor.Definition.PhysicalSize * 1.5 / samplingDensity)
-	var rawEdges = sampleEdgePoints(navMesh, actor.Definition.PhysicalSize * 1.5 / samplingDensity)
+	var maxDistSquared = pow(params.maximumDistance, 2)
+	var rawSurfaces = sampleSurfacePoints(currentMapRid, params.aabb, params.sampleSpacing)
+	var rawEdges = sampleEdgePoints(currentRegionRid, params.navigationMesh, params.sampleSpacing)
 
 	var sample = NavmeshSample.new()
 
-	if tryClaim(gridState, actor.global_position + Vector3(0, 0.01, 0), outputDensity):
-		sample.points.push_back(actor.global_position + Vector3(0, 0.01, 0))
+	if tryClaim(gridState, params.origin + Vector3(0, 0.01, 0), params.outputSpacing):
+		sample.points.push_back(params.origin + Vector3(0, 0.01, 0))
 
 	for point in rawEdges:
-		if point.distance_squared_to(actor.global_position) > maxDistSquared:
+		if point.distance_squared_to(params.origin) > maxDistSquared:
 			continue
-		if tryClaim(gridState, point, outputDensity):
+		if tryClaim(gridState, point, params.outputSpacing):
 			sample.points.push_back(point)
 
 	for point in rawSurfaces:
-		if point.distance_squared_to(actor.global_position) > maxDistSquared:
+		if point.distance_squared_to(params.origin) > maxDistSquared:
 			continue
-		if tryClaim(gridState, point, outputDensity):
+		if tryClaim(gridState, point, params.outputSpacing):
 			sample.points.push_back(point)
-
 
 	return sample
 
-static func sampleEdgePoints(nav_region: NavigationRegion3D, spacing: float) -> Array[Vector3]:
-	var nav_mesh = nav_region.navigation_mesh
-	var verts = nav_mesh.get_vertices()
-	var xform = nav_region.global_transform
+static func sampleEdgePoints(region: RID, navMesh: NavigationMesh, spacing: float) -> Array[Vector3]:
+	var verts = navMesh.get_vertices()
+	var xform = NavigationServer3D.region_get_transform(region)
 
 	# Count edge usage to find boundary edges
 	var edge_count = {}
-	for i in nav_mesh.get_polygon_count():
-		var poly = nav_mesh.get_polygon(i)
+	for i in navMesh.get_polygon_count():
+		var poly = navMesh.get_polygon(i)
 		for j in poly.size():
 			var a = poly[j]
 			var b = poly[(j + 1) % poly.size()]

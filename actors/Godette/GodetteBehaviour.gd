@@ -60,13 +60,12 @@ func addHighlight(result: ExplainedThreatValue, label: String, value: float) -> 
 
 func PlanTurnActions() -> Array[TurnAction]:
 	if Parent.actions.ActionPointsUsed == 0:
-		return [planMovementAction()]
+		return [await planMovementAction()]
 
 	return [planCombatAction()]
 
 func planMovementAction() -> TurnAction:
-	print("Plan move")
-	var coverMap = BehaviourUtils.CreateActorCoverMap(Parent)
+	var coverMap = await BehaviourUtils.CreateActorCoverMap(Parent)
 	if coverMap.Points.size() == 0:
 		printerr("No cover points in the map")
 		return TurnAction.Skip()
