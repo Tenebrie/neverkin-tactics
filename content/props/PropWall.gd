@@ -86,6 +86,7 @@ func setIgnored(enabled: bool):
 			if child.has_node("MeshInstance3D"):
 				child.get_node("MeshInstance3D").transparency = 0
 
+var physicsFieldObstacle
 func rebuild():
 	var children = get_children()
 	if children.is_empty():
@@ -124,40 +125,94 @@ func rebuild():
 				clone.Definition.HealthMaximum = SegmentHealth
 			clone.add_to_group(WallGroupName)
 
+	physicsFieldObstacle = buildPhysicsFieldObstacle()
+
+func buildPhysicsFieldObstacle():
+	var obstacle = PhysicsFieldObstacle.new()
+	obstacle.transform = Transform2D(-global_rotation.y, Vector2(global_position.x, global_position.z))
+	for segmentNode in get_children():
+		if segmentNode is CollisionObject3D node:
+			var segment = PhysicsFieldObstacleSegment.new()
+			var shape = PhysicsFieldShapeRect.new()
+			shape.size = Vector2(xSpacing, ySpacing)
+			obstacle.collision_layer = obstacle.collision_layer | node.collision_layer
+			segment.shape = shape
+			segment.transform = Transform2D(-node.rotation.y, Vector2(node.position.x, node.position.z))
+			obstacle.segments.push_back(segment)
+
+	if obstacle.segments.is_empty():
+		return obstacle
+
+	for index in obstacle.segments.size():
+		var segment = obstacle.segments[index]
+		var halfSize = Vector2(xSpacing / 2, ySpacing / 2)
+		var localCorners = [
+			Vector2(-halfSize.x, -halfSize.y),
+			Vector2( halfSize.x, -halfSize.y),
+			Vector2( halfSize.x,  halfSize.y),
+			Vector2(-halfSize.x,  halfSize.y),
+		]
+		var worldTransform = obstacle.transform * segment.transform
+		for corner in localCorners:
+			var world = worldTransform * corner
+			if index == 0 and corner == localCorners[0]:
+				obstacle.aabb = Rect2(world, Vector2.ZERO)
+			else:
+				obstacle.aabb = obstacle.aabb.expand(world)
+	return obstacle
+
 #region Static Helpers
-static func GetIgnoredWallRidsAt(at: Vector3, physicalSize: float) -> Array[RID]:
-	var out: Array[RID] = []
+static func GetIgnoredWallRidsAt(walls: Array[BehaviourUtils.MapTask.WallData], at: Vector3, physicalSize: float) -> Array[PhysicsFieldObstacle]:
+	var out: Array[PhysicsFieldObstacle] = []
 	var threshold: float = pow(physicalSize * 2.0, 2)
-	for wall in PropWall.Repository.List:
+	for wall in walls:
 		var minimalDistance = wall.boundingCircleRadius + physicalSize * 2.0
-		if wall.global_position.distance_to(at) > minimalDistance:
+		if wall.globalPosition.distance_to(at) > minimalDistance:
 			continue
 
-		if not wall.CanBeIgnored:
-			continue
 		var wallIsClose: bool = false
-		for segment in wall.get_children():
-			if segment is not Node3D:
-				continue
-			if segment.global_position.distance_squared_to(at) < threshold:
+		for segment in wall.segmentPositions:
+			if segment.distance_squared_to(at) < threshold:
 				wallIsClose = true
 				break
 		if not wallIsClose:
 			continue
+		out.push_back(wall.obstacle)
+	return out
+
+static func collectBehaviourMapTaskData() -> Array[BehaviourUtils.MapTask.WallData]:
+	var out: Array[BehaviourUtils.MapTask.WallData] = []
+	for wall in PropWall.Repository.List:
+		if not wall.CanBeIgnored:
+			continue
+
+		var wallData = BehaviourUtils.MapTask.WallData.new()
+		wallData.globalPosition = wall.global_position
+		wallData.boundingCircleRadius = wall.boundingCircleRadius
+		wallData.obstacle = wall.physicsFieldObstacle
 		for segment in wall.get_children():
-			if segment is CollisionObject3D:
-				out.push_back((segment as CollisionObject3D).get_rid())
+			if segment is not Node3D:
+				continue
+			wallData.segmentPositions.push_back(segment.global_position)
+		out.push_back(wallData)
 	return out
 
 static func collectPhysicsFieldObstacles() -> Array[PhysicsFieldObstacle]:
 	var out: Array[PhysicsFieldObstacle]
 	for wall in PropWall.Repository.List:
-		var obstacle = PhysicsFieldObstacle.new()
+		if wall.physicsFieldObstacle:
+			out.push_back(wall.physicsFieldObstacle)
+	return out
+
+static func collectPhysicsFieldObstaclesGD() -> Array[PhysicsFieldGD.Obstacle]:
+	var out: Array[PhysicsFieldGD.Obstacle]
+	for wall in PropWall.Repository.List:
+		var obstacle = PhysicsFieldGD.Obstacle.new()
 		obstacle.transform = Transform2D(-wall.global_rotation.y, Vector2(wall.global_position.x, wall.global_position.z))
 		for segmentNode in wall.get_children():
 			if segmentNode is CollisionObject3D node:
-				var segment = PhysicsFieldObstacleSegment.new()
-				var shape = PhysicsFieldShapeRect.new()
+				var segment = PhysicsFieldGD.ObstacleSegment.new()
+				var shape = PhysicsShape.Rect.new()
 				shape.size = Vector2(xSpacing, ySpacing)
 				#obstacle.collisionLayer = obstacle.collisionLayer | node.collision_layer
 				segment.shape = shape

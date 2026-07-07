@@ -72,13 +72,6 @@ static func GetPathTo(actor: Actor, point: Vector3) -> PackedVector3Array:
 		actor.navigator.agent.navigation_layers
 	)
 
-static func EvaluateCoverScore(actor: Actor) -> float:
-	var threats = BehaviourUtils.findEnemies(actor)
-	var targets = threats
-	if actor.Behaviour is ActorBehaviourWorldControlled npcBehaviour:
-		targets = [npcBehaviour.FocusedTarget]
-	return BehaviourUtils.EvaluateCoverScoreAtLocation(actor, actor.global_position, targets, threats, BehaviourUtils.CoverMapCache.new())
-
 static func IsPointReachable(actor: Actor, point: Vector3, actionLimit: int) -> bool:
 	var length = GetPathLength(GetPathTo(actor, point))
 	return length <= (actor.Definition.MovementSpeedPerActionPoint * actionLimit)
@@ -174,5 +167,13 @@ static func FlatDirectionTo(from: Actor, toPoint: Vector3) -> Vector3:
 	return origin.direction_to(toPoint)
 
 static func HasLineOfSight(actor: Actor, target: Actor) -> bool:
-	var shot = BehaviourUtils.ShotContext.FromLiveState(actor, target)
-	return BehaviourUtils.hasLineOfSight(shot)
+	var physicsField = PhysicsField.new()
+	physicsField.obstacles = PropWall.collectPhysicsFieldObstacles()
+	var query = PhysicsFieldRaycastQuery.new()
+	query.width = 0.1
+	query.origin = actor.global_position
+	query.target = target.global_position
+	query.collision_mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
+	query.exclude = PropWall.GetIgnoredWallRidsAt(PropWall.collectBehaviourMapTaskData(), actor.global_position, actor.PhysicalSize)
+	var result = physicsField.raycast_query(query)
+	return not result.has_hits

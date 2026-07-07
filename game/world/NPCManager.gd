@@ -2,7 +2,7 @@ extends Node
 class_name NPCManager
 
 const FACE_TARGET_TIME: float = 0.4
-const POST_ACTION_PAUSE: float = 0.5
+const POST_ACTION_PAUSE: float = 0.25
 
 func _ready() -> void:
 	TurnManager.Instance.FactionTurnStarted.connect(func(faction):
@@ -14,12 +14,6 @@ func _ready() -> void:
 
 func performPlayerTurnStart():
 	pass
-	#var npcActors = Actor.Repository.All.List.filter(func(actor):
-		#return actor.Stats.Alliance != Actor.Alliance.Player
-	#)
-	#for actor in npcActors:
-		#if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
-			#behaviour.UpdateFocusedTarget()
 
 func performFactionTurn(faction: Actor.Alliance):
 	var actors = Actor.Repository.All.List.filter(func(actor):

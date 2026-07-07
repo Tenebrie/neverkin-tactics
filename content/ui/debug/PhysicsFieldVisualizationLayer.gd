@@ -1,6 +1,6 @@
 extends VisualizationLayer
 
-var _currentField: PhysicsFieldState
+var _currentField: PhysicsField
 var _rayOrigin: Vector3
 var _rayTarget: Vector3
 
@@ -10,7 +10,37 @@ func updateRender():
 
 	super.updateRender()
 
-	_currentField = PhysicsField.build_state(PropWall.collectPhysicsFieldObstacles())
+	_currentField = PhysicsField.new()
+	_currentField.obstacles = PropWall.collectPhysicsFieldObstacles()
+
+	var raysToTest = 5000
+
+	var timer = PerformanceUtils.startMeasure("Running %d rays"%raysToTest)
+	var signalBox = SignalBox.new()
+
+	var actor = TurnManager.Instance.CurrentActor
+	var query = PhysicsFieldRaycastQuery.new()
+	var target = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
+	query.origin = actor.global_position
+	query.target = target
+
+	var workersDone = [0]
+	var workerCount = 1
+	signalBox.done.connect(func():
+		workersDone[0] += 1
+		if workersDone[0] >= workerCount:
+			timer.endMeasure()
+	)
+	for i in range(workerCount):
+		WorkerThreadPool.add_task(func():
+			var result = PhysicsFieldRaycastResult.new()
+			for x in raysToTest / workerCount:
+				_currentField.raycast_query_into(query, result)
+			signalBox.done.emit.call_deferred()
+		)
+
+class SignalBox:
+	signal done
 
 func _process(delta: float) -> void:
 	if not _currentField or not visible or not TurnManager.Instance.CurrentActor:
@@ -22,20 +52,16 @@ func _process(delta: float) -> void:
 	var target = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
 	query.origin = actor.global_position
 	query.target = target
+	query.collision_mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
+	query.width = 1.0
 
 	_rayOrigin = actor.global_position
 	_rayTarget = target
 
-	var result = PhysicsField.raycast_query(_currentField, query)
+	var result = _currentField.raycast_query(query)
+
 	if result.has_hits:
-		_rayTarget = result.hits[0].position
-
-	var raysToTest = 3000
-
-	var timer = PerformanceUtils.startMeasure("Running %d rays"%raysToTest)
-	for i in raysToTest:
-		PhysicsField.raycast_query(_currentField, query)
-	timer.endMeasure()
+		_rayTarget = result.get_hit_position(0)
 
 func _draw():
 	var camera = get_viewport().get_camera_3d()
@@ -56,4 +82,10 @@ func _draw():
 		draw_polyline(pts, Color.RED, 2.0)
 
 	if _rayOrigin and _rayTarget:
-		draw_line(camera.unproject_position(_rayOrigin), camera.unproject_position(_rayTarget), Color.AQUAMARINE, 4)
+		draw_line(camera.unproject_position(_rayOrigin), camera.unproject_position(_rayTarget), Color.AQUAMARINE, worldLengthToPixels(camera, 1), true)
+
+func worldLengthToPixels(camera: Camera3D, meters: float) -> float:
+	var right = camera.global_transform.basis.x.normalized()
+	var a = camera.unproject_position(Vector3.ZERO)
+	var b = camera.unproject_position(Vector3.ZERO + right * meters)
+	return a.distance_to(b)
