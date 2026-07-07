@@ -38,7 +38,7 @@ static func raycastAgainstShape(origin: Vector2, target: Vector2, shape: Physics
 	if shape is PhysicsShape.Rect:
 		return raycastAgainstLocalRect(localOrigin, localTarget, shape.size / 2)
 	elif shape is PhysicsShape.Circle:
-		return raycastAgainstLocalRect(localOrigin, localTarget, shape.size / 2)
+		return raycastAgainstLocalCircle(localOrigin, localTarget, shape.radius)
 	return -1
 
 static func raycastAgainstLocalRect(origin: Vector2, target: Vector2, halfSize: Vector2) -> float:
