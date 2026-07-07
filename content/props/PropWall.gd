@@ -149,17 +149,17 @@ static func GetIgnoredWallRidsAt(at: Vector3, physicalSize: float) -> Array[RID]
 				out.push_back((segment as CollisionObject3D).get_rid())
 	return out
 
-static func collectPhysicsFieldObstacles() -> Array[PhysicsField.Obstacle]:
-	var out: Array[PhysicsField.Obstacle]
+static func collectPhysicsFieldObstacles() -> Array[PhysicsFieldObstacle]:
+	var out: Array[PhysicsFieldObstacle]
 	for wall in PropWall.Repository.List:
-		var obstacle = PhysicsField.Obstacle.new()
+		var obstacle = PhysicsFieldObstacle.new()
 		obstacle.transform = Transform2D(-wall.global_rotation.y, Vector2(wall.global_position.x, wall.global_position.z))
 		for segmentNode in wall.get_children():
 			if segmentNode is CollisionObject3D node:
-				var segment = PhysicsField.ObstacleSegment.new()
-				var shape = PhysicsShape.Rect.new()
+				var segment = PhysicsFieldObstacleSegment.new()
+				var shape = PhysicsFieldShapeRect.new()
 				shape.size = Vector2(xSpacing, ySpacing)
-				obstacle.collisionLayer = obstacle.collisionLayer | node.collision_layer
+				#obstacle.collisionLayer = obstacle.collisionLayer | node.collision_layer
 				segment.shape = shape
 				segment.transform = Transform2D(-node.rotation.y, Vector2(node.position.x, node.position.z))
 				obstacle.segments.push_back(segment)

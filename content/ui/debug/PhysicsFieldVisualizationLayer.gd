@@ -1,6 +1,6 @@
 extends VisualizationLayer
 
-var _currentField: PhysicsField.State
+var _currentField: PhysicsFieldState
 var _rayOrigin: Vector3
 var _rayTarget: Vector3
 
@@ -10,7 +10,7 @@ func updateRender():
 
 	super.updateRender()
 
-	_currentField = PhysicsField.buildState()
+	_currentField = PhysicsField.build_state(PropWall.collectPhysicsFieldObstacles())
 
 func _process(delta: float) -> void:
 	if not _currentField or not visible or not TurnManager.Instance.CurrentActor:
@@ -18,7 +18,7 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 	var actor = TurnManager.Instance.CurrentActor
-	var query = PhysicsField.RaycastQuery.new()
+	var query = PhysicsFieldRaycastQuery.new()
 	var target = ActorUtils.GetMouseWorldPlanePosition(get_viewport())
 	query.origin = actor.global_position
 	query.target = target
@@ -26,15 +26,15 @@ func _process(delta: float) -> void:
 	_rayOrigin = actor.global_position
 	_rayTarget = target
 
-	var result = PhysicsField.raycastQuery(_currentField, query)
-	if result.hasHits:
+	var result = PhysicsField.raycast_query(_currentField, query)
+	if result.has_hits:
 		_rayTarget = result.hits[0].position
 
 	var raysToTest = 3000
 
 	var timer = PerformanceUtils.startMeasure("Running %d rays"%raysToTest)
 	for i in raysToTest:
-		PhysicsField.raycastQuery(_currentField, query)
+		PhysicsField.raycast_query(_currentField, query)
 	timer.endMeasure()
 
 func _draw():
