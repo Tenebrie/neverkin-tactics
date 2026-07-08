@@ -118,6 +118,11 @@ enum Alliance {
 	Neutral = 1,
 	CityThugs = 2,
 	Algae = 3,
+	PlaceholderFaction1 = 4,
+	PlaceholderFaction2 = 5,
+	PlaceholderFaction3 = 6,
+	PlaceholderFaction4 = 7,
+	PlaceholderFaction5 = 8
 }
 
 enum ThreatLevel {

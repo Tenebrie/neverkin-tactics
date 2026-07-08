@@ -1,7 +1,7 @@
 extends Node
 class_name NPCManager
 
-const FACE_TARGET_TIME: float = 0.4
+const FACE_TARGET_TIME: float = 0.6
 const POST_ACTION_PAUSE: float = 0.25
 
 func _ready() -> void:
@@ -69,6 +69,7 @@ func executeAction(actor: Actor, action: ActorBehaviour.TurnAction):
 
 func executeSkipAction(actor: Actor):
 	MessageLog.PrintActorMessage("Waiting...", actor)
+	actor.actions.ConsumeActionPoints(1)
 
 func executeMoveToAction(actor: Actor, params: ActorBehaviour.TurnAction.MoveToParams):
 	var path = ActorUtils.GetPathTo(actor, params.point)
@@ -97,3 +98,4 @@ func executeUseSkillAction(actor: Actor, params: ActorBehaviour.TurnAction.UseSk
 
 func executeEndTurnAction(actor: Actor):
 	MessageLog.PrintActorMessage("End turn", actor)
+	actor.actions.ConsumeActionPoints(100)

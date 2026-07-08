@@ -40,6 +40,9 @@ func _ready():
 	startTurnForCurrentFaction()
 
 func EndPlayerTurn() -> void:
+	if CurrentFaction != Actor.Alliance.Player:
+		MessageLog.PrintMessage("Uncool, let them play")
+		return
 	for actor in PlayerControlledActors:
 		if is_instance_valid(actor) and actor.actions.IsPerformingAnyAction():
 			MessageLog.PrintMessage("Wait for animation pls")
@@ -58,12 +61,18 @@ func advanceTurn():
 	CurrentFaction = (CurrentFaction + 1) as Actor.Alliance
 	if CurrentFaction >= Actor.Alliance.size() - 1:
 		CurrentFaction = Actor.Alliance.Player
+	var factionHasActors = Actor.Repository.All.List.any(func(a):
+		return a.Stats.Alliance == CurrentFaction and a.HasComponent(ActorBehaviour)
+	)
+	if not factionHasActors:
+		advanceTurn()
+		return
 	startTurnForCurrentFaction()
 	if ActorTakingTurn != previousActor:
 		CurrentActorChanged.emit(ActorTakingTurn, previousActor)
 
 func startTurnForCurrentFaction():
-	MessageLog.PrintChatMessage("Turn: %s"%CurrentFaction)
+	MessageLog.PrintChatMessage("Turn Start: %s"%Actor.Alliance.keys()[CurrentFaction + 1])
 	TurnChanged.emit()
 	FactionTurnStarted.emit(CurrentFaction)
 

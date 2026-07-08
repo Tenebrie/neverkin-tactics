@@ -54,7 +54,10 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 	var threats = findEnemies(actor)
 	var targets = threats
 	if actor.Behaviour is ActorBehaviourWorldControlled npcBehaviour:
-		targets = [npcBehaviour.FocusedTarget]
+		if npcBehaviour.FocusedTarget and is_instance_valid(npcBehaviour.FocusedTarget):
+			targets = [npcBehaviour.FocusedTarget]
+		else:
+			targets = []
 	elapsed = Time.get_ticks_usec() - start
 	print("- Collecting enemies: %.2f ms" % [elapsed / 1000.0])
 
@@ -69,9 +72,11 @@ static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
 	task.actorOffensiveSkills = BehaviourUtils.gatherAttackSkills(actor)
 	task.ignorableWalls = PropWall.collectBehaviourMapTaskData()
 	for threat in threats:
-		task.threats.push_back(MapTask.ActorData.collect(threat))
+		if is_instance_valid(threat) and threat.IsAlive:
+			task.threats.push_back(MapTask.ActorData.collect(threat))
 	for target in targets:
-		task.targets.push_back(MapTask.ActorData.collect(target))
+		if is_instance_valid(target) and target.IsAlive:
+			task.targets.push_back(MapTask.ActorData.collect(target))
 	task.weightHasShot = 1.0
 	task.weightAvoidLineOfSight = 1.0
 	if actor.Behaviour is ActorBehaviourWorldControlled behaviour:

@@ -87,6 +87,8 @@ func planMovementAction() -> TurnAction:
 	return TurnAction.MoveTo(bestPoint)
 
 func planCombatAction() -> TurnAction:
+	if not FocusedTarget or not is_instance_valid(FocusedTarget):
+		return TurnAction.Skip()
 	var dist = ActorUtils.FlatDistanceBetween(Parent, FocusedTarget) - Parent.Definition.PhysicalSize
 	var pistolRange = Parent.Skills.Get(SkillPistolShot).Definition.TargetingMaxRange
 	var grenadeRange = Parent.Skills.Get(SkillFragGrenade).Definition.TargetingMaxRange

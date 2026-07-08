@@ -19,7 +19,11 @@ func printMessage(message: String) -> void:
 		container.remove_child(child)
 
 	var node := Label.new()
-	node.add_theme_font_size_override("font_size", 22)
+	node.label_settings = LabelSettings.new()
+	node.label_settings.outline_size = 1
+	node.label_settings.outline_color = Color.RED
+	node.label_settings.shadow_size = 2
+	node.label_settings.font_size = 20
 	node.text = message
 	container.add_child(node)
 	await get_tree().create_timer(8).timeout
@@ -34,25 +38,24 @@ static func PrintChatMessage(message: String) -> void:
 	instance.printMessage(message)
 
 static func PrintMessage(message: String) -> void:
-	#instance.printMessage(message)
 	var item = Asset.Instantiate(MessageLogFloatingItem)
 	item.text = message
 	item.global_position = instance.get_viewport().get_mouse_position() - Vector2(instance.get_viewport_rect().size.x / 2, 24)
 	instance.get_tree().root.add_child(item)
 
 static func PrintErrorObject(error: Error) -> void:
-	#instance.printMessage(prefix + " " + error.Message)
 	var item = Asset.Instantiate(MessageLogFloatingItem)
 	item.text = error.Message
 	item.global_position = instance.get_viewport().get_mouse_position() - Vector2(instance.get_viewport_rect().size.x / 2, 24)
 	instance.get_tree().root.add_child(item)
 
 static func PrintWorldMessage(message: String, point: Vector3, viewport: Viewport) -> void:
-	var screenPosition = viewport.get_camera_3d().unproject_position(point)
 	var item = Asset.Instantiate(MessageLogFloatingItem)
 	item.text = message
-	item.global_position = screenPosition - Vector2(instance.get_viewport_rect().size.x / 2, 24)
+	item.followCamera = true
+	item.worldPosition = point
 	instance.get_tree().root.add_child(item)
+	item.screenOffset = -Vector2(item.size.x / 2, 24)
 
 static func PrintActorMessage(message: String, actor: Actor) -> void:
 	PrintWorldMessage(message, actor.global_position, actor.get_viewport())
