@@ -67,8 +67,8 @@ static func RunCollectNavmeshPointsTask(params: Params) -> Sample:
 		var originPt = params.origin + Vector3(0, 0.01, 0)
 		buckets[toCellCoordinates(originPt, params.outputSpacing)] = originPt
 
-	insertBest(buckets, rawEdges, params.origin, maxDistSquared, params.outputSpacing, true)
-	insertBest(buckets, rawSurfaces, params.origin, maxDistSquared, params.outputSpacing, false)
+	insertBest(buckets, rawEdges, params.origin, maxDistSquared, params.outputSpacing)
+	insertBest(buckets, rawSurfaces, params.origin, maxDistSquared, params.outputSpacing)
 	var sample = Sample.new()
 	for key: Vector2i in buckets:
 		sample.points.push_back(buckets[key])
@@ -79,8 +79,7 @@ static func insertBest(
 		points: Array[Vector3],
 		origin: Vector3,
 		maxDistSquared: float,
-		cellSize: float,
-		overwrite: bool
+		cellSize: float
 	):
 	for point in points:
 		if point.distance_squared_to(origin) > maxDistSquared:
@@ -88,10 +87,8 @@ static func insertBest(
 		var key = toCellCoordinates(point, cellSize)
 		if not buckets.has(key):
 			buckets[key] = point
-		elif overwrite or isCloserToCenter(point, buckets[key], key, cellSize):
-			# keep whichever candidate sits nearest its cell center
-			if isCloserToCenter(point, buckets[key], key, cellSize):
-				buckets[key] = point
+		elif isCloserToCenter(point, buckets[key], key, cellSize):
+			buckets[key] = point
 
 static func isCloserToCenter(candidate: Vector3, existing: Vector3, cell: Vector2i, cellSize: float) -> bool:
 	var center = Vector2((cell.x + 0.5) * cellSize, (cell.y + 0.5) * cellSize)
@@ -144,8 +141,8 @@ static func sampleSurfacePoints(map_rid: RID, bounds: AABB, spacing: float) -> A
 			var cell = Vector3(ix * spacing, bounds.position.y, iz * spacing)
 			var on_mesh = NavigationServer3D.map_get_closest_point(map_rid, cell)
 			if Vector2(cell.x - on_mesh.x, cell.z - on_mesh.z).length() < spacing / 2.0:
-				result.append(Vector3(cell.x, 0.0, cell.z))
+				result.append(Vector3(on_mesh.x, 0.0, on_mesh.z))
 	return result
 
 static func toCellCoordinates(point: Vector3, gridSize: float) -> Vector2i:
-	return Vector2i(int(round(point.x / gridSize)), int(round(point.z / gridSize)))
+	return Vector2i(int(floor(point.x / gridSize)), int(floor(point.z / gridSize)))
