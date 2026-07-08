@@ -70,13 +70,14 @@ func planMovementAction() -> TurnAction:
 		printerr("No points in reach")
 		return TurnAction.Skip()
 
-	var bestPointIndex = coverMap.ScoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
-		return ActorUtils.isPointReachable(Parent, point.Point, 1)
+	var bestPointIndex = coverMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
+		return ActorUtils.isPointReachable(Parent, point.point, 1)
 	)
 	if bestPointIndex == -1:
 		printerr("No points in reach")
 		return TurnAction.Skip()
-	var bestPoint = coverMap.ScoredPoints[bestPointIndex].Point
+	var bestPoint = coverMap.scoredPoints[bestPointIndex].point
+	print("Best point is %d"%coverMap.scoredPoints[bestPointIndex].score)
 	var currentCover = coverMap.read(Parent.global_position)
 	var bestCover = coverMap.read(bestPoint)
 
@@ -86,13 +87,19 @@ func planMovementAction() -> TurnAction:
 	return TurnAction.MoveTo(bestPoint)
 
 func planCombatAction() -> TurnAction:
-	if not FocusedTarget or not is_instance_valid(FocusedTarget):
-		return TurnAction.Skip()
-	var dist = ActorUtils.flatDistanceBetween(Parent, FocusedTarget) - Parent.Definition.PhysicalSize
-	var pistolRange = Parent.Skills.Get(SkillPistolShot).Definition.TargetingMaxRange
-	var grenadeRange = Parent.Skills.Get(SkillFragGrenade).Definition.TargetingMaxRange
-	if dist < pistolRange and ActorUtils.hasLineOfSight(Parent, FocusedTarget):
-		return TurnAction.UseSkillOnActor(SkillPistolShot, FocusedTarget)
-	elif dist < grenadeRange:
-		return TurnAction.UseSkillOnActor(SkillFragGrenade, FocusedTarget)
+	#if not FocusedTarget or not is_instance_valid(FocusedTarget):
+		#return TurnAction.Skip()
+	for rankedTarget in Ranking:
+		var target = rankedTarget.Target
+		if not is_instance_valid(target):
+			continue
+
+		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.PhysicalSize
+		var pistolRange = Parent.Skills.Get(SkillPistolShot).Definition.TargetingMaxRange
+		var grenadeRange = Parent.Skills.Get(SkillFragGrenade).Definition.TargetingMaxRange
+		if dist < pistolRange and ActorUtils.hasLineOfSight(Parent, target):
+			return TurnAction.UseSkillOnActor(SkillPistolShot, target)
+		elif dist < grenadeRange:
+			return TurnAction.UseSkillOnActor(SkillFragGrenade, target)
+
 	return TurnAction.Skip()

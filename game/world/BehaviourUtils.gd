@@ -3,7 +3,7 @@ class_name BehaviourUtils
 
 const BEAM_WIDTH: float = 0.1
 
-const gridSize = 0.18
+const gridSize = 0.5
 
 static var WEIGHT_BLUR_ITERATIONS = 3
 
@@ -36,7 +36,7 @@ class MapTask:
 			field = PhysicsField.new()
 			field.obstacles = PropWall.collectPhysicsFieldObstacles()
 		if not sample:
-			sample = await NavmeshSampler.CollectNavmeshPoints(actor, BehaviourUtils.gridSize, 1.5, 2.0)
+			sample = await NavmeshSampler.CollectNavmeshPoints(actor, BehaviourUtils.gridSize, 2.0)
 
 		var task = MapTask.new()
 		task.physicsField = field
@@ -158,31 +158,54 @@ static func _dispatchCreateActorProximityMapTask(task: MapTask) -> FloatFieldMap
 	return _produceFloatFieldMap(task, values)
 
 static func _produceFloatFieldMap(task: MapTask, values: Dictionary[Vector2i, float]) -> FloatFieldMap:
-	## Find each point's neighbours
-	var neighbourDist = pow(task.actor.physicalSize * 2 - 0.05, 2)
+	var neighbourDist = task.actor.physicalSize * 2 - 0.05
+	var neighbourDistSquared = pow(task.actor.physicalSize * 2 - 0.05, 2)
 	var neighboursOfCell: Dictionary[Vector2i, Array[Vector3]]
+	var weightsOfNeighbours: Dictionary[Vector2i, Array[float]]
 	for point in task.navmeshSample.points:
 		var cell = toCellCoordinates(point, task.gridSize)
 		if not values.has(cell):
 			continue
 		var validNeighbours: Array[Vector3]
+		var neighbourWeights: Array[float]
 		for other in task.navmeshSample.points:
-			if other.distance_squared_to(point) < neighbourDist and point != other:
+			if point == other:
+				continue
+			var distSquared = other.distance_squared_to(point)
+			if distSquared < neighbourDistSquared:
 				validNeighbours.push_back(other)
+				neighbourWeights.push_back(neighbourDist - sqrt(distSquared))
 		neighboursOfCell[cell] = validNeighbours
+		weightsOfNeighbours[cell] = neighbourWeights
 
 	## Gaussian blur (kind of) the point values
-	for i in range(WEIGHT_BLUR_ITERATIONS):
+	for y in range(WEIGHT_BLUR_ITERATIONS):
 		var nextValues: Dictionary[Vector2i, float]
+		#for point in task.navmeshSample.points:
+			#var cell = toCellCoordinates(point, task.gridSize)
+			#if not values.has(cell):
+				#continue
+			#nextValues[cell] = values[cell] * 0.5
+			#var validNeighbours = neighboursOfCell[cell]
+			#for neighbour in validNeighbours:
+				#var neighbourValue = values[toCellCoordinates(neighbour, task.gridSize)]
+				#nextValues[cell] += neighbourValue / validNeighbours.size() / 2.0
+
 		for point in task.navmeshSample.points:
 			var cell = toCellCoordinates(point, task.gridSize)
 			if not values.has(cell):
 				continue
-			nextValues[cell] = values[cell] * 0.5
 			var validNeighbours = neighboursOfCell[cell]
-			for neighbour in validNeighbours:
-				var neighbourValue = values[toCellCoordinates(neighbour, task.gridSize)]
-				nextValues[cell] += neighbourValue / validNeighbours.size() / 2.0
+			var neighbourWeights = weightsOfNeighbours[cell]
+
+			var weightSum = 1.0  # self weight = 1.0
+			var acc = values[cell]  # self contribution
+			for i in range(validNeighbours.size()):
+				var neighbourValue = values[toCellCoordinates(validNeighbours[i], task.gridSize)]
+				var w = neighbourWeights[i]
+				acc += neighbourValue * w
+				weightSum += w
+			nextValues[cell] = acc / weightSum
 
 		values = nextValues
 

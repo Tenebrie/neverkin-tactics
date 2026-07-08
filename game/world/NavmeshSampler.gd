@@ -20,7 +20,6 @@ class SignalBox:
 static func CollectNavmeshPoints(
 		actor: Actor,
 		gridSize: float,
-		samplingDensity: float = 1.0,
 		oversample: float = 0.0,
 		includeSurfaces: bool = true,
 		includeEdges: bool = true
@@ -35,7 +34,7 @@ static func CollectNavmeshPoints(
 	params.navigationMap = currentMapRid
 	params.navigationMesh = region.navigation_mesh
 	params.origin = actor.global_position
-	params.sampleSpacing = actor.Definition.PhysicalSize * 1.5 / samplingDensity
+	params.sampleSpacing = gridSize
 	params.outputSpacing = gridSize
 	params.aabb = AABB(params.origin - boxSize, boxSize * 2)
 	params.maximumDistance = movementSpeed
@@ -54,34 +53,51 @@ static func RunCollectNavmeshPointsTask(params: Params) -> Sample:
 	var currentMapRid = params.navigationMap
 	var currentRegionRid = NavigationServer3D.map_get_closest_point_owner(currentMapRid, params.origin)
 
-	var gridState: Dictionary[Vector2i, Vector3]
-
 	var maxDistSquared = pow(params.maximumDistance, 2)
 	var rawSurfaces: Array[Vector3]
 	var rawEdges: Array[Vector3]
 	if params.includeSurfaces:
-		rawSurfaces = sampleSurfacePoints(currentMapRid, params.aabb, params.sampleSpacing)
+		rawSurfaces = sampleSurfacePoints(currentMapRid, params.aabb, params.outputSpacing / 4.0)
 	if params.includeEdges:
-		rawEdges = sampleEdgePoints(currentRegionRid, params.navigationMesh, params.sampleSpacing)
+		rawEdges = sampleEdgePoints(currentRegionRid, params.navigationMesh, params.outputSpacing)
 
+	var buckets: Dictionary[Vector2i, Vector3]
+
+	if params.includeSurfaces:
+		var originPt = params.origin + Vector3(0, 0.01, 0)
+		buckets[toCellCoordinates(originPt, params.outputSpacing)] = originPt
+
+	insertBest(buckets, rawEdges, params.origin, maxDistSquared, params.outputSpacing, true)
+	insertBest(buckets, rawSurfaces, params.origin, maxDistSquared, params.outputSpacing, false)
 	var sample = Sample.new()
-
-	if params.includeSurfaces and tryClaim(gridState, params.origin + Vector3(0, 0.01, 0), params.outputSpacing):
-		sample.points.push_back(params.origin + Vector3(0, 0.01, 0))
-
-	for point in rawEdges:
-		if point.distance_squared_to(params.origin) > maxDistSquared:
-			continue
-		if tryClaim(gridState, point, params.outputSpacing):
-			sample.points.push_back(point)
-
-	for point in rawSurfaces:
-		if point.distance_squared_to(params.origin) > maxDistSquared:
-			continue
-		if tryClaim(gridState, point, params.outputSpacing):
-			sample.points.push_back(point)
-
+	for key: Vector2i in buckets:
+		sample.points.push_back(buckets[key])
 	return sample
+
+static func insertBest(
+		buckets: Dictionary[Vector2i, Vector3],
+		points: Array[Vector3],
+		origin: Vector3,
+		maxDistSquared: float,
+		cellSize: float,
+		overwrite: bool
+	):
+	for point in points:
+		if point.distance_squared_to(origin) > maxDistSquared:
+			continue
+		var key = toCellCoordinates(point, cellSize)
+		if not buckets.has(key):
+			buckets[key] = point
+		elif overwrite or isCloserToCenter(point, buckets[key], key, cellSize):
+			# keep whichever candidate sits nearest its cell center
+			if isCloserToCenter(point, buckets[key], key, cellSize):
+				buckets[key] = point
+
+static func isCloserToCenter(candidate: Vector3, existing: Vector3, cell: Vector2i, cellSize: float) -> bool:
+	var center = Vector2((cell.x + 0.5) * cellSize, (cell.y + 0.5) * cellSize)
+	var dc = Vector2(candidate.x, candidate.z).distance_squared_to(center)
+	var de = Vector2(existing.x, existing.z).distance_squared_to(center)
+	return dc < de
 
 static func sampleEdgePoints(region: RID, navMesh: NavigationMesh, spacing: float) -> Array[Vector3]:
 	var verts = navMesh.get_vertices()
@@ -125,28 +141,11 @@ static func sampleSurfacePoints(map_rid: RID, bounds: AABB, spacing: float) -> A
 
 	for ix in range(start_ix, end_ix + 1):
 		for iz in range(start_iz, end_iz + 1):
-			var query = Vector3(ix * spacing, bounds.position.y, iz * spacing)
-			var on_mesh = NavigationServer3D.map_get_closest_point(map_rid, query)
-			# keep only if the nearest navmesh point is close to the grid point
-			if Vector2(query.x - on_mesh.x, query.z - on_mesh.z).length() < spacing * 0.5:
-				result.append(on_mesh)
-
+			var cell = Vector3(ix * spacing, bounds.position.y, iz * spacing)
+			var on_mesh = NavigationServer3D.map_get_closest_point(map_rid, cell)
+			if Vector2(cell.x - on_mesh.x, cell.z - on_mesh.z).length() < spacing / 2.0:
+				result.append(Vector3(cell.x, 0.0, cell.z))
 	return result
 
-static func tryClaim(state: Dictionary[Vector2i, Vector3], point: Vector3, cellSize: float) -> bool:
-	var cx := int(floor(point.x / cellSize))
-	var cz := int(floor(point.z / cellSize))
-	# check this cell + 8 neighbors, since a point near a cell edge can be
-	# within cullRadius of a point in an adjacent cell
-	for dx in [-1, 0, 1]:
-		for dz in [-1, 0, 1]:
-			var key := Vector2i(cx + dx, cz + dz)
-			if state.has(key):
-				var existing: Vector3 = state[key]
-				if existing.distance_squared_to(point) < cellSize * cellSize:
-					return false
-	state[Vector2i(cx, cz)] = point
-	return true
-
 static func toCellCoordinates(point: Vector3, gridSize: float) -> Vector2i:
-	return Vector2i(int(floor(point.x / gridSize)), int(floor(point.z / gridSize)))
+	return Vector2i(int(round(point.x / gridSize)), int(round(point.z / gridSize)))

@@ -122,23 +122,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.475344, 0.00049996376, 4.2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6439652, 0.0005002022, 4.81162)
 
 [node name="Godette" parent="." unique_id=709077820 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2313223, 0.0005002022, -3.7460623)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.983377, 0.0005002022, -4.4880114)
 Definition = SubResource("Resource_w22tq")
 
 [node name="AlgaeHunter2" parent="." unique_id=807014692 instance=ExtResource("6_6ytau")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5752037, 0.0005002022, -5.8502407)
 
 [node name="Godette2" parent="." unique_id=1227995685 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.9794645, 0.0005002022, -1.0088315)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.367398, 0.0005002022, -0.50158477)
 Definition = SubResource("Resource_e8rlm")
 
 [node name="Godette3" parent="." unique_id=1458410066 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7794647, 0.0005002022, 3.4911685)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6759384, 0.0005002022, 2.2297986)
 Definition = SubResource("Resource_6pl24")
 
 [node name="Godette4" parent="." unique_id=279726060 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35046375, 0.0005002022, -4.2179813)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62858415, 0.0005002022, -1.6119442)
 
 [node name="Godette5" parent="." unique_id=752934444 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7205354, 0.0005002022, 3.9911685)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.923705, 0.0005002022, 3.9079194)
 Definition = SubResource("Resource_21xg8")

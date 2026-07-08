@@ -26,8 +26,8 @@ MessageLogInstance="*uid://bnowp6ttp38gb"
 NPCManagerInstance="*uid://b75fcywcxv6fi"
 PhysicsFieldVisualizationLayer="*uid://dmgwfsk6pj2ai"
 ActorValueVisualizationLayer="*uid://xfb867ura4t"
-CoverVisualizationLayer="*uid://cd5xxxahr1i53"
 LineOfSightVisualizationLayer="*uid://c4kmoemm6iqu1"
+CoverVisualizationLayer="*uid://cd5xxxahr1i53"
 ProximityVisualizationLayer="*uid://blafccyolmd7y"
 
 [debug]

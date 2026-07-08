@@ -33,6 +33,10 @@ func leftMerge(other: FloatFieldMap) -> FloatFieldMap:
 		if other.cellToScoredPoint.has(scoredPoint.cell):
 			scoredPoint.score += other.cellToScoredPoint[scoredPoint.cell].score
 
+	scoredPoints.sort_custom(func(a, b):
+		return a.score > b.score
+	)
+
 	return self
 
 func toCellCoordinates(point: Vector3) -> Vector2i:
