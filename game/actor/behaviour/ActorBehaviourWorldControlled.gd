@@ -49,6 +49,9 @@ func _ready() -> void:
 	await get_tree().process_frame
 	Parent.add_child(inputProvider)
 	Parent.InputProvider = inputProvider
+	Actor.SignalBus.ActorDestroyed.connect(func():
+		computeRanking()
+	)
 
 func _process(_delta: float) -> void:
 	if TurnManager.Instance.CurrentFaction != Actor.Faction.Player:
@@ -65,8 +68,8 @@ func _process(_delta: float) -> void:
 
 func computeRanking() -> Array[RankedTarget]:
 	var result: Array[RankedTarget] = []
-	var targets = Actor.Repository.All.List.filter(func(actor):
-		return ActorUtils.isHostileTo(actor, Parent)
+	var targets = Actor.Repository.Alive.List.filter(func(actor):
+		return ActorUtils.isHostileTo(actor, Parent) and actor.IsAlive
 	)
 	if targets.size() == 0:
 		return result

@@ -361,7 +361,7 @@ static func canBeShotBy(shot: ShotContext) -> bool:
 #region Helpers
 static func findAllies(actor: Actor) -> Array[Actor]:
 	var result: Array[Actor] = []
-	for other in Actor.Repository.All.List:
+	for other in Actor.Repository.Alive.List:
 		if other == actor or not is_instance_valid(other) or not other.IsAlive:
 			continue
 		if not ActorUtils.isAlliedTo(other, actor):
@@ -371,7 +371,7 @@ static func findAllies(actor: Actor) -> Array[Actor]:
 
 static func findEnemies(actor: Actor) -> Array[Actor]:
 	var result: Array[Actor] = []
-	for other in Actor.Repository.All.List:
+	for other in Actor.Repository.Alive.List:
 		if other == actor or not is_instance_valid(other) or not other.IsAlive:
 			continue
 		if not ActorUtils.isHostileTo(other, actor):

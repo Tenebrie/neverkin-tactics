@@ -79,7 +79,7 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 		var source = NavigationMeshSourceGeometryData3D.new()
 		NavigationServer3D.parse_source_geometry_data(navMesh, source, region)
 		for c: Actor in characters:
-			if allExceptions.has(c):
+			if c.isDestroyed or allExceptions.has(c):
 				continue
 			var col: CollisionShape3D = c.get_node_or_null("CollisionShape3D")
 			if col and col.shape:

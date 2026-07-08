@@ -16,7 +16,7 @@ func performPlayerTurnStart():
 	pass
 
 func performFactionTurn(faction: Actor.Faction):
-	var actors = Actor.Repository.All.List.filter(func(actor):
+	var actors = Actor.Repository.Alive.List.filter(func(actor):
 		return actor.Definition.Faction == faction and actor.Behaviour
 	)
 
@@ -99,3 +99,4 @@ func executeUseSkillAction(actor: Actor, params: ActorBehaviour.TurnAction.UseSk
 func executeEndTurnAction(actor: Actor):
 	MessageLog.PrintActorMessage("End turn", actor)
 	actor.actions.ConsumeActionPoints(100)
+	await get_tree().create_timer(FACE_TARGET_TIME).timeout

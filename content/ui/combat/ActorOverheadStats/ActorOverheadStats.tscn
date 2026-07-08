@@ -43,13 +43,9 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 mouse_filter = 2
-CornerRadius = 6
-TickColor = Color(0, 0, 0, 0.5)
 
 [node name="ActionPointBar" parent="VBoxContainer" unique_id=1588530800 instance=ExtResource("2_171gv")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 mouse_filter = 2
-CornerRadius = 6
-TickColor = Color(0, 0, 0, 0.5)

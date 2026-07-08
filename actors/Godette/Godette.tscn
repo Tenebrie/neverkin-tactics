@@ -30,4 +30,3 @@ shape = SubResource("CylinderShape3D_57786")
 script = ExtResource("4_ys6q1")
 PreferredRange = 5.0
 PreferredRangeTolerance = 2.5
-WeightMovementCostPerAp = 5.0

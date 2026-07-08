@@ -10,14 +10,21 @@ extends Camera3D
 @export var zoomMax = 30.0
 @export var zoomStep = 2.0
 
-var userOffset: Vector3
+var cameraTarget: Vector3
 var targetZoom: float
 
 func _ready() -> void:
 	targetZoom = size
+	cameraTarget = position
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a):
-		userOffset = Vector3.ZERO
+		var actor = TurnManager.Instance.ActorTakingTurn
+		if actor != null:
+			snapToTarget(actor.global_position)
 	)
+
+func snapToTarget(worldPos: Vector3) -> void:
+	cameraTarget.x = clampf(worldPos.x, offsetRangeMinX, offsetRangeMaxX)
+	cameraTarget.z = clampf(worldPos.z, offsetRangeMinZ, offsetRangeMaxZ)
 
 func _unhandled_input(event: InputEvent) -> void:
 	var button = event as InputEventMouseButton
@@ -30,12 +37,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	size = lerpf(size, targetZoom, delta * 10.0)
-
 	if TurnManager.Instance.CurrentActor == null:
 		return
 
-	var movementVector = Vector3.ZERO
-	if TurnManager.Instance.CurrentFaction == Actor.Faction.Player:
+	var isPlayerTurn = TurnManager.Instance.CurrentFaction == Actor.Faction.Player
+
+	if isPlayerTurn:
+		var movementVector = Vector3.ZERO
 		if Input.is_key_pressed(KEY_W):
 			movementVector.z -= 1
 		if Input.is_key_pressed(KEY_S):
@@ -44,17 +52,13 @@ func _process(delta: float) -> void:
 			movementVector.x -= 1
 		if Input.is_key_pressed(KEY_D):
 			movementVector.x += 1
-	movementVector = movementVector.normalized()
-	userOffset += movementVector * delta * size
+		movementVector = movementVector.normalized()
+		cameraTarget += movementVector * delta * size
+	else:
+		cameraTarget = TurnManager.Instance.ActorTakingTurn.global_position
 
-	var actorPos = TurnManager.Instance.ActorTakingTurn.global_position
-
-	var clampedX = clampf(actorPos.x + userOffset.x, offsetRangeMinX, offsetRangeMaxX)
-	var clampedZ = clampf(actorPos.z + userOffset.z, offsetRangeMinZ, offsetRangeMaxZ)
-
-	userOffset.x = clampedX - actorPos.x
-	userOffset.z = clampedZ - actorPos.z
-
-	var targetPosition = Vector3(clampedX, position.y, clampedZ)
-	var lerpSpeed = 12.0 if TurnManager.Instance.CurrentFaction == Actor.Faction.Player else 5.0
+	cameraTarget.x = clampf(cameraTarget.x, offsetRangeMinX, offsetRangeMaxX)
+	cameraTarget.z = clampf(cameraTarget.z, offsetRangeMinZ, offsetRangeMaxZ)
+	var targetPosition = Vector3(cameraTarget.x, position.y, cameraTarget.z)
+	var lerpSpeed = 12.0 if isPlayerTurn else 5.0
 	position = position.lerp(targetPosition, delta * lerpSpeed)

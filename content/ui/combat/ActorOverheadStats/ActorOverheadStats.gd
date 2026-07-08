@@ -54,7 +54,7 @@ func updateValues():
 
 	actionPointBar.ThreatValue = parent.targeting.PredictedActionPointCost + actions.ActionPointsThreatened
 
-	var focusedTargets = Actor.Repository.All.List.filter(func(actor):
+	var focusedTargets = Actor.Repository.Alive.List.filter(func(actor):
 		if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
 			return behaviour.FocusedTarget == parent
 		return false
@@ -62,3 +62,7 @@ func updateValues():
 	focusTargetCount.visible = focusedTargets.size() > 0
 	if focusTargetCount.visible:
 		focusTargetCount.get_node("Label").text = str(focusedTargets.size())
+
+func fadeOut(duration: float = 0.3):
+	var container: Control = $VBoxContainer
+	create_tween().tween_property(container, "modulate:a", 0, duration)

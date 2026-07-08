@@ -77,7 +77,6 @@ func planMovementAction() -> TurnAction:
 		printerr("No points in reach")
 		return TurnAction.Skip()
 	var bestPoint = coverMap.scoredPoints[bestPointIndex].point
-	print("Best point is %d"%coverMap.scoredPoints[bestPointIndex].score)
 	var currentCover = coverMap.read(Parent.global_position)
 	var bestCover = coverMap.read(bestPoint)
 

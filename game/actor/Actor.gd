@@ -13,6 +13,8 @@ signal DefinitionChanged(def: ActorDefinition)
 			SignalBus.ActorDefinitionChanged.emit(self)
 
 @onready var isReady = true
+var isDestroyed = false
+
 @onready var Buffs: ActorBuffs = GetComponent(ActorBuffs)
 @onready var Stats: ActorStats = GetComponent(ActorStats)
 @onready var actions: ActorActions = GetComponent(ActorActions)
@@ -34,7 +36,7 @@ var IsPlayerControlled: bool:
 
 var IsAlive: bool:
 	get:
-		return Stats.HealthCurrent > 0
+		return Stats.HealthCurrent > 0 and not isDestroyed
 
 func GetComponent(type: GDScript[Component]) -> Component:
 	for child in get_children():
@@ -60,6 +62,7 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	Repository.All.Register(self)
+	Repository.Alive.Register(self)
 
 	if has_node("TokenMeshInstance3D"):
 		TurnManager.Instance.CurrentActorChanged.connect(func(actor):
@@ -83,16 +86,31 @@ func loadDefinition():
 func _exit_tree() -> void:
 	if not Engine.is_editor_hint():
 		Repository.All.Unregister(self)
+		Repository.Alive.Unregister(self)
+		Repository.Hovered.Unregister(self)
 
 func Destroy() -> void:
-	Repository.All.Unregister(self)
-	Repository.Hovered.Unregister(self)
+	isDestroyed = true
+	collision_mask = 0
+	collision_layer = 0
+	Repository.Alive.Unregister(self)
+	fadeOut()
+	destroyed.emit()
 	SignalBus.ActorDestroyed.emit(self)
-	queue_free()
+
+func fadeOut(duration: float = 0.3):
+	if has_node("TokenMeshInstance3D"):
+		var tween = create_tween()
+		tween.tween_property($TokenMeshInstance3D, "transparency", 1.0, duration)
+
+	if has_node("ActorOverheadStats"):
+		var stats: ActorOverheadStats = $ActorOverheadStats
+		stats.fadeOut()
 
 #region Repository
 class Repository:
 	static var All: Implementation = Implementation.new()
+	static var Alive: Implementation = Implementation.new()
 	static var Hovered: Implementation = Implementation.new()
 
 	class Implementation:
@@ -137,6 +155,8 @@ enum ThreatLevel {
 	## Immediate and undeniable existential crisis
 	Existential,
 }
+
+signal destroyed()
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 class SignalBusImplementation:

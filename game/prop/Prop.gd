@@ -12,3 +12,7 @@ func _ready() -> void:
 	Definition.MovementSpeedPerActionPoint = 0
 	Definition.PerceivedThreat = ThreatLevel.Harmless
 	super._ready()
+
+func fadeOut(duration: float = 0.3):
+	super.fadeOut()
+	queue_free()
