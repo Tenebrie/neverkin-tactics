@@ -46,7 +46,7 @@ func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 
 	addHighlight(result, "Blood...", woundedValue)
 	addHighlight(result, "Juicy...", unhurtValue)
-	addHighlight(result, "%s threat" % ActorUtils.GetThreatLevelName(actor.Stats.ThreatCurrent), threatValue)
+	addHighlight(result, "%s threat" % ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent), threatValue)
 	addHighlight(result, "So close...", proximityValue)
 
 	return result

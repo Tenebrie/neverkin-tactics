@@ -42,7 +42,7 @@ func Cast(targets: Skill.TargetData) -> void:
 	tween.tween_property(effect, "rotation:y", effect.rotation.y + TAU, duration)
 	await get_tree().create_timer(duration + 0.01).timeout
 
-	if Parent.Stats.Alliance == Actor.Alliance.Player:
+	if Parent.Stats.Faction == Actor.Faction.Player:
 		for target in targets.PerTelegraph[damageTelegraph]:
 			if is_instance_valid(target):
 				target.Stats.DealSkillDamage(targets)

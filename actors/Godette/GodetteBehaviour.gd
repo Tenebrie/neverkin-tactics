@@ -46,7 +46,7 @@ func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 
 	addHighlight(result, "Wounded", woundedValue)
 	addHighlight(result, "Unhurt", unhurtValue)
-	addHighlight(result, "%s threat" % ActorUtils.GetThreatLevelName(actor.Stats.ThreatCurrent), threatValue)
+	addHighlight(result, "%s threat" % ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent), threatValue)
 	addHighlight(result, "Within reach", proximityValue)
 	addHighlight(result, "Attacked me!", grudgeValue)
 
@@ -65,34 +65,33 @@ func PlanTurnActions() -> Array[TurnAction]:
 	return [planCombatAction()]
 
 func planMovementAction() -> TurnAction:
-	var coverMap = await BehaviourUtils.CreateActorCoverMap(Parent)
-	if coverMap.Points.size() == 0:
-		printerr("No cover points in the map")
+	var coverMap = await BehaviourUtils.createActorValueMap(Parent)
+	if coverMap.points.size() == 0:
+		printerr("No points in reach")
 		return TurnAction.Skip()
 
 	var bestPointIndex = coverMap.ScoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
-		return ActorUtils.IsPointReachable(Parent, point.Point, 1)
+		return ActorUtils.isPointReachable(Parent, point.Point, 1)
 	)
 	if bestPointIndex == -1:
-		printerr("No reachable points in the map")
+		printerr("No points in reach")
 		return TurnAction.Skip()
 	var bestPoint = coverMap.ScoredPoints[bestPointIndex].Point
-	var currentCover = coverMap.Read(Parent.global_position)
-	var bestCover = coverMap.Read(bestPoint)
+	var currentCover = coverMap.read(Parent.global_position)
+	var bestCover = coverMap.read(bestPoint)
 
 	if bestCover <= currentCover:
 		return TurnAction.UseSkillOnSelf(SkillHunkerDown)
 
-	print("Diff is ", bestCover - currentCover)
 	return TurnAction.MoveTo(bestPoint)
 
 func planCombatAction() -> TurnAction:
 	if not FocusedTarget or not is_instance_valid(FocusedTarget):
 		return TurnAction.Skip()
-	var dist = ActorUtils.FlatDistanceBetween(Parent, FocusedTarget) - Parent.Definition.PhysicalSize
+	var dist = ActorUtils.flatDistanceBetween(Parent, FocusedTarget) - Parent.Definition.PhysicalSize
 	var pistolRange = Parent.Skills.Get(SkillPistolShot).Definition.TargetingMaxRange
 	var grenadeRange = Parent.Skills.Get(SkillFragGrenade).Definition.TargetingMaxRange
-	if dist < pistolRange and ActorUtils.HasLineOfSight(Parent, FocusedTarget):
+	if dist < pistolRange and ActorUtils.hasLineOfSight(Parent, FocusedTarget):
 		return TurnAction.UseSkillOnActor(SkillPistolShot, FocusedTarget)
 	elif dist < grenadeRange:
 		return TurnAction.UseSkillOnActor(SkillFragGrenade, FocusedTarget)

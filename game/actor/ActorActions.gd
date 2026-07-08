@@ -90,8 +90,8 @@ func IsPerformingAnyAction() -> bool:
 	return ActionQueue.Busy()
 #endregion
 
-func onTurnEnded(faction: Actor.Alliance) -> void:
-	if faction != Parent.Definition.Alliance:
+func onTurnEnded(faction: Actor.Faction) -> void:
+	if faction != Parent.Definition.Faction:
 		return
 	MovementBuffer = 0.0
 	if ActionPointsUsed < ActionPointsMax:

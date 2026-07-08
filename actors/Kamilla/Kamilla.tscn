@@ -28,3 +28,4 @@ shape = SubResource("CylinderShape3D_cyn10")
 
 [node name="PlayerController" type="Node" parent="." index="10" unique_id=40309796]
 script = ExtResource("8_o02g8")
+PortraitColor = Color(0.59, 0, 0.009833183, 1)

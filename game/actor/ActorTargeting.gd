@@ -122,7 +122,7 @@ func getLegalPathTo(target: Vector3) -> PackedVector3Array:
 			true,
 			Parent.navigator.agent.navigation_layers
 	)
-	var truncatedPath = ActorUtils.LimitPathLength(previewPath, Parent.actions.MovementAvailable)
+	var truncatedPath = ActorUtils.limitPathLength(previewPath, Parent.actions.MovementAvailable)
 	return truncatedPath
 
 #endregion

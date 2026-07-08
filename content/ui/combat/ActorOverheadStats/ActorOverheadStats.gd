@@ -1,4 +1,5 @@
 extends CanvasLayer
+class_name ActorOverheadStats
 
 @onready var parent: Actor = get_parent()
 
@@ -7,6 +8,8 @@ extends CanvasLayer
 @onready var actionPointBar: SegmentedBar = $%ActionPointBar
 
 @onready var focusTargetCount: Control = %CurrentFocusTargetCount
+
+static var GloballyVisible = true
 
 func _ready():
 	healthBar.FillColor = Color(0.0, 0.6, 0.2)
@@ -17,6 +20,10 @@ func _ready():
 	actionPointBar.InhumanColor = Color(1.6, 0.6, 0.0)
 
 func _process(_delta: float):
+	if visible != GloballyVisible:
+		visible = GloballyVisible
+	if not GloballyVisible:
+		return
 	updatePosition()
 	updateValues()
 

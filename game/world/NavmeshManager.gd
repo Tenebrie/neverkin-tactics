@@ -32,7 +32,10 @@ func WaitUntilReady():
 	while isBaking or hasPendingRequest:
 		await BakeCompleted
 
-func rebakeNavmesh(actor: Actor, exceptions: Array[Actor]):
+func rebakeNavmeshForCurrentActor():
+	return await rebakeNavmesh(TurnManager.Instance.ActorTakingTurn)
+
+func rebakeNavmesh(actor: Actor, exceptions: Array[Actor] = []):
 	if actor == null:
 		return
 	pendingActor = actor
@@ -40,6 +43,7 @@ func rebakeNavmesh(actor: Actor, exceptions: Array[Actor]):
 	hasPendingRequest = true
 	if not isBaking:
 		drainQueue()
+	return await WaitUntilReady()
 
 func drainQueue():
 	isBaking = true

@@ -26,10 +26,10 @@ var coneAngle: float = 3.15
 		coneAngle = value
 		set_instance_shader_parameter(&"SECTOR", value)
 
-@export var Alliance: int = Actor.Alliance.Neutral:
+@export var Faction: int = Actor.Faction.Neutral:
 	set(value):
-		Alliance = value
-		SetColor(ActorUtils.GetAllianceColor(value))
+		Faction = value
+		SetColor(ActorUtils.getFactionColor(value))
 
 var fadingIn: bool = true
 var fadingOut: bool = false

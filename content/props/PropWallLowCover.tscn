@@ -6,10 +6,15 @@
 
 [sub_resource type="Resource" id="Resource_g2rid"]
 script = ExtResource("2_g2rid")
+Name = "Low Cover"
+PhysicalSize = 0.1
+PerceivedThreat = 0
+MovementSpeedPerActionPoint = 0.0
 
 [node name="PropWallLowCover" type="Node3D" unique_id=1850641905]
 script = ExtResource("1_g2rid")
 ObstacleWidth = 5
+CoverValue = 1
 
 [node name="PropLowCover" parent="." unique_id=842978226 instance=ExtResource("1_icchu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 0)

@@ -20,6 +20,7 @@ class_name PropWall
 		if is_node_ready():
 			rebuild()
 
+@export var CoverValue: int = 0
 @export var CanBeIgnored: bool = true
 @onready var WallGroupName: StringName = "obstaclegroup_" + str(randi())
 
@@ -30,13 +31,15 @@ var boundingCircleRadius = 0.0
 
 func _ready():
 	rebuild()
-	Repository.Register(self)
+	if not Engine.is_editor_hint():
+		Repository.Register(self)
 	if CanBeIgnored and not Engine.is_editor_hint():
 		TurnManager.Instance.CurrentActorChanged.connect(checkDistances)
 		Actor.SignalBus.ActorSelectedSkillChanged.connect(checkDistances)
 
 func _exit_tree() -> void:
-	Repository.Unregister(self)
+	if not Engine.is_editor_hint():
+		Repository.Unregister(self)
 
 func IsIgnoredFor(actor: Actor) -> bool:
 	if not CanBeIgnored:
@@ -164,6 +167,13 @@ func buildPhysicsFieldObstacle():
 #region Static Helpers
 static func GetIgnoredWallRidsAt(walls: Array[BehaviourUtils.MapTask.WallData], at: Vector3, physicalSize: float) -> Array[PhysicsFieldObstacle]:
 	var out: Array[PhysicsFieldObstacle] = []
+	var ignoredWalls = GetIgnoredWallsAt(walls, at, physicalSize)
+	for wall in ignoredWalls:
+		out.push_back(wall.obstacle)
+	return out
+
+static func GetIgnoredWallsAt(walls: Array[BehaviourUtils.MapTask.WallData], at: Vector3, physicalSize: float) -> Array[BehaviourUtils.MapTask.WallData]:
+	var out: Array[BehaviourUtils.MapTask.WallData] = []
 	var threshold: float = pow(physicalSize * 2.0, 2)
 	for wall in walls:
 		var minimalDistance = wall.boundingCircleRadius + physicalSize * 2.0
@@ -177,19 +187,21 @@ static func GetIgnoredWallRidsAt(walls: Array[BehaviourUtils.MapTask.WallData], 
 				break
 		if not wallIsClose:
 			continue
-		out.push_back(wall.obstacle)
+		out.push_back(wall)
 	return out
 
-static func collectBehaviourMapTaskData() -> Array[BehaviourUtils.MapTask.WallData]:
+static func collectBehaviourMapTaskData(includeFullCover: bool = false) -> Array[BehaviourUtils.MapTask.WallData]:
 	var out: Array[BehaviourUtils.MapTask.WallData] = []
 	for wall in PropWall.Repository.List:
-		if not wall.CanBeIgnored:
+		if not includeFullCover and not wall.CanBeIgnored:
 			continue
-
 		var wallData = BehaviourUtils.MapTask.WallData.new()
+		wallData.wallName = wall.name
 		wallData.globalPosition = wall.global_position
 		wallData.boundingCircleRadius = wall.boundingCircleRadius
 		wallData.obstacle = wall.physicsFieldObstacle
+		wallData.coverValue = wall.CoverValue
+		wallData.canBeUsedAsCover = wall.CanBeIgnored
 		for segment in wall.get_children():
 			if segment is not Node3D:
 				continue

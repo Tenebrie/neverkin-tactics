@@ -36,7 +36,7 @@ func FindTelegraph(def: TelegraphDefinition) -> Telegraph:
 
 func _parentReady() -> void:
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a, previous):
-		if previous == Parent and Parent.Definition.Alliance == Actor.Alliance.Player:
+		if previous == Parent and Parent.Definition.Faction == Actor.Faction.Player:
 			resetState()
 	)
 	Parent.Skills.SelectedSkillChanged.connect(func(skill):

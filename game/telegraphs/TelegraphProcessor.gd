@@ -10,7 +10,7 @@ static func SnapToHoveredActor(telegraph: Telegraph):
 		return
 	telegraph.global_position = hovered[0].global_position
 
-static func TargetAllianceTint(telegraph: Telegraph):
+static func TargetFactionTint(telegraph: Telegraph):
 	if telegraph.Targets.size() > 0:
 		telegraph.Tint = TelegraphColor.TargetAcquired
 

@@ -32,7 +32,7 @@ class SingleActor extends TelegraphDefinition:
 
 		Processors.push_back(TelegraphProcessor.SnapToHoveredActor)
 		Processors.push_back(TelegraphProcessor.OutOfRangeTint)
-		Processors.push_back(TelegraphProcessor.TargetAllianceTint)
+		Processors.push_back(TelegraphProcessor.TargetFactionTint)
 		Processors.push_back(TelegraphProcessor.NoTransparency)
 
 	func Load(_skill: Skill):
@@ -41,7 +41,7 @@ class SingleActor extends TelegraphDefinition:
 	func WithDamageToHostiles(damage: int):
 		HealthThreat = damage
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.Definition.Alliance != Actor.Alliance.Player and Actor.Repository.Hovered.List.has(actor)
+			return actor.Definition.Faction != Actor.Faction.Player and Actor.Repository.Hovered.List.has(actor)
 		)
 		return self
 
@@ -53,7 +53,7 @@ class Projectile extends TelegraphDefinition:
 		ShootFromCover = true
 
 		Processors.push_back(TelegraphProcessor.LookAtMouse)
-		Processors.push_back(TelegraphProcessor.TargetAllianceTint)
+		Processors.push_back(TelegraphProcessor.TargetFactionTint)
 		Processors.push_back(TelegraphProcessor.ApplyCollisionRules)
 
 	func Load(skill: Skill):
@@ -65,7 +65,7 @@ class Projectile extends TelegraphDefinition:
 
 	func TargetingHostiles() -> Projectile:
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return ActorUtils.IsTargetableBy(actor, ParentSkill.Parent) && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
+			return ActorUtils.isTargetableBy(actor, ParentSkill.Parent) && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
 		)
 		return self
 
@@ -90,7 +90,7 @@ class PointArea extends TelegraphDefinition:
 
 		Validators.push_back(TelegraphValidator.MaximumSkillRange)
 
-		Processors.push_back(TelegraphProcessor.TargetAllianceTint)
+		Processors.push_back(TelegraphProcessor.TargetFactionTint)
 		Processors.push_back(TelegraphProcessor.OutOfRangeTint)
 
 	func Load(_skill: Skill):
@@ -99,6 +99,6 @@ class PointArea extends TelegraphDefinition:
 	func WithDamageToHostiles(damage: int) -> TelegraphDefinition:
 		HealthThreat = damage
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return ActorUtils.IsTargetableBy(actor, ParentSkill.Parent)
+			return ActorUtils.isTargetableBy(actor, ParentSkill.Parent)
 		)
 		return self

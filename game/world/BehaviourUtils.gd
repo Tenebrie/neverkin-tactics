@@ -3,20 +3,82 @@ class_name BehaviourUtils
 
 const BEAM_WIDTH: float = 0.1
 
+const gridSize = 0.18
+
+static var WEIGHT_BLUR_ITERATIONS = 3
+
 #region Cover Check
 class MapTask:
-	var navmeshSample: NavmeshSampler.NavmeshSample
+	var navmeshSample: NavmeshSampler.Sample
 	var physicsField: PhysicsField
 	var actorOffensiveSkills: Array[SkillDefinition]
 	var gridSize: float
+	var navigationMapRid: RID
 
+	var weightCover = 1.0
 	var weightHasShot = 1.0
 	var weightAvoidLineOfSight = 1.0
+	var weightDistanceToMove = 1.0
+	var weightProximityToAllies = 1.0
+	var weightProximityToAlliesFalloffMeters = 10.0
+	var weightProximityToEnemies = 1.0
+	var weightProximityToEnemiesFalloffMeters = 10.0
 
 	var actor: ActorData
+	var allies: Array[ActorData]
 	var targets: Array[ActorData]
 	var threats: Array[ActorData]
+	var allWalls: Array[WallData]
 	var ignorableWalls: Array[WallData]
+
+	static func collect(actor: Actor, field: PhysicsField = null, sample: NavmeshSampler.Sample = null) -> MapTask:
+		if not field:
+			field = PhysicsField.new()
+			field.obstacles = PropWall.collectPhysicsFieldObstacles()
+		if not sample:
+			sample = await NavmeshSampler.CollectNavmeshPoints(actor, BehaviourUtils.gridSize, 1.5, 2.0)
+
+		var task = MapTask.new()
+		task.physicsField = field
+		task.navmeshSample = sample
+		task.gridSize = BehaviourUtils.gridSize
+		task.navigationMapRid = actor.navigator.agent.get_navigation_map()
+		task.actor = MapTask.ActorData.collect(actor)
+		task.allWalls = PropWall.collectBehaviourMapTaskData(true)
+		task.ignorableWalls = PropWall.collectBehaviourMapTaskData()
+		task.actorOffensiveSkills = BehaviourUtils.gatherAttackSkills(actor)
+		if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
+			task.weightCover = behaviour.WeightCover
+			task.weightHasShot = behaviour.WeightHasShot
+			task.weightAvoidLineOfSight = behaviour.WeightAvoidLineOfSight
+			task.weightDistanceToMove = behaviour.WeightDistanceToMove
+			task.weightProximityToAllies = behaviour.WeightProximityToAllies
+			task.weightProximityToAlliesFalloffMeters = behaviour.WeightProximityToAlliesFalloffMeters
+			task.weightProximityToEnemies = behaviour.WeightProximityToEnemies
+			task.weightProximityToEnemiesFalloffMeters = behaviour.WeightProximityToEnemiesFalloffMeters
+
+		## Friendlies to chill close to
+		var allies = BehaviourUtils.findAllies(actor)
+		for ally in allies:
+			task.allies.push_back(ActorData.collect(ally))
+
+		## Enemies attacking this actor
+		var threats = BehaviourUtils.findEnemies(actor)
+		for threat in threats:
+			task.threats.push_back(ActorData.collect(threat))
+
+		## Enemies this actor will attack (sorted by aggro)
+		var targets = threats
+		if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
+			targets.sort_custom(func(a, b):
+				var indexOfA = behaviour.Ranking.find_custom(func(rank: ActorBehaviourWorldControlled.RankedTarget): return rank.Target == a)
+				var indexOfB = behaviour.Ranking.find_custom(func(rank: ActorBehaviourWorldControlled.RankedTarget): return rank.Target == b)
+				return indexOfA < indexOfB and indexOfA != -1
+			)
+		for target in targets:
+			task.targets.push_back(ActorData.collect(target))
+
+		return task
 
 	class ActorData:
 		var threat: float
@@ -33,77 +95,70 @@ class MapTask:
 			return data
 
 	class WallData:
+		var wallName: String
+		var coverValue: float
+		var canBeUsedAsCover: float
 		var globalPosition: Vector3
 		var boundingCircleRadius: float
 		var segmentPositions: Array[Vector3]
 		var obstacle: PhysicsFieldObstacle
 
-class SignalBox:
-	signal done(map: FloatFieldMap)
+		func _to_string() -> String:
+			return "<MapTask.WallData %s>"%wallName
 
-static func CreateActorCoverMap(actor: Actor) -> FloatFieldMap:
-	## Collect interesting points to evaluate
-	var gridSize = 0.25
-	var start = Time.get_ticks_usec()
-	var navmeshSample = await NavmeshSampler.CollectNavmeshPoints(actor, gridSize, 1.0, 0.0)
-	var elapsed = Time.get_ticks_usec() - start
-	print("- Collecting points: %.2f ms" % [elapsed / 1000.0])
+static func createActorValueMap(actor: Actor) -> FloatFieldMap:
+	var task = await MapTask.collect(actor)
 
-	start = Time.get_ticks_usec()
-	## NPCs evaluate against their focus target. Otherwise, check all enemies.
-	var threats = findEnemies(actor)
-	var targets = threats
-	if actor.Behaviour is ActorBehaviourWorldControlled npcBehaviour:
-		if npcBehaviour.FocusedTarget and is_instance_valid(npcBehaviour.FocusedTarget):
-			targets = [npcBehaviour.FocusedTarget]
-		else:
-			targets = []
-	elapsed = Time.get_ticks_usec() - start
-	print("- Collecting enemies: %.2f ms" % [elapsed / 1000.0])
+	var timer = PerformanceUtils.startMeasure("AI evaluation for %s"%actor)
+	var coverPromise = Promise.run(func(): return _dispatchCreateActorCoverMapTask(task))
+	var lineOfSightPromise = Promise.run(func(): return _dispatchCreateActorLineOfSightMapTask(task))
+	var proximityPromise = Promise.run(func(): return _dispatchCreateActorProximityMapTask(task))
 
-	var field = PhysicsField.new()
-	field.obstacles = PropWall.collectPhysicsFieldObstacles()
+	var coverMap = await coverPromise.toResolve() as FloatFieldMap
+	var lineOfSightMap = await lineOfSightPromise.toResolve() as FloatFieldMap
+	var proximityMap = await proximityPromise.toResolve() as FloatFieldMap
+	timer.endMeasure()
 
-	var task = MapTask.new()
-	task.navmeshSample = navmeshSample
-	task.physicsField = field
-	task.gridSize = gridSize
-	task.actor = MapTask.ActorData.collect(actor)
-	task.actorOffensiveSkills = BehaviourUtils.gatherAttackSkills(actor)
-	task.ignorableWalls = PropWall.collectBehaviourMapTaskData()
-	for threat in threats:
-		if is_instance_valid(threat) and threat.IsAlive:
-			task.threats.push_back(MapTask.ActorData.collect(threat))
-	for target in targets:
-		if is_instance_valid(target) and target.IsAlive:
-			task.targets.push_back(MapTask.ActorData.collect(target))
-	task.weightHasShot = 1.0
-	task.weightAvoidLineOfSight = 1.0
-	if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
-		task.weightHasShot = behaviour.WeightHasShot
-		task.weightAvoidLineOfSight = behaviour.WeightAvoidLineOfSight
+	return coverMap.leftMerge(lineOfSightMap).leftMerge(proximityMap)
 
-	var signalBox = SignalBox.new()
-	WorkerThreadPool.add_task(func():
-		var sample = dispatchCreateActorCoverMap(task)
-		signalBox.done.emit.call_deferred(sample)
-	)
-	var data: FloatFieldMap = await signalBox.done
-	return data
+static func createActorCoverMap(actor: Actor) -> FloatFieldMap:
+	var task = await MapTask.collect(actor)
+	return await Promise.run(func(): return _dispatchCreateActorCoverMapTask(task)).done
 
-static func dispatchCreateActorCoverMap(task: MapTask) -> FloatFieldMap:
+static func createActorLineOfSightMap(actor: Actor) -> FloatFieldMap:
+	var task = await MapTask.collect(actor)
+	return await Promise.run(func(): return _dispatchCreateActorLineOfSightMapTask(task)).done
+
+static func createActorProximityMap(actor: Actor) -> FloatFieldMap:
+	var task = await MapTask.collect(actor)
+	return await Promise.run(func(): return _dispatchCreateActorProximityMapTask(task)).done
+
+static func _dispatchCreateActorLineOfSightMapTask(task: MapTask) -> FloatFieldMap:
 	var values: Dictionary[Vector2i, float]
-	## Populate initial values
-	var start = Time.get_ticks_usec()
 	for point in task.navmeshSample.points:
-		var coverScore = EvaluateCoverScoreAtLocation(task, point)
+		var coverScore = evaluateLineOfSightScoreAtLocation(task, point)
 		var cell = toCellCoordinates(point, task.gridSize)
 		values[cell] = coverScore
-	var elapsed = Time.get_ticks_usec() - start
-	print("- Collecting initial values: %.2f ms" % [elapsed / 1000.0])
+	return _produceFloatFieldMap(task, values)
 
+static func _dispatchCreateActorCoverMapTask(task: MapTask) -> FloatFieldMap:
+	var values: Dictionary[Vector2i, float]
+	for point in task.navmeshSample.points:
+		var coverScore = evaluateCoverScoreAtLocation(task, point)
+		var cell = toCellCoordinates(point, task.gridSize)
+		values[cell] = coverScore
+	return _produceFloatFieldMap(task, values)
+
+static func _dispatchCreateActorProximityMapTask(task: MapTask) -> FloatFieldMap:
+	var values: Dictionary[Vector2i, float]
+	for point in task.navmeshSample.points:
+		var proximityScore = evaluateProximityScoreAtLocation(task, point)
+		var cell = toCellCoordinates(point, task.gridSize)
+		values[cell] = proximityScore
+	return _produceFloatFieldMap(task, values)
+
+static func _produceFloatFieldMap(task: MapTask, values: Dictionary[Vector2i, float]) -> FloatFieldMap:
 	## Find each point's neighbours
-	start = Time.get_ticks_usec()
 	var neighbourDist = pow(task.actor.physicalSize * 2 - 0.05, 2)
 	var neighboursOfCell: Dictionary[Vector2i, Array[Vector3]]
 	for point in task.navmeshSample.points:
@@ -115,12 +170,9 @@ static func dispatchCreateActorCoverMap(task: MapTask) -> FloatFieldMap:
 			if other.distance_squared_to(point) < neighbourDist and point != other:
 				validNeighbours.push_back(other)
 		neighboursOfCell[cell] = validNeighbours
-	elapsed = Time.get_ticks_usec() - start
-	print("- Collecting neighbours: %.2f ms" % [elapsed / 1000.0])
 
 	## Gaussian blur (kind of) the point values
-	start = Time.get_ticks_usec()
-	for i in range(3):
+	for i in range(WEIGHT_BLUR_ITERATIONS):
 		var nextValues: Dictionary[Vector2i, float]
 		for point in task.navmeshSample.points:
 			var cell = toCellCoordinates(point, task.gridSize)
@@ -133,27 +185,76 @@ static func dispatchCreateActorCoverMap(task: MapTask) -> FloatFieldMap:
 				nextValues[cell] += neighbourValue / validNeighbours.size() / 2.0
 
 		values = nextValues
-		nextValues = {}
-	elapsed = Time.get_ticks_usec() - start
-	print("- Applying blur: %.2f ms" % [elapsed / 1000.0])
 
 	## Produce a sorted array to easily access the best positions
-	start = Time.get_ticks_usec()
 	var scored: Array[FloatFieldMap.ScoredPoint] = []
 	for point in task.navmeshSample.points:
-		scored.push_back(FloatFieldMap.ScoredPoint.new(point, values[toCellCoordinates(point, task.gridSize)]))
+		var cell = toCellCoordinates(point, task.gridSize)
+		scored.push_back(FloatFieldMap.ScoredPoint.new(cell, point, values[cell]))
 	scored.sort_custom(func(a, b):
-		return a.Score > b.Score
+		return a.score > b.score
 	)
-	elapsed = Time.get_ticks_usec() - start
-	print("- Sorting points: %.2f ms" % [elapsed / 1000.0])
 
 	return FloatFieldMap.Build(values, task.navmeshSample.points, task.gridSize, scored)
 
 static func toCellCoordinates(point: Vector3, gridSize: float) -> Vector2i:
 	return Vector2i(int(floor(point.x / gridSize)), int(floor(point.z / gridSize)))
 
-static func EvaluateCoverScoreAtLocation(task: MapTask, candidate: Vector3) -> float:
+static func evaluateCoverScoreAtLocation(task: MapTask, candidate: Vector3) -> float:
+	var threshold = pow(task.actor.physicalSize * 3, 2)
+	var wallSeen = false
+	var minWallValue = INF
+	for wall in task.allWalls:
+		var adjustedCoverValue = wall.coverValue if wall.canBeUsedAsCover else 0.67
+		if adjustedCoverValue >= minWallValue:
+			continue
+		var minimalDistanceSquared = pow(wall.boundingCircleRadius + wall.boundingCircleRadius, 2)
+		if wall.globalPosition.distance_to(candidate) > minimalDistanceSquared:
+			continue
+		for segment in wall.segmentPositions:
+			if segment.distance_squared_to(candidate) < threshold:
+				wallSeen = true
+				minWallValue = adjustedCoverValue
+				break
+	if not wallSeen:
+		minWallValue = -1
+	return minWallValue * task.weightCover / 2.0
+
+static func evaluateProximityScoreAtLocation(task: MapTask, candidate: Vector3) -> float:
+	var score = 0.0
+	if task.weightDistanceToMove != 0.0:
+		var straightDistance = task.actor.globalPosition.distance_to(candidate)
+		var distanceScore = maxf(-1.0, -straightDistance / 10.0)
+		score += distanceScore * task.weightDistanceToMove * 0.5
+
+		var path = NavigationUtils.getPath(task.navigationMapRid, task.actor.globalPosition, candidate)
+		var length = NavigationUtils.getPathLength(path)
+		var walkingScore = maxf(-1.0, -length / 10.0)
+		score += walkingScore * task.weightDistanceToMove * 0.5
+
+	if task.weightProximityToAllies != 0.0 and task.allies.size() > 0:
+		var distToClosestAlly = INF
+		for ally in task.allies:
+			var dist = ally.globalPosition.distance_to(candidate)
+			if dist < distToClosestAlly:
+				distToClosestAlly = dist
+		var allyScore = maxf(0.0, 1.0 - distToClosestAlly / maxf(0.1, task.weightProximityToAlliesFalloffMeters))
+		score += allyScore * task.weightProximityToAllies
+
+	if task.weightProximityToEnemies != 0.0 and task.targets.size() > 0:
+		var closestEnemy: MapTask.ActorData
+		var distToClosestEnemy = INF
+		for enemy in task.targets:
+			var dist = enemy.globalPosition.distance_to(candidate)
+			if dist < distToClosestEnemy:
+				closestEnemy = enemy
+				distToClosestEnemy = dist
+		var enemyScore = maxf(0.0, 1.0 - distToClosestEnemy / maxf(0.1, task.weightProximityToEnemiesFalloffMeters))
+		score += enemyScore * task.weightProximityToEnemies * closestEnemy.threat
+
+	return score
+
+static func evaluateLineOfSightScoreAtLocation(task: MapTask, candidate: Vector3) -> float:
 	if task.targets.is_empty() and task.threats.is_empty():
 		return 0.0
 
@@ -163,17 +264,26 @@ static func EvaluateCoverScoreAtLocation(task: MapTask, candidate: Vector3) -> f
 	var currentShot = ShotContext.new()
 	currentShot.task = task
 	var ignoredWallsAtCandidate = PropWall.GetIgnoredWallRidsAt(task.ignorableWalls, candidate, task.actor.physicalSize)
-	for enemy in task.targets:
-		currentShot.from = candidate
-		currentShot.to = enemy.globalPosition
-		currentShot.shooter = task.actor
-		currentShot.target = enemy
-		currentShot.ignoredWalls = ignoredWallsAtCandidate
-		for skill in task.actorOffensiveSkills:
-			score += scoreSkillUsable(currentShot, skill) * task.weightHasShot
+	for skill in task.actorOffensiveSkills:
+		if task.weightHasShot == 0.0:
+			break
+
+		var skillMax = 0.0
+		for enemy in task.targets:
+			if enemy.threat <= 0.0 or skill.BehaviourUsagePreference * enemy.threat < skillMax:
+				continue
+			currentShot.from = candidate
+			currentShot.to = enemy.globalPosition
+			currentShot.shooter = task.actor
+			currentShot.target = enemy
+			currentShot.ignoredWalls = ignoredWallsAtCandidate
+			skillMax = max(scoreSkillUsable(currentShot, skill), skillMax)
+		score += skillMax * task.weightHasShot
 
 	## Enemies shooting at the agent
 	for enemy in task.threats:
+		if enemy.threat <= 0.0 or task.weightHasShot == 0.0:
+			break
 		currentShot.from = enemy.globalPosition
 		currentShot.to = candidate
 		currentShot.shooter = enemy
@@ -226,14 +336,22 @@ static func canBeShotBy(shot: ShotContext) -> bool:
 #endregion
 
 #region Helpers
+static func findAllies(actor: Actor) -> Array[Actor]:
+	var result: Array[Actor] = []
+	for other in Actor.Repository.All.List:
+		if other == actor or not is_instance_valid(other) or not other.IsAlive:
+			continue
+		if not ActorUtils.isAlliedTo(other, actor):
+			continue
+		result.push_back(other)
+	return result
+
 static func findEnemies(actor: Actor) -> Array[Actor]:
 	var result: Array[Actor] = []
 	for other in Actor.Repository.All.List:
-		if other == actor:
+		if other == actor or not is_instance_valid(other) or not other.IsAlive:
 			continue
-		if not ActorUtils.IsHostileTo(other, actor):
-			continue
-		if not other.IsAlive:
+		if not ActorUtils.isHostileTo(other, actor):
 			continue
 		result.push_back(other)
 	return result

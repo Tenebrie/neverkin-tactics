@@ -15,6 +15,7 @@ MovementSpeedPerActionPoint = 0.0
 [node name="PropWallFullCover" type="Node3D" unique_id=1850641905]
 script = ExtResource("1_4llw4")
 SegmentHealth = 9999
+CoverValue = 3
 CanBeIgnored = false
 
 [node name="PropFullCover" parent="." unique_id=842978226 instance=ExtResource("2_4llw4")]

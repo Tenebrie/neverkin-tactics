@@ -6,7 +6,7 @@ const POST_ACTION_PAUSE: float = 0.25
 
 func _ready() -> void:
 	TurnManager.Instance.FactionTurnStarted.connect(func(faction):
-		if faction != Actor.Alliance.Player:
+		if faction != Actor.Faction.Player:
 			performFactionTurn(faction)
 		else:
 			performPlayerTurnStart()
@@ -15,9 +15,9 @@ func _ready() -> void:
 func performPlayerTurnStart():
 	pass
 
-func performFactionTurn(faction: Actor.Alliance):
+func performFactionTurn(faction: Actor.Faction):
 	var actors = Actor.Repository.All.List.filter(func(actor):
-		return actor.Definition.Alliance == faction and actor.Behaviour
+		return actor.Definition.Faction == faction and actor.Behaviour
 	)
 
 	await resolveQueuedAttacks(actors)
@@ -72,7 +72,7 @@ func executeSkipAction(actor: Actor):
 	actor.actions.ConsumeActionPoints(1)
 
 func executeMoveToAction(actor: Actor, params: ActorBehaviour.TurnAction.MoveToParams):
-	var path = ActorUtils.GetPathTo(actor, params.point)
+	var path = ActorUtils.getPathTo(actor, params.point)
 	actor.actions.IssueOrder_MoveThroughPath(path)
 	await actor.actions.ActionQueue.QueueEmptied
 

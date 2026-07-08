@@ -1,6 +1,6 @@
 class_name ActorUtils
 
-static func GetPathCompletedPercentage(path: PackedVector3Array, position: Vector3) -> float:
+static func getPathCompletedPercentage(path: PackedVector3Array, position: Vector3) -> float:
 	if path.size() < 2:
 		return 1.0
 	var pos := Vector3(position.x, 0.0, position.z)
@@ -30,7 +30,7 @@ static func GetPathCompletedPercentage(path: PackedVector3Array, position: Vecto
 		lengthBeforeSegment += sqrt(lenSq)
 	return clampf(traversed / totalLength, 0.0, 1.0)
 
-static func LimitPathLength(points: PackedVector3Array, maxLength: float) -> PackedVector3Array:
+static func limitPathLength(points: PackedVector3Array, maxLength: float) -> PackedVector3Array:
 	if points.size() < 2 or maxLength <= 0.0:
 		return PackedVector3Array() if points.is_empty() else PackedVector3Array([points[0]])
 
@@ -50,17 +50,7 @@ static func LimitPathLength(points: PackedVector3Array, maxLength: float) -> Pac
 
 	return result
 
-static func GetPathLength(points: PackedVector3Array) -> float:
-	var result = 0.0
-
-	for i in range(1, points.size()):
-		var seg = points[i] - points[i - 1]
-		var seg_len = seg.length()
-		result += seg_len
-
-	return result
-
-static func GetPathTo(actor: Actor, point: Vector3) -> PackedVector3Array:
+static func getPathTo(actor: Actor, point: Vector3) -> PackedVector3Array:
 	var mapRid = actor.navigator.agent.get_navigation_map()
 	var target = NavigationServer3D.map_get_closest_point(mapRid, point)
 
@@ -72,11 +62,28 @@ static func GetPathTo(actor: Actor, point: Vector3) -> PackedVector3Array:
 		actor.navigator.agent.navigation_layers
 	)
 
-static func IsPointReachable(actor: Actor, point: Vector3, actionLimit: int) -> bool:
-	var length = GetPathLength(GetPathTo(actor, point))
+static func isPointReachable(actor: Actor, point: Vector3, actionLimit: int) -> bool:
+	var length = NavigationUtils.getPathLength(getPathTo(actor, point))
 	return length <= (actor.Definition.MovementSpeedPerActionPoint * actionLimit)
 
-static func GetMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
+static func getReachablePointsAsync(actor: Actor, points: Array[Vector3], actionLimit: int) -> Array[Vector3]:
+	var maxDistance = actor.Definition.MovementSpeedPerActionPoint * actionLimit
+	var navigationLayers = actor.navigator.agent.navigation_layers
+	var origin = actor.global_position
+	var mapRid = actor.navigator.agent.get_navigation_map()
+	var threadCount = 4
+	var result = await Promise.runManyFlat(threadCount, func(index):
+		var slice = points.slice(index, 0x7FFFFFFF, threadCount)
+		var filtered = slice.filter(func(point):
+			return NavigationUtils.isPointReachable(mapRid, origin, point, maxDistance, navigationLayers)
+		)
+		return filtered
+	)
+	var typedResult: Array[Vector3]
+	typedResult.assign(result)
+	return typedResult
+
+static func getMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
 	var camera := viewport.get_camera_3d()
 	var mouse_pos := viewport.get_mouse_position()
 	var origin := camera.project_ray_origin(mouse_pos)
@@ -92,25 +99,27 @@ static func GetMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
 		return intersection
 	return Vector3.ZERO
 
-static func GetAllianceColor(alliance: Actor.Alliance) -> Color:
-	if alliance == Actor.Alliance.Player:
+static func getFactionColor(faction: Actor.Faction) -> Color:
+	if faction == Actor.Faction.Player:
 		return Color("4deb4b")
-	elif alliance == Actor.Alliance.CityThugs:
+	elif faction == Actor.Faction.CityThugs:
 		return Color("eb4d4b")
-	elif alliance == Actor.Alliance.Algae:
+	elif faction == Actor.Faction.Algae:
 		return Color("4b4deb")
 	return Color.GRAY
 
-static func GetFactionName(faction: Actor.Alliance) -> String:
-	if faction == Actor.Alliance.Player:
+static func getFactionName(faction: Actor.Faction) -> String:
+	if faction == Actor.Faction.Player:
 		return "Player"
-	elif faction == Actor.Alliance.CityThugs:
+	elif faction == Actor.Faction.CityThugs:
 		return "Thugs"
-	elif faction == Actor.Alliance.Algae:
+	elif faction == Actor.Faction.Algae:
 		return "Bloom"
-	return "Neutral"
+	elif faction == Actor.Faction.Neutral:
+		return "Neutral"
+	return Actor.Faction.keys()[faction + 1]
 
-static func GetThreatLevelColor(threatValue: float) -> Color:
+static func getThreatLevelColor(threatValue: float) -> Color:
 	var threat = floori(threatValue)
 	match threat:
 		Actor.ThreatLevel.Harmless:
@@ -129,44 +138,49 @@ static func GetThreatLevelColor(threatValue: float) -> Color:
 			var peak = Color("ff2fd0")
 			return base.lerp(peak, clampf(overcap * 0.25 + 0.4, 0.0, 1.0))
 
-static func GetThreatLevelName(threatValue: float) -> String:
+static func getThreatLevelName(threatValue: float) -> String:
 	var threat = floori(threatValue)
 	if threat <= Actor.ThreatLevel.Existential:
 		return Actor.ThreatLevel.keys()[clampi(threat, 0, Actor.ThreatLevel.Existential)]
 	var overcap = threat - Actor.ThreatLevel.Existential
 	return Actor.ThreatLevel.keys()[Actor.ThreatLevel.Existential] + "+".repeat(overcap)
 
-static func IsTargetableBy(a: Actor, b: Actor) -> bool:
-	var aa: Actor.Alliance = a.Definition.Alliance
-	var bb: Actor.Alliance = b.Definition.Alliance
-	if aa == Actor.Alliance.Neutral or bb == Actor.Alliance.Neutral:
+static func isTargetableBy(a: Actor, b: Actor) -> bool:
+	var aa: Actor.Faction = a.Definition.Faction
+	var bb: Actor.Faction = b.Definition.Faction
+	if aa == Actor.Faction.Neutral or bb == Actor.Faction.Neutral:
 		return true
 	return aa != bb
 
-static func IsHostileTo(a: Actor, b: Actor) -> bool:
-	var aa: Actor.Alliance = a.Definition.Alliance
-	var bb: Actor.Alliance = b.Definition.Alliance
-	if aa == Actor.Alliance.Neutral or bb == Actor.Alliance.Neutral:
+static func isAlliedTo(a: Actor, b: Actor) -> bool:
+	var aa: Actor.Faction = a.Definition.Faction
+	var bb: Actor.Faction = b.Definition.Faction
+	return aa == bb
+
+static func isHostileTo(a: Actor, b: Actor) -> bool:
+	var aa: Actor.Faction = a.Definition.Faction
+	var bb: Actor.Faction = b.Definition.Faction
+	if aa == Actor.Faction.Neutral or bb == Actor.Faction.Neutral:
 		return false
 	return aa != bb
 
-static func FlatPositionOf(node: Node3D) -> Vector3:
+static func flatPositionOf(node: Node3D) -> Vector3:
 	return Vector3(node.global_position.x, 0.0, node.global_position.z)
 
-static func FlatDistanceBetween(a: Node3D, b: Node3D) -> float:
-	return FlatPositionOf(a).distance_to(FlatPositionOf(b))
+static func flatDistanceBetween(a: Node3D, b: Node3D) -> float:
+	return flatPositionOf(a).distance_to(flatPositionOf(b))
 
-static func FlatDistanceTo(node: Node3D, point: Vector3) -> float:
+static func flatDistanceTo(node: Node3D, point: Vector3) -> float:
 	point.y = 0.0
-	return FlatPositionOf(node).distance_to(point)
+	return flatPositionOf(node).distance_to(point)
 
-static func FlatDirectionTo(from: Actor, toPoint: Vector3) -> Vector3:
+static func flatDirectionTo(from: Actor, toPoint: Vector3) -> Vector3:
 	var origin = from.global_position
 	origin.y = 0.0
 	toPoint.y = 0.0
 	return origin.direction_to(toPoint)
 
-static func HasLineOfSight(actor: Actor, target: Actor) -> bool:
+static func hasLineOfSight(actor: Actor, target: Actor) -> bool:
 	var physicsField = PhysicsField.new()
 	physicsField.obstacles = PropWall.collectPhysicsFieldObstacles()
 	var query = PhysicsFieldRaycastQuery.new()

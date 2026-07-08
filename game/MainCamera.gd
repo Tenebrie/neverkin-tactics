@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 		return
 
 	var movementVector = Vector3.ZERO
-	if TurnManager.Instance.CurrentFaction == Actor.Alliance.Player:
+	if TurnManager.Instance.CurrentFaction == Actor.Faction.Player:
 		if Input.is_key_pressed(KEY_W):
 			movementVector.z -= 1
 		if Input.is_key_pressed(KEY_S):
@@ -56,5 +56,5 @@ func _process(delta: float) -> void:
 	userOffset.z = clampedZ - actorPos.z
 
 	var targetPosition = Vector3(clampedX, position.y, clampedZ)
-	var lerpSpeed = 12.0 if TurnManager.Instance.CurrentFaction == Actor.Alliance.Player else 5.0
+	var lerpSpeed = 12.0 if TurnManager.Instance.CurrentFaction == Actor.Faction.Player else 5.0
 	position = position.lerp(targetPosition, delta * lerpSpeed)

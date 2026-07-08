@@ -9,7 +9,7 @@ var CurrentActor: Actor = null
 var CurrentNPC: Actor = null
 var ActorTakingTurn: Actor:
 	get:
-		if CurrentFaction == Actor.Alliance.Player:
+		if CurrentFaction == Actor.Faction.Player:
 			return CurrentActor
 		return CurrentNPC
 var PlayerControlledActors: Array[Actor] = []
@@ -17,11 +17,11 @@ var PlayerControlledActors: Array[Actor] = []
 signal KnownActorsChanged
 signal CurrentActorChanged(actor: Actor, previous: Actor)
 signal CurrentPlayerActorChanged(actor: Actor, previous: Actor)
-signal FactionTurnStarted(faction: Actor.Alliance)
-signal FactionTurnEnded(faction: Actor.Alliance)
+signal FactionTurnStarted(faction: Actor.Faction)
+signal FactionTurnEnded(faction: Actor.Faction)
 signal TurnChanged
 
-var CurrentFaction: Actor.Alliance = Actor.Alliance.Player
+var CurrentFaction: Actor.Faction = Actor.Faction.Player
 
 func _ready():
 	await get_tree().process_frame
@@ -40,7 +40,7 @@ func _ready():
 	startTurnForCurrentFaction()
 
 func EndPlayerTurn() -> void:
-	if CurrentFaction != Actor.Alliance.Player:
+	if CurrentFaction != Actor.Faction.Player:
 		MessageLog.PrintMessage("Uncool, let them play")
 		return
 	for actor in PlayerControlledActors:
@@ -58,11 +58,11 @@ func advanceTurn():
 	var previousActor = ActorTakingTurn
 	SelectNonPlayableActor(null)
 	FactionTurnEnded.emit(CurrentFaction)
-	CurrentFaction = (CurrentFaction + 1) as Actor.Alliance
-	if CurrentFaction >= Actor.Alliance.size() - 1:
-		CurrentFaction = Actor.Alliance.Player
+	CurrentFaction = (CurrentFaction + 1) as Actor.Faction
+	if CurrentFaction >= Actor.Faction.size() - 1:
+		CurrentFaction = Actor.Faction.Player
 	var factionHasActors = Actor.Repository.All.List.any(func(a):
-		return a.Stats.Alliance == CurrentFaction and a.HasComponent(ActorBehaviour)
+		return a.Stats.Faction == CurrentFaction and a.HasComponent(ActorBehaviour)
 	)
 	if not factionHasActors:
 		advanceTurn()
@@ -72,7 +72,7 @@ func advanceTurn():
 		CurrentActorChanged.emit(ActorTakingTurn, previousActor)
 
 func startTurnForCurrentFaction():
-	MessageLog.PrintChatMessage("Turn Start: %s"%Actor.Alliance.keys()[CurrentFaction + 1])
+	MessageLog.PrintChatMessage("Turn Start: %s"%Actor.Faction.keys()[CurrentFaction + 1])
 	TurnChanged.emit()
 	FactionTurnStarted.emit(CurrentFaction)
 

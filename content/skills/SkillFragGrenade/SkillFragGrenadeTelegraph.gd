@@ -18,18 +18,18 @@ func EnableFuse(origin: Vector3):
 	fuse.Definition = TelegraphPreset.PointArea.new(Radius).WithDamageToHostiles(Damage)
 
 	ActorActions.SignalBus.ActionPointsConsumedPermanently.connect(func(actor: Actor, apConsumed):
-		if actor.Stats.Alliance != Actor.Alliance.Player or fuse.IsLeaving:
+		if actor.Stats.Faction != Actor.Faction.Player or fuse.IsLeaving:
 			return
 		AdvanceFuse(apConsumed)
 	)
 	ActorNavigator.SignalBus.ActorTraversed.connect(func(actor, dist):
-		if actor.Stats.Alliance != Actor.Alliance.Player or fuse.IsLeaving:
+		if actor.Stats.Faction != Actor.Faction.Player or fuse.IsLeaving:
 			return
 		var apSpent = dist / actor.Definition.MovementSpeedPerActionPoint
 		AdvanceFuse(apSpent)
 	)
 	TurnManager.Instance.FactionTurnEnded.connect(func(faction):
-		if fuse.IsLeaving or faction != Actor.Alliance.Player:
+		if fuse.IsLeaving or faction != Actor.Faction.Player:
 			return
 		AdvanceFuse(1000)
 	)

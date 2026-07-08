@@ -1,6 +1,8 @@
 extends ActorBehaviour
 class_name ActorBehaviourPlayerControlled
 
+@export var PortraitColor: Color
+
 ## Highest priority character is selected by default
 var CharacterPriority: int:
 	get: return Parent.Definition.RenderPriority

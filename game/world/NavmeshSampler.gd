@@ -1,6 +1,6 @@
 class_name NavmeshSampler
 
-class NavmeshSample:
+class Sample:
 	var points: Array[Vector3]
 
 class Params:
@@ -11,11 +11,20 @@ class Params:
 	var outputSpacing: float
 	var aabb: AABB
 	var maximumDistance: float
+	var includeSurfaces: bool
+	var includeEdges: bool
 
 class SignalBox:
-	signal done(sample: NavmeshSample)
+	signal done(sample: Sample)
 
-static func CollectNavmeshPoints(actor: Actor, gridSize: float, samplingDensity: float = 1.0, oversample: float = 0.0):
+static func CollectNavmeshPoints(
+		actor: Actor,
+		gridSize: float,
+		samplingDensity: float = 1.0,
+		oversample: float = 0.0,
+		includeSurfaces: bool = true,
+		includeEdges: bool = true
+	):
 	var currentMapRid = actor.navigator.agent.get_navigation_map()
 	var currentRegionRid = NavigationServer3D.map_get_closest_point_owner(currentMapRid, actor.global_position)
 	var region = NavmeshManager.Instance.GetRegion(currentRegionRid)
@@ -30,28 +39,34 @@ static func CollectNavmeshPoints(actor: Actor, gridSize: float, samplingDensity:
 	params.outputSpacing = gridSize
 	params.aabb = AABB(params.origin - boxSize, boxSize * 2)
 	params.maximumDistance = movementSpeed
+	params.includeSurfaces = includeSurfaces
+	params.includeEdges = includeEdges
 
 	var signalBox = SignalBox.new()
 	WorkerThreadPool.add_task(func():
-		var sample = CollectNavmeshPointsAsync(params)
+		var sample = RunCollectNavmeshPointsTask(params)
 		signalBox.done.emit.call_deferred(sample)
 	)
-	var data: NavmeshSample = await signalBox.done
+	var data: Sample = await signalBox.done
 	return data
 
-static func CollectNavmeshPointsAsync(params: Params) -> NavmeshSample:
+static func RunCollectNavmeshPointsTask(params: Params) -> Sample:
 	var currentMapRid = params.navigationMap
 	var currentRegionRid = NavigationServer3D.map_get_closest_point_owner(currentMapRid, params.origin)
 
 	var gridState: Dictionary[Vector2i, Vector3]
 
 	var maxDistSquared = pow(params.maximumDistance, 2)
-	var rawSurfaces = sampleSurfacePoints(currentMapRid, params.aabb, params.sampleSpacing)
-	var rawEdges = sampleEdgePoints(currentRegionRid, params.navigationMesh, params.sampleSpacing)
+	var rawSurfaces: Array[Vector3]
+	var rawEdges: Array[Vector3]
+	if params.includeSurfaces:
+		rawSurfaces = sampleSurfacePoints(currentMapRid, params.aabb, params.sampleSpacing)
+	if params.includeEdges:
+		rawEdges = sampleEdgePoints(currentRegionRid, params.navigationMesh, params.sampleSpacing)
 
-	var sample = NavmeshSample.new()
+	var sample = Sample.new()
 
-	if tryClaim(gridState, params.origin + Vector3(0, 0.01, 0), params.outputSpacing):
+	if params.includeSurfaces and tryClaim(gridState, params.origin + Vector3(0, 0.01, 0), params.outputSpacing):
 		sample.points.push_back(params.origin + Vector3(0, 0.01, 0))
 
 	for point in rawEdges:

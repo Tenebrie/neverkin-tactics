@@ -14,22 +14,20 @@ class_name ActorBehaviourWorldControlled
 @export_group("Behaviour Weights", "Weight")
 ## How valuable is cover for this actor
 @export var WeightCover: float = 1.0
-
 ## How badly this actor wants to be able to attack
 @export var WeightHasShot: float = 1.0
 ## How much does this actor try to break line of sight to threats
 @export var WeightAvoidLineOfSight: float = 1.0
-
-## How strictly this actor tries to stay at its PreferredRange from enemies.
-@export var WeightRange: float = 1.0
-## How much this actor avoids standing near allies who have already acted (AoE risk).
-@export var WeightCluster: float = 1.0
-## How reluctant this actor is to burn AP on movement.
-@export var WeightMovementCostPerAp: float = 1.0
-## How much this actor dislikes ending its turn with unspent AP.
-@export var WeightUnspentAp: float = 1.0
-## How strongly this actor is pulled toward the enemy when no shot is available from the current candidate.
-@export var WeightChasePerMeter: float = 1.0
+# How reluctant is this actor to move from their current position
+@export var WeightDistanceToMove: float = 1.0
+# How much is this actor attracted towards allies
+@export var WeightProximityToAllies: float = 1.0
+# Range at which proximity influence decays to 0
+@export var WeightProximityToAlliesFalloffMeters: float = 10.0
+# How much is this actor attracted towards enemies
+@export var WeightProximityToEnemies: float = 1.0
+# Range at which proximity influence decays to 0
+@export var WeightProximityToEnemiesFalloffMeters: float = 10.0
 
 var FocusedTarget: Actor = null
 var FocusedTargetTotal: float = 0.0
@@ -53,7 +51,7 @@ func _ready() -> void:
 	Parent.InputProvider = inputProvider
 
 func _process(_delta: float) -> void:
-	if TurnManager.Instance.CurrentFaction != Actor.Alliance.Player:
+	if TurnManager.Instance.CurrentFaction != Actor.Faction.Player:
 		return
 	Ranking = computeRanking()
 	if Ranking.is_empty():
@@ -68,7 +66,7 @@ func _process(_delta: float) -> void:
 func computeRanking() -> Array[RankedTarget]:
 	var result: Array[RankedTarget] = []
 	var targets = Actor.Repository.All.List.filter(func(actor):
-		return ActorUtils.IsHostileTo(actor, Parent)
+		return ActorUtils.isHostileTo(actor, Parent)
 	)
 	if targets.size() == 0:
 		return result

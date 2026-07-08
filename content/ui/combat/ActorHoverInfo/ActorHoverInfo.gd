@@ -1,4 +1,5 @@
 extends CanvasLayer
+class_name ActorHoverInfo
 
 @onready var panelContainer: PanelContainer = $PanelContainer
 @onready var nameLabel: Label = %NameLabel
@@ -16,6 +17,7 @@ const REASON_INDENT: int = 16
 const SECTION_HEADER_COLOR: Color = Color(0.65, 0.65, 0.72)
 
 var trackedActor: Actor
+static var GloballyVisible = true
 
 func _ready() -> void:
 	ActorHoverArea.SignalBus.MouseEntered.connect(func(actor):
@@ -29,7 +31,7 @@ func _ready() -> void:
 	)
 
 func _process(_delta: float):
-	if TurnManager.Instance.CurrentActor and TurnManager.Instance.CurrentActor.Skills.SelectedSkill != null:
+	if TurnManager.Instance.CurrentActor and TurnManager.Instance.CurrentActor.Skills.SelectedSkill != null or not GloballyVisible:
 		visible = false
 		trackedActor = null
 		return
@@ -64,19 +66,19 @@ func loadActorData(actor: Actor):
 	stylebox.corner_radius_bottom_left = 0
 	stylebox.corner_radius_bottom_right = 0
 	var tooltipOpacity = 0.95
-	match(actor.Stats.Alliance):
-		Actor.Alliance.Player: stylebox.bg_color = Color(0.01, 0.15, 0.01, tooltipOpacity)
-		Actor.Alliance.CityThugs: stylebox.bg_color = Color(0.15, 0.01, 0.01, tooltipOpacity)
-		Actor.Alliance.Algae: stylebox.bg_color = Color(0.01, 0.01, 0.15, tooltipOpacity)
+	match(actor.Stats.Faction):
+		Actor.Faction.Player: stylebox.bg_color = Color(0.01, 0.15, 0.01, tooltipOpacity)
+		Actor.Faction.CityThugs: stylebox.bg_color = Color(0.15, 0.01, 0.01, tooltipOpacity)
+		Actor.Faction.Algae: stylebox.bg_color = Color(0.01, 0.01, 0.15, tooltipOpacity)
 		_: stylebox.bg_color = Color(0.01, 0.01, 0.1, tooltipOpacity)
 	panelContainer.add_theme_stylebox_override("panel", stylebox)
 
 	nameLabel.text = actor.Definition.Name
-	factionLabel.text = ActorUtils.GetFactionName(actor.Stats.Alliance)
-	factionLabel.add_theme_color_override("font_color", ActorUtils.GetAllianceColor(actor.Stats.Alliance))
+	factionLabel.text = ActorUtils.getFactionName(actor.Stats.Faction)
+	factionLabel.add_theme_color_override("font_color", ActorUtils.getFactionColor(actor.Stats.Faction))
 	healthLabel.text = "%d / %d"%[actor.Stats.HealthCurrent, actor.Stats.HealthMaximum]
-	threatLabel.text = ActorUtils.GetThreatLevelName(actor.Stats.ThreatCurrent)
-	threatLabel.add_theme_color_override("font_color", ActorUtils.GetThreatLevelColor(actor.Stats.ThreatCurrent))
+	threatLabel.text = ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent)
+	threatLabel.add_theme_color_override("font_color", ActorUtils.getThreatLevelColor(actor.Stats.ThreatCurrent))
 	movementSpeedLabel.text = "%.1f m/a" % actor.Definition.MovementSpeedPerActionPoint
 
 	renderSectionVisibility()
@@ -131,7 +133,7 @@ func addTargetRow(actor: Actor, total: float, behaviour: ActorBehaviourWorldCont
 	row.add_child(rowIndexLabel)
 	var rowNameLabel = Label.new()
 	rowNameLabel.text = actor.Definition.Name
-	rowNameLabel.add_theme_color_override("font_color", ActorUtils.GetAllianceColor(actor.Stats.Alliance))
+	rowNameLabel.add_theme_color_override("font_color", ActorUtils.getFactionColor(actor.Stats.Faction))
 	row.add_child(rowNameLabel)
 	if behaviour.FocusedTarget == actor:
 		var icon = TextureRect.new()

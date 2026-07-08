@@ -38,7 +38,7 @@ script = ExtResource("12_kxqg4")
 Name = "Godot"
 TokenTexture = ExtResource("8_6pl24")
 AvatarTexture = ExtResource("8_6pl24")
-Alliance = 7
+Faction = 7
 HealthMaximum = 4
 ActionPointsMax = 2
 MovementSpeedPerActionPoint = 5.0
@@ -50,7 +50,7 @@ script = ExtResource("12_kxqg4")
 Name = "Godot"
 TokenTexture = ExtResource("8_6pl24")
 AvatarTexture = ExtResource("8_6pl24")
-Alliance = 6
+Faction = 6
 HealthMaximum = 4
 ActionPointsMax = 2
 MovementSpeedPerActionPoint = 5.0
@@ -62,7 +62,7 @@ script = ExtResource("12_kxqg4")
 Name = "Godot"
 TokenTexture = ExtResource("8_6pl24")
 AvatarTexture = ExtResource("8_6pl24")
-Alliance = 5
+Faction = 5
 HealthMaximum = 4
 ActionPointsMax = 2
 MovementSpeedPerActionPoint = 5.0
@@ -74,7 +74,7 @@ script = ExtResource("12_kxqg4")
 Name = "Godot"
 TokenTexture = ExtResource("8_6pl24")
 AvatarTexture = ExtResource("8_6pl24")
-Alliance = 4
+Faction = 4
 HealthMaximum = 4
 ActionPointsMax = 2
 MovementSpeedPerActionPoint = 5.0
@@ -113,7 +113,7 @@ directional_shadow_max_distance = 25.0
 script = SubResource("GDScript_6ytau")
 
 [node name="Ivera" parent="." unique_id=197562730 instance=ExtResource("2_xy3my")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.50763, 0.00049996376, 3.850049)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.50763, 0.00049996376, -1.649951)
 
 [node name="Kamilla" parent="." unique_id=220179378 instance=ExtResource("6_xs4ih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.475344, 0.00049996376, 4.286884)
@@ -126,7 +126,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2313223, 0.0005002022, -3.7
 Definition = SubResource("Resource_w22tq")
 
 [node name="AlgaeHunter2" parent="." unique_id=807014692 instance=ExtResource("6_6ytau")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.535082, 0.0005002022, 4.008871)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5752037, 0.0005002022, -5.8502407)
 
 [node name="Godette2" parent="." unique_id=1227995685 instance=ExtResource("5_7s5hy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.9794645, 0.0005002022, -1.0088315)
@@ -137,7 +137,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7794647, 0.0005002022, 3.49
 Definition = SubResource("Resource_6pl24")
 
 [node name="Godette4" parent="." unique_id=279726060 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1205354, 0.0005002022, -0.5088315)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35046375, 0.0005002022, -4.2179813)
 
 [node name="Godette5" parent="." unique_id=752934444 instance=ExtResource("5_7s5hy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7205354, 0.0005002022, 3.9911685)

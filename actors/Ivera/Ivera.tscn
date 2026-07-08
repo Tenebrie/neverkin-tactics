@@ -28,3 +28,4 @@ shape = SubResource("CylinderShape3D_ijibt")
 
 [node name="PlayerController" type="Node" parent="." index="10" unique_id=80011005]
 script = ExtResource("4_ijibt")
+PortraitColor = Color(0.165, 0.55, 0.22274996, 1)

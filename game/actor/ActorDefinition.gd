@@ -10,7 +10,7 @@ class_name ActorDefinition
 
 @export var TokenTexture: Texture2D
 @export var AvatarTexture: Texture2D
-@export var Alliance: Actor.Alliance = Actor.Alliance.Neutral
+@export var Faction: Actor.Faction = Actor.Faction.Neutral
 
 @export var HealthMaximum: int = 3
 @export var HealthHumanityThreshold: int = 0

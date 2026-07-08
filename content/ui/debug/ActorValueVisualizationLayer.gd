@@ -4,7 +4,7 @@ var lastSeenActor: Actor
 var isRendering = false
 
 func getMapActivationMessage() -> String:
-	return "VisualizationLayer: Actor cover value"
+	return "VisualizationLayer: Actor total value"
 
 func updateRender():
 	if isRendering or not visible:
@@ -29,7 +29,7 @@ func updateRender():
 
 	isRendering = true
 	await NavmeshManager.Instance.rebakeNavmesh(actor)
-	var coverMap = await BehaviourUtils.createActorCoverMap(actor)
+	var coverMap = await BehaviourUtils.createActorValueMap(actor)
 	var reachablePoints = await ActorUtils.getReachablePointsAsync(actor, coverMap.points, 1)
 
 	for point in reachablePoints:

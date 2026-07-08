@@ -111,7 +111,7 @@ class Repository:
 			List.remove_at(index)
 #endregion
 
-enum Alliance {
+enum Faction {
 	None = -1,
 
 	Player = 0,

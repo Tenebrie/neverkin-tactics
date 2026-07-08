@@ -43,4 +43,9 @@ anchor_bottom = 0.0
 grow_horizontal = 1
 grow_vertical = 1
 
-[node name="ActorHoverInfo" parent="." unique_id=388092998 instance=ExtResource("6_h0psq")]
+[node name="ActorHoverInfoContainer" type="Control" parent="." unique_id=1548154319]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ActorHoverInfo" parent="ActorHoverInfoContainer" unique_id=388092998 instance=ExtResource("6_h0psq")]

@@ -7,7 +7,7 @@ class_name Prop
 func _ready() -> void:
 	Definition = ActorDefinition.new()
 	Definition.Name = Name
-	Definition.Alliance = Alliance.Neutral
+	Definition.Faction = Faction.Neutral
 	Definition.PhysicalSize = 0.1
 	Definition.MovementSpeedPerActionPoint = 0
 	Definition.PerceivedThreat = ThreatLevel.Harmless

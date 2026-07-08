@@ -24,14 +24,16 @@ TurnManagerInstance="*uid://dq3q74togyfy3"
 GameInstance="*uid://dge7jpvygd3jf"
 MessageLogInstance="*uid://bnowp6ttp38gb"
 NPCManagerInstance="*uid://b75fcywcxv6fi"
-CoverVisualizationLayer="*uid://c4kmoemm6iqu1"
-PhysicsFieldGdVisualizationLayer="*uid://b0qkcmclxw5ad"
 PhysicsFieldVisualizationLayer="*uid://dmgwfsk6pj2ai"
-ReachableVisualizationLayer="*uid://cd5xxxahr1i53"
+ActorValueVisualizationLayer="*uid://xfb867ura4t"
+CoverVisualizationLayer="*uid://cd5xxxahr1i53"
+LineOfSightVisualizationLayer="*uid://c4kmoemm6iqu1"
+ProximityVisualizationLayer="*uid://blafccyolmd7y"
 
 [debug]
 
 gdscript/type_inference/infer_type_from_assignment=true
+gdscript/warnings/shadowed_variable=0
 shapes/navigation/3d/enable_edge_lines=false
 
 [display]

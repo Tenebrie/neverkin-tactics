@@ -1,4 +1,4 @@
-extends Control
+@abstract extends Control
 class_name VisualizationLayer
 
 func _ready():
@@ -19,11 +19,34 @@ func updateRender():
 			textCellPool.push_back(child)
 
 func _unhandled_input(inputEvent: InputEvent) -> void:
-	if inputEvent is InputEventKey keyEvent and inputEvent.is_pressed() and not inputEvent.is_echo():
+	if inputEvent is InputEventKey keyEvent and inputEvent.is_pressed() and not inputEvent.is_echo() and inputEvent.ctrl_pressed:
+		if keyEvent.keycode == KEY_KP_ADD:
+			handleMapWeightBlurChange(1)
+			return
+		if keyEvent.keycode == KEY_KP_SUBTRACT:
+			handleMapWeightBlurChange(-1)
+			return
 		var code = keyEvent.keycode - KEY_KP_0
 		if code < 0 or code > 9:
 			return
 		enableLayer(code)
+
+func handleMapWeightBlurChange(direction: int):
+	var index = getOwnLayerIndex()
+	if index != 0:
+		return
+	BehaviourUtils.WEIGHT_BLUR_ITERATIONS = maxi(BehaviourUtils.WEIGHT_BLUR_ITERATIONS + direction, 0)
+	MessageLog.PrintMessage("AI map blur iterations: %d"%BehaviourUtils.WEIGHT_BLUR_ITERATIONS)
+
+func getOwnLayerIndex() -> int:
+	var allLayers = get_tree().root.get_children().filter(func(node):
+		return node is VisualizationLayer
+	)
+	for i in allLayers.size():
+		var layer = allLayers[i] as VisualizationLayer
+		if layer == self:
+			return i
+	return -1
 
 func enableLayer(index: int) -> void:
 	var allLayers = get_tree().root.get_children().filter(func(node):
@@ -37,16 +60,20 @@ func enableLayer(index: int) -> void:
 		if index == i and not visible:
 			updateRender()
 			show()
+			MessageLog.PrintMessage(getMapActivationMessage())
 		else:
 			hide()
 
 var textCellPool: Array[VisualizationLayerTextCell]
 
+@abstract func getMapActivationMessage() -> String
+
 func setPointValue(value: float, worldPoint: Vector3) -> VisualizationLayerTextCell:
 	var text = "%.2f"%value if value < 0 else "+%.2f"%value
 	var cell = setPointText(text, worldPoint)
-	#var cell = setPointText("", worldPoint)
 	cell.color = Color(clampf(-value / 3.0, 0, 1), clampf(value / 3.0, 0, 1), 0.0)
+	cell.updatePosition()
+	cell.setOutlineColor(Color.GREEN if (value > 0) else Color.RED)
 	return cell
 
 func setPointText(value: String, worldPoint: Vector3) -> VisualizationLayerTextCell:

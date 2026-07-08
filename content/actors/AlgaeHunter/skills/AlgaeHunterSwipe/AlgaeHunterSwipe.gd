@@ -9,7 +9,7 @@ func _ready() -> void:
 	Definition = preload("./AlgaeHunterSwipe.tres").duplicate()
 	damageTelegraph.HealthThreat = Damage
 	damageTelegraph.TargetFilters.push_back(func(actor: Actor) -> bool:
-		return ActorUtils.IsHostileTo(actor, Parent)
+		return ActorUtils.isHostileTo(actor, Parent)
 	)
 
 	Definition.Telegraphs = [
