@@ -8,7 +8,7 @@ var SelectedSkill: Skill = null:
 		var previous = SelectedSkill
 		SelectedSkill = v
 		SelectedSkillChanged.emit(v, previous)
-		Actor.SignalBus.ActorSelectedSkillChanged.emit(Parent, v, previous)
+		SignalBus.SelectedSkillChanged.emit(Parent, v, previous)
 
 @onready var commonSkillGroup: ControlGroup = ControlGroup.new()
 @onready var activeSkillGroup: ControlGroup = ControlGroup.new()
@@ -132,3 +132,7 @@ class ControlGroup extends Node3D:
 					return child
 			childrenSeen += 1
 		return null
+
+static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
+class SignalBusImplementation extends NodeSignalBus:
+	signal SelectedSkillChanged(actor: Actor, current: Skill, previous: Skill)

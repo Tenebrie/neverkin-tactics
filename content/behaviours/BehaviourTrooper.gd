@@ -10,6 +10,22 @@ const HIGHLIGHT_THRESHOLD: float = 1.0
 @export var WEIGHT_PROXIMITY: float = 1.0
 @export var WEIGHT_GRUDGE: float = 1.0
 
+var Grudges: Dictionary[Actor, float] = {}
+
+func _parentReady() -> void:
+	super._parentReady()
+	Parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
+		RecordGrudge(damage.SourceActor, damage.Value)
+	)
+
+func RecordGrudge(against: Actor, swings: float) -> void:
+	if against == null:
+		return
+	Grudges[against] = Grudges.get(against, 0.0) + swings
+
+func ForgiveGrudge(against: Actor) -> void:
+	Grudges.erase(against)
+
 func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 	var effectiveMax = maxi(actor.Stats.HealthMaximum - actor.Stats.HealthHumanityThreshold, 1)
 	var effectiveCurrent = clampi(actor.Stats.HealthCurrent - actor.Stats.HealthHumanityThreshold, 0, effectiveMax)

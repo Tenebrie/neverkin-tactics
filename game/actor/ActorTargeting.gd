@@ -36,7 +36,7 @@ func _parentReady() -> void:
 	)
 
 func _process(_delta: float) -> void:
-	if not Parent.IsPlayerControlled:
+	if TurnManager.Instance.activeActor != Parent:
 		return
 
 	## Show committed path (updated per frame)
@@ -60,7 +60,7 @@ func _process(_delta: float) -> void:
 		PredictedActionPointCost = shownApCount
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not Parent.IsPlayerControlled:
+	if TurnManager.Instance.activeActor != Parent:
 		return
 
 	if event is not InputEventMouseButton:

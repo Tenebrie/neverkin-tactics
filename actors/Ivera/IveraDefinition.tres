@@ -10,13 +10,14 @@
 [resource]
 script = ExtResource("1_n1w0k")
 Name = "Ivera"
-TokenTexture = ExtResource("1_2wdr7")
-AvatarTexture = ExtResource("1_4qsbl")
 Faction = 0
+pronouns = 1
+TokenTexture = ExtResource("1_2wdr7")
+RenderPriority = 10
+AvatarTexture = ExtResource("1_4qsbl")
 HealthMaximum = 8
 HealthHumanityThreshold = 3
 ActionPointsMax = 4
 MovementSpeedPerActionPoint = 5.5
-RenderPriority = 10
 Skills = Array[GDScript]([ExtResource("2_5mj32"), ExtResource("3_bh363"), null, null, null, null, null, ExtResource("3_vtik3")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

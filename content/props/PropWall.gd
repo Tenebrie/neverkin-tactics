@@ -35,7 +35,7 @@ func _ready():
 		Repository.Register(self)
 	if CanBeIgnored and not Engine.is_editor_hint():
 		TurnManager.Instance.CurrentActorChanged.connect(checkDistances)
-		Actor.SignalBus.ActorSelectedSkillChanged.connect(checkDistances)
+		SkillController.SignalBus.SelectedSkillChanged.connect(checkDistances)
 
 func _exit_tree() -> void:
 	if not Engine.is_editor_hint():

@@ -2,59 +2,9 @@
 class_name Actor
 extends CharacterBody3D
 
-signal DefinitionChanged(def: ActorDefinition)
-@export var Definition: ActorDefinition:
-	set(v):
-		Definition = v
-		if isReady:
-			loadDefinition()
-		DefinitionChanged.emit(v)
-		if not Engine.is_editor_hint():
-			SignalBus.ActorDefinitionChanged.emit(self)
-
 @onready var isReady = true
 
-@onready var Buffs: ActorBuffs = GetComponent(ActorBuffs)
-@onready var Stats: ActorStats = GetComponent(ActorStats)
-@onready var actions: ActorActions = GetComponent(ActorActions)
-@onready var navigator: ActorNavigator = GetComponent(ActorNavigator)
-@onready var targeting: ActorTargeting = GetComponent(ActorTargeting)
-@onready var Skills: SkillController = GetComponent(SkillController)
-@onready var Behaviour: ActorBehaviour = GetComponent(ActorBehaviour)
-@onready var InputProvider: ActorInputProvider = GetComponent(ActorInputProvider)
-@onready var Telegraphs: ActorTelegraphs = GetComponent(ActorTelegraphs)
-
-var PhysicalSize:
-	get:
-		return Definition.PhysicalSize
-
-## This actor is currently selected and being controlled by the player
-var IsPlayerControlled: bool:
-	get:
-		return TurnManager.Instance.activePlayerActor == self
-
-var isAlive: bool:
-	get:
-		return Stats.HealthCurrent > 0 and not isDead
-var isDead = false
-
-func GetComponent(type: GDScript[Component]) -> Component:
-	for child in get_children():
-		if Utils.IsNodeDescendantOf(child, type):
-			return child
-	return null
-
-func HasComponent(type: GDScript[Component]) -> bool:
-	for child in get_children():
-		if Utils.IsNodeDescendantOf(child, type):
-			return true
-	return false
-
-func RemoveComponent(type: GDScript[Component]):
-	for child in get_children():
-		if Utils.IsNodeDescendantOf(child, type):
-			remove_child(child)
-
+#region Engine Events
 func _ready() -> void:
 	if Definition != null:
 		loadDefinition()
@@ -72,6 +22,62 @@ func _ready() -> void:
 				$TokenMeshInstance3D.position.y = -0.02
 	)
 
+func _exit_tree() -> void:
+	if not Engine.is_editor_hint():
+		Repository.All.Unregister(self)
+		Repository.Alive.Unregister(self)
+		Repository.Hovered.Unregister(self)
+#endregion
+
+#region Proxy Getters
+var PhysicalSize:
+	get: return Definition.PhysicalSize
+var pronouns:
+	get:
+		return Pronouns.FromPreset(Definition.pronouns)
+#endregion
+
+#region Components
+@onready var Buffs: ActorBuffs = GetComponent(ActorBuffs)
+@onready var Stats: ActorStats = GetComponent(ActorStats)
+@onready var actions: ActorActions = GetComponent(ActorActions)
+@onready var navigator: ActorNavigator = GetComponent(ActorNavigator)
+@onready var targeting: ActorTargeting = GetComponent(ActorTargeting)
+@onready var Skills: SkillController = GetComponent(SkillController)
+@onready var Behaviour: ActorBehaviour = GetComponent(ActorBehaviour)
+@onready var InputProvider: ActorInputProvider = GetComponent(ActorInputProvider)
+@onready var Telegraphs: ActorTelegraphs = GetComponent(ActorTelegraphs)
+
+func GetComponent(type: GDScript[Component]) -> Component:
+	for child in get_children():
+		if Utils.IsNodeDescendantOf(child, type):
+			return child
+	return null
+
+func HasComponent(type: GDScript[Component]) -> bool:
+	for child in get_children():
+		if Utils.IsNodeDescendantOf(child, type):
+			return true
+	return false
+
+func RemoveComponent(type: GDScript[Component]):
+	for child in get_children():
+		if Utils.IsNodeDescendantOf(child, type):
+			remove_child(child)
+#endregion
+
+#region Definition
+signal DefinitionChanged(def: ActorDefinition)
+
+@export var Definition: ActorDefinition:
+	set(v):
+		Definition = v
+		if isReady:
+			loadDefinition()
+		DefinitionChanged.emit(v)
+		if not Engine.is_editor_hint():
+			SignalBus.ActorDefinitionChanged.emit(self)
+
 func loadDefinition():
 	if Definition.TokenTexture:
 		var material: StandardMaterial3D = $TokenMeshInstance3D.material_override
@@ -82,12 +88,15 @@ func loadDefinition():
 		tween.tween_property($CollisionShape3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
 		$TokenMeshInstance3D.position.x = Definition.TokenOffset.x
 		$TokenMeshInstance3D.position.z = Definition.TokenOffset.y
+#endregion
 
-func _exit_tree() -> void:
-	if not Engine.is_editor_hint():
-		Repository.All.Unregister(self)
-		Repository.Alive.Unregister(self)
-		Repository.Hovered.Unregister(self)
+#region Lifecycle (Game)
+signal destroyed
+
+var isAlive: bool:
+	get:
+		return Stats.HealthCurrent > 0 and not isDead
+var isDead = false
 
 func Destroy() -> void:
 	isDead = true
@@ -106,6 +115,7 @@ func fadeOut(duration: float = 0.3):
 	if has_node("ActorOverheadStats"):
 		var stats: ActorOverheadStats = $ActorOverheadStats
 		stats.fadeOut()
+#endregion
 
 #region Repository
 class Repository:
@@ -129,6 +139,7 @@ class Repository:
 			List.remove_at(index)
 #endregion
 
+#region Enums
 enum Faction {
 	None = -1,
 
@@ -155,11 +166,9 @@ enum ThreatLevel {
 	## Immediate and undeniable existential crisis
 	Existential,
 }
-
-signal destroyed()
+#endregion
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 class SignalBusImplementation extends NodeSignalBus:
 	signal ActorDefinitionChanged(actor: Actor)
 	signal ActorDestroyed(actor: Actor)
-	signal ActorSelectedSkillChanged(actor: Actor, current: Skill, previous: Skill)

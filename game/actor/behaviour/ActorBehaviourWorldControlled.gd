@@ -38,11 +38,16 @@ var FocusedTargetTotal: float = 0.0
 var FocusedTargetReasons: Dictionary[String, float] = {}
 
 var Ranking: Array[RankedTarget] = []
+var Grudges: Dictionary[Array, SkillGrudge] = {}
 
 class ExplainedThreatValue:
 	var Total: int = 0
 	var TotalPrecise: float = 0.0
 	var Highlights: Dictionary[String, float] = {}
+
+class SkillGrudge:
+	var value: float
+	var message: String
 
 class RankedTarget:
 	var Target: Actor
@@ -56,6 +61,36 @@ func _ready() -> void:
 	Actor.SignalBus.ActorDestroyed.connect(func():
 		computeRanking()
 	)
+
+func _parentReady() -> void:
+	super._parentReady()
+	Parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
+		RecordGrudge(damage)
+	)
+
+func RecordGrudge(damage: DamageInstance) -> void:
+	if not damage.SourceActor or not damage.SourceSkill:
+		return
+	var grudge = SkillGrudge.new()
+
+	var key = [damage.SourceActor.Definition, damage.SourceSkill.Definition]
+	if Grudges.has(key):
+		Grudges[key].value += damage.Value
+		return
+
+	var grudge = SkillGrudge.new()
+	grudge.value = damage.Value
+	grudge.message =
+	grudge.sourceActor = damage.SourceActor.Definition
+	grudge.sourceSkill = damage.SourceSkill.Definition
+	Grudges[key]
+
+	grudge.value = Grudges.get(source, ActorGrudge.new()).value + swings
+	grudge.source = source
+	Grudges[source] = grudge
+
+func ForgiveGrudge(against: Actor) -> void:
+	Grudges.erase(against)
 
 func _process(_delta: float) -> void:
 	if TurnManager.Instance.activeFaction != Actor.Faction.Player:

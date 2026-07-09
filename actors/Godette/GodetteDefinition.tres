@@ -9,9 +9,9 @@
 [resource]
 script = ExtResource("4_6ui04")
 Name = "Godot"
+Faction = 2
 TokenTexture = ExtResource("1_bjopc")
 AvatarTexture = ExtResource("1_bjopc")
-Faction = 2
 HealthMaximum = 4
 ActionPointsMax = 2
 MovementSpeedPerActionPoint = 5.0

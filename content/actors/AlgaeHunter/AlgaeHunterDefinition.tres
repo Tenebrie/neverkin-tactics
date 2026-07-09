@@ -7,8 +7,9 @@
 [resource]
 script = ExtResource("1_c536d")
 Name = "Algae Hunter"
-TokenTexture = ExtResource("1_lfkse")
 Faction = 3
+pronouns = 3
+TokenTexture = ExtResource("1_lfkse")
 HealthMaximum = 10
 HealthHumanityThreshold = 7
 ActionPointsMax = 4
