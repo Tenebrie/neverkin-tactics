@@ -40,6 +40,8 @@ func onPortraitClick() -> void:
 		TrackedSkill.Controller.Select(null)
 	elif TrackedSkill.Parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
 		MessageLog.PrintMessage("Not enough movement")
+	elif TrackedSkill.Parent.isDead:
+		MessageLog.PrintMessage("%s is incapacitated!"%TrackedSkill.Parent.Definition.Name)
 	elif TrackedSkill.Parent.actions.ActionPointsAvailable >= TrackedSkill.ActionPointCost:
 		TrackedSkill.Controller.Select(TrackedSkill)
 	else:
@@ -95,6 +97,8 @@ func updateModulate() -> void:
 		if TrackedSkill.Parent.actions.ActionPointsAvailable < TrackedSkill.ActionPointCost:
 			base = Color(0.4, 0.4, 0.4)
 		if TrackedSkill.Parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
+			base = Color(0.4, 0.4, 0.4)
+		if TrackedSkill.Parent.isDead:
 			base = Color(0.4, 0.4, 0.4)
 
 	iconButton.self_modulate = base

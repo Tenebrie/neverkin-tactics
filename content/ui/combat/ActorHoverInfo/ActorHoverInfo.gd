@@ -21,7 +21,7 @@ static var GloballyVisible = true
 
 func _ready() -> void:
 	ActorHoverArea.SignalBus.MouseEntered.connect(func(actor):
-		if TurnManager.Instance.CurrentActor and TurnManager.Instance.CurrentActor.Skills.SelectedSkill != null:
+		if TurnManager.Instance.activePlayerActor and TurnManager.Instance.activePlayerActor.Skills.SelectedSkill != null:
 			return
 		loadActorData(actor)
 	)
@@ -31,7 +31,7 @@ func _ready() -> void:
 	)
 
 func _process(_delta: float):
-	if TurnManager.Instance.CurrentActor and TurnManager.Instance.CurrentActor.Skills.SelectedSkill != null or not GloballyVisible:
+	if TurnManager.Instance.activePlayerActor and TurnManager.Instance.activePlayerActor.Skills.SelectedSkill != null or not GloballyVisible:
 		visible = false
 		trackedActor = null
 		return

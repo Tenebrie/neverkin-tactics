@@ -17,11 +17,11 @@ func updateRender():
 	_currentField.obstacles = PropWall.collectPhysicsFieldObstacles()
 
 func _process(_delta: float) -> void:
-	if not _currentField or not visible or not TurnManager.Instance.CurrentActor:
+	if not _currentField or not visible or not TurnManager.Instance.activePlayerActor:
 		return
 	queue_redraw()
 
-	var actor = TurnManager.Instance.CurrentActor
+	var actor = TurnManager.Instance.activePlayerActor
 	var query = PhysicsFieldRaycastQuery.new()
 	var target = ActorUtils.getMouseWorldPlanePosition(get_viewport())
 	query.origin = actor.global_position

@@ -4,7 +4,7 @@ class_name SkillBar
 @onready var commonBarContainer: Control = $%CommonBarContainer
 @onready var mainBarContainer: Control = $%MainBarContainer
 
-@onready var CurrentActor = SignalTracker.new(
+@onready var activePlayerActor = SignalTracker.new(
 	func(actor: Actor): return actor.Skills.SkillsChanged,
 	rebuildItems
 )
@@ -13,7 +13,7 @@ func _ready() -> void:
 	TurnManager.Instance.CurrentPlayerActorChanged.connect(connectSignals)
 
 func connectSignals(actor: Actor) -> void:
-	CurrentActor.Track(actor)
+	activePlayerActor.Track(actor)
 	rebuildItems()
 
 func rebuildItems() -> void:
@@ -22,7 +22,7 @@ func rebuildItems() -> void:
 	for child in mainBarContainer.get_children():
 		child.queue_free()
 
-	var controller = TurnManager.Instance.CurrentActor.Skills
+	var controller = TurnManager.Instance.activePlayerActor.Skills
 	for i in range(8):
 		var newItem = Asset.Instantiate(SkillBarItem)
 		var skill = controller.commonSkillGroup.GetByIndex(i)

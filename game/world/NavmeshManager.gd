@@ -21,11 +21,11 @@ func _enter_tree():
 		rebakeNavmesh(actor, [])
 	)
 	Actor.SignalBus.ActorDestroyed.connect(func(actor: Actor):
-		rebakeNavmesh(TurnManager.Instance.ActorTakingTurn, [actor])
+		rebakeNavmesh(TurnManager.Instance.activeActor, [actor])
 	)
 	TurnManager.Instance.FactionTurnStarted.connect(func():
-		if is_instance_valid(TurnManager.Instance.ActorTakingTurn):
-			rebakeNavmesh(TurnManager.Instance.ActorTakingTurn, [])
+		if is_instance_valid(TurnManager.Instance.activeActor):
+			rebakeNavmesh(TurnManager.Instance.activeActor, [])
 	)
 
 func WaitUntilReady():
@@ -33,7 +33,7 @@ func WaitUntilReady():
 		await BakeCompleted
 
 func rebakeNavmeshForCurrentActor():
-	return await rebakeNavmesh(TurnManager.Instance.ActorTakingTurn)
+	return await rebakeNavmesh(TurnManager.Instance.activeActor)
 
 func rebakeNavmesh(actor: Actor, exceptions: Array[Actor] = []):
 	if actor == null:
@@ -79,7 +79,7 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 		var source = NavigationMeshSourceGeometryData3D.new()
 		NavigationServer3D.parse_source_geometry_data(navMesh, source, region)
 		for c: Actor in characters:
-			if c.isDestroyed or allExceptions.has(c):
+			if c.isDead or allExceptions.has(c):
 				continue
 			var col: CollisionShape3D = c.get_node_or_null("CollisionShape3D")
 			if col and col.shape:

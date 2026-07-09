@@ -23,6 +23,8 @@ class MapTask:
 	var weightProximityToAlliesFalloffMeters = 10.0
 	var weightProximityToEnemies = 1.0
 	var weightProximityToEnemiesFalloffMeters = 10.0
+	var weightOutOfFight = 1.0
+	var weightOutOfFightMinDistance = 10.0
 
 	var actor: ActorData
 	var allies: Array[ActorData]
@@ -56,6 +58,8 @@ class MapTask:
 			task.weightProximityToAlliesFalloffMeters = behaviour.WeightProximityToAlliesFalloffMeters
 			task.weightProximityToEnemies = behaviour.WeightProximityToEnemies
 			task.weightProximityToEnemiesFalloffMeters = behaviour.WeightProximityToEnemiesFalloffMeters
+			task.weightOutOfFight = behaviour.WeightOutOfFight
+			task.weightOutOfFightMinDistance = behaviour.WeightOutOfFightMinDistance
 
 		## Friendlies to chill close to
 		var allies = BehaviourUtils.findAllies(actor)
@@ -159,7 +163,7 @@ static func _dispatchCreateActorProximityMapTask(task: MapTask) -> FloatFieldMap
 
 static func _produceFloatFieldMap(task: MapTask, values: Dictionary[Vector2i, float]) -> FloatFieldMap:
 	var neighbourDist = task.actor.physicalSize * 2 - 0.05
-	var neighbourDistSquared = pow(task.actor.physicalSize * 2 - 0.05, 2)
+	var neighbourDistSquared = neighbourDist ** 2
 	var neighboursOfCell: Dictionary[Vector2i, Array[Vector3]]
 	var weightsOfNeighbours: Dictionary[Vector2i, Array[float]]
 	for point in task.navmeshSample.points:
@@ -181,16 +185,6 @@ static func _produceFloatFieldMap(task: MapTask, values: Dictionary[Vector2i, fl
 	## Gaussian blur (kind of) the point values
 	for y in range(WEIGHT_BLUR_ITERATIONS):
 		var nextValues: Dictionary[Vector2i, float]
-		#for point in task.navmeshSample.points:
-			#var cell = toCellCoordinates(point, task.gridSize)
-			#if not values.has(cell):
-				#continue
-			#nextValues[cell] = values[cell] * 0.5
-			#var validNeighbours = neighboursOfCell[cell]
-			#for neighbour in validNeighbours:
-				#var neighbourValue = values[toCellCoordinates(neighbour, task.gridSize)]
-				#nextValues[cell] += neighbourValue / validNeighbours.size() / 2.0
-
 		for point in task.navmeshSample.points:
 			var cell = toCellCoordinates(point, task.gridSize)
 			if not values.has(cell):
@@ -198,8 +192,8 @@ static func _produceFloatFieldMap(task: MapTask, values: Dictionary[Vector2i, fl
 			var validNeighbours = neighboursOfCell[cell]
 			var neighbourWeights = weightsOfNeighbours[cell]
 
-			var weightSum = 1.0  # self weight = 1.0
-			var acc = values[cell]  # self contribution
+			var weightSum = 1.0
+			var acc = values[cell]
 			for i in range(validNeighbours.size()):
 				var neighbourValue = values[toCellCoordinates(validNeighbours[i], task.gridSize)]
 				var w = neighbourWeights[i]
@@ -264,7 +258,7 @@ static func evaluateProximityScoreAtLocation(task: MapTask, candidate: Vector3) 
 		var allyScore = maxf(0.0, 1.0 - distToClosestAlly / maxf(0.1, task.weightProximityToAlliesFalloffMeters))
 		score += allyScore * task.weightProximityToAllies
 
-	if task.weightProximityToEnemies != 0.0 and task.targets.size() > 0:
+	if (task.weightProximityToEnemies != 0.0 or task.weightOutOfFight != 0.0) and task.targets.size() > 0:
 		var closestEnemy: MapTask.ActorData
 		var distToClosestEnemy = INF
 		for enemy in task.targets:
@@ -274,6 +268,9 @@ static func evaluateProximityScoreAtLocation(task: MapTask, candidate: Vector3) 
 				distToClosestEnemy = dist
 		var enemyScore = maxf(0.0, 1.0 - distToClosestEnemy / maxf(0.1, task.weightProximityToEnemiesFalloffMeters))
 		score += enemyScore * task.weightProximityToEnemies * closestEnemy.threat
+
+		var outOfFightScore = maxf(0.0, (distToClosestEnemy - task.weightOutOfFightMinDistance) / 5.0)
+		score -= outOfFightScore * task.weightOutOfFight
 
 	return score
 
@@ -348,21 +345,42 @@ static func hasLineOfSight(shot: ShotContext) -> bool:
 	return not result.has_hits
 
 static func canBeShotBy(shot: ShotContext) -> bool:
-	var query = PhysicsFieldRaycastQuery.new()
-	query.width = BEAM_WIDTH
-	query.origin = shot.from
-	query.target = shot.to
-	query.collision_mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
-	query.exclude = shot.ignoredWalls
-	var result = shot.task.physicsField.raycast_query(query)
-	return not result.has_hits
+	var mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
+	var center = shot.to
+	var radius = shot.target.physicalSize
+
+	var targets: Array[Vector3] = [center]
+
+	var outlineCount = 4
+	for i in outlineCount:
+		var angle = TAU * float(i) / float(outlineCount)
+		targets.append(center + Vector3(cos(angle) * radius, 0.0, sin(angle) * radius))
+
+	var midCount = 3
+	var midRadius = radius * 0.5
+	for i in midCount:
+		var angle = TAU * float(i) / float(midCount)
+		targets.append(center + Vector3(cos(angle) * midRadius, 0.0, sin(angle) * midRadius))
+
+	for point in targets:
+		var query = PhysicsFieldRaycastQuery.new()
+		query.width = BEAM_WIDTH
+		query.origin = shot.from
+		query.target = point
+		query.collision_mask = mask
+		query.exclude = shot.ignoredWalls
+		var result = shot.task.physicsField.raycast_query(query)
+		if not result.has_hits:
+			return true
+
+	return false
 #endregion
 
 #region Helpers
 static func findAllies(actor: Actor) -> Array[Actor]:
 	var result: Array[Actor] = []
 	for other in Actor.Repository.Alive.List:
-		if other == actor or not is_instance_valid(other) or not other.IsAlive:
+		if other == actor or not is_instance_valid(other) or not other.isAlive:
 			continue
 		if not ActorUtils.isAlliedTo(other, actor):
 			continue
@@ -372,7 +390,7 @@ static func findAllies(actor: Actor) -> Array[Actor]:
 static func findEnemies(actor: Actor) -> Array[Actor]:
 	var result: Array[Actor] = []
 	for other in Actor.Repository.Alive.List:
-		if other == actor or not is_instance_valid(other) or not other.IsAlive:
+		if other == actor or not is_instance_valid(other) or not other.isAlive:
 			continue
 		if not ActorUtils.isHostileTo(other, actor):
 			continue

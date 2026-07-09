@@ -5,7 +5,7 @@ class_name ActorHoverArea
 
 func _ready() -> void:
 	mouse_entered.connect(func():
-		if parent.isDestroyed:
+		if parent.isDead:
 			return
 		Actor.Repository.Hovered.Register(parent)
 		SignalBus.MouseEntered.emit(parent)

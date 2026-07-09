@@ -88,9 +88,10 @@ func planMovementAction() -> TurnAction:
 func planCombatAction() -> TurnAction:
 	#if not FocusedTarget or not is_instance_valid(FocusedTarget):
 		#return TurnAction.Skip()
+	computeRanking()
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
-		if not is_instance_valid(target):
+		if target.isDead:
 			continue
 
 		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.PhysicalSize

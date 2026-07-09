@@ -17,7 +17,7 @@ func _ready() -> void:
 	targetZoom = size
 	cameraTarget = position
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a):
-		var actor = TurnManager.Instance.ActorTakingTurn
+		var actor = TurnManager.Instance.activeActor
 		if actor != null:
 			snapToTarget(actor.global_position)
 	)
@@ -37,10 +37,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	size = lerpf(size, targetZoom, delta * 10.0)
-	if TurnManager.Instance.CurrentActor == null:
+	if TurnManager.Instance.activePlayerActor == null:
 		return
 
-	var isPlayerTurn = TurnManager.Instance.CurrentFaction == Actor.Faction.Player
+	var isPlayerTurn = TurnManager.Instance.activeFaction == Actor.Faction.Player
 
 	if isPlayerTurn:
 		var movementVector = Vector3.ZERO
@@ -55,7 +55,7 @@ func _process(delta: float) -> void:
 		movementVector = movementVector.normalized()
 		cameraTarget += movementVector * delta * size
 	else:
-		cameraTarget = TurnManager.Instance.ActorTakingTurn.global_position
+		cameraTarget = TurnManager.Instance.activeActor.global_position
 
 	cameraTarget.x = clampf(cameraTarget.x, offsetRangeMinX, offsetRangeMaxX)
 	cameraTarget.z = clampf(cameraTarget.z, offsetRangeMinZ, offsetRangeMaxZ)

@@ -87,6 +87,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif isMouseClick and lockedMode == TargetMode.WalkPreview and not isSkillSelected:
 		# Cancel movement
 		lockedMode = TargetMode.None
+	elif isRightMouseClick and Parent.isDead:
+		MessageLog.PrintMessage("%s is incapacitated!"%Parent.Definition.Name)
 	elif isRightMouseClick:
 		# Start movement preview
 		lockedMode = TargetMode.WalkPreview

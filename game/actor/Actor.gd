@@ -13,7 +13,6 @@ signal DefinitionChanged(def: ActorDefinition)
 			SignalBus.ActorDefinitionChanged.emit(self)
 
 @onready var isReady = true
-var isDestroyed = false
 
 @onready var Buffs: ActorBuffs = GetComponent(ActorBuffs)
 @onready var Stats: ActorStats = GetComponent(ActorStats)
@@ -32,11 +31,12 @@ var PhysicalSize:
 ## This actor is currently selected and being controlled by the player
 var IsPlayerControlled: bool:
 	get:
-		return TurnManager.Instance.CurrentActor == self
+		return TurnManager.Instance.activePlayerActor == self
 
-var IsAlive: bool:
+var isAlive: bool:
 	get:
-		return Stats.HealthCurrent > 0 and not isDestroyed
+		return Stats.HealthCurrent > 0 and not isDead
+var isDead = false
 
 func GetComponent(type: GDScript[Component]) -> Component:
 	for child in get_children():
@@ -90,7 +90,7 @@ func _exit_tree() -> void:
 		Repository.Hovered.Unregister(self)
 
 func Destroy() -> void:
-	isDestroyed = true
+	isDead = true
 	collision_mask = 0
 	collision_layer = 0
 	Repository.Alive.Unregister(self)
@@ -159,7 +159,7 @@ enum ThreatLevel {
 signal destroyed()
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
-class SignalBusImplementation:
+class SignalBusImplementation extends NodeSignalBus:
 	signal ActorDefinitionChanged(actor: Actor)
 	signal ActorDestroyed(actor: Actor)
 	signal ActorSelectedSkillChanged(actor: Actor, current: Skill, previous: Skill)

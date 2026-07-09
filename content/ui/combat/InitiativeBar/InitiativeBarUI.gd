@@ -11,8 +11,8 @@ func rebuildPortraits() -> void:
 	while portraitContainer.get_child_count() > 0:
 		portraitContainer.remove_child(portraitContainer.get_child(0))
 
-	for i in TurnManager.Instance.PlayerControlledActors.size():
-		var actor = TurnManager.Instance.PlayerControlledActors[i]
+	for i in TurnManager.Instance.playerControlledActors.size():
+		var actor = TurnManager.Instance.playerControlledActors[i]
 		var portrait: InitiativePortrait = Asset.Instantiate(InitiativePortrait)
 		portrait.TrackedActor = actor
 		portrait.HotkeyIndex = i

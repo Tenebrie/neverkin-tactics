@@ -58,12 +58,12 @@ func IsIgnoredFor(actor: Actor) -> bool:
 	return false
 
 func checkDistances():
-	var currentActor = TurnManager.Instance.ActorTakingTurn
-	if not currentActor:
+	var activeActor = TurnManager.Instance.activeActor
+	if not activeActor:
 		setIgnored(false)
 		return
 
-	var selectedSkill = currentActor.Skills.SelectedSkill
+	var selectedSkill = activeActor.Skills.SelectedSkill
 	if not selectedSkill:
 		setIgnored(false)
 		return
@@ -72,7 +72,7 @@ func checkDistances():
 		return telegraph.ShootFromCover
 	)
 	if shootFromCover:
-		setIgnored(IsIgnoredFor(currentActor))
+		setIgnored(IsIgnoredFor(activeActor))
 	else:
 		setIgnored(false)
 

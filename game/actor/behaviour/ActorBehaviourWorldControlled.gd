@@ -28,6 +28,10 @@ class_name ActorBehaviourWorldControlled
 @export var WeightProximityToEnemies: float = 1.0
 # Range at which proximity influence decays to 0
 @export var WeightProximityToEnemiesFalloffMeters: float = 10.0
+# How much is this actor unhappy about being far from the fight
+@export var WeightOutOfFight: float = 1.0
+# Distance from the fight at which the actor starts to be penalized
+@export var WeightOutOfFightMinDistance: float = 10.0
 
 var FocusedTarget: Actor = null
 var FocusedTargetTotal: float = 0.0
@@ -54,7 +58,7 @@ func _ready() -> void:
 	)
 
 func _process(_delta: float) -> void:
-	if TurnManager.Instance.CurrentFaction != Actor.Faction.Player:
+	if TurnManager.Instance.activeFaction != Actor.Faction.Player:
 		return
 	Ranking = computeRanking()
 	if Ranking.is_empty():
@@ -69,7 +73,7 @@ func _process(_delta: float) -> void:
 func computeRanking() -> Array[RankedTarget]:
 	var result: Array[RankedTarget] = []
 	var targets = Actor.Repository.Alive.List.filter(func(actor):
-		return ActorUtils.isHostileTo(actor, Parent) and actor.IsAlive
+		return ActorUtils.isHostileTo(actor, Parent)
 	)
 	if targets.size() == 0:
 		return result

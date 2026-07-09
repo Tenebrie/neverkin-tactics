@@ -25,17 +25,17 @@ func performFactionTurn(faction: Actor.Faction):
 	for actor in actors:
 		if not is_instance_valid(actor):
 			continue
-		TurnManager.Instance.SelectNonPlayableActor(actor)
+		TurnManager.Instance.activateWorldActor(actor)
 		await NavmeshManager.Instance.WaitUntilReady()
 		await takeTurn(actor)
 
-	TurnManager.Instance.EndWorldTurn()
+	TurnManager.Instance.endWorldTurn()
 
 func resolveQueuedAttacks(actors: Array[Actor]) -> void:
 	for actor in actors:
 		if not is_instance_valid(actor) or not actor.Skills.SelectedSkill:
 			continue
-		TurnManager.Instance.SelectNonPlayableActor(actor)
+		TurnManager.Instance.activateWorldActor(actor)
 		await NavmeshManager.Instance.WaitUntilReady()
 		await get_tree().create_timer(POST_ACTION_PAUSE).timeout
 		actor.targeting.PerformAction_CastSelectedSkill()

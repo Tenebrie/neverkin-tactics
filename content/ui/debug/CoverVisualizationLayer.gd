@@ -10,7 +10,7 @@ func updateRender():
 	if isRendering or not visible:
 		return
 
-	if not TurnManager.Instance.ActorTakingTurn:
+	if not TurnManager.Instance.activeActor:
 		return
 
 	var actor: Actor
@@ -19,7 +19,7 @@ func updateRender():
 	elif lastSeenActor and is_instance_valid(lastSeenActor):
 		actor = lastSeenActor
 	else:
-		actor = TurnManager.Instance.ActorTakingTurn
+		actor = TurnManager.Instance.activeActor
 
 	if not actor or not actor.navigator or lastSeenActor == actor:
 		return
