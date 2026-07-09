@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bdgt33qjttv1o"]
 
 [ext_resource type="Script" uid="uid://dlpk1jf2ghjm2" path="res://game/actor/Actor.gd" id="1_ocm0e"]
-[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://actors/Ivera/ivera.Token.webp" id="2_1yc4f"]
+[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://content/actors/Ivera/ivera.Token.webp" id="2_1yc4f"]
 [ext_resource type="Script" uid="uid://bwyipm7pkrsw1" path="res://game/actor/ActorStats.gd" id="3_2qf6d"]
 [ext_resource type="Script" uid="uid://x0dicygbgdp2" path="res://game/actor/ActorBuffs.gd" id="4_2qf6d"]
 [ext_resource type="Script" uid="uid://dk1i4lds5ke56" path="res://game/actor/ActorActions.gd" id="4_pe7q2"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dmghp7x8tk4pt" path="res://content/ui/combat/ActorOverheadStats/ActorOverheadStats.tscn" id="7_541ji"]
 [ext_resource type="Script" uid="uid://bg4x5cqts33r6" path="res://game/skills/SkillController.gd" id="8_ocm0e"]
 [ext_resource type="Script" uid="uid://bibsejet712xq" path="res://game/actor/ActorHoverArea.gd" id="9_m37al"]
+[ext_resource type="Script" uid="uid://jcfo153okts8" path="res://game/actor/inputProvider/ActorInputProvider.gd" id="12_pe7q2"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
 resource_local_to_scene = true
@@ -59,6 +60,9 @@ script = ExtResource("6_v5lek")
 
 [node name="ActorTelegraphs" type="Node" parent="." unique_id=1823962377]
 script = ExtResource("7_1yc4f")
+
+[node name="ActorInputProvider" type="Node" parent="." unique_id=224060493]
+script = ExtResource("12_pe7q2")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1615640899]
 path_desired_distance = 0.1

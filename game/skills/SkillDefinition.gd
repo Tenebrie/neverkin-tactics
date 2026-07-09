@@ -3,6 +3,7 @@ extends Resource
 class_name SkillDefinition
 
 @export var Name: String = "Unnamed"
+@export var GrudgeString: String = "$They attacked me"
 @export_multiline var Description: String
 @export var IconTexture: Texture2D
 @export var ActionPointCost: int = 1

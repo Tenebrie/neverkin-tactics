@@ -18,7 +18,7 @@ var lockedMode: TargetMode = TargetMode.None:
 signal LockedModeChanged
 
 func _parentReady() -> void:
-	agentPathPreview.LineColor = Color(0.0, 0.0, 0.0, 0.8)
+	agentPathPreview.LineColor = Color(0.0, 1.0, 0.0, 0.8)
 	TurnManager.Instance.CurrentActorChanged.connect(func():
 		resetDisplayedElements()
 		lockedMode = TargetMode.None
@@ -51,11 +51,11 @@ func _process(_delta: float) -> void:
 
 	## Show preview path
 	if lockedMode == TargetMode.WalkPreview:
-		var previewPath := getLegalPathToMouse()
+		var previewPath = getLegalPathToMouse()
 		agentPathPreview.SetPath(previewPath, Parent.position)
 		var movementCost = ActorNavigator.GetPathMovementCost(previewPath)
-		var apCount := Parent.actions.GetMovementActionPointCost(movementCost)
-		var shownApCount := mini(apCount, Parent.actions.ActionPointsAvailable)
+		var apCount = Parent.actions.GetMovementActionPointCost(movementCost)
+		var shownApCount = mini(apCount, Parent.actions.ActionPointsAvailable)
 		CombatUI.cursor.ShowActionPointCost(shownApCount, movementCost)
 		PredictedActionPointCost = shownApCount
 
@@ -114,7 +114,7 @@ func getLegalPathToMouse() -> PackedVector3Array:
 	return getLegalPathTo(Parent.InputProvider.CursorPosition)
 
 func getLegalPathTo(target: Vector3) -> PackedVector3Array:
-	var map_rid := Parent.navigator.agent.get_navigation_map()
+	var map_rid = Parent.navigator.agent.get_navigation_map()
 	target = NavigationServer3D.map_get_closest_point(map_rid, target)
 
 	var previewPath = NavigationServer3D.map_get_path(

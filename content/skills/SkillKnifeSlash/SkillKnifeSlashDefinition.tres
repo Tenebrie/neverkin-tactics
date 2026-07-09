@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://bkj6fn6h0dffv"]
+
+[ext_resource type="Texture2D" uid="uid://e1msv0cryibm" path="res://content/skills/SkillKnifeSlash/SkillKnifeSlashIcon.png" id="1_4qavi"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_u1iji"]
+
+[resource]
+script = ExtResource("2_u1iji")
+Name = "Knife Stab"
+GrudgeString = "$They stabbed me"
+IconTexture = ExtResource("1_4qavi")
+TargetingMaxRange = 0.75
+BehaviourRequireLineOfSight = false
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

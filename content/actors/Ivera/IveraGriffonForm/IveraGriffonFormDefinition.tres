@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://x5sms1i1tc64"]
+
+[ext_resource type="Texture2D" uid="uid://dwj7xlfrk0163" path="res://content/actors/Ivera/IveraGriffonForm/Ivera.GriffonForm.Avatar.webp" id="1_6x3wb"]
+[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/skills/IveraClaws/IveraClaws.gd" id="2_p5t07"]
+[ext_resource type="Script" uid="uid://cl7dg242eqiye" path="res://content/skills/IveraHumanForm/IveraHumanForm.gd" id="3_6x3wb"]
+[ext_resource type="Texture2D" uid="uid://dc6h1yjmt6g8x" path="res://content/actors/Ivera/IveraGriffonForm/Ivera.GriffonForm.Token.webp" id="4_mpfqu"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="5_7bfqy"]
+
+[resource]
+script = ExtResource("5_7bfqy")
+Name = "Winged Ivera"
+Faction = 0
+PerceivedThreat = 2
+pronouns = 3
+PhysicalSize = 0.8
+TokenOffset = Vector2(0, -0.03)
+TokenTexture = ExtResource("4_mpfqu")
+RenderPriority = 10
+AvatarTexture = ExtResource("1_6x3wb")
+HealthMaximum = 10
+HealthHumanityThreshold = 5
+ActionPointsMax = 4
+MovementSpeedPerActionPoint = 6.5
+Skills = Array[GDScript]([ExtResource("2_p5t07"), null, null, null, null, null, null, ExtResource("3_6x3wb")])
+metadata/_custom_type_script = "uid://xdmrao02bm7l"

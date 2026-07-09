@@ -9,7 +9,7 @@ var activePlayerActor: Actor = null
 var activeWorldActor: Actor = null
 var activeActor: Actor:
 	get:
-		if activeFaction == Actor.Faction.Player:
+		if activeFaction == Actor.PlayerFaction:
 			return activePlayerActor
 		return activeWorldActor
 var playerControlledActors: Array[Actor] = []
@@ -21,26 +21,45 @@ signal FactionTurnStarted(faction: Actor.Faction)
 signal FactionTurnEnded(faction: Actor.Faction)
 signal TurnChanged
 
-var activeFaction: Actor.Faction = Actor.Faction.Player
+var activeFaction: Actor.Faction = Actor.PlayerFaction
 
 func _ready():
 	await get_tree().process_frame
-	for actor in Actor.Repository.All.List:
-		if actor.HasComponent(ActorBehaviourPlayerControlled):
-			playerControlledActors.push_back(actor)
-
-	if playerControlledActors.size() == 0:
-		return
-
-	activePlayerActor = playerControlledActors[0]
-	KnownActorsChanged.emit()
-	CurrentActorChanged.emit(activeActor, null)
-	CurrentPlayerActorChanged.emit(activePlayerActor, null)
+	loadPlayerControlledActors()
 	await get_tree().process_frame
 	startTurnForCurrentFaction()
 
+func setPlayerFaction(faction: Actor.Faction):
+	var factionHasActors = false
+	for actor in Actor.Repository.All.List:
+		if actor.faction == faction and actor.Behaviour:
+			factionHasActors = true
+			break
+	if not factionHasActors:
+		MessageLog.PrintMessage("Unable to switch to faction %s as it has no controllable actors"%Actor.Faction.keys()[faction + 1])
+		return
+	Actor.PlayerFaction = faction
+	loadPlayerControlledActors()
+	advanceTurn()
+
+func loadPlayerControlledActors():
+	playerControlledActors = []
+	for actor in Actor.Repository.All.List:
+		if actor.faction == Actor.PlayerFaction:
+			playerControlledActors.push_back(actor)
+	playerControlledActors.sort_custom(func(a, b):
+		return a.initiative > b.initiative
+	)
+
+	if playerControlledActors.size() > 0:
+		activePlayerActor = playerControlledActors[0]
+
+	KnownActorsChanged.emit()
+	CurrentActorChanged.emit(activeActor, null)
+	CurrentPlayerActorChanged.emit(activePlayerActor, null)
+
 func endPlayerTurn() -> void:
-	if activeFaction != Actor.Faction.Player:
+	if activeFaction != Actor.PlayerFaction:
 		MessageLog.PrintMessage("Uncool, let them play")
 		return
 	for actor in playerControlledActors:
@@ -60,7 +79,7 @@ func advanceTurn():
 	FactionTurnEnded.emit(activeFaction)
 	activeFaction = (activeFaction + 1) as Actor.Faction
 	if activeFaction >= Actor.Faction.size() - 1:
-		activeFaction = Actor.Faction.Player
+		activeFaction = Actor.PlayerFaction
 	var factionHasActors = Actor.Repository.Alive.List.any(func(a):
 		return a.Stats.Faction == activeFaction and a.HasComponent(ActorBehaviour)
 	)
@@ -75,7 +94,7 @@ func startTurnForCurrentFaction():
 	MessageLog.PrintChatMessage("Turn Start: %s"%Actor.Faction.keys()[activeFaction + 1])
 	TurnChanged.emit()
 	FactionTurnStarted.emit(activeFaction)
-	if activeFaction == Actor.Faction.Player:
+	if activeFaction == Actor.PlayerFaction:
 		startPlayerTurn()
 
 func startPlayerTurn():

@@ -27,3 +27,10 @@ static func ForSkillCast(target: Actor, targetData: Skill.TargetData) -> DamageI
 			continue
 		instance.Value += def.HealthThreatSelector.call(target)
 	return instance
+
+static func ForAggroGeneration(sourceSkill: Skill, value: int) -> DamageInstance:
+	var instance = DamageInstance.new()
+	instance.SourceSkill = sourceSkill
+	instance.SourceActor = sourceSkill.Parent
+	instance.Value = value
+	return instance

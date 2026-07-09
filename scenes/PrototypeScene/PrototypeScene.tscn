@@ -47,6 +47,7 @@ size = Vector3(3, 0.1, 3.6000001)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=63940742]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007748604, 0)
+visible = false
 navigation_mesh = SubResource("NavigationMesh_wr5mt")
 
 [node name="Node3D" type="Node3D" parent="." unique_id=1847546094 groups=["navigation_mesh_source_group"]]
@@ -73,7 +74,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.1, 1)
 ObstacleWidth = 10
 
 [node name="PropLowCover9" parent="Node3D" unique_id=1294996915 instance=ExtResource("2_1352n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.9000006, -0.1, 1.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.8, -0.1, 1.7)
 ObstacleWidth = 10
 
 [node name="PropLowCover10" parent="Node3D" unique_id=1786916117 instance=ExtResource("2_1352n")]
@@ -124,21 +125,13 @@ ObstacleWidth = 5
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.1999998, -0.1, 7.1)
 ObstacleWidth = 15
 
-[node name="PropWallFullCover4" parent="." unique_id=1372271252 instance=ExtResource("7_xgj7p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5000005, -0.1, 3.2)
-ObstacleWidth = 15
-
-[node name="PropWallFullCover5" parent="." unique_id=2031823101 instance=ExtResource("7_xgj7p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5000005, -0.1, 5.3)
-ObstacleWidth = 15
-
 [node name="PropWallFullCover6" parent="." unique_id=2121098111 instance=ExtResource("7_xgj7p")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4.9000006, -0.1, 4.2000003)
 ObstacleWidth = 15
 
 [node name="PropWallFullCover7" parent="." unique_id=1171193460 instance=ExtResource("7_xgj7p")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -8.1, -0.1, 4.2000003)
-ObstacleWidth = 15
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -14.243616, -0.1, 1.3764272)
+ObstacleWidth = 111
 
 [node name="PropWallFullCover2" parent="." unique_id=1775011020 instance=ExtResource("7_xgj7p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -0.1, -0.89999986)
@@ -185,10 +178,10 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.1,
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.6999998, -0.1, -0.49999988)
 
 [node name="PropWallHighCover17" parent="." unique_id=1616537850 instance=ExtResource("5_25yxr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6, -0.1, 1.9000002)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.8999996, -0.1, 2.3000002)
 
 [node name="PropWallHighCover18" parent="." unique_id=551751727 instance=ExtResource("5_25yxr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6, -0.1, -1.0999999)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6, -0.1, -0.89999986)
 
 [node name="PropWallHighCover12" parent="." unique_id=1915722056 instance=ExtResource("5_25yxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, -0.1, 2.8999999)

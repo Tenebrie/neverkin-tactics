@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://bqn1bv5re5kvb"]
+
+[ext_resource type="Texture2D" uid="uid://e6atrs61dq5m" path="res://content/actors/WolfpackBrawler/WolfpackBrawlerIcon.webp" id="1_cogwv"]
+[ext_resource type="Script" uid="uid://b2vrii8i04rkj" path="res://content/skills/SkillKnifeSlash/SkillKnifeSlash.gd" id="2_mu5nx"]
+[ext_resource type="Script" uid="uid://cpo0vw04a26la" path="res://content/skills/SkillStim/SkillStim.gd" id="3_mu5nx"]
+[ext_resource type="Script" uid="uid://ckfd6aj1y8185" path="res://content/actors/WolfpackBrawler/skills/SkillWolfHowl/SkillWolfHowl.gd" id="3_q4vuy"]
+[ext_resource type="Script" uid="uid://uxynsgynpsq6" path="res://content/actors/WolfpackBrawler/skills/SkillRoundhouseSlash/SkillRoundhouseSlash.gd" id="4_ny34h"]
+[ext_resource type="Texture2D" uid="uid://nxiism0sknn7" path="res://content/actors/WolfpackBrawler/WolfpackBrawlerAvatar.webp" id="5_rxd8m"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="6_l27rb"]
+[ext_resource type="Script" uid="uid://c4lp5jogtqgdr" path="res://content/skills/SkillHunkerDown/SkillHunkerDown.gd" id="6_q4vuy"]
+
+[resource]
+script = ExtResource("6_l27rb")
+Name = "Brawler"
+Faction = 4
+pronouns = 4
+initiative = 5
+TokenTexture = ExtResource("5_rxd8m")
+AvatarTexture = ExtResource("1_cogwv")
+HealthMaximum = 6
+ActionPointsMax = 2
+MovementSpeedPerActionPoint = 4.0
+Skills = Array[GDScript]([ExtResource("2_mu5nx"), ExtResource("3_mu5nx"), ExtResource("4_ny34h"), ExtResource("3_q4vuy"), ExtResource("6_q4vuy")])
+metadata/_custom_type_script = "uid://xdmrao02bm7l"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://5ni4vm26ccl6"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_dtlc4"]
+
+[resource]
+script = ExtResource("2_dtlc4")
+Name = "Stimpack"
+GrudgeString = ""
+TargetingMaxRange = 0.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

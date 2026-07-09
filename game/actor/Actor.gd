@@ -32,9 +32,29 @@ func _exit_tree() -> void:
 #region Proxy Getters
 var PhysicalSize:
 	get: return Definition.PhysicalSize
-var pronouns:
+var pronouns: Pronouns:
 	get:
 		return Pronouns.FromPreset(Definition.pronouns)
+var faction: Faction:
+	get:
+		if Buffs:
+			var mindControl = Buffs.Get(BuffMindControl) as BuffMindControl
+			if mindControl:
+				return mindControl.faction
+		return Definition.Faction
+var movementSpeedPerAction: float:
+	get:
+		var base = Definition.MovementSpeedPerActionPoint
+		if not Buffs:
+			return base
+		if Buffs.Has(BuffCrippled):
+			base /= 2.0
+		if Buffs.Has(BuffStim):
+			base *= 2.0
+		return base
+var initiative: float:
+	get:
+		return Definition.initiative
 #endregion
 
 #region Components
@@ -143,16 +163,18 @@ class Repository:
 enum Faction {
 	None = -1,
 
-	Player = 0,
+	Kin = 0,
 	Neutral = 1,
 	CityThugs = 2,
 	Algae = 3,
-	PlaceholderFaction1 = 4,
+	Wolfpack = 4,
 	PlaceholderFaction2 = 5,
 	PlaceholderFaction3 = 6,
 	PlaceholderFaction4 = 7,
-	PlaceholderFaction5 = 8
+	PlaceholderFaction5 = 8,
 }
+
+static var PlayerFaction = Faction.Kin
 
 enum ThreatLevel {
 	## Unarmed, not a combatant

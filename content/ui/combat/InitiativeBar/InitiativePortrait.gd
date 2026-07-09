@@ -31,7 +31,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		onPortraitClick()
 
 func update() -> void:
-	if TrackedActor == null or TrackedActor.Behaviour is not ActorBehaviourPlayerControlled behaviour:
+	if TrackedActor == null or TrackedActor.Behaviour is not ActorBehaviour behaviour:
 		portrait.texture_normal = null
 		return
 
@@ -42,7 +42,7 @@ func update() -> void:
 	nameLabel.label_settings.outline_color = behaviour.PortraitColor
 	nameLabel.label_settings.shadow_size = 1
 	hotkeyLabel.text = "F" + str(HotkeyIndex + 1)
-	portrait.texture_normal = behaviour.Portrait
+	portrait.texture_normal = TrackedActor.Definition.AvatarTexture
 	updateModulate()
 
 func updateModulate() -> void:

@@ -7,8 +7,8 @@ extends Node3D
 	set(value):
 		material.albedo_color = value
 
-@export var LineWidth := 0.02
-@export var HeightOffset := -0.001
+@export var LineWidth = 0.02
+@export var HeightOffset = -0.001
 
 var meshInstance: MeshInstance3D
 var immediateMesh: ImmediateMesh
@@ -36,8 +36,8 @@ func SetPath(path: PackedVector3Array, currentPosition: Vector3) -> void:
 	rebuild()
 
 func cleanPoints(raw: PackedVector3Array) -> PackedVector3Array:
-	var result := PackedVector3Array()
-	var minDist := 0.02
+	var result = PackedVector3Array()
+	var minDist = 0.02
 	for p in raw:
 		if result.size() == 0:
 			result.append(p)
@@ -53,30 +53,30 @@ func ClearPath() -> void:
 	rebuild()
 
 func GetLength() -> float:
-	var total := 0.0
+	var total = 0.0
 	for i in points.size() - 1:
 		total += (points[i + 1] - points[i]).length()
 	return total
 
 func buildVisiblePoints(path: PackedVector3Array, currentPosition: Vector3) -> PackedVector3Array:
-	var result := PackedVector3Array()
+	var result = PackedVector3Array()
 	if path.size() < 1:
 		return result
 
-	var pos := flat(currentPosition)
-	var bestDist := INF
-	var startIndex := path.size()
+	var pos = flat(currentPosition)
+	var bestDist = INF
+	var startIndex = path.size()
 
 	for i in path.size() - 1:
-		var a := flat(path[i])
-		var b := flat(path[i + 1])
-		var ab := b - a
-		var lenSq := ab.length_squared()
-		var t := 0.0
+		var a = flat(path[i])
+		var b = flat(path[i + 1])
+		var ab = b - a
+		var lenSq = ab.length_squared()
+		var t = 0.0
 		if lenSq > 0.0000001:
 			t = clampf((pos - a).dot(ab) / lenSq, 0.0, 1.0)
-		var closest := a + ab * t
-		var d := pos.distance_squared_to(closest)
+		var closest = a + ab * t
+		var d = pos.distance_squared_to(closest)
 		if d < bestDist:
 			bestDist = d
 			startIndex = i + 1
@@ -91,20 +91,20 @@ func flat(v: Vector3) -> Vector3:
 
 func rebuild() -> void:
 	immediateMesh.clear_surfaces()
-	var count := points.size()
+	var count = points.size()
 	if count < 2:
 		return
 
-	var half := LineWidth * 0.5
-	var up := Vector3.UP
-	var lift := up * HeightOffset
-	var miterLimit := 2.0
+	var half = LineWidth * 0.5
+	var up = Vector3.UP
+	var lift = up * HeightOffset
+	var miterLimit = 2.0
 
 	var offsets: Array[Vector3] = []
 	offsets.resize(count)
 	for i in count:
-		var inDir := Vector3.ZERO
-		var outDir := Vector3.ZERO
+		var inDir = Vector3.ZERO
+		var outDir = Vector3.ZERO
 		if i > 0:
 			inDir = flat(points[i] - points[i - 1])
 		if i < count - 1:
@@ -116,23 +116,23 @@ func rebuild() -> void:
 		if outDir == Vector3.ZERO:
 			outDir = inDir
 
-		var nIn := up.cross(inDir)
-		var nOut := up.cross(outDir)
-		var miter := nIn + nOut
+		var nIn = up.cross(inDir)
+		var nOut = up.cross(outDir)
+		var miter = nIn + nOut
 		if miter.length_squared() < 0.0000001:
 			miter = nOut
 		miter = miter.normalized()
 
-		var cosHalf := miter.dot(nOut.normalized())
-		var lineScale := 1.0 / maxf(absf(cosHalf), 1.0 / miterLimit)
+		var cosHalf = miter.dot(nOut.normalized())
+		var lineScale = 1.0 / maxf(absf(cosHalf), 1.0 / miterLimit)
 		offsets[i] = miter * half * lineScale
 
 	immediateMesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES, material)
 	for i in count - 1:
-		var a := points[i] + lift
-		var b := points[i + 1] + lift
-		var oa := offsets[i]
-		var ob := offsets[i + 1]
+		var a = points[i] + lift
+		var b = points[i + 1] + lift
+		var oa = offsets[i]
+		var ob = offsets[i + 1]
 
 		addVertex(a + oa)
 		addVertex(b + ob)

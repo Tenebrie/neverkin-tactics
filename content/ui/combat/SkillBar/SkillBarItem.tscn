@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://u7dn2gxvlbkk"]
 
 [ext_resource type="Script" uid="uid://drubw221xpify" path="res://content/ui/combat/SkillBar/SkillBarItem.gd" id="1_bbwqj"]
-[ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://actors/Ivera/ivera.Avatar.webp" id="2_cnihy"]
+[ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://content/actors/Ivera/ivera.Avatar.webp" id="2_cnihy"]
 [ext_resource type="PackedScene" uid="uid://dbssbd5tja4hl" path="res://content/ui/combat/SkillBar/SkillBarItemActionPoint.tscn" id="3_n32wj"]
 
 [sub_resource type="Shader" id="Shader_61go4"]

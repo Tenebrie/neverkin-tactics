@@ -1,6 +1,8 @@
 extends Component
 class_name ActorBehaviour
 
+@export var PortraitColor: Color
+
 enum ActionVariant {
 	Skip,
 	MoveTo,

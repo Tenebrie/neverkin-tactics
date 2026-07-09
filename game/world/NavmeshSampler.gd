@@ -27,7 +27,7 @@ static func CollectNavmeshPoints(
 	var currentMapRid = actor.navigator.agent.get_navigation_map()
 	var currentRegionRid = NavigationServer3D.map_get_closest_point_owner(currentMapRid, actor.global_position)
 	var region = NavmeshManager.Instance.GetRegion(currentRegionRid)
-	var movementSpeed = actor.Definition.MovementSpeedPerActionPoint + oversample
+	var movementSpeed = actor.movementSpeedPerAction + oversample
 	var boxSize = Vector3(movementSpeed, 0, movementSpeed)
 
 	var params = Params.new()

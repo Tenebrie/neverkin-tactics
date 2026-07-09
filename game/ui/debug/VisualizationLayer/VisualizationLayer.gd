@@ -19,7 +19,7 @@ func updateRender():
 			textCellPool.push_back(child)
 
 func _unhandled_input(inputEvent: InputEvent) -> void:
-	if inputEvent is InputEventKey keyEvent and inputEvent.is_pressed() and not inputEvent.is_echo() and inputEvent.ctrl_pressed:
+	if inputEvent is InputEventKey keyEvent and inputEvent.is_pressed() and not inputEvent.is_echo() and inputEvent.ctrl_pressed and not inputEvent.alt_pressed:
 		if keyEvent.keycode == KEY_KP_ADD:
 			handleMapWeightBlurChange(1)
 			return

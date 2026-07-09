@@ -40,8 +40,13 @@ class SingleActor extends TelegraphDefinition:
 
 	func WithDamageToHostiles(damage: int):
 		HealthThreat = damage
+		#TargetFilters.push_back(func(actor: Actor) -> bool:
+			#return actor.faction != Actor.PlayerFaction and Actor.Repository.Hovered.List.has(actor)
+		#)
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return actor.Definition.Faction != Actor.Faction.Player and Actor.Repository.Hovered.List.has(actor)
+			if TurnManager.Instance.activeFaction == Actor.PlayerFaction and not Actor.Repository.Hovered.List.has(actor):
+				return false
+			return ActorUtils.isTargetableBy(actor, ParentSkill.Parent)
 		)
 		return self
 

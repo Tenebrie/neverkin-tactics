@@ -2,16 +2,12 @@
 
 [ext_resource type="Script" uid="uid://dheb7w3ek6fi2" path="res://game/scene/GameScene.gd" id="1_6ytau"]
 [ext_resource type="Script" uid="uid://bimanig80yrro" path="res://game/MainCamera.gd" id="2_cxv17"]
-[ext_resource type="PackedScene" uid="uid://ylc6aguob6mn" path="res://actors/Ivera/Ivera.tscn" id="2_xy3my"]
-[ext_resource type="PackedScene" uid="uid://cxoxb77d1144u" path="res://actors/Godette/Godette.tscn" id="5_7s5hy"]
-[ext_resource type="PackedScene" uid="uid://4seydnc3rhjm" path="res://content/actors/AlgaeHunter/AlgaeHunter.tscn" id="6_6ytau"]
-[ext_resource type="PackedScene" uid="uid://dmyet57hfpj6u" path="res://actors/Kamilla/Kamilla.tscn" id="6_xs4ih"]
+[ext_resource type="PackedScene" uid="uid://ylc6aguob6mn" path="res://content/actors/Ivera/Ivera.tscn" id="2_xy3my"]
+[ext_resource type="PackedScene" uid="uid://cxoxb77d1144u" path="res://content/actors/WolfpackTrooper/WolfpackTrooper.tscn" id="5_7s5hy"]
+[ext_resource type="PackedScene" uid="uid://dmyet57hfpj6u" path="res://content/actors/Kamilla/Kamilla.tscn" id="6_xs4ih"]
 [ext_resource type="PackedScene" uid="uid://2ohwekfgbpuc" path="res://scenes/PrototypeScene/PrototypeScene.tscn" id="7_6ytau"]
-[ext_resource type="Texture2D" uid="uid://byhwirkvtng2e" path="res://icon.svg" id="8_6pl24"]
-[ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="9_w22tq"]
-[ext_resource type="Script" uid="uid://cyt4dokmb4uau" path="res://content/skills/SkillFragGrenade/SkillCheapFragGrenade.gd" id="10_e8rlm"]
-[ext_resource type="Script" uid="uid://c4lp5jogtqgdr" path="res://content/skills/SkillHunkerDown/SkillHunkerDown.gd" id="11_qitmq"]
-[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="12_kxqg4"]
+[ext_resource type="Script" uid="uid://bm3n567le1rhf" path="res://content/utils/MindControlNode.gd" id="8_pynjx"]
+[ext_resource type="PackedScene" uid="uid://bm6mqj82bco5k" path="res://content/actors/WolfpackBrawler/WolfpackBrawler.tscn" id="8_vijgj"]
 
 [sub_resource type="Environment" id="Environment_vh257"]
 glow_enabled = true
@@ -32,54 +28,6 @@ script/source = "extends DirectionalLight3D
 func _ready() -> void:
 	directional_shadow_max_distance = 5
 "
-
-[sub_resource type="Resource" id="Resource_w22tq"]
-script = ExtResource("12_kxqg4")
-Name = "Godot"
-TokenTexture = ExtResource("8_6pl24")
-AvatarTexture = ExtResource("8_6pl24")
-Faction = 7
-HealthMaximum = 4
-ActionPointsMax = 2
-MovementSpeedPerActionPoint = 5.0
-Skills = Array[GDScript]([ExtResource("9_w22tq"), ExtResource("10_e8rlm"), ExtResource("11_qitmq")])
-metadata/_custom_type_script = "uid://xdmrao02bm7l"
-
-[sub_resource type="Resource" id="Resource_e8rlm"]
-script = ExtResource("12_kxqg4")
-Name = "Godot"
-TokenTexture = ExtResource("8_6pl24")
-AvatarTexture = ExtResource("8_6pl24")
-Faction = 6
-HealthMaximum = 4
-ActionPointsMax = 2
-MovementSpeedPerActionPoint = 5.0
-Skills = Array[GDScript]([ExtResource("9_w22tq"), ExtResource("10_e8rlm"), ExtResource("11_qitmq")])
-metadata/_custom_type_script = "uid://xdmrao02bm7l"
-
-[sub_resource type="Resource" id="Resource_6pl24"]
-script = ExtResource("12_kxqg4")
-Name = "Godot"
-TokenTexture = ExtResource("8_6pl24")
-AvatarTexture = ExtResource("8_6pl24")
-Faction = 5
-HealthMaximum = 4
-ActionPointsMax = 2
-MovementSpeedPerActionPoint = 5.0
-Skills = Array[GDScript]([ExtResource("9_w22tq"), ExtResource("10_e8rlm"), ExtResource("11_qitmq")])
-metadata/_custom_type_script = "uid://xdmrao02bm7l"
-
-[sub_resource type="Resource" id="Resource_21xg8"]
-script = ExtResource("12_kxqg4")
-Name = "Godot"
-TokenTexture = ExtResource("8_6pl24")
-AvatarTexture = ExtResource("8_6pl24")
-Faction = 4
-HealthMaximum = 4
-ActionPointsMax = 2
-MovementSpeedPerActionPoint = 5.0
-Skills = Array[GDScript]([ExtResource("9_w22tq"), ExtResource("10_e8rlm"), ExtResource("11_qitmq")])
-metadata/_custom_type_script = "uid://xdmrao02bm7l"
 
 [node name="GameScene" type="Node3D" unique_id=1981852205]
 script = ExtResource("1_6ytau")
@@ -113,32 +61,36 @@ directional_shadow_max_distance = 25.0
 script = SubResource("GDScript_6ytau")
 
 [node name="Ivera" parent="." unique_id=197562730 instance=ExtResource("2_xy3my")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.467902, 0.00049996376, 0.80499935)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.812733, 0.00049996376, 2.7453127)
 
 [node name="Kamilla" parent="." unique_id=220179378 instance=ExtResource("6_xs4ih")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.352624, 0.00049996376, 4.176859)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.271603, 0.00049996376, 1.6890688)
 
-[node name="AlgaeHunter" parent="." unique_id=2072888492 instance=ExtResource("6_6ytau")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.521245, 0.0005002022, 4.7015953)
+[node name="WolfpackTrooper" parent="." unique_id=410591199 instance=ExtResource("5_7s5hy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8937922, 0.00050091743, 5.1751)
 
-[node name="Godette" parent="." unique_id=709077820 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.983377, 0.0005002022, -4.4880114)
-Definition = SubResource("Resource_w22tq")
+[node name="WolfpackTrooper2" parent="." unique_id=611624937 instance=ExtResource("5_7s5hy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.832835, 0.0005002022, 6.2261996)
 
-[node name="AlgaeHunter2" parent="." unique_id=807014692 instance=ExtResource("6_6ytau")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5864544, 0.0005002022, 3.7185245)
+[node name="WolfpackBrawler" parent="." unique_id=141319436 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5316734, 0.0005002022, 6.393017)
 
-[node name="Godette2" parent="." unique_id=1227995685 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.367398, 0.0005002022, -0.50158477)
-Definition = SubResource("Resource_e8rlm")
+[node name="WolfpackBrawler2" parent="." unique_id=168031144 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.4807982, 0.00049972534, 5.102641)
 
-[node name="Godette3" parent="." unique_id=1458410066 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6759384, 0.0005002022, 2.2297986)
-Definition = SubResource("Resource_6pl24")
+[node name="MindControlNode" type="Node3D" parent="." unique_id=1689570924]
+script = ExtResource("8_pynjx")
+faction = 2
+metadata/_custom_type_script = "uid://bm3n567le1rhf"
 
-[node name="Godette4" parent="." unique_id=279726060 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62858415, 0.0005002022, -1.6119442)
+[node name="WolfpackTrooper" parent="MindControlNode" unique_id=807014692 instance=ExtResource("5_7s5hy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.481642, -4.7683716e-07, 2.5066426)
 
-[node name="Godette5" parent="." unique_id=752934444 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.923705, 0.0005002022, 3.9079194)
-Definition = SubResource("Resource_21xg8")
+[node name="WolfpackTrooper2" parent="MindControlNode" unique_id=673216426 instance=ExtResource("5_7s5hy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2385608, -4.7683716e-07, 1.7339323)
+
+[node name="WolfpackBrawler" parent="MindControlNode" unique_id=296734400 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8834898, 4.7683716e-07, 1.5466306)
+
+[node name="WolfpackBrawler2" parent="MindControlNode" unique_id=1594408601 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1298878, 4.7683716e-07, 0.7798166)

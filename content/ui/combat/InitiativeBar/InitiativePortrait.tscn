@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b0v2yj4jouojo"]
 
 [ext_resource type="Script" uid="uid://c5lclst24baif" path="res://content/ui/combat/InitiativeBar/InitiativePortrait.gd" id="1_0nlr4"]
-[ext_resource type="Texture2D" uid="uid://dnx6v7s1conns" path="res://actors/Kamilla/kamilla.Avatar.webp" id="2_xmgn0"]
+[ext_resource type="Texture2D" uid="uid://dnx6v7s1conns" path="res://content/actors/Kamilla/kamilla.Avatar.webp" id="2_xmgn0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lqa7y"]
 content_margin_left = 0.0

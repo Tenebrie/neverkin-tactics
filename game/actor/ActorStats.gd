@@ -6,7 +6,7 @@ signal DamageTaken(damage: DamageInstance)
 var Name: String:
 	get: return Parent.Definition.Name
 var Faction: Actor.Faction:
-	get: return Parent.Definition.Faction
+	get: return Parent.faction
 
 #region Health
 var HealthDamageTaken: int = 0

@@ -56,7 +56,7 @@ func _process(delta: float) -> void:
 	direction.y = 0.0
 	direction = direction.normalized()
 
-	var maxMovementSpeed = clampf(Parent.Definition.MovementSpeedPerActionPoint / 2, 2.0, 4.0)
+	var maxMovementSpeed = clampf(Parent.movementSpeedPerAction / 2, 2.0, 4.0)
 	var distanceToTarget := Parent.global_position.distance_to(agent.target_position)
 	var stopDistance := maxf(distanceToTarget - agent.target_desired_distance, 0.0)
 	var targetSpeed := minf(maxMovementSpeed, sqrt(2.0 * maxDeceleration * stopDistance))

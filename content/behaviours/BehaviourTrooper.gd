@@ -1,62 +1,38 @@
 extends ActorBehaviourWorldControlled
+class_name BehaviourTrooper
 
 const METERS_PER_AP: float = 5.0
 const ENGAGEMENT_REFERENCE_METERS: float = 20.0
-const HIGHLIGHT_THRESHOLD: float = 1.0
 
-@export var WEIGHT_LOW_HEALTH: float = 2.0
-@export var WEIGHT_HIGH_HEALTH: float = 1.0
-@export var WEIGHT_THREAT: float = 2.0
-@export var WEIGHT_PROXIMITY: float = 1.0
-@export var WEIGHT_GRUDGE: float = 1.0
-
-var Grudges: Dictionary[Actor, float] = {}
-
-func _parentReady() -> void:
-	super._parentReady()
-	Parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
-		RecordGrudge(damage.SourceActor, damage.Value)
-	)
-
-func RecordGrudge(against: Actor, swings: float) -> void:
-	if against == null:
-		return
-	Grudges[against] = Grudges.get(against, 0.0) + swings
-
-func ForgiveGrudge(against: Actor) -> void:
-	Grudges.erase(against)
+@export var aggroWeightLowHealth: float = 2.0
+@export var aggroWeightHighHealth: float = 1.0
+@export var aggroWeightThreat: float = 2.0
+@export var aggroWeightProximity: float = 1.0
 
 func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 	var effectiveMax = maxi(actor.Stats.HealthMaximum - actor.Stats.HealthHumanityThreshold, 1)
 	var effectiveCurrent = clampi(actor.Stats.HealthCurrent - actor.Stats.HealthHumanityThreshold, 0, effectiveMax)
 	var lowFraction = 1.0 - float(effectiveCurrent) / float(effectiveMax)
 	var highFraction = float(effectiveCurrent) / float(effectiveMax)
-	var woundedValue = (WEIGHT_LOW_HEALTH - 1.0) * lowFraction * float(effectiveMax)
-	var unhurtValue = (WEIGHT_HIGH_HEALTH - 1.0) * highFraction * float(effectiveMax)
+	var woundedValue = (aggroWeightLowHealth - 1.0) * lowFraction * float(effectiveMax)
+	var unhurtValue = (aggroWeightHighHealth - 1.0) * highFraction * float(effectiveMax)
 
-	var threatValue = actor.Stats.ThreatCurrent * WEIGHT_THREAT
+	var threatValue = actor.Stats.ThreatCurrent * aggroWeightThreat
 
 	var distance = Parent.global_position.distance_to(actor.global_position)
 	var apSaved = maxf(0.0, (ENGAGEMENT_REFERENCE_METERS - distance) / METERS_PER_AP)
-	var proximityValue = apSaved * WEIGHT_PROXIMITY
-
-	var grudgeValue = Grudges.get(actor, 0.0) * WEIGHT_GRUDGE
+	var proximityValue = apSaved * aggroWeightProximity
 
 	var result = ExplainedThreatValue.new()
 
-	addHighlight(result, "Wounded", woundedValue)
-	addHighlight(result, "Unhurt", unhurtValue)
-	addHighlight(result, "%s threat" % ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent), threatValue)
-	addHighlight(result, "Within reach", proximityValue)
-	addHighlight(result, "Attacked me!", grudgeValue)
+	explainThreatEntry(result, "Wounded", woundedValue)
+	explainThreatEntry(result, "Unhurt", unhurtValue)
+	explainThreatEntry(result, "%s threat" % ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent), threatValue)
+	explainThreatEntry(result, "Within reach", proximityValue)
+	for grudge in getGrudges(actor):
+		explainThreatEntry(result, grudge.message, grudge.value)
 
 	return result
-
-func addHighlight(result: ExplainedThreatValue, label: String, value: float) -> void:
-	result.Total += floori(value)
-	result.TotalPrecise += value
-	if value >= HIGHLIGHT_THRESHOLD:
-		result.Highlights[label] = value
 
 func PlanTurnActions() -> Array[TurnAction]:
 	if Parent.actions.ActionPointsUsed == 0:
@@ -86,9 +62,6 @@ func planMovementAction() -> TurnAction:
 	return TurnAction.MoveTo(bestPoint)
 
 func planCombatAction() -> TurnAction:
-	#if not FocusedTarget or not is_instance_valid(FocusedTarget):
-		#return TurnAction.Skip()
-	computeRanking()
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
 		if target.isDead:

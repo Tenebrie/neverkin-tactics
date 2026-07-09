@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://bpluyrx7ka0yv"]
+
+[ext_resource type="Texture2D" uid="uid://brccwqt6tosnd" path="res://content/actors/WolfpackTrooper/WolfpackTrooperAvatar.webp" id="1_v0qi4"]
+[ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="2_eabg8"]
+[ext_resource type="Script" uid="uid://cyt4dokmb4uau" path="res://content/skills/SkillFragGrenade/SkillCheapFragGrenade.gd" id="3_sjd6c"]
+[ext_resource type="Script" uid="uid://c4lp5jogtqgdr" path="res://content/skills/SkillHunkerDown/SkillHunkerDown.gd" id="4_nr03p"]
+[ext_resource type="Script" uid="uid://7sil2be4hewh" path="res://content/actors/WolfpackTrooper/skills/SkillCripplingShot/SkillCripplingShot.gd" id="5_n2wkc"]
+[ext_resource type="Texture2D" uid="uid://bwvanpwgd5uiw" path="res://content/actors/WolfpackTrooper/WolfpackTrooperToken.webp" id="6_pl1j3"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="7_sf3wy"]
+
+[resource]
+script = ExtResource("7_sf3wy")
+Name = "Trooper"
+Faction = 4
+pronouns = 4
+TokenTexture = ExtResource("6_pl1j3")
+AvatarTexture = ExtResource("1_v0qi4")
+HealthMaximum = 4
+ActionPointsMax = 2
+MovementSpeedPerActionPoint = 5.0
+Skills = Array[GDScript]([ExtResource("2_eabg8"), ExtResource("3_sjd6c"), ExtResource("4_nr03p"), ExtResource("5_n2wkc")])
+metadata/_custom_type_script = "uid://xdmrao02bm7l"

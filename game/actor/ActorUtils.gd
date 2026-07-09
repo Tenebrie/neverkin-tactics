@@ -63,20 +63,26 @@ static func getPathTo(actor: Actor, point: Vector3) -> PackedVector3Array:
 	)
 
 static func isPointReachable(actor: Actor, point: Vector3, actionLimit: int) -> bool:
-	var length = NavigationUtils.getPathLength(getPathTo(actor, point))
-	return length <= (actor.Definition.MovementSpeedPerActionPoint * actionLimit)
+	var mapRid = actor.navigator.agent.get_navigation_map()
+	var maximumDistance = actor.movementSpeedPerAction * actionLimit
+	return NavigationUtils.isPointReachable(mapRid, actor.global_position, point, maximumDistance)
+	#var length = NavigationUtils.getPathLength(getPathTo(actor, point))
+	#return length <= ()
 
 static func getReachablePointsAsync(actor: Actor, points: Array[Vector3], actionLimit: int) -> Array[Vector3]:
-	var maxDistance = actor.Definition.MovementSpeedPerActionPoint * actionLimit
+	var maxDistance = actor.movementSpeedPerAction * actionLimit
 	var navigationLayers = actor.navigator.agent.navigation_layers
 	var origin = actor.global_position
 	var mapRid = actor.navigator.agent.get_navigation_map()
-	var threadCount = 4
+	var threadCount = 16
 	var result = await Promise.runManyFlat(threadCount, func(index):
-		var slice = points.slice(index, 0x7FFFFFFF, threadCount)
-		var filtered = slice.filter(func(point):
-			return NavigationUtils.isPointReachable(mapRid, origin, point, maxDistance, navigationLayers)
-		)
+		var chunkSize = ceili(float(points.size()) / threadCount)
+		var start = index * chunkSize
+		var end = mini(start + chunkSize, points.size())
+		var filtered: Array[Vector3]
+		for i in range(start, end):
+			if NavigationUtils.isPointReachable(mapRid, origin, points[i], maxDistance, navigationLayers):
+				filtered.append(points[i])
 		return filtered
 	)
 	var typedResult: Array[Vector3]
@@ -100,23 +106,23 @@ static func getMouseWorldPlanePosition(viewport: Viewport) -> Vector3:
 	return Vector3.ZERO
 
 static func getFactionColor(faction: Actor.Faction) -> Color:
-	if faction == Actor.Faction.Player:
+	if faction == Actor.Faction.Kin:
 		return Color("4deb4b")
 	elif faction == Actor.Faction.CityThugs:
 		return Color("eb4d4b")
 	elif faction == Actor.Faction.Algae:
 		return Color("4b4deb")
+	elif faction == Actor.Faction.Wolfpack:
+		return Color("eb4d4b")
 	return Color.GRAY
 
 static func getFactionName(faction: Actor.Faction) -> String:
-	if faction == Actor.Faction.Player:
+	if faction == Actor.Faction.Kin:
 		return "Player"
 	elif faction == Actor.Faction.CityThugs:
 		return "Thugs"
 	elif faction == Actor.Faction.Algae:
 		return "Bloom"
-	elif faction == Actor.Faction.Neutral:
-		return "Neutral"
 	return Actor.Faction.keys()[faction + 1]
 
 static func getThreatLevelColor(threatValue: float) -> Color:
@@ -146,20 +152,20 @@ static func getThreatLevelName(threatValue: float) -> String:
 	return Actor.ThreatLevel.keys()[Actor.ThreatLevel.Existential] + "+".repeat(overcap)
 
 static func isTargetableBy(a: Actor, b: Actor) -> bool:
-	var aa: Actor.Faction = a.Definition.Faction
-	var bb: Actor.Faction = b.Definition.Faction
+	var aa: Actor.Faction = a.faction
+	var bb: Actor.Faction = b.faction
 	if aa == Actor.Faction.Neutral or bb == Actor.Faction.Neutral:
 		return true
 	return aa != bb
 
 static func isAlliedTo(a: Actor, b: Actor) -> bool:
-	var aa: Actor.Faction = a.Definition.Faction
-	var bb: Actor.Faction = b.Definition.Faction
+	var aa: Actor.Faction = a.faction
+	var bb: Actor.Faction = b.faction
 	return aa == bb
 
 static func isHostileTo(a: Actor, b: Actor) -> bool:
-	var aa: Actor.Faction = a.Definition.Faction
-	var bb: Actor.Faction = b.Definition.Faction
+	var aa: Actor.Faction = a.faction
+	var bb: Actor.Faction = b.faction
 	if aa == Actor.Faction.Neutral or bb == Actor.Faction.Neutral:
 		return false
 	return aa != bb

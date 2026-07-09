@@ -6,7 +6,7 @@ const POST_ACTION_PAUSE: float = 0.25
 
 func _ready() -> void:
 	TurnManager.Instance.FactionTurnStarted.connect(func(faction):
-		if faction != Actor.Faction.Player:
+		if faction != Actor.PlayerFaction:
 			performFactionTurn(faction)
 		else:
 			performPlayerTurnStart()
@@ -16,13 +16,16 @@ func performPlayerTurnStart():
 	pass
 
 func performFactionTurn(faction: Actor.Faction):
-	var actors = Actor.Repository.Alive.List.filter(func(actor):
-		return actor.Definition.Faction == faction and actor.Behaviour
+	var factionActors = Actor.Repository.Alive.List.filter(func(actor):
+		return actor.faction == faction and actor.Behaviour
+	)
+	factionActors.sort_custom(func(a, b):
+		return a.initiative > b.initiative
 	)
 
-	await resolveQueuedAttacks(actors)
+	await resolveQueuedAttacks(factionActors)
 
-	for actor in actors:
+	for actor in factionActors:
 		if not is_instance_valid(actor):
 			continue
 		TurnManager.Instance.activateWorldActor(actor)
@@ -47,7 +50,9 @@ func takeTurn(actor: Actor) -> void:
 	for step in 4:
 		if actor.actions.ActionPointsAvailable <= 0:
 			break
+		behaviour.updateRanking()
 		var start = Time.get_ticks_usec()
+		@warning_ignore("redundant_await")
 		var plan = await behaviour.PlanTurnActions()
 		var elapsed = Time.get_ticks_usec() - start
 		print("AI planning phase took %.2f ms" % [elapsed / 1000.0])
@@ -82,7 +87,6 @@ func executeUseSkillAction(actor: Actor, params: ActorBehaviour.TurnAction.UseSk
 		printerr("Actor %s does not have skill %s"%[actor, params.skill])
 		return
 	actor.Skills.Select(skill)
-	MessageLog.PrintActorMessage(skill.Definition.Name, actor)
 	actor.InputProvider.CursorPosition = params.targetPoint
 	await get_tree().create_timer(FACE_TARGET_TIME).timeout
 

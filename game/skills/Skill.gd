@@ -23,6 +23,7 @@ var MovementRequired: float:
 		return Definition.MovementRequired
 
 func PerformCast(targets: TargetData) -> void:
+	MessageLog.PrintActorMessage(Definition.Name, Parent)
 	BeforeCast.emit(targets)
 	Cast(targets)
 	OnCast.emit(targets)

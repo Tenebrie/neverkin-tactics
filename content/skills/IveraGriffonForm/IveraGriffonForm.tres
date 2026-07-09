@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://d14mr8ctgwnl5"]
 
-[ext_resource type="Texture2D" uid="uid://dwj7xlfrk0163" path="res://actors/Ivera/IveraGriffonForm/Ivera.GriffonForm.Avatar.webp" id="1_ojcdp"]
+[ext_resource type="Texture2D" uid="uid://dwj7xlfrk0163" path="res://content/actors/Ivera/IveraGriffonForm/Ivera.GriffonForm.Avatar.webp" id="1_ojcdp"]
 [ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_nrb5n"]
-[ext_resource type="Resource" uid="uid://x5sms1i1tc64" path="res://actors/Ivera/IveraGriffonForm/IveraGriffonFormDefinition.tres" id="2_ojcdp"]
+[ext_resource type="Resource" uid="uid://x5sms1i1tc64" path="res://content/actors/Ivera/IveraGriffonForm/IveraGriffonFormDefinition.tres" id="2_ojcdp"]
 
 [resource]
 script = ExtResource("2_nrb5n")

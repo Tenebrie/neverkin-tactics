@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://1o0nidhaf0h8"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_xtrxt"]
+
+[resource]
+script = ExtResource("1_xtrxt")
+Name = "Wolf Howl"
+GrudgeString = "Hunting target..."
+TargetingMaxRange = 0.0
+BehaviourRequireLineOfSight = false
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

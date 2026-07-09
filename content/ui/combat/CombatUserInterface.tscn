@@ -7,6 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://doytmrc7mbay2" path="res://content/ui/combat/EndTurnButton/EndTurnButton.tscn" id="5_vfpog"]
 [ext_resource type="PackedScene" uid="uid://dgo6nljeqthco" path="res://content/ui/combat/ActorHoverInfo/ActorHoverInfo.tscn" id="6_h0psq"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_sukno"]
+font_size = 12
+font_color = Color(0.7162962, 0.7162962, 0.7162962, 1)
+
 [node name="CombatUI" type="Control" unique_id=1242906264]
 layout_mode = 3
 anchors_preset = 15
@@ -49,3 +53,16 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ActorHoverInfo" parent="ActorHoverInfoContainer" unique_id=388092998 instance=ExtResource("6_h0psq")]
+
+[node name="FramerateLabel" type="Label" parent="." unique_id=1404552994]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "240"
+label_settings = SubResource("LabelSettings_sukno")
+horizontal_alignment = 2

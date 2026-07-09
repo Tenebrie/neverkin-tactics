@@ -17,9 +17,10 @@ class MapTask:
 
 	var weightCover = 1.0
 	var weightHasShot = 1.0
+	var weightAvoidMeleeRange = 0.0
 	var weightAvoidLineOfSight = 1.0
 	var weightDistanceToMove = 1.0
-	var weightProximityToAllies = 1.0
+	var weightProximityToAllies = 0.0
 	var weightProximityToAlliesFalloffMeters = 10.0
 	var weightProximityToEnemies = 1.0
 	var weightProximityToEnemiesFalloffMeters = 10.0
@@ -38,7 +39,7 @@ class MapTask:
 			field = PhysicsField.new()
 			field.obstacles = PropWall.collectPhysicsFieldObstacles()
 		if not sample:
-			sample = await NavmeshSampler.CollectNavmeshPoints(actor, BehaviourUtils.gridSize, 2.0)
+			sample = await NavmeshSampler.CollectNavmeshPoints(actor, BehaviourUtils.gridSize, 1.0)
 
 		var task = MapTask.new()
 		task.physicsField = field
@@ -52,6 +53,7 @@ class MapTask:
 		if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
 			task.weightCover = behaviour.WeightCover
 			task.weightHasShot = behaviour.WeightHasShot
+			task.weightAvoidMeleeRange = behaviour.WeightAvoidMeleeRange
 			task.weightAvoidLineOfSight = behaviour.WeightAvoidLineOfSight
 			task.weightDistanceToMove = behaviour.WeightDistanceToMove
 			task.weightProximityToAllies = behaviour.WeightProximityToAllies
@@ -237,6 +239,7 @@ static func evaluateCoverScoreAtLocation(task: MapTask, candidate: Vector3) -> f
 		minWallValue = -1
 	return minWallValue * task.weightCover / 2.0
 
+
 static func evaluateProximityScoreAtLocation(task: MapTask, candidate: Vector3) -> float:
 	var score = 0.0
 	if task.weightDistanceToMove != 0.0:
@@ -252,17 +255,29 @@ static func evaluateProximityScoreAtLocation(task: MapTask, candidate: Vector3) 
 	if task.weightProximityToAllies != 0.0 and task.allies.size() > 0:
 		var distToClosestAlly = INF
 		for ally in task.allies:
-			var dist = ally.globalPosition.distance_to(candidate)
+			#var dist = ally.globalPosition.distance_to(candidate)
+			var path = NavigationUtils.getPath(task.navigationMapRid, candidate, ally.globalPosition)
+			var dist = NavigationUtils.getPathLength(path)
 			if dist < distToClosestAlly:
 				distToClosestAlly = dist
 		var allyScore = maxf(0.0, 1.0 - distToClosestAlly / maxf(0.1, task.weightProximityToAlliesFalloffMeters))
 		score += allyScore * task.weightProximityToAllies
 
+	if task.weightAvoidMeleeRange != 0.0 and task.threats.size() > 0:
+		var meleeRangeScore = 0.0
+		for enemy in task.threats:
+			var dist = enemy.globalPosition.distance_to(candidate)
+			var threshold = 3.0 + enemy.physicalSize * 2.0
+			meleeRangeScore += maxf(0.0, 1.0 - dist / threshold)
+		score -= meleeRangeScore * task.weightAvoidMeleeRange
+
 	if (task.weightProximityToEnemies != 0.0 or task.weightOutOfFight != 0.0) and task.targets.size() > 0:
 		var closestEnemy: MapTask.ActorData
 		var distToClosestEnemy = INF
 		for enemy in task.targets:
-			var dist = enemy.globalPosition.distance_to(candidate)
+			#var dist = enemy.globalPosition.distance_to(candidate)
+			var path = NavigationUtils.getPath(task.navigationMapRid, candidate, enemy.globalPosition)
+			var dist = NavigationUtils.getPathLength(path)
 			if dist < distToClosestEnemy:
 				closestEnemy = enemy
 				distToClosestEnemy = dist
@@ -384,7 +399,8 @@ static func findAllies(actor: Actor) -> Array[Actor]:
 			continue
 		if not ActorUtils.isAlliedTo(other, actor):
 			continue
-		result.push_back(other)
+		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.PhysicalSize):
+			result.push_back(other)
 	return result
 
 static func findEnemies(actor: Actor) -> Array[Actor]:
@@ -394,7 +410,8 @@ static func findEnemies(actor: Actor) -> Array[Actor]:
 			continue
 		if not ActorUtils.isHostileTo(other, actor):
 			continue
-		result.push_back(other)
+		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.PhysicalSize):
+			result.push_back(other)
 	return result
 
 static func gatherAttackSkills(actor: Actor) -> Array[SkillDefinition]:

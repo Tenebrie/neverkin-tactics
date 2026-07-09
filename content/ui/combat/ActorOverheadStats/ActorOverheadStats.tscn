@@ -4,6 +4,13 @@
 [ext_resource type="PackedScene" uid="uid://cs8ad3c61m1dk" path="res://content/ui/combat/SegmentedBar/SegmentedBar.tscn" id="2_171gv"]
 [ext_resource type="Texture2D" uid="uid://cy4i31224wr1f" path="res://assets/icons/eye-target-64.svg" id="3_l7a6n"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_8tiyd"]
+resource_local_to_scene = true
+outline_size = 2
+outline_color = Color(1, 0.120000005, 0.120000005, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 1)
+
 [node name="ActorOverheadStats" type="CanvasLayer" unique_id=388092998]
 layer = -1
 script = ExtResource("1_nmjte")
@@ -22,6 +29,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Ivera"
+label_settings = SubResource("LabelSettings_8tiyd")
 
 [node name="CurrentFocusTargetCount" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=1598203069]
 unique_name_in_owner = true

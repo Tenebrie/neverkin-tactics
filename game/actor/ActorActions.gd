@@ -38,7 +38,7 @@ func RefundActionPoints(value: int):
 #region Movement
 var MovementSpeedPerAP: float:
 	get:
-		return Parent.Definition.MovementSpeedPerActionPoint
+		return Parent.movementSpeedPerAction
 var MovementBuffer: float = 0.0:
 	set(v):
 		MovementBuffer = v
@@ -91,13 +91,13 @@ func IsPerformingAnyAction() -> bool:
 #endregion
 
 func onTurnEnded(faction: Actor.Faction) -> void:
-	if faction != Parent.Definition.Faction:
+	if faction != Parent.faction:
 		return
 	MovementBuffer = 0.0
-	if ActionPointsUsed < ActionPointsMax:
-		ActionPointsSavedMax = 1
-	else:
-		ActionPointsSavedMax = 0
+	#if ActionPointsUsed < ActionPointsMax:
+		#ActionPointsSavedMax = 1
+	#else:
+		#ActionPointsSavedMax = 0
 	ActionPointsUsed = 0
 
 #region Orders

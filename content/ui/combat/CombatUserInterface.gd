@@ -6,7 +6,7 @@ extends Control
 @onready var actorHoverInfo: Control = $ActorHoverInfoContainer
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is not InputEventKey or not event.is_pressed() or event.is_echo() or event.ctrl_pressed:
+	if event is not InputEventKey or not event.is_pressed() or event.is_echo() or event.ctrl_pressed or event.alt_pressed:
 		return
 
 	var key = event.keycode
@@ -38,3 +38,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _getStatusWord(status: bool):
 	return "shown" if status else "hidden"
+
+func _process(delta: float) -> void:
+	%FramerateLabel.text = "%d"%Engine.get_frames_per_second()

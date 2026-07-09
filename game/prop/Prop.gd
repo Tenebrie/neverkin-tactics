@@ -9,10 +9,10 @@ func _ready() -> void:
 	Definition.Name = Name
 	Definition.Faction = Faction.Neutral
 	Definition.PhysicalSize = 0.1
-	Definition.MovementSpeedPerActionPoint = 0
+	movementSpeedPerAction = 0
 	Definition.PerceivedThreat = ThreatLevel.Harmless
 	super._ready()
 
-func fadeOut(duration: float = 0.3):
+func fadeOut(_duration: float = 0.3):
 	super.fadeOut()
 	queue_free()

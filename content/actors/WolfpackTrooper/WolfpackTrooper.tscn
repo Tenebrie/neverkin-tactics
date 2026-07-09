@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://cxoxb77d1144u"]
+
+[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_xj0r5"]
+[ext_resource type="Resource" uid="uid://bpluyrx7ka0yv" path="res://content/actors/WolfpackTrooper/WolfpackTrooper.tres" id="2_8tiyd"]
+[ext_resource type="Texture2D" uid="uid://bwvanpwgd5uiw" path="res://content/actors/WolfpackTrooper/WolfpackTrooperToken.webp" id="3_8tiyd"]
+[ext_resource type="Script" uid="uid://b2iscy6dhhw26" path="res://content/behaviours/BehaviourTrooper.gd" id="4_mmrqk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8tiyd"]
+resource_local_to_scene = true
+transparency = 1
+albedo_texture = ExtResource("3_8tiyd")
+texture_repeat = false
+point_size = 111.1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1q2ve"]
+resource_local_to_scene = true
+height = 0.2
+radius = 0.4
+
+[node name="WolfpackTrooper" unique_id=807014692 instance=ExtResource("1_xj0r5")]
+Definition = ExtResource("2_8tiyd")
+
+[node name="TokenMeshInstance3D" parent="." index="0" unique_id=405721016]
+material_override = SubResource("StandardMaterial3D_8tiyd")
+
+[node name="CollisionShape3D" parent="." index="1" unique_id=1364732436]
+shape = SubResource("CylinderShape3D_1q2ve")
+
+[node name="BehaviourTrooper" type="Node" parent="." index="12" unique_id=1979767382]
+script = ExtResource("4_mmrqk")
+WeightAvoidMeleeRange = 3.0

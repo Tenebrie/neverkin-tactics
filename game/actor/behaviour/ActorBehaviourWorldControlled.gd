@@ -16,12 +16,14 @@ class_name ActorBehaviourWorldControlled
 @export var WeightCover: float = 1.0
 ## How badly this actor wants to be able to attack
 @export var WeightHasShot: float = 1.0
+## How much does this actor try to avoid going into enemy melee range
+@export var WeightAvoidMeleeRange: float = 0.0
 ## How much does this actor try to break line of sight to threats
 @export var WeightAvoidLineOfSight: float = 1.0
 # How reluctant is this actor to move from their current position
 @export var WeightDistanceToMove: float = 1.0
 # How much is this actor attracted towards allies
-@export var WeightProximityToAllies: float = 1.0
+@export var WeightProximityToAllies: float = 0.0
 # Range at which proximity influence decays to 0
 @export var WeightProximityToAlliesFalloffMeters: float = 10.0
 # How much is this actor attracted towards enemies
@@ -32,6 +34,8 @@ class_name ActorBehaviourWorldControlled
 @export var WeightOutOfFight: float = 1.0
 # Distance from the fight at which the actor starts to be penalized
 @export var WeightOutOfFightMinDistance: float = 10.0
+# How offended is this actor about being targeted by enemy skills
+@export var WeightGrudges: float = 1.0
 
 var FocusedTarget: Actor = null
 var FocusedTargetTotal: float = 0.0
@@ -48,54 +52,58 @@ class ExplainedThreatValue:
 class SkillGrudge:
 	var value: float
 	var message: String
+	var sourceActor: Actor
 
 class RankedTarget:
 	var Target: Actor
 	var Value: ExplainedThreatValue
 
 func _ready() -> void:
-	var inputProvider = ActorInputProvider.new()
-	await get_tree().process_frame
-	Parent.add_child(inputProvider)
-	Parent.InputProvider = inputProvider
 	Actor.SignalBus.ActorDestroyed.connect(func():
-		computeRanking()
+		updateRanking()
 	)
 
 func _parentReady() -> void:
 	super._parentReady()
 	Parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
-		RecordGrudge(damage)
+		RecordGrudge(damage, damage.SourceActor)
 	)
 
-func RecordGrudge(damage: DamageInstance) -> void:
+func getGrudges(actor: Actor) -> Array[SkillGrudge]:
+	if WeightGrudges == 0:
+		return []
+
+	var out: Array[SkillGrudge]
+	for grudge: SkillGrudge in Grudges.values():
+		if grudge.sourceActor == actor and grudge.value >= 1.0:
+			out.push_back(grudge)
+	return out
+
+func RecordGrudge(damage: DamageInstance, grudgeTarget: Actor) -> void:
 	if not damage.SourceActor or not damage.SourceSkill:
 		return
-	var grudge = SkillGrudge.new()
 
-	var key = [damage.SourceActor.Definition, damage.SourceSkill.Definition]
+	var message = damage.SourceActor.pronouns.evaluate(damage.SourceSkill.Definition.GrudgeString)
+	var key = [grudgeTarget, damage.SourceSkill.Definition]
 	if Grudges.has(key):
 		Grudges[key].value += damage.Value
 		return
 
 	var grudge = SkillGrudge.new()
 	grudge.value = damage.Value
-	grudge.message =
-	grudge.sourceActor = damage.SourceActor.Definition
-	grudge.sourceSkill = damage.SourceSkill.Definition
-	Grudges[key]
+	grudge.message = message
+	grudge.sourceActor = grudgeTarget
+	Grudges[key] = grudge
 
-	grudge.value = Grudges.get(source, ActorGrudge.new()).value + swings
-	grudge.source = source
-	Grudges[source] = grudge
+const HIGHLIGHT_THRESHOLD: float = 1.0
+func explainThreatEntry(result: ExplainedThreatValue, label: String, value: float) -> void:
+	result.Total += floori(value)
+	result.TotalPrecise += value
+	if value >= HIGHLIGHT_THRESHOLD:
+		result.Highlights[label] = value
 
-func ForgiveGrudge(against: Actor) -> void:
-	Grudges.erase(against)
-
-func _process(_delta: float) -> void:
-	if TurnManager.Instance.activeFaction != Actor.Faction.Player:
-		return
-	Ranking = computeRanking()
+func updateRanking():
+	Ranking = _computeRanking()
 	if Ranking.is_empty():
 		FocusedTarget = null
 		FocusedTargetTotal = 0.0
@@ -105,10 +113,10 @@ func _process(_delta: float) -> void:
 	FocusedTargetTotal = Ranking[0].Value.Total
 	FocusedTargetReasons = Ranking[0].Value.Highlights
 
-func computeRanking() -> Array[RankedTarget]:
+func _computeRanking() -> Array[RankedTarget]:
 	var result: Array[RankedTarget] = []
 	var targets = Actor.Repository.Alive.List.filter(func(actor):
-		return ActorUtils.isHostileTo(actor, Parent)
+		return ActorUtils.isHostileTo(actor, Parent) and actor.isAlive
 	)
 	if targets.size() == 0:
 		return result
@@ -142,7 +150,7 @@ func computeRanking() -> Array[RankedTarget]:
 
 func evaluateTargetThreat(actor: Actor) -> ExplainedThreatValue:
 	var value = ExplainedThreatValue.new()
-	value.Total = actor.Stats.ThreatCurrent
+	value.Total = floori(actor.Stats.ThreatCurrent)
 	value.Highlights["Scary!"] = actor.Stats.ThreatCurrent
 	return value
 

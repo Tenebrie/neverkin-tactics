@@ -18,6 +18,7 @@ func _ready():
 	actionPointBar.FillColor = Color(0.8, 0.8, 0.0)
 	actionPointBar.ThreatColor = Color(0.6, 0.4, 0.0)
 	actionPointBar.InhumanColor = Color(1.6, 0.6, 0.0)
+	nameLabel.label_settings.outline_color = ActorUtils.getFactionColor(parent.faction)
 
 func _process(_delta: float):
 	if visible != GloballyVisible:

@@ -1,10 +1,11 @@
 class_name Pronouns
 
 enum Preset {
-	Neutral,
-	Feminine,
-	Masculine,
-	Impersonal
+	Neutral = 0,
+	Feminine = 1,
+	Masculine = 2,
+	Impersonal = 3,
+	HumanoidRandom = 4,
 }
 
 class Values:
@@ -20,7 +21,13 @@ class Values:
 var lowercase: Values
 var capitalized: Values
 
-static func FromPreset(preset: Preset):
+func evaluate(text: String) -> String:
+	return text
+
+static func FromPreset(preset: Preset) -> Pronouns:
+	if preset == Preset.HumanoidRandom:
+		preset = randi_range(Preset.Neutral, Preset.Masculine) as Preset
+
 	match (preset):
 		Preset.Feminine: 	return Pronouns.Feminine()
 		Preset.Masculine: 	return Pronouns.Masculine()
@@ -29,6 +36,8 @@ static func FromPreset(preset: Preset):
 
 static func Neutral() -> Pronouns:
 	var pronouns = Pronouns.new()
+	pronouns.lowercase = Values.new()
+	pronouns.capitalized = Values.new()
 	pronouns.lowercase.nominative = "they"
 	pronouns.lowercase.objectve = "them"
 	pronouns.lowercase.dependentPossessive = "their"
@@ -41,6 +50,8 @@ static func Neutral() -> Pronouns:
 
 static func Feminine() -> Pronouns:
 	var pronouns = Pronouns.new()
+	pronouns.lowercase = Values.new()
+	pronouns.capitalized = Values.new()
 	pronouns.lowercase.nominative = "she"
 	pronouns.lowercase.objectve = "her"
 	pronouns.lowercase.dependentPossessive = "her"
@@ -53,6 +64,8 @@ static func Feminine() -> Pronouns:
 
 static func Masculine() -> Pronouns:
 	var pronouns = Pronouns.new()
+	pronouns.lowercase = Values.new()
+	pronouns.capitalized = Values.new()
 	pronouns.lowercase.nominative = "he"
 	pronouns.lowercase.objectve = "him"
 	pronouns.lowercase.dependentPossessive = "his"
@@ -65,6 +78,8 @@ static func Masculine() -> Pronouns:
 
 static func Impersonal() -> Pronouns:
 	var pronouns = Pronouns.new()
+	pronouns.lowercase = Values.new()
+	pronouns.capitalized = Values.new()
 	pronouns.lowercase.nominative = "it"
 	pronouns.lowercase.objectve = "it"
 	pronouns.lowercase.dependentPossessive = "its"

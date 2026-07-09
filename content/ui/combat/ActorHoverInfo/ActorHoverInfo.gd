@@ -67,7 +67,7 @@ func loadActorData(actor: Actor):
 	stylebox.corner_radius_bottom_right = 0
 	var tooltipOpacity = 0.95
 	match(actor.Stats.Faction):
-		Actor.Faction.Player: stylebox.bg_color = Color(0.01, 0.15, 0.01, tooltipOpacity)
+		Actor.PlayerFaction: stylebox.bg_color = Color(0.01, 0.15, 0.01, tooltipOpacity)
 		Actor.Faction.CityThugs: stylebox.bg_color = Color(0.15, 0.01, 0.01, tooltipOpacity)
 		Actor.Faction.Algae: stylebox.bg_color = Color(0.01, 0.01, 0.15, tooltipOpacity)
 		_: stylebox.bg_color = Color(0.01, 0.01, 0.1, tooltipOpacity)
@@ -79,7 +79,7 @@ func loadActorData(actor: Actor):
 	healthLabel.text = "%d / %d"%[actor.Stats.HealthCurrent, actor.Stats.HealthMaximum]
 	threatLabel.text = ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent)
 	threatLabel.add_theme_color_override("font_color", ActorUtils.getThreatLevelColor(actor.Stats.ThreatCurrent))
-	movementSpeedLabel.text = "%.1f m/a" % actor.Definition.MovementSpeedPerActionPoint
+	movementSpeedLabel.text = "%.1f m/a" % actor.movementSpeedPerAction
 
 	renderSectionVisibility()
 	if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
@@ -97,7 +97,7 @@ func renderSectionVisibility() -> void:
 
 	visible = not Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 	healthLabel.visible = Input.is_key_pressed(KEY_ALT)
-	movementSpeedLabel.visible = Input.is_key_pressed(KEY_ALT) and trackedActor.Definition.MovementSpeedPerActionPoint > 0
+	movementSpeedLabel.visible = Input.is_key_pressed(KEY_ALT) and trackedActor.movementSpeedPerAction > 0
 	%AltToSeeMoreLabel.visible = not Input.is_key_pressed(KEY_ALT)
 
 func renderBehaviourSection(behaviour: ActorBehaviourWorldControlled) -> void:
@@ -108,6 +108,7 @@ func renderBehaviourSection(behaviour: ActorBehaviourWorldControlled) -> void:
 		addSectionHeader("Regrouping")
 		return
 
+	behaviour.updateRanking()
 	var ranking = behaviour.Ranking
 
 	addSectionHeader("Threats")

@@ -6,6 +6,7 @@ class_name ActorDefinition
 @export var Faction: Actor.Faction = Actor.Faction.Neutral
 @export var PerceivedThreat = Actor.ThreatLevel.Concerning
 @export var pronouns = Pronouns.Preset.Neutral
+@export var initiative: int = 0
 
 @export_group("Token")
 @export var PhysicalSize: float = 0.4
@@ -13,7 +14,6 @@ class_name ActorDefinition
 @export var TokenTexture: Texture2D
 
 @export_group("Avatar")
-@export var RenderPriority: int = 0
 @export var AvatarTexture: Texture2D
 
 @export_group("Stats")

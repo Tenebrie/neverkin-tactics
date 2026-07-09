@@ -9,27 +9,30 @@ var apSpentTotal = 0.0
 var fuseDuration = 1.0 # action points
 var fuse: CircularTelegraph
 
-func EnableFuse(origin: Vector3):
-	fuse = Asset.Instantiate(CircularTelegraph)
+func EnableFuse(origin: Vector3, telegraphDefinition: TelegraphDefinition):
+	#fuse = Asset.Instantiate(CircularTelegraph)
+	#fuse.ParentSkill = TriggeringSkill
+	#fuse.Definition = parentTelegraph.Definition
+	fuse = ActorTelegraphs.instantiateTelegraph(telegraphDefinition, TriggeringSkill)
 	Game.Scene.add_child(fuse)
 	fuse.global_position = origin
-	fuse.radius = Radius
+	fuse.growPercentage = 0.0
+	#fuse.radius = Radius
 	fuse.setColor(Color.RED)
-	fuse.Definition = TelegraphPreset.PointArea.new(Radius).WithDamageToHostiles(Damage)
 
 	ActorActions.SignalBus.ActionPointsConsumedPermanently.connect(func(actor: Actor, apConsumed):
-		if actor.Stats.Faction != Actor.Faction.Player or fuse.IsLeaving:
+		if actor.Stats.Faction != Actor.PlayerFaction or fuse.IsLeaving:
 			return
 		AdvanceFuse(apConsumed)
 	)
 	ActorNavigator.SignalBus.ActorTraversed.connect(func(actor, dist):
-		if actor.Stats.Faction != Actor.Faction.Player or fuse.IsLeaving:
+		if actor.Stats.Faction != Actor.PlayerFaction or fuse.IsLeaving:
 			return
-		var apSpent = dist / actor.Definition.MovementSpeedPerActionPoint
+		var apSpent = dist / actor.movementSpeedPerAction
 		AdvanceFuse(apSpent)
 	)
 	TurnManager.Instance.FactionTurnEnded.connect(func(faction):
-		if fuse.IsLeaving or faction != Actor.Faction.Player:
+		if fuse.IsLeaving or faction != Actor.PlayerFaction:
 			return
 		AdvanceFuse(1000)
 	)
@@ -52,4 +55,4 @@ func PlayExplosionEffect():
 		var angle = randf() * TAU
 		var distance = sqrt(randf()) * Radius
 		var point = global_position + Vector3(cos(angle) * distance, 0.0, sin(angle) * distance)
-		MessageLog.PrintWorldMessage("Boom!", point, get_viewport())
+		MessageLog.PrintWorldMessage("Boom!", point)

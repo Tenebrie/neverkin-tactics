@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://cbd4ym50rdkol"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_hvrt6"]
+
+[resource]
+script = ExtResource("1_hvrt6")
+Name = "Roundhouse Slash"
+GrudgeString = "$They kicked me"
+TargetingMaxRange = 1.2
+BehaviourRequireLineOfSight = false
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

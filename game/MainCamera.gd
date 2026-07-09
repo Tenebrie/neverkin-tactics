@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 	if TurnManager.Instance.activePlayerActor == null:
 		return
 
-	var isPlayerTurn = TurnManager.Instance.activeFaction == Actor.Faction.Player
+	var isPlayerTurn = TurnManager.Instance.activeFaction == Actor.PlayerFaction
 
 	if isPlayerTurn:
 		var movementVector = Vector3.ZERO
@@ -54,7 +54,7 @@ func _process(delta: float) -> void:
 			movementVector.x += 1
 		movementVector = movementVector.normalized()
 		cameraTarget += movementVector * delta * size
-	else:
+	elif TurnManager.Instance.activeActor:
 		cameraTarget = TurnManager.Instance.activeActor.global_position
 
 	cameraTarget.x = clampf(cameraTarget.x, offsetRangeMinX, offsetRangeMaxX)

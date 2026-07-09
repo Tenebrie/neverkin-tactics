@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://bm6mqj82bco5k"]
+
+[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_53kbj"]
+[ext_resource type="Resource" uid="uid://bqn1bv5re5kvb" path="res://content/actors/WolfpackBrawler/WolfpackBrawler.tres" id="2_lwem1"]
+[ext_resource type="Texture2D" uid="uid://nxiism0sknn7" path="res://content/actors/WolfpackBrawler/WolfpackBrawlerAvatar.webp" id="3_lwem1"]
+[ext_resource type="Script" uid="uid://dooh7j3h51ywm" path="res://content/behaviours/BehaviourBrawler.gd" id="4_lwem1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lwem1"]
+resource_local_to_scene = true
+transparency = 1
+albedo_texture = ExtResource("3_lwem1")
+texture_repeat = false
+point_size = 111.1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_c8p40"]
+resource_local_to_scene = true
+height = 0.2
+radius = 0.4
+
+[node name="WolfpackBrawler" unique_id=807014692 instance=ExtResource("1_53kbj")]
+Definition = ExtResource("2_lwem1")
+
+[node name="TokenMeshInstance3D" parent="." index="0" unique_id=405721016]
+material_override = SubResource("StandardMaterial3D_lwem1")
+
+[node name="CollisionShape3D" parent="." index="1" unique_id=1364732436]
+shape = SubResource("CylinderShape3D_c8p40")
+
+[node name="BehaviourBrawler" type="Node" parent="." index="12" unique_id=1101268705]
+script = ExtResource("4_lwem1")
+WeightCover = 0.0
+WeightHasShot = 3.0
+WeightAvoidLineOfSight = 0.05
+WeightProximityToEnemies = 3.0
+WeightOutOfFight = 3.0
