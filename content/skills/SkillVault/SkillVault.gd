@@ -6,7 +6,10 @@ var landingAreaTelegraph: TelegraphDefinition = TelegraphPreset.PointArea.new(0.
 var targetedActor: Actor
 
 func _prepare() -> void:
-	landingAreaTelegraph.CircleRadius = Parent.physicalSize
+	landingAreaTelegraph.created.connect(func(telegraph: CircularTelegraph):
+		telegraph.radius = Parent.physicalSize
+	)
+
 	landingAreaTelegraph.Processors.push_back(func(telegraph: Telegraph):
 		var targetTint = Color.TRANSPARENT
 		if targetedActor:
@@ -15,7 +18,7 @@ func _prepare() -> void:
 			var landingSpot = partnerPosition + jumpVector * (Parent.physicalSize + 0.25 + targetedActor.physicalSize)
 			telegraph.global_position = landingSpot
 
-			if telegraph.IsPathable():
+			if telegraph.IsPathable(Parent.physicalSize):
 				targetTint = TelegraphColor.ExclusionGood
 			else:
 				targetTint = TelegraphColor.ExclusionOccupied
@@ -25,14 +28,14 @@ func _prepare() -> void:
 
 	landingAreaTelegraph.Validators = []
 	landingAreaTelegraph.Validators.push_back(func(telegraph: Telegraph):
-		if not telegraph.IsPathable():
+		if not telegraph.IsPathable(Parent.physicalSize):
 			return Error.new("Not enough free space at destination.")
 	)
 
 	landingAreaTelegraph.Attachment = Telegraph.Attachment.None
 
 	targetSelectorTelegraph.addTargetFilter(func(target):
-		return target is Prop or not ActorUtils.isHostileTo(target, Parent)
+		return target is Prop or not ActorUtils.isHostileTo(target, Parent) and target != Parent
 	)
 	targetSelectorTelegraph.targetsChanged.connect(func(targets):
 		if targets.size() > 0:

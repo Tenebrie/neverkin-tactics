@@ -11,4 +11,6 @@ func _cast(targets: Skill.TargetData) -> void:
 	super._cast(targets)
 
 	for actor in targets.perTelegraph[damageTelegraph]:
-		actor.Buffs.Add(BuffCrippled.new())
+		var buff = BuffCrippled.new()
+		buff.turnsRemaining = 1
+		actor.Buffs.Add(buff)

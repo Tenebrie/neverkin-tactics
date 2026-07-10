@@ -9,4 +9,6 @@ func _ready() -> void:
 	super._ready()
 
 func _cast(_targets: Skill.TargetData) -> void:
-	Parent.Buffs.Add(BuffStim.new())
+	var stim = BuffStim.new()
+	stim.turnsRemaining = 1
+	Parent.Buffs.Add(stim)

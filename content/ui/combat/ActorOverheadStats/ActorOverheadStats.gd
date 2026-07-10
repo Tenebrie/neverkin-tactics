@@ -8,6 +8,7 @@ class_name ActorOverheadStats
 @onready var actionPointBar: SegmentedBar = $%ActionPointBar
 
 @onready var focusTargetCount: Control = %CurrentFocusTargetCount
+@onready var buffContainer: HBoxContainer = %BuffContainer
 
 static var GloballyVisible = true
 
@@ -19,6 +20,9 @@ func _ready():
 	actionPointBar.ThreatColor = Color(0.6, 0.4, 0.0)
 	actionPointBar.InhumanColor = Color(1.6, 0.6, 0.0)
 	nameLabel.label_settings.outline_color = ActorUtils.getFactionColor(parent.faction)
+	await get_tree().process_frame
+	parent.Buffs.Changed.connect(rebuildBuffs)
+	rebuildBuffs()
 
 func _process(_delta: float):
 	if visible != GloballyVisible:
@@ -29,8 +33,8 @@ func _process(_delta: float):
 	updateValues()
 
 func updatePosition():
-	var cam := get_viewport().get_camera_3d()
-	var screen := cam.unproject_position(parent.global_position)
+	var cam = get_viewport().get_camera_3d()
+	var screen = cam.unproject_position(parent.global_position)
 	offset = screen - Vector2($VBoxContainer.size.x / 2, $VBoxContainer.size.y) - Vector2(0, world_to_pixels(parent.physicalSize) + 4)
 
 func world_to_pixels(world_size: float) -> float:
@@ -63,6 +67,15 @@ func updateValues():
 	focusTargetCount.visible = focusedTargets.size() > 0
 	if focusTargetCount.visible:
 		focusTargetCount.get_node("Label").text = str(focusedTargets.size())
+
+func rebuildBuffs():
+	for child in buffContainer.get_children():
+		child.queue_free()
+	for buff in parent.Buffs.listAllVisible():
+		var buffView = Asset.Instantiate(ActorOverheadStatsBuff)
+		buffView.parent = parent
+		buffContainer.add_child(buffView)
+		buffView.loadBuff(buff)
 
 func fadeOut(duration: float = 0.3):
 	var container: Control = $VBoxContainer

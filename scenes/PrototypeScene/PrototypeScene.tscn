@@ -47,7 +47,6 @@ size = Vector3(3, 0.1, 3.6000001)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=63940742]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007748604, 0)
-visible = false
 navigation_mesh = SubResource("NavigationMesh_wr5mt")
 
 [node name="Node3D" type="Node3D" parent="." unique_id=1847546094 groups=["navigation_mesh_source_group"]]

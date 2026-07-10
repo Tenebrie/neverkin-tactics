@@ -47,21 +47,30 @@ func cleanUp():
 	super.cleanUp()
 	decal.cleanUp()
 
-## TODO: Check collision properly
-func IsPathable() -> bool:
-	var sampleCount = 32
+## TODO: Rewrite this
+func IsPathable(_agentSize: float) -> bool:
 	var map = get_world_3d().navigation_map
 	var center = global_position
+	var tolerance = 0.01
+	var requiredSize = radius + tolerance
+	var currentSize = 0.4
+	if NavmeshManager.Instance.currentMapActor:
+		currentSize = NavmeshManager.Instance.currentMapActor.physicalSize
+	var delta = requiredSize - currentSize
 
-	# Check center
-	if not isPointOnNavmesh(map, center):
+	if not isPointOnNavmesh(map, center, tolerance + maxf(-delta, 0.0)):
 		return false
 
-	# Check ring of points at the edge
-	for i in sampleCount:
-		var angle = (TAU / sampleCount) * i
-		var offset = Vector3(cos(angle), 0, sin(angle)) * radius
-		var point = center + offset
-		if not isPointOnNavmesh(map, point):
-			return false
-	return true
+	if delta <= tolerance:
+		return true
+
+	var shape = CylinderShape3D.new()
+	shape.radius = radius
+	shape.height = 3.0
+	var query = PhysicsShapeQueryParameters3D.new()
+	query.shape = shape
+	query.transform = Transform3D(Basis(), Vector3(center.x, RenderHeight.Navigation + 1.5, center.z))
+	query.collision_mask = CollisionLayer.ACTOR | CollisionLayer.OBSTACLE | CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
+	if NavmeshManager.Instance.currentMapActor:
+		query.exclude = [NavmeshManager.Instance.currentMapActor]
+	return get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()

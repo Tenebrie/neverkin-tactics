@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cmhowjgaa3w42" path="res://content/ui/combat/ActorOverheadStats/ActorOverheadStats.gd" id="1_nmjte"]
 [ext_resource type="PackedScene" uid="uid://cs8ad3c61m1dk" path="res://content/ui/combat/SegmentedBar/SegmentedBar.tscn" id="2_171gv"]
+[ext_resource type="PackedScene" uid="uid://dywuub3ltetny" path="res://content/ui/combat/ActorOverheadStats/ActorOverheadStatsBuff.tscn" id="2_r8iqe"]
 [ext_resource type="Texture2D" uid="uid://cy4i31224wr1f" path="res://assets/icons/eye-target-64.svg" id="3_l7a6n"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_8tiyd"]
@@ -58,3 +59,18 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 mouse_filter = 2
+
+[node name="BuffContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1121555862]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 0
+
+[node name="ActorOverheadStatsBuff" parent="VBoxContainer/BuffContainer" unique_id=1952470217 instance=ExtResource("2_r8iqe")]
+layout_mode = 2
+
+[node name="ActorOverheadStatsBuff2" parent="VBoxContainer/BuffContainer" unique_id=1153454181 instance=ExtResource("2_r8iqe")]
+layout_mode = 2
+
+[node name="ActorOverheadStatsBuff3" parent="VBoxContainer/BuffContainer" unique_id=1174349115 instance=ExtResource("2_r8iqe")]
+layout_mode = 2

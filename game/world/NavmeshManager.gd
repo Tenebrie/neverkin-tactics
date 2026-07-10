@@ -16,9 +16,15 @@ var pendingActor: Actor = null
 var pendingExceptions: Array[Actor] = []
 var activeBakeCount = 0
 
+var currentMapActor: Actor
+
 func _enter_tree():
 	TurnManager.Instance.CurrentActorChanged.connect(func(actor: Actor):
 		rebakeNavmesh(actor, [])
+	)
+	Actor.SignalBus.ActorDefinitionChanged.connect(func(actor: Actor):
+		if actor == TurnManager.Instance.activeActor:
+			rebakeNavmesh(TurnManager.Instance.activeActor, [actor])
 	)
 	Actor.SignalBus.ActorDestroyed.connect(func(actor: Actor):
 		rebakeNavmesh(TurnManager.Instance.activeActor, [actor])
@@ -56,8 +62,8 @@ func drainQueue():
 	BakeCompleted.emit()
 
 func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
-	var bakeStartUsec := Time.get_ticks_usec()
-	#print("[navbake] dispatch for %s" % [actor.name])
+	currentMapActor = actor
+	var bakeStartUsec = Time.get_ticks_usec()
 	var allExceptions: Array[Actor] = exceptions.duplicate()
 	allExceptions.push_back(actor)
 	var characters = get_tree().current_scene.find_children("*", "Actor", true, false)
@@ -89,7 +95,7 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 		NavigationServer3D.bake_from_source_geometry_data_async(navMesh, source, onRegionBakeFinished)
 	if activeBakeCount > 0:
 		await batchFinished
-	var elapsedMs := (Time.get_ticks_usec() - bakeStartUsec) / 1000.0
+	var elapsedMs = (Time.get_ticks_usec() - bakeStartUsec) / 1000.0
 	if is_instance_valid(actor):
 		print("[navbake] finished for %s in %.3f ms (%d region(s))" % [actor.name, elapsedMs, touchedMaps.size()])
 	return touchedMaps

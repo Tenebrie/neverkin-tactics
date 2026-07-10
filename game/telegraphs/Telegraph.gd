@@ -30,6 +30,7 @@ var FilteredOnlyTargets: Array[Actor]
 
 func _ready():
 	setColor(Tint)
+	Definition.created.emit(self)
 
 func _physics_process(_d: float) -> void:
 	checkTargetsDiff()
@@ -83,7 +84,7 @@ func onBodyExited(body: Node3D):
 		checkTargetsDiff()
 
 @abstract func setColor(color: Color) -> void
-@abstract func IsPathable() -> bool
+@abstract func IsPathable(agentSize: float) -> bool
 
 signal cleaningStarted
 
@@ -94,7 +95,7 @@ func cleanUp() -> void:
 	await get_tree().create_timer(1.0).timeout
 	queue_free()
 
-func isPointOnNavmesh(map: RID, point: Vector3, threshold: float = 0.4) -> bool:
+func isPointOnNavmesh(map: RID, point: Vector3, threshold: float) -> bool:
 	var flattenedPoint = Vector3(point.x, RenderHeight.Navigation, point.z)
 	var closest = NavigationServer3D.map_get_closest_point(map, flattenedPoint)
 	return flattenedPoint.distance_to(closest) < threshold

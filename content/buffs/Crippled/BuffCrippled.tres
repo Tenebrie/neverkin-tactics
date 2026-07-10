@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BuffDefinition" format=3 uid="uid://wusf01lwi7nt"]
+
+[ext_resource type="Texture2D" uid="uid://dx5dmtm13jy1o" path="res://content/buffs/Crippled/BuffCrippledIcon.svg" id="1_5f3xh"]
+[ext_resource type="Script" uid="uid://tbbvo8dei2ke" path="res://game/buff/BuffDefinition.gd" id="2_mjegy"]
+
+[resource]
+script = ExtResource("2_mjegy")
+name = "Crippled"
+description = "Movement speed is reduced by 50%."
+alignment = 2
+iconTexture = ExtResource("1_5f3xh")
+metadata/_custom_type_script = "uid://tbbvo8dei2ke"

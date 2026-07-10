@@ -83,7 +83,7 @@ func EnableCulling():
 	decal.EnableCulling()
 
 ## TODO: Check collision properly
-func IsPathable() -> bool:
+func IsPathable(agentSize: float) -> bool:
 	var sampleCountX = 16
 	var sampleCountZ = 16
 	var map = get_world_3d().navigation_map
@@ -102,6 +102,6 @@ func IsPathable() -> bool:
 			var tz = (float(zi) / (sampleCountZ - 1)) * 2.0 - 1.0
 			var localPoint = localCenter + Vector3(tx * halfWidth, 0, tz * halfLength)
 			var worldPoint = global_transform * localPoint
-			if not isPointOnNavmesh(map, worldPoint):
+			if not isPointOnNavmesh(map, worldPoint, agentSize):
 				return false
 	return true

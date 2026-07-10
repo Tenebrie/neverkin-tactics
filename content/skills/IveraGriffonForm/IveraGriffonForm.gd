@@ -3,20 +3,21 @@ class_name IveraGriffonForm
 
 var Damage = 3
 
+const GRIFFON_SIZE = 0.8
 var damageArea = TelegraphPreset.PointArea.new(1.2).WithDamageToHostiles(Damage)
-var exclusionArea = TelegraphPreset.PointArea.new(0.8)
+var exclusionArea = TelegraphPreset.PointArea.new(GRIFFON_SIZE)
 
 func _ready() -> void:
 	Definition = preload("./IveraGriffonForm.tres").duplicate()
 
 	damageArea.Validators.push_back(func(_telegraph: Telegraph):
 		var exclusionAreaTelegraph = Parent.Telegraphs.FindTelegraph(exclusionArea)
-		if not exclusionAreaTelegraph.IsPathable():
+		if not exclusionAreaTelegraph.IsPathable(GRIFFON_SIZE):
 			return Error.new("Not enough free space at destination.")
 	)
 
 	exclusionArea.Processors.push_back(func(telegraph: Telegraph):
-		if telegraph.IsPathable():
+		if telegraph.IsPathable(GRIFFON_SIZE):
 			telegraph.Tint = TelegraphColor.ExclusionGood
 		else:
 			telegraph.Tint = TelegraphColor.ExclusionOccupied

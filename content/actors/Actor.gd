@@ -31,7 +31,8 @@ func _exit_tree() -> void:
 
 #region Proxy Getters
 var physicalSize:
-	get: return Definition.physicalSize
+	get:
+		return Definition.physicalSize
 var pronouns: Pronouns:
 	get:
 		return Pronouns.FromPreset(Definition.pronouns)

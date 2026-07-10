@@ -1,6 +1,7 @@
 @abstract extends Resource
 class_name TelegraphDefinition
 
+signal created(telegraph: Telegraph)
 signal targetsChanged(targets: Array[Actor])
 
 @export var Shape: Telegraph.Shape = Telegraph.Shape.Circle
