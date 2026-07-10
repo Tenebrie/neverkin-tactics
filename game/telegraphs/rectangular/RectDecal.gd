@@ -14,11 +14,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if fadingOut:
 		fadeValue -= float(delta) * (1.0 / fadeOutDuration)
+		fadeValue = clampf(fadeValue, 0.0, 1.0)
 		set_instance_shader_parameter(&"FADE", fadeValue)
-		if fadeValue <= 0.0:
-			if OnFadeOut.is_valid():
-				OnFadeOut.call()
-			queue_free()
 	elif fadingIn:
 		fadeValue += float(delta) * (1.0 / fadeOutDuration)
 		set_instance_shader_parameter(&"FADE", fadeValue)
@@ -26,7 +23,10 @@ func _process(delta: float) -> void:
 			fadeValue = 1.0
 			fadingIn = false
 
+func SetInnerAlpha(value: float) -> void:
+	set_instance_shader_parameter(&"INNER_ALPHA", value)
+
 func cleanUp() -> void:
-	fadeValue = 1.0
+	#fadeValue = 1.0
 	fadingIn = false
 	fadingOut = true

@@ -41,7 +41,7 @@ func resolveQueuedAttacks(actors: Array[Actor]) -> void:
 		TurnManager.Instance.activateWorldActor(actor)
 		await NavmeshManager.Instance.WaitUntilReady()
 		await get_tree().create_timer(POST_ACTION_PAUSE).timeout
-		actor.targeting.PerformAction_CastSelectedSkill()
+		await actor.targeting.PerformAction_CastSelectedSkill()
 		actor.Skills.Unselect()
 		await get_tree().create_timer(POST_ACTION_PAUSE).timeout
 
@@ -95,7 +95,7 @@ func executeUseSkillAction(actor: Actor, params: ActorBehaviour.TurnAction.UseSk
 	#if plan.chosenSkill.Definition.TargetingResolvesNextTurn:
 		#return true
 
-	actor.targeting.PerformAction_CastSelectedSkill()
+	await actor.targeting.PerformAction_CastSelectedSkill()
 	actor.Skills.Unselect()
 	await get_tree().create_timer(POST_ACTION_PAUSE).timeout
 	return true

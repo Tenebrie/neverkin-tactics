@@ -1,9 +1,8 @@
 @abstract extends Node3D
 class_name Skill
 
-signal BeforeCast(targets: TargetData)
-signal OnCast(targets: TargetData)
-signal AfterCast(targets: TargetData)
+signal beforeCast(targets: TargetData)
+signal afterCast(targets: TargetData)
 
 @export var Definition: SkillDefinition
 
@@ -37,13 +36,19 @@ var MovementRequired: float:
 
 func PerformCast(targets: TargetData) -> void:
 	MessageLog.PrintActorMessage(Definition.Name, Parent)
-	BeforeCast.emit(targets)
-	_cast(targets)
-	OnCast.emit(targets)
-	AfterCast.emit(targets)
+	_emitSkillEvent([beforeCast, SignalBus.beforeCast], targets)
+	await _cast(targets)
+	_emitSkillEvent([afterCast, SignalBus.afterCast], targets)
 
 func _cast(_targets: TargetData) -> void:
 	pass
+
+func _emitSkillEvent(signals: Array[Signal], targets: TargetData):
+	for signalToEmit in signals:
+		var connections = signalToEmit.get_connections()
+		for connection in connections:
+			var callable = connection["callable"]
+			await callable.call(targets)
 
 func StartSequence() -> Sequencer:
 	return Sequencer.Start(self)
@@ -81,3 +86,8 @@ class TargetData:
 		targetData.perTelegraph = actor.Telegraphs.TargetsPerTelegraphDefinition
 		targetData.perTelegraphIndex = targetData.perTelegraph.values()
 		return targetData
+
+static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
+class SignalBusImplementation extends NodeSignalBus:
+	signal beforeCast(targets: TargetData)
+	signal afterCast(targets: TargetData)

@@ -34,6 +34,7 @@ ProximityVisualizationLayer="*uid://blafccyolmd7y"
 
 gdscript/type_inference/infer_type_from_assignment=true
 gdscript/warnings/shadowed_variable=0
+gdscript/warnings/redundant_await=0
 shapes/navigation/3d/enable_edge_lines=false
 
 [display]

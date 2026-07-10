@@ -59,8 +59,6 @@ func planMovementAction() -> TurnAction:
 	var bestPointIndex = coverMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
 		return ActorUtils.isPointReachable(Parent, point.point, 1)
 	)
-	for point in coverMap.scoredPoints:
-		print(point.score)
 	if bestPointIndex == -1:
 		printerr("No points in reach")
 		return TurnAction.Skip()

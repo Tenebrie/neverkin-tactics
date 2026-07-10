@@ -127,7 +127,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 				return
 
 	ConsumeActionPoints(apCost)
-	skill.PerformCast(targets)
+	await skill.PerformCast(targets)
 
 func IssueOrder_Stop():
 	if ActionQueue.Empty():

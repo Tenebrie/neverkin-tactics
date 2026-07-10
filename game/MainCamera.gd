@@ -42,7 +42,9 @@ func _process(delta: float) -> void:
 
 	var isPlayerTurn = TurnManager.Instance.activeFaction == Actor.PlayerFaction
 
-	if isPlayerTurn:
+	if lockedTarget:
+		cameraTarget = lockedTarget.global_position
+	elif isPlayerTurn:
 		var movementVector = Vector3.ZERO
 		if Input.is_key_pressed(KEY_W):
 			movementVector.z -= 1
@@ -60,5 +62,13 @@ func _process(delta: float) -> void:
 	cameraTarget.x = clampf(cameraTarget.x, offsetRangeMinX, offsetRangeMaxX)
 	cameraTarget.z = clampf(cameraTarget.z, offsetRangeMinZ, offsetRangeMaxZ)
 	var targetPosition = Vector3(cameraTarget.x, position.y, cameraTarget.z)
-	var lerpSpeed = 12.0 if isPlayerTurn else 5.0
+	var lerpSpeed = 12.0 if isPlayerTurn and not lockedTarget else 5.0
 	position = position.lerp(targetPosition, delta * lerpSpeed)
+
+static var lockedTarget: Node3D
+static func lock(node: Node3D):
+	lockedTarget = node
+
+static func unlock(node: Node3D):
+	if lockedTarget == node:
+		lockedTarget = null

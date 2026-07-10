@@ -27,6 +27,8 @@ func _ready() -> void:
 	updateRadius()
 
 func _process(_delta: float):
+	if IsLeaving:
+		return
 	decal.set_instance_shader_parameter(&"PROGRESS", growPercentage)
 
 func updateRadius():
@@ -42,10 +44,8 @@ func setColor(color: Color):
 	decal.set_instance_shader_parameter(&"COLOR_A", color.a)
 
 func cleanUp():
-	decal.cleanUp()
-	decal.OnFadeOut = func():
-		queue_free()
 	super.cleanUp()
+	decal.cleanUp()
 
 ## TODO: Check collision properly
 func IsPathable() -> bool:

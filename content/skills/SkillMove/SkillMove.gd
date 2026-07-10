@@ -4,14 +4,7 @@ class_name SkillMove
 func _ready() -> void:
 	Definition = preload("res://content/skills/SkillMove/SkillMove.tres").duplicate()
 
-	OnCast.connect(func():
-		var path = Parent.targeting.getLegalPathToMouse()
-		if path.size() == 0:
-			return
-		Parent.actions.IssueOrder_MoveThroughPath(path)
-	)
-
-	AfterCast.connect(func():
+	afterCast.connect(func():
 		Parent.Skills.Select(null)
 		Parent.targeting.lockedMode = ActorTargeting.TargetMode.None
 	)
@@ -22,3 +15,9 @@ func _ready() -> void:
 	)
 
 	super._ready()
+
+func _cast(_targets: TargetData) -> void:
+	var path = Parent.targeting.getLegalPathToMouse()
+	if path.size() == 0:
+		return
+	Parent.actions.IssueOrder_MoveThroughPath(path)

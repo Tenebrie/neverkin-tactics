@@ -36,7 +36,6 @@ var fadingOut: bool = false
 var fadeValue: float = 0.0
 var fadeInDuration: float = 0.25
 var fadeOutDuration: float = 0.1
-var OnFadeOut: Callable
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -48,20 +47,14 @@ func _process(delta: float) -> void:
 		return
 	if fadingOut:
 		fadeValue -= float(delta) * (1.0 / fadeOutDuration)
+		fadeValue = clampf(fadeValue, 0.0, 1.0)
 		set_instance_shader_parameter(&"FADE", fadeValue)
-		if fadeValue <= 0.0:
-			if OnFadeOut.is_valid():
-				OnFadeOut.call()
-			queue_free()
 	elif fadingIn:
 		fadeValue += float(delta) * (1.0 / fadeInDuration)
 		set_instance_shader_parameter(&"FADE", fadeValue)
 		if fadeValue >= 1.0:
 			fadeValue = 1.0
 			fadingIn = false
-
-func SetInnerAlpha(value: float) -> void:
-	set_instance_shader_parameter(&"INNER_ALPHA", value)
 
 func SetProgress(value: float) -> void:
 	set_instance_shader_parameter(&"PROGRESS", value)
@@ -76,6 +69,6 @@ func SetOuterWidth(value: float) -> void:
 	set_instance_shader_parameter(&"OUTER_WIDTH", value / 20.0)
 
 func cleanUp() -> void:
-	fadeValue = 1.0
+	#fadeValue = 1.0
 	fadingIn = false
 	fadingOut = true

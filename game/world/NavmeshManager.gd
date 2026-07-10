@@ -23,7 +23,7 @@ func _enter_tree():
 	Actor.SignalBus.ActorDestroyed.connect(func(actor: Actor):
 		rebakeNavmesh(TurnManager.Instance.activeActor, [actor])
 	)
-	TurnManager.Instance.FactionTurnStarted.connect(func():
+	TurnManager.Instance.FactionTurnStarted.connect(func(_f):
 		if is_instance_valid(TurnManager.Instance.activeActor):
 			rebakeNavmesh(TurnManager.Instance.activeActor, [])
 	)

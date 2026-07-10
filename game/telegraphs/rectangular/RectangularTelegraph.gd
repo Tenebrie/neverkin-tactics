@@ -76,8 +76,8 @@ func setColor(color: Color):
 	decal.set_instance_shader_parameter(&"COLOR_A", color.a)
 
 func cleanUp():
-	queue_free()
 	super.cleanUp()
+	decal.cleanUp()
 
 func EnableCulling():
 	decal.EnableCulling()

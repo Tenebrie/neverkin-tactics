@@ -85,9 +85,14 @@ func onBodyExited(body: Node3D):
 @abstract func setColor(color: Color) -> void
 @abstract func IsPathable() -> bool
 
+signal cleaningStarted
+
 var IsLeaving = false
 func cleanUp() -> void:
 	IsLeaving = true
+	cleaningStarted.emit()
+	await get_tree().create_timer(1.0).timeout
+	queue_free()
 
 func isPointOnNavmesh(map: RID, point: Vector3, threshold: float = 0.4) -> bool:
 	var flattenedPoint = Vector3(point.x, RenderHeight.Navigation, point.z)

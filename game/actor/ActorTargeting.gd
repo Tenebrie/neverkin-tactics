@@ -102,7 +102,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func PerformAction_CastSelectedSkill():
 	var targetData = Skill.TargetData.Collect(Parent)
-	Parent.actions.IssueOrder_ConfirmCast(Parent.Skills.SelectedSkill, targetData)
+	await Parent.actions.IssueOrder_ConfirmCast(Parent.Skills.SelectedSkill, targetData)
 
 func resetDisplayedElements() -> void:
 	agentPathPreview.ClearPath()

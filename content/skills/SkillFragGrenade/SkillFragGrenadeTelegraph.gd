@@ -15,6 +15,10 @@ func EnableFuse(origin: Vector3, telegraphDefinition: TelegraphDefinition):
 	fuse.global_position = origin
 	fuse.growPercentage = 0.0
 	fuse.setColor(Color.RED)
+	fuse.cleaningStarted.connect(func():
+		for child in get_children():
+			child.queue_free()
+	)
 
 	ActorActions.SignalBus.ActionPointsConsumedPermanently.connect(func(actor: Actor, apConsumed):
 		if actor.Stats.Faction != Actor.PlayerFaction or fuse.IsLeaving:
@@ -26,22 +30,50 @@ func EnableFuse(origin: Vector3, telegraphDefinition: TelegraphDefinition):
 			return
 		var apSpent = dist / actor.movementSpeedPerAction
 		AdvanceFuse(apSpent)
+		if apSpentTotal >= fuseDuration:
+			explode()
 	)
-	TurnManager.Instance.FactionTurnEnded.connect(func(faction):
+	TurnManager.Instance.BeforeFactionTurnEnded.connect(func(faction):
 		if fuse.IsLeaving or faction != Actor.PlayerFaction:
 			return
 		AdvanceFuse(1000)
+		MainCamera.lock(self)
+		while fuse.growPercentage < 1.0:
+			await get_tree().process_frame
+		explode()
+		await get_tree().create_timer(0.25).timeout
+		MainCamera.unlock(self)
+	)
+
+	Skill.SignalBus.afterCast.connect(func(_t):
+		if apSpentTotal < fuseDuration:
+			return
+
+		while fuse.growPercentage < 1.0:
+			await get_tree().process_frame
+		explode()
+		await get_tree().create_timer(0.25).timeout
 	)
 
 func AdvanceFuse(apSpent: float):
 	apSpentTotal += apSpent
-	fuse.growPercentage = clampf(apSpentTotal / (fuseDuration - 0.05), 0.0, 1.0)
-	if fuse.growPercentage >= 1.0:
-		explode()
-		fuse.cleanUp()
-		fuse.tree_exiting.connect(queue_free)
+
+func _process(delta: float) -> void:
+	if not fuse:
+		return
+	var current = fuse.growPercentage
+	var target = clampf(apSpentTotal / (fuseDuration - 0.05), 0.0, 1.0)
+	if target == current:
+		return
+
+	if target > current:
+		fuse.growPercentage = clampf(current + delta * fuseDuration, current, target)
+	else:
+		fuse.growPercentage = clampf(current - delta * fuseDuration, target, current)
 
 func explode():
+	fuse.cleanUp()
+	fuse.tree_exiting.connect(queue_free)
 	PlayExplosionEffect()
 	for target in fuse.Targets:
 		target.Stats.DealDamage(DamageInstance.ForDelayedTelegraph(target, TriggeringSkill, fuse))
