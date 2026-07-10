@@ -213,44 +213,85 @@ func fill_files_list():
 
 func fill_files_list_with(files: Array[FileData]):
 	var filter_text: String = filter_txt.text
-	files.sort_custom(sort_by_filter)
 
+	if (filter_text.is_empty()):
+		for file_data: FileData in files:
+			add_file_item(file_data)
+		return
+
+	var query_lower: String = filter_text.to_lower()
+	var scored: Array = []
 	for file_data: FileData in files:
-		var file: String = file_data.file
-		if (filter_text.is_empty() || filter_text.is_subsequence_ofn(file)):
-			var icon: Texture2D = EditorInterface.get_base_control().get_theme_icon(file_data.file_type, &"EditorIcons")
+		var score: int = compute_match_score(query_lower, file_data)
+		if (score >= 0):
+			scored.append([score, file_data])
 
-			files_list.add_item(file_data.file_name_structure, icon)
-			files_list.set_item_metadata(files_list.item_count - 1, file)
-			files_list.set_item_tooltip(files_list.item_count - 1, file)
+	scored.sort_custom(func(a, b) -> bool:
+		if (a[0] != b[0]):
+			return a[0] > b[0]
+		return a[1].file_name < b[1].file_name
+	)
 
-func sort_by_filter(file_data1: FileData, file_data2: FileData) -> bool:
-	var filter_text: String = filter_txt.text
-	var name1: String = file_data1.file_name
-	var name2: String = file_data2.file_name
+	for entry: Array in scored:
+		add_file_item(entry[1])
 
-	for index: int in filter_text.length():
-		var a_oob: bool = index >= name1.length()
-		var b_oob: bool = index >= name2.length()
+func add_file_item(file_data: FileData):
+	var icon: Texture2D = EditorInterface.get_base_control().get_theme_icon(file_data.file_type, &"EditorIcons")
+	files_list.add_item(file_data.file_name_structure, icon)
+	files_list.set_item_metadata(files_list.item_count - 1, file_data.file)
+	files_list.set_item_tooltip(files_list.item_count - 1, file_data.file)
 
-		if (a_oob):
-			if (b_oob):
-				return false;
-			return true
-		if (b_oob):
-			return false
+# Tiered so any file_name hit outranks any path-only hit, and substring beats subsequence.
+func compute_match_score(query_lower: String, file_data: FileData) -> int:
+	var name_lower: String = file_data.file_name.to_lower()
 
-		var char: String = filter_text[index]
-		var a_match: bool = char == name1[index]
-		var b_match: bool = char == name2[index]
+	var name_substr: int = name_lower.find(query_lower)
+	if (name_substr >= 0):
+		return 1000000 - name_substr * 1000 - file_data.file_name.length()
 
-		if (a_match && !b_match):
-			return true
+	var name_score: int = fuzzy_subseq_score(query_lower, name_lower, file_data.file_name)
+	if (name_score >= 0):
+		return 500000 + name_score - file_data.file_name.length()
 
-		if (b_match && !a_match):
-			return false
+	var path_lower: String = file_data.file.to_lower()
+	var path_substr: int = path_lower.find(query_lower)
+	if (path_substr >= 0):
+		return 100000 - path_substr
 
-	return name1 < name2
+	var path_score: int = fuzzy_subseq_score(query_lower, path_lower, file_data.file)
+	if (path_score >= 0):
+		return path_score
+
+	return -1
+
+func fuzzy_subseq_score(query_lower: String, target_lower: String, target_original: String) -> int:
+	var score: int = 0
+	var q_idx: int = 0
+	var last_match: int = -2
+	for i: int in target_lower.length():
+		if (q_idx >= query_lower.length()):
+			break
+		if (target_lower[i] == query_lower[q_idx]):
+			score += 10
+			if (last_match == i - 1):
+				score += 15
+			if (i == 0):
+				score += 20
+			else:
+				var prev: String = target_original[i - 1]
+				if (prev == "_" || prev == "/" || prev == "-" || prev == "."):
+					score += 15
+				else:
+					var cur: String = target_original[i]
+					if (cur != cur.to_lower() && prev == prev.to_lower()):
+						score += 10
+			last_match = i
+			q_idx += 1
+
+	if (q_idx < query_lower.length()):
+		return -1
+
+	return score
 
 class FileData:
 	var file: String
