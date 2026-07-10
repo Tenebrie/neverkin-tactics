@@ -31,7 +31,7 @@ func _process(_delta: float):
 func updatePosition():
 	var cam := get_viewport().get_camera_3d()
 	var screen := cam.unproject_position(parent.global_position)
-	offset = screen - Vector2($VBoxContainer.size.x / 2, $VBoxContainer.size.y) - Vector2(0, world_to_pixels(parent.PhysicalSize) + 4)
+	offset = screen - Vector2($VBoxContainer.size.x / 2, $VBoxContainer.size.y) - Vector2(0, world_to_pixels(parent.physicalSize) + 4)
 
 func world_to_pixels(world_size: float) -> float:
 	var camera = get_viewport().get_camera_3d()

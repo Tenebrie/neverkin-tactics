@@ -1,15 +1,14 @@
 [gd_scene format=3 uid="uid://bfov4a1ba7otj"]
 
-[ext_resource type="PackedScene" uid="uid://bvxvnc3sify1j" path="res://game/prop/Prop.tscn" id="1_0mw2e"]
+[ext_resource type="PackedScene" uid="uid://bvxvnc3sify1j" path="res://content/props/Prop.tscn" id="1_0mw2e"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="2_ko0qu"]
 [ext_resource type="Texture2D" uid="uid://vsy1e5um1axl" path="res://addons/prototype-textures/green/texture_03.png" id="3_y63i5"]
 
 [sub_resource type="Resource" id="Resource_0mw2e"]
 script = ExtResource("2_ko0qu")
 Name = "Unnamed Prop"
-PhysicalSize = 0.1
 PerceivedThreat = 0
-MovementSpeedPerActionPoint = 0.0
+PhysicalSize = 0.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_y63i5")

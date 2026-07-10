@@ -8,5 +8,5 @@ func _ready() -> void:
 	]
 	super._ready()
 
-func Cast(_targets: Skill.TargetData) -> void:
+func _cast(_targets: Skill.TargetData) -> void:
 	Parent.Definition = Definition.ShapeshiftTargetActor

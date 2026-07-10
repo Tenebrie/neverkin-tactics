@@ -12,7 +12,7 @@ const ENGAGEMENT_REFERENCE_METERS: float = 100.0
 func _parentReady() -> void:
 	super._parentReady()
 	Parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
-		RecordGrudge(damage, damage.SourceActor)
+		RecordGrudge(damage, damage.sourceActor)
 	)
 
 func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:

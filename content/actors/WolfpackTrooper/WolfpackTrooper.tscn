@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cxoxb77d1144u"]
 
-[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_xj0r5"]
+[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://content/actors/Actor.tscn" id="1_xj0r5"]
 [ext_resource type="Resource" uid="uid://bpluyrx7ka0yv" path="res://content/actors/WolfpackTrooper/WolfpackTrooper.tres" id="2_8tiyd"]
 [ext_resource type="Texture2D" uid="uid://bwvanpwgd5uiw" path="res://content/actors/WolfpackTrooper/WolfpackTrooperToken.webp" id="3_8tiyd"]
 [ext_resource type="Script" uid="uid://b2iscy6dhhw26" path="res://content/behaviours/BehaviourTrooper.gd" id="4_mmrqk"]

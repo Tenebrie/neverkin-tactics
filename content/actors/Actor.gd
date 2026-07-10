@@ -30,8 +30,8 @@ func _exit_tree() -> void:
 #endregion
 
 #region Proxy Getters
-var PhysicalSize:
-	get: return Definition.PhysicalSize
+var physicalSize:
+	get: return Definition.physicalSize
 var pronouns: Pronouns:
 	get:
 		return Pronouns.FromPreset(Definition.pronouns)
@@ -102,7 +102,7 @@ func loadDefinition():
 	if Definition.TokenTexture:
 		var material: StandardMaterial3D = $TokenMeshInstance3D.material_override
 		material.albedo_texture = Definition.TokenTexture
-		var scaleMod = Definition.PhysicalSize / 0.4
+		var scaleMod = Definition.physicalSize / 0.4
 		var tween = create_tween().set_parallel()
 		tween.tween_property($TokenMeshInstance3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
 		tween.tween_property($CollisionShape3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)

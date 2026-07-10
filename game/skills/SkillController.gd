@@ -38,6 +38,7 @@ func _parentReady() -> void:
 
 func LoadCommonSkills() -> void:
 	commonSkillGroup.Add(SkillMove.new())
+	commonSkillGroup.Add(SkillVault.new())
 
 func LoadSkills() -> void:
 	for skillOrNode in activeSkillGroup.get_children():

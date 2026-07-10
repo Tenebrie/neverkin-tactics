@@ -10,14 +10,10 @@ var fuseDuration = 1.0 # action points
 var fuse: CircularTelegraph
 
 func EnableFuse(origin: Vector3, telegraphDefinition: TelegraphDefinition):
-	#fuse = Asset.Instantiate(CircularTelegraph)
-	#fuse.ParentSkill = TriggeringSkill
-	#fuse.Definition = parentTelegraph.Definition
 	fuse = ActorTelegraphs.instantiateTelegraph(telegraphDefinition, TriggeringSkill)
 	Game.Scene.add_child(fuse)
 	fuse.global_position = origin
 	fuse.growPercentage = 0.0
-	#fuse.radius = Radius
 	fuse.setColor(Color.RED)
 
 	ActorActions.SignalBus.ActionPointsConsumedPermanently.connect(func(actor: Actor, apConsumed):

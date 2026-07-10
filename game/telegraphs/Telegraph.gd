@@ -49,6 +49,7 @@ func checkTargetsDiff() -> void:
 			BuffHealthThreat.RemoveByOwner(target, self)
 	if current != previousSeenTargets:
 		TargetsChanged.emit(current)
+		Definition.targetsChanged.emit(current)
 	previousSeenTargets = current
 
 var previousSeenTargets: Array[Actor] = []

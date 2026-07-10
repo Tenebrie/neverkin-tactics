@@ -7,7 +7,7 @@ func _ready() -> void:
 	Definition = load("res://content/skills/IveraClaws/IveraClaws.tres")
 	super._ready()
 
-func Cast(targets: Skill.TargetData) -> void:
+func _cast(targets: Skill.TargetData) -> void:
 	var actor = targets.actor
 	var effect = IveraClawsStrikeEffect.new()
 	get_parent().add_child(effect)

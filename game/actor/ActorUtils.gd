@@ -194,6 +194,6 @@ static func hasLineOfSight(actor: Actor, target: Actor) -> bool:
 	query.origin = actor.global_position
 	query.target = target.global_position
 	query.collision_mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
-	query.exclude = PropWall.GetIgnoredWallRidsAt(PropWall.collectBehaviourMapTaskData(), actor.global_position, actor.PhysicalSize)
+	query.exclude = PropWall.GetIgnoredWallRidsAt(PropWall.collectBehaviourMapTaskData(), actor.global_position, actor.physicalSize)
 	var result = physicsField.raycast_query(query)
 	return not result.has_hits

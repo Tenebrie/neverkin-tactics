@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bm6mqj82bco5k"]
 
-[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_53kbj"]
+[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://content/actors/Actor.tscn" id="1_53kbj"]
 [ext_resource type="Resource" uid="uid://bqn1bv5re5kvb" path="res://content/actors/WolfpackBrawler/WolfpackBrawler.tres" id="2_lwem1"]
 [ext_resource type="Texture2D" uid="uid://nxiism0sknn7" path="res://content/actors/WolfpackBrawler/WolfpackBrawlerAvatar.webp" id="3_lwem1"]
 [ext_resource type="Script" uid="uid://dooh7j3h51ywm" path="res://content/behaviours/BehaviourBrawler.gd" id="4_lwem1"]

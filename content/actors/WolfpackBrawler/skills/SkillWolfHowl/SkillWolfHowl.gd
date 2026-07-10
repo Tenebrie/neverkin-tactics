@@ -9,7 +9,7 @@ func _ready() -> void:
 	]
 	super._ready()
 
-func Cast(targets: Skill.TargetData) -> void:
+func _cast(targets: Skill.TargetData) -> void:
 	var target = targets.actor
 	target.Buffs.Add(BuffWolfHowlTarget.new())
 

@@ -104,12 +104,12 @@ func renderBehaviourSection(behaviour: ActorBehaviourWorldControlled) -> void:
 	clearContainer(targetReasonContainer)
 	focusTargetLabel.get_parent().visible = false
 
+	behaviour.updateRanking()
+	var ranking = behaviour.Ranking
+
 	if not behaviour.FocusedTarget:
 		addSectionHeader("Regrouping")
 		return
-
-	behaviour.updateRanking()
-	var ranking = behaviour.Ranking
 
 	addSectionHeader("Threats")
 	for i in ranking.size():

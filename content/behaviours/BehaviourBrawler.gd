@@ -44,14 +44,13 @@ func planMovementAction() -> TurnAction:
 	var adjacentTargetCount = 0
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
-		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.PhysicalSize
-		if dist <= SkillRoundhouseSlash.AttackArea + Parent.PhysicalSize:
+		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.physicalSize
+		if dist <= SkillRoundhouseSlash.AttackArea + Parent.physicalSize:
 			adjacentTargetCount += 1
 
 	if adjacentTargetCount >= 2:
 		return TurnAction.UseSkillOnSelf(SkillRoundhouseSlash)
 
-	print("Starting to go")
 	var coverMap = await BehaviourUtils.createActorValueMap(Parent)
 	if coverMap.points.size() == 0:
 		printerr("No points in reach")
@@ -68,7 +67,6 @@ func planMovementAction() -> TurnAction:
 	var currentCover = coverMap.read(Parent.global_position)
 	var bestPoint = coverMap.scoredPoints[bestPointIndex].point
 	var bestCover = coverMap.read(bestPoint)
-	print("Best point score is %f"%bestCover)
 
 	if currentCover >= bestCover and adjacentTargetCount >= 1:
 		return TurnAction.UseSkillOnSelf(SkillRoundhouseSlash)
@@ -81,8 +79,8 @@ func planCombatAction() -> TurnAction:
 	var adjacentTargetCount = 0
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
-		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.PhysicalSize
-		if dist <= Parent.Skills.Get(SkillKnifeSlash).Definition.TargetingMaxRange + Parent.PhysicalSize:
+		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.physicalSize
+		if dist <= Parent.Skills.Get(SkillKnifeSlash).Definition.TargetingMaxRange + Parent.physicalSize:
 			adjacentTargetCount += 1
 
 	if adjacentTargetCount == 0:
@@ -91,7 +89,7 @@ func planCombatAction() -> TurnAction:
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
 
-		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.PhysicalSize
+		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.physicalSize
 		var knifeRange = Parent.Skills.Get(SkillKnifeSlash).Definition.TargetingMaxRange
 		if dist < knifeRange:
 			return TurnAction.UseSkillOnActor(SkillKnifeSlash, target)

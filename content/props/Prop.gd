@@ -8,7 +8,7 @@ func _ready() -> void:
 	Definition = ActorDefinition.new()
 	Definition.Name = Name
 	Definition.Faction = Faction.Neutral
-	Definition.PhysicalSize = 0.1
+	Definition.physicalSize = 0.1
 	movementSpeedPerAction = 0
 	Definition.PerceivedThreat = ThreatLevel.Harmless
 	super._ready()

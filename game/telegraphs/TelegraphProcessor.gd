@@ -23,7 +23,7 @@ static func OutOfRangeTint(telegraph: Telegraph):
 	parentPosition.y = 0
 	var telegraphPosition = telegraph.global_position
 	telegraphPosition.y = 0
-	var dist = parentPosition.distance_to(telegraphPosition) - parent.PhysicalSize
+	var dist = parentPosition.distance_to(telegraphPosition) - parent.physicalSize
 	if dist > telegraph.ParentSkill.Definition.TargetingMaxRange:
 		telegraph.Tint = TelegraphColor.OutOfRange
 

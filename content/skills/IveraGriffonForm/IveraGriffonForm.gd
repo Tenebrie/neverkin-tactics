@@ -29,8 +29,8 @@ func _ready() -> void:
 	]
 	super._ready()
 
-func Cast(targets: Skill.TargetData) -> void:
-	for target in targets.PerTelegraph[damageArea]:
+func _cast(targets: Skill.TargetData) -> void:
+	for target in targets.perTelegraph[damageArea]:
 		StartSequence()
 			.AddStep(0.3, func():
 				var effect = IveraClawsStrikeEffect.new()

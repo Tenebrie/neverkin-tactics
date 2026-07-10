@@ -11,7 +11,7 @@ func _ready() -> void:
 	]
 	super._ready()
 
-func Cast(targets: Skill.TargetData) -> void:
+func _cast(targets: Skill.TargetData) -> void:
 	var actor = targets.actor
 	var effect = IveraClawsStrikeEffect.new()
 	get_tree().current_scene.add_child(effect)

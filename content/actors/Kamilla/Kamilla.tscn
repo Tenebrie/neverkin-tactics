@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmyet57hfpj6u"]
 
-[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_tq261"]
+[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://content/actors/Actor.tscn" id="1_tq261"]
 [ext_resource type="Resource" uid="uid://86yotqi3o76i" path="res://content/actors/Kamilla/KamillaDefinition.tres" id="2_q0caw"]
 [ext_resource type="Texture2D" uid="uid://dvn23v5qlr8h2" path="res://content/actors/Kamilla/kamilla.Token.webp" id="2_s4ik7"]
 [ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/actor/behaviour/ActorBehaviourPlayerControlled.gd" id="8_o02g8"]

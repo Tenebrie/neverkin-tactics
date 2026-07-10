@@ -8,7 +8,7 @@ class SelfCast extends TelegraphDefinition:
 		Processors.push_back(TelegraphProcessor.ConstantTint(TelegraphColor.MaxRange))
 
 	func Load(skill: Skill):
-		CircleRadius = skill.Parent.PhysicalSize + 0.05
+		CircleRadius = skill.Parent.physicalSize + 0.05
 
 class MaxCastRange extends TelegraphDefinition:
 	func _init():
@@ -18,7 +18,7 @@ class MaxCastRange extends TelegraphDefinition:
 		Processors.push_back(TelegraphProcessor.ConstantTint(TelegraphColor.MaxRange))
 
 	func Load(skill: Skill):
-		CircleRadius = skill.Definition.TargetingMaxRange + skill.Parent.PhysicalSize
+		CircleRadius = skill.Definition.TargetingMaxRange + skill.Parent.physicalSize
 
 class SingleActor extends TelegraphDefinition:
 	func _init():
@@ -35,17 +35,16 @@ class SingleActor extends TelegraphDefinition:
 		Processors.push_back(TelegraphProcessor.TargetFactionTint)
 		Processors.push_back(TelegraphProcessor.NoTransparency)
 
+		addTargetFilter(func(actor: Actor) -> bool:
+			return TurnManager.Instance.activeFaction != Actor.PlayerFaction or Actor.Repository.Hovered.List.has(actor)
+		)
+
 	func Load(_skill: Skill):
 		pass
 
 	func WithDamageToHostiles(damage: int):
 		HealthThreat = damage
-		#TargetFilters.push_back(func(actor: Actor) -> bool:
-			#return actor.faction != Actor.PlayerFaction and Actor.Repository.Hovered.List.has(actor)
-		#)
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			if TurnManager.Instance.activeFaction == Actor.PlayerFaction and not Actor.Repository.Hovered.List.has(actor):
-				return false
 			return ActorUtils.isTargetableBy(actor, ParentSkill.Parent)
 		)
 		return self

@@ -13,7 +13,20 @@ signal AfterCast(targets: TargetData)
 @onready var Parent: Actor = Controller.Parent
 
 func _ready() -> void:
-	name = Definition.Name
+	if not Definition:
+		var scriptPath = get_script().resource_path
+		var definitionPath = scriptPath.get_basename() + ".tres"
+		var definitionObject = load(definitionPath).duplicate() as SkillDefinition
+		if not definitionObject:
+			push_error("Missing definition: %s" % definitionPath)
+		Definition = definitionObject
+
+	if Definition:
+		name = Definition.Name
+	_prepare()
+
+func _prepare() -> void:
+	pass
 
 var ActionPointCost: int:
 	get:
@@ -25,11 +38,11 @@ var MovementRequired: float:
 func PerformCast(targets: TargetData) -> void:
 	MessageLog.PrintActorMessage(Definition.Name, Parent)
 	BeforeCast.emit(targets)
-	Cast(targets)
+	_cast(targets)
 	OnCast.emit(targets)
 	AfterCast.emit(targets)
 
-func Cast(_targets: TargetData) -> void:
+func _cast(_targets: TargetData) -> void:
 	pass
 
 func StartSequence() -> Sequencer:
@@ -43,7 +56,7 @@ enum TargetMode {
 }
 
 class TargetData:
-	var SourceSkill: Skill
+	var sourceSkill: Skill
 	var actor: Actor
 
 	## Actors matching normal telegraphs
@@ -52,16 +65,19 @@ class TargetData:
 	## World point under cursor
 	var mousePoint: Vector3
 
-	var PerTelegraph: Dictionary[TelegraphDefinition, Array[Actor]]
-	var PerTelegraphIndex: Array[Array[Actor]]
+	var pointPerTelegraph: Dictionary[TelegraphDefinition, Vector3]
+	var perTelegraph: Dictionary[TelegraphDefinition, Array[Actor]]
+	var perTelegraphIndex: Array[Array[Actor]]
 
 	static func Collect(actor: Actor) -> Skill.TargetData:
 		var targetData = Skill.TargetData.new()
-		targetData.SourceSkill = actor.Skills.SelectedSkill
+		targetData.sourceSkill = actor.Skills.SelectedSkill
 		if actor.Telegraphs.Targets.size() > 0:
 			targetData.actor = actor.Telegraphs.Targets.get(0)
 		targetData.actors = actor.Telegraphs.Targets
 		targetData.mousePoint = actor.InputProvider.CursorPosition
-		targetData.PerTelegraph = actor.Telegraphs.TargetsPerTelegraphDefinition
-		targetData.PerTelegraphIndex = targetData.PerTelegraph.values()
+		for telegraph in actor.Telegraphs.telegraphs:
+			targetData.pointPerTelegraph[telegraph.Definition] = ActorUtils.flatPositionOf(telegraph)
+		targetData.perTelegraph = actor.Telegraphs.TargetsPerTelegraphDefinition
+		targetData.perTelegraphIndex = targetData.perTelegraph.values()
 		return targetData

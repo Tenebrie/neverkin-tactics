@@ -48,7 +48,7 @@ func IsIgnoredFor(actor: Actor) -> bool:
 		return false
 
 	var actorPosition = actor.global_position
-	var distanceThreshold = pow(actor.PhysicalSize * 2, 2)
+	var distanceThreshold = pow(actor.physicalSize * 2, 2)
 
 	for child in get_children():
 		if child is not Node3D:

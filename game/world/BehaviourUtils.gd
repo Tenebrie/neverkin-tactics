@@ -95,9 +95,9 @@ class MapTask:
 		static func collect(actor: Actor) -> ActorData:
 			var data = ActorData.new()
 			data.threat = actor.Stats.ThreatCurrent
-			data.physicalSize = actor.PhysicalSize
+			data.physicalSize = actor.physicalSize
 			data.globalPosition = actor.global_position
-			data.ignoredWalls = PropWall.GetIgnoredWallRidsAt(PropWall.collectBehaviourMapTaskData(), actor.global_position, actor.PhysicalSize)
+			data.ignoredWalls = PropWall.GetIgnoredWallRidsAt(PropWall.collectBehaviourMapTaskData(), actor.global_position, actor.physicalSize)
 			return data
 
 	class WallData:
@@ -399,7 +399,7 @@ static func findAllies(actor: Actor) -> Array[Actor]:
 			continue
 		if not ActorUtils.isAlliedTo(other, actor):
 			continue
-		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.PhysicalSize):
+		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.physicalSize):
 			result.push_back(other)
 	return result
 
@@ -410,7 +410,7 @@ static func findEnemies(actor: Actor) -> Array[Actor]:
 			continue
 		if not ActorUtils.isHostileTo(other, actor):
 			continue
-		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.PhysicalSize):
+		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.physicalSize):
 			result.push_back(other)
 	return result
 

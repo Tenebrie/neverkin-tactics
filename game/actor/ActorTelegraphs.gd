@@ -76,6 +76,8 @@ func onSkillSelected(skill: Skill):
 			add_child(telegraph)
 		elif def.Attachment == Telegraph.Attachment.Caster:
 			skill.Parent.add_child(telegraph)
+		else:
+			get_tree().root.add_child(telegraph)
 
 	CurrentSkill = skill
 
@@ -108,7 +110,7 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 	telegraph.TargetValidator = func(actor: Actor) -> bool:
 		if telegraph.IsLeaving:
 			return false
-		if actor.collision_layer & CollisionLayer.SKILL_TARGETABLE == 0:
+		if actor.collision_layer & def.collisionMask == 0:
 			return false
 		for group in telegraph.IgnoredObstacleGroups:
 			if actor.is_in_group(group):

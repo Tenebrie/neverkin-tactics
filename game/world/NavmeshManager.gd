@@ -74,7 +74,7 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 		seenMeshes[navMesh] = region.name
 		if NavigationServer3D.is_baking_navigation_mesh(navMesh):
 			continue
-		navMesh.agent_radius = actor.PhysicalSize
+		navMesh.agent_radius = actor.physicalSize
 		navMesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
 		var source = NavigationMeshSourceGeometryData3D.new()
 		NavigationServer3D.parse_source_geometry_data(navMesh, source, region)
@@ -83,7 +83,7 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 				continue
 			var col: CollisionShape3D = c.get_node_or_null("CollisionShape3D")
 			if col and col.shape:
-				addObstruction(source, c, col, actor.PhysicalSize)
+				addObstruction(source, c, col, actor.physicalSize)
 		touchedMaps.push_back(region.get_navigation_map())
 		activeBakeCount += 1
 		NavigationServer3D.bake_from_source_geometry_data_async(navMesh, source, onRegionBakeFinished)
@@ -163,7 +163,7 @@ func addObstruction(source: NavigationMeshSourceGeometryData3D, other: Actor, co
 		push_warning("[navbake] Unsupported collision shape type: %s" % shape.get_class())
 		return
 
-	var footprint = maxf(shapeRadius * horizontalScale, other.PhysicalSize)
+	var footprint = maxf(shapeRadius * horizontalScale, other.physicalSize)
 	height = height * absf(colScale.y)
 
 	var carveRadius = footprint + agentRadius

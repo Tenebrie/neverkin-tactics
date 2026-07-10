@@ -59,14 +59,12 @@ class RankedTarget:
 	var Value: ExplainedThreatValue
 
 func _ready() -> void:
-	Actor.SignalBus.ActorDestroyed.connect(func():
-		updateRanking()
-	)
+	updateRanking()
 
 func _parentReady() -> void:
 	super._parentReady()
 	Parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
-		RecordGrudge(damage, damage.SourceActor)
+		RecordGrudge(damage, damage.sourceActor)
 	)
 
 func getGrudges(actor: Actor) -> Array[SkillGrudge]:
@@ -80,11 +78,11 @@ func getGrudges(actor: Actor) -> Array[SkillGrudge]:
 	return out
 
 func RecordGrudge(damage: DamageInstance, grudgeTarget: Actor) -> void:
-	if not damage.SourceActor or not damage.SourceSkill:
+	if not damage.sourceActor or not damage.sourceSkill:
 		return
 
-	var message = damage.SourceActor.pronouns.evaluate(damage.SourceSkill.Definition.GrudgeString)
-	var key = [grudgeTarget, damage.SourceSkill.Definition]
+	var message = damage.sourceActor.pronouns.evaluate(damage.sourceSkill.Definition.GrudgeString)
+	var key = [grudgeTarget, damage.sourceSkill.Definition]
 	if Grudges.has(key):
 		Grudges[key].value += damage.Value
 		return

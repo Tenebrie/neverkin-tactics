@@ -1,28 +1,28 @@
 class_name DamageInstance
 
 var Value: int = 0
-var SourceActor: Actor
-var SourceSkill: Skill
+var sourceActor: Actor
+var sourceSkill: Skill
 
 var GrudgeString: String
 
 func _to_string() -> String:
-	return "<DamageInstance Value=%d SourceActor=%s SourceSkill=%s>"%[Value, SourceActor, SourceSkill]
+	return "<DamageInstance Value=%d sourceActor=%s sourceSkill=%s>"%[Value, sourceActor, sourceSkill]
 
 static func ForDelayedTelegraph(target: Actor, sourceSkill: Skill, telegraph: Telegraph) -> DamageInstance:
 	var instance = DamageInstance.new()
-	instance.SourceSkill = sourceSkill
-	instance.SourceActor = sourceSkill.Parent
+	instance.sourceSkill = sourceSkill
+	instance.sourceActor = sourceSkill.Parent
 	instance.Value = telegraph.Definition.HealthThreatSelector.call(target)
 	return instance
 
 static func ForSkillCast(target: Actor, targetData: Skill.TargetData) -> DamageInstance:
 	var instance = DamageInstance.new()
-	instance.SourceSkill = targetData.SourceSkill
-	instance.SourceActor = targetData.SourceSkill.Parent
+	instance.sourceSkill = targetData.sourceSkill
+	instance.sourceActor = targetData.sourceSkill.Parent
 
-	for def in targetData.SourceSkill.Definition.Telegraphs:
-		var telegraphTargets = targetData.PerTelegraph[def]
+	for def in targetData.sourceSkill.Definition.Telegraphs:
+		var telegraphTargets = targetData.perTelegraph[def]
 		if not telegraphTargets.has(target):
 			continue
 		instance.Value += def.HealthThreatSelector.call(target)
@@ -30,7 +30,7 @@ static func ForSkillCast(target: Actor, targetData: Skill.TargetData) -> DamageI
 
 static func ForAggroGeneration(sourceSkill: Skill, value: int) -> DamageInstance:
 	var instance = DamageInstance.new()
-	instance.SourceSkill = sourceSkill
-	instance.SourceActor = sourceSkill.Parent
+	instance.sourceSkill = sourceSkill
+	instance.sourceActor = sourceSkill.Parent
 	instance.Value = value
 	return instance

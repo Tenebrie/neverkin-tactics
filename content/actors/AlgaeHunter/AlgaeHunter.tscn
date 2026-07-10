@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://4seydnc3rhjm"]
 
-[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://game/actor/Actor.tscn" id="1_8v85i"]
+[ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://content/actors/Actor.tscn" id="1_8v85i"]
 [ext_resource type="Resource" uid="uid://byi3o26on4m4f" path="res://content/actors/AlgaeHunter/AlgaeHunterDefinition.tres" id="2_nkocr"]
 [ext_resource type="Texture2D" uid="uid://oj88kx5hagc2" path="res://content/actors/AlgaeHunter/AlgaeHunterToken.webp" id="3_s6oeb"]
 [ext_resource type="Script" uid="uid://c2acdvtvn7la1" path="res://content/actors/AlgaeHunter/AlgaeHunterBehaviour.gd" id="4_s6oeb"]

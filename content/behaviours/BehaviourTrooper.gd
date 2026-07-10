@@ -67,7 +67,7 @@ func planCombatAction() -> TurnAction:
 		if target.isDead:
 			continue
 
-		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.PhysicalSize
+		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.physicalSize
 		var pistolRange = Parent.Skills.Get(SkillPistolShot).Definition.TargetingMaxRange
 		var grenadeRange = Parent.Skills.Get(SkillFragGrenade).Definition.TargetingMaxRange
 		if dist < pistolRange and ActorUtils.hasLineOfSight(Parent, target):

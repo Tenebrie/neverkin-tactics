@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://dntufyf3qin4l"]
+
+[ext_resource type="Texture2D" uid="uid://fmqjfv04l8kx" path="res://content/skills/SkillVault/SkillVaultIcon.png" id="1_yawl1"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_ry4fp"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_r1dwb"]
+device = -1
+keycode = 74
+unicode = 106
+
+[resource]
+script = ExtResource("2_ry4fp")
+Name = "Vault"
+GrudgeString = ""
+IconTexture = ExtResource("1_yawl1")
+Hotkey = SubResource("InputEventKey_r1dwb")
+TargetingMaxRange = 0.5
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

@@ -9,7 +9,7 @@ class_name ActorDefinition
 @export var initiative: int = 0
 
 @export_group("Token")
-@export var PhysicalSize: float = 0.4
+@export var physicalSize: float = 0.4
 @export var TokenOffset: Vector2 = Vector2.ZERO
 @export var TokenTexture: Texture2D
 

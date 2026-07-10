@@ -23,6 +23,7 @@ mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1456027749]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="NameLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1573864759]
 unique_name_in_owner = true

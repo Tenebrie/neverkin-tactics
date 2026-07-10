@@ -7,8 +7,8 @@ func _ready() -> void:
 	newDefinition.Telegraphs = Definition.Telegraphs
 	Definition = newDefinition
 
-func Cast(targets: Skill.TargetData) -> void:
-	super.Cast(targets)
+func _cast(targets: Skill.TargetData) -> void:
+	super._cast(targets)
 
-	for actor in targets.PerTelegraph[damageTelegraph]:
+	for actor in targets.perTelegraph[damageTelegraph]:
 		actor.Buffs.Add(BuffCrippled.new())
