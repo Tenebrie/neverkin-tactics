@@ -11,3 +11,6 @@ func _input(event: InputEvent) -> void:
 
 	var faction = (key.keycode - KEY_KP_0) as Actor.Faction
 	TurnManager.Instance.setPlayerFaction(faction)
+
+func _process(_delta: float) -> void:
+	MouseArea3D.updateHoverStates()

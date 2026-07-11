@@ -1,11 +1,11 @@
-extends CanvasLayer
+extends ParadoxTooltip
 class_name ActorHoverInfo
 
 @onready var panelContainer: PanelContainer = $PanelContainer
 @onready var nameLabel: Label = %NameLabel
-@onready var factionLabel: Label = %FactionLabel
+@onready var factionLabel: ParadoxTextLabel = %FactionLabel
 @onready var healthLabel: HLabeledValueContainer = %HealthLabel
-@onready var threatLabel: Label = %ThreatLabel
+@onready var threatLabel: ParadoxTextLabel = %ThreatLabel
 @onready var movementSpeedLabel: HLabeledValueContainer = %MovementSpeedLabel
 
 @onready var npcBehaviourSection: Control = %NPCBehaviourSection
@@ -20,6 +20,7 @@ var trackedActor: Actor
 static var GloballyVisible = true
 
 func _ready() -> void:
+	super._ready()
 	ActorHoverArea.SignalBus.MouseEntered.connect(func(actor):
 		if TurnManager.Instance.activePlayerActor and TurnManager.Instance.activePlayerActor.Skills.SelectedSkill != null:
 			return
@@ -30,19 +31,18 @@ func _ready() -> void:
 			trackedActor = null
 	)
 
-func _process(_delta: float):
+func _process(delta: float):
+	if isLocked:
+		super._process(delta)
+		return
+
 	if TurnManager.Instance.activePlayerActor and TurnManager.Instance.activePlayerActor.Skills.SelectedSkill != null or not GloballyVisible:
 		visible = false
 		trackedActor = null
-		return
-
-	if not trackedActor:
+	elif not trackedActor:
 		visible = false
-		return
 
-	offset = get_viewport().get_mouse_position() - Vector2(0, $PanelContainer.size.y)
-	offset.x = clampf(offset.x, 0, get_viewport().get_visible_rect().size.x - $PanelContainer.size.x)
-	offset.y = clampf(offset.y, 0, get_viewport().get_visible_rect().size.y)
+	super._process(delta)
 
 func _input(event: InputEvent):
 	if not trackedActor:
@@ -54,6 +54,7 @@ func _input(event: InputEvent):
 		if trackedActor.Behaviour is ActorBehaviourWorldControlled behaviour:
 			renderBehaviourSection(behaviour)
 			$PanelContainer.reset_size()
+	super._input(event)
 
 func loadActorData(actor: Actor):
 	if actor == trackedActor:
@@ -75,10 +76,10 @@ func loadActorData(actor: Actor):
 
 	nameLabel.text = actor.definition.Name
 	factionLabel.text = ActorUtils.getFactionName(actor.Stats.Faction)
-	factionLabel.add_theme_color_override("font_color", ActorUtils.getFactionColor(actor.Stats.Faction))
+	factionLabel.add_theme_color_override("default_color", ActorUtils.getFactionColor(actor.Stats.Faction))
 	healthLabel.text = "%d / %d"%[actor.Stats.HealthCurrent, actor.Stats.HealthMaximum]
 	threatLabel.text = ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent)
-	threatLabel.add_theme_color_override("font_color", ActorUtils.getThreatLevelColor(actor.Stats.ThreatCurrent))
+	threatLabel.add_theme_color_override("default_color", ActorUtils.getThreatLevelColor(actor.Stats.ThreatCurrent))
 	movementSpeedLabel.text = "%.1f m/a" % actor.movementSpeedPerAction
 
 	renderSectionVisibility()

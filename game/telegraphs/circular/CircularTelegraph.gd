@@ -48,6 +48,8 @@ func cleanUp():
 	decal.cleanUp()
 
 ## TODO: Rewrite this
+## 1. As navmesh changes during shapeshift, the isPointOnNavmesh may return true, but the post-rebuild navmesh does not agree
+## 2. Currently navmesh is generated assuming the agent is a square, so the corners around obstacles are problematic
 func IsPathable(_agentSize: float) -> bool:
 	var map = get_world_3d().navigation_map
 	var center = global_position
@@ -64,12 +66,9 @@ func IsPathable(_agentSize: float) -> bool:
 	if delta <= tolerance:
 		return true
 
-	var shape = CylinderShape3D.new()
-	shape.radius = radius
-	shape.height = 3.0
 	var query = PhysicsShapeQueryParameters3D.new()
-	query.shape = shape
-	query.transform = Transform3D(Basis(), Vector3(center.x, RenderHeight.Navigation + 1.5, center.z))
+	query.shape = hitboxShape.shape
+	query.transform = hitboxShape.global_transform
 	query.collision_mask = CollisionLayer.ACTOR | CollisionLayer.OBSTACLE | CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER
 	if NavmeshManager.Instance.currentMapActor:
 		query.exclude = [NavmeshManager.Instance.currentMapActor]

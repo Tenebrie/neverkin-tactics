@@ -1,16 +1,16 @@
-extends Area3D
+extends MouseArea3D
 class_name ActorHoverArea
 
 @onready var parent: Actor = get_parent()
 
 func _ready() -> void:
-	mouse_entered.connect(func():
+	mouseEnteredImmediate.connect(func():
 		if parent.isDead:
 			return
 		Actor.Repository.Hovered.Register(parent)
 		SignalBus.MouseEntered.emit(parent)
 	)
-	mouse_exited.connect(func():
+	mouseExitedImmediate.connect(func():
 		Actor.Repository.Hovered.Unregister(parent)
 		SignalBus.MouseExited.emit(parent)
 	)

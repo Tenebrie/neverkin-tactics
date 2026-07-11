@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bxb66aiirhihw" path="res://content/ui/combat/ActorOverheadStats/ActorOverheadStatsBuff.gd" id="1_a3su4"]
 [ext_resource type="Texture2D" uid="uid://wman2lsal5wm" path="res://content/skills/IveraGriffonForm/IveraGriffonFormIcon.png" id="2_tw514"]
+[ext_resource type="Script" uid="uid://d0qhuo3fkn356" path="res://game/ui/common/ParadoxTooltip/ParadoxTooltip.gd" id="3_5exnc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x5vy7"]
 resource_local_to_scene = true
@@ -57,9 +58,12 @@ offset_bottom = 40.0
 mouse_filter = 2
 mouse_behavior_recursive = 1
 
-[node name="CanvasLayer" type="CanvasLayer" parent="TooltipMount" unique_id=1509668925]
+[node name="ParadoxTooltip" type="CanvasLayer" parent="TooltipMount" unique_id=2097247685]
+unique_name_in_owner = true
+script = ExtResource("3_5exnc")
+metadata/_custom_type_script = "uid://d0qhuo3fkn356"
 
-[node name="TooltipContainer" type="PanelContainer" parent="TooltipMount/CanvasLayer" unique_id=64571825]
+[node name="TooltipContainer" type="PanelContainer" parent="TooltipMount/ParadoxTooltip" unique_id=64571825]
 unique_name_in_owner = true
 offset_left = 32.0
 offset_right = 268.0
@@ -69,7 +73,7 @@ mouse_filter = 2
 mouse_behavior_recursive = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_x5vy7")
 
-[node name="MarginContainer" type="MarginContainer" parent="TooltipMount/CanvasLayer/TooltipContainer" unique_id=1128486184]
+[node name="MarginContainer" type="MarginContainer" parent="TooltipMount/ParadoxTooltip/TooltipContainer" unique_id=1128486184]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/margin_left = 8
@@ -77,43 +81,43 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TooltipMount/CanvasLayer/TooltipContainer/MarginContainer" unique_id=1616108359]
+[node name="VBoxContainer" type="VBoxContainer" parent="TooltipMount/ParadoxTooltip/TooltipContainer/MarginContainer" unique_id=1616108359]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TooltipMount/CanvasLayer/TooltipContainer/MarginContainer/VBoxContainer" unique_id=726337351]
+[node name="HBoxContainer" type="HBoxContainer" parent="TooltipMount/ParadoxTooltip/TooltipContainer/MarginContainer/VBoxContainer" unique_id=726337351]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="TooltipMount/CanvasLayer/TooltipContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=248869657]
+[node name="NameLabel" type="Label" parent="TooltipMount/ParadoxTooltip/TooltipContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=248869657]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Name"
 
-[node name="FactionLabel" type="Label" parent="TooltipMount/CanvasLayer/TooltipContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=728972949]
+[node name="FactionLabel" type="Label" parent="TooltipMount/ParadoxTooltip/TooltipContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=728972949]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Faction"
 
-[node name="HSeparator" type="HSeparator" parent="TooltipMount/CanvasLayer/TooltipContainer/MarginContainer/VBoxContainer" unique_id=1501496170]
+[node name="HSeparator" type="HSeparator" parent="TooltipMount/ParadoxTooltip/TooltipContainer/MarginContainer/VBoxContainer" unique_id=1501496170]
 layout_mode = 2
 
-[node name="DescriptionLabel" type="Label" parent="TooltipMount/CanvasLayer/TooltipContainer/MarginContainer/VBoxContainer" unique_id=490913474]
+[node name="DescriptionLabel" type="Label" parent="TooltipMount/ParadoxTooltip/TooltipContainer/MarginContainer/VBoxContainer" unique_id=490913474]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Buff description"
 label_settings = SubResource("LabelSettings_5f3xh")
 autowrap_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="TooltipMount/CanvasLayer/TooltipContainer/MarginContainer/VBoxContainer" unique_id=1278840621]
+[node name="MarginContainer" type="MarginContainer" parent="TooltipMount/ParadoxTooltip/TooltipContainer/MarginContainer/VBoxContainer" unique_id=1278840621]
 layout_mode = 2
 theme_override_constants/margin_top = 4
 
-[node name="DurationLabel" type="Label" parent="TooltipMount/CanvasLayer/TooltipContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=1431194907]
+[node name="DurationLabel" type="Label" parent="TooltipMount/ParadoxTooltip/TooltipContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=1431194907]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Until the end of the turn"
 label_settings = SubResource("LabelSettings_tw514")
-autowrap_mode = 2

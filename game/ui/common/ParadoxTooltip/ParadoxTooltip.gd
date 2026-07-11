@@ -1,0 +1,65 @@
+extends CanvasLayer
+class_name ParadoxTooltip
+
+var isLocked = false
+
+var root: Control
+var mainCanvas: CanvasLayer
+var backdropCanvas: CanvasLayer
+
+func _ready() -> void:
+	visible = false
+	if get_child_count() != 1:
+		push_error("ParadoxTooltip must have exactly 1 child with available size")
+		return
+	root = get_child(0)
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
+
+func _process(_delta: float):
+	if isLocked:
+		visible = true
+	if not visible and not isLocked:
+		return
+
+	var firstChild: Control = get_child(0)
+	if not isLocked:
+		offset = get_viewport().get_mouse_position() - Vector2(0, firstChild.size.y)
+		offset.x = clampf(offset.x, 0, get_viewport().get_visible_rect().size.x - firstChild.size.x)
+		offset.y = clampf(offset.y, 0, get_viewport().get_visible_rect().size.y)
+
+func lockTooltip():
+	isLocked = true
+	backdropCanvas = CanvasLayer.new()
+	backdropCanvas.layer = layer
+	var panel = Panel.new()
+	backdropCanvas.add_child(panel)
+	var stylebox = StyleBoxFlat.new()
+	stylebox.bg_color = Color(0,0,0, 0.5)
+	panel.add_theme_stylebox_override(&"panel", stylebox)
+	panel.size = get_viewport().get_visible_rect().size
+	panel.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
+			unlockTooltip()
+	)
+	layer += 1
+	add_child(backdropCanvas)
+	root.mouse_filter = Control.MOUSE_FILTER_STOP
+	root.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_INHERITED
+
+func unlockTooltip():
+	isLocked = false
+	visible = false
+	layer -= 1
+	backdropCanvas.queue_free()
+	backdropCanvas.visible = false
+	backdropCanvas = null
+	MouseArea3D.updateHoverStates()
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
+
+func _input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if event.is_action_pressed("lockParadoxTooltip"):
+		lockTooltip()

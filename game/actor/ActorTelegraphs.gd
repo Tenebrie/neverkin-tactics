@@ -131,10 +131,15 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 		icon.SetSize(Vector2(0.8, 0.8))
 		telegraph.add_child(icon)
 		icon.transparency = 1.0
-		telegraph.create_tween().tween_property(icon, "transparency", 0.0, 0.1)
-		telegraph.cleaningStarted.connect(func():
-			telegraph.create_tween().tween_property(icon, "transparency", 1.0, 0.1)
-		)
+		## TODO: Rewrite physics or something so that intersect happened same frame?
+		skill.get_tree().physics_frame.connect(func():
+			await skill.get_tree().physics_frame
+			await skill.get_tree().physics_frame
+			telegraph.create_tween().tween_property(icon, "transparency", 0.0, 0.1)
+			telegraph.cleaningStarted.connect(func():
+				telegraph.create_tween().tween_property(icon, "transparency", 1.0, 0.1)
+			)
+		, CONNECT_ONE_SHOT)
 		icon.position.y = RenderHeight.AboveWalls - RenderHeight.TelegraphBase
 	telegraph.ParentSkill = skill
 	if def.ShootFromCover:
