@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://bqi0que63ap4k"]
+
+[ext_resource type="Script" uid="uid://b1ypgwvkol8t" path="res://game/ui/common/ParadoxTooltip/ParadoxTooltipKeyword.gd" id="1_rc7da"]
+[ext_resource type="Script" uid="uid://x71tl38kn1dg" path="res://game/ui/common/ParadoxTooltip/ParadoxTextLabel.gd" id="2_8uj5t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ii06"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.09985284, 0.09985284, 0.09985284, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="ParadoxTooltipKeyword" type="CanvasLayer" unique_id=388092998]
+script = ExtResource("1_rc7da")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=585905873]
+offset_right = 158.0
+offset_bottom = 64.0
+mouse_filter = 2
+mouse_behavior_recursive = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_5ii06")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1002917395]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Description" type="RichTextLabel" parent="PanelContainer/MarginContainer" unique_id=1994612913]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+text = "[url][/url]Threat level"
+fit_content = true
+script = ExtResource("2_8uj5t")
+metadata/_custom_type_script = "uid://x71tl38kn1dg"

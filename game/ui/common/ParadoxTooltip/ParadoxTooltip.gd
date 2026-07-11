@@ -63,3 +63,22 @@ func _input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("lockParadoxTooltip"):
 		lockTooltip()
+
+func resizeToContent() -> void:
+	if root == null:
+		return
+	_forceLayout(root)
+	_invalidateMins(root)
+	root.reset_size()
+
+static func _forceLayout(node: Node) -> void:
+	if node is Container:
+		node.notification(Container.NOTIFICATION_SORT_CHILDREN)
+	for child in node.get_children():
+		_forceLayout(child)
+
+static func _invalidateMins(node: Node) -> void:
+	if node is Control:
+		node.update_minimum_size()
+	for child in node.get_children():
+		_invalidateMins(child)

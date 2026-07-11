@@ -1,0 +1,2 @@
+extends ParadoxTooltip
+class_name ParadoxTooltipKeyword

@@ -53,7 +53,7 @@ func _input(event: InputEvent):
 		renderSectionVisibility()
 		if trackedActor.Behaviour is ActorBehaviourWorldControlled behaviour:
 			renderBehaviourSection(behaviour)
-			$PanelContainer.reset_size()
+			resizeToContent()
 	super._input(event)
 
 func loadActorData(actor: Actor):
@@ -89,7 +89,7 @@ func loadActorData(actor: Actor):
 	else:
 		npcBehaviourSection.visible = false
 
-	$PanelContainer.reset_size()
+	resizeToContent()
 	visible = not Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 
 func renderSectionVisibility() -> void:

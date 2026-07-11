@@ -2,6 +2,8 @@
 class_name ParadoxTextLabel
 extends RichTextLabel
 
+static var _stack: Array[ParadoxTextLabel]
+
 class Metadata:
 	var test: String
 
