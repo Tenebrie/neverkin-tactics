@@ -7,10 +7,10 @@ var HitboxWidth = 0.1
 var damageTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
 
 func _ready() -> void:
-	Definition = preload("res://content/skills/SkillRailgunShot/SkillRailgunShot.tres").duplicate()
+	definition = preload("res://content/skills/SkillRailgunShot/SkillRailgunShot.tres").duplicate()
 	damageTelegraph.PenetrationPower = 1
 	damageTelegraph.PiercingPower = 1
-	Definition.Telegraphs = [
+	definition.telegraphs = [
 		damageTelegraph
 	]
 	super._ready()
@@ -18,10 +18,10 @@ func _ready() -> void:
 func _cast(targets: Skill.TargetData) -> void:
 	var effect = SkillRailgunShotEffect.new()
 	get_parent().add_child(effect)
-	effect.global_position = Parent.global_position
+	effect.global_position = parent.global_position
 	effect.position.y += 0.5
 
-	var furthestPoint = (targets.mousePoint - Parent.global_position).normalized() * Definition.TargetingMaxRange
+	var furthestPoint = (targets.mousePoint - parent.global_position).normalized() * definition.TargetingMaxRange
 	effect.Play(furthestPoint)
 
 	for actor in targets.perTelegraph[damageTelegraph]:

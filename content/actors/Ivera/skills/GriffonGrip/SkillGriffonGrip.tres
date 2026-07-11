@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://hjeggpbfwr2f"]
+
+[ext_resource type="Texture2D" uid="uid://c2a3dew7q413x" path="res://content/actors/Ivera/skills/GriffonGrip/SkillGriffonGripIcon.png" id="1_2pflu"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_khmqf"]
+
+[resource]
+script = ExtResource("1_khmqf")
+Name = "Griffon Grip"
+GrudgeString = ""
+IconTexture = ExtResource("1_2pflu")
+ActionPointCost = 0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

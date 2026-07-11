@@ -25,34 +25,34 @@ var TargetsPerTelegraphDefinition: Dictionary[TelegraphDefinition, Array[Actor]]
 	get:
 		var dict: Dictionary[TelegraphDefinition, Array[Actor]] = {}
 		for telegraph in telegraphs:
-			dict[telegraph.Definition] = telegraph.Targets
+			dict[telegraph.definition] = telegraph.Targets
 		return dict
 
 func FindTelegraph(def: TelegraphDefinition) -> Telegraph:
 	for telegraph in telegraphs:
-		if telegraph.Definition == def:
+		if telegraph.definition == def:
 			return telegraph
 	return null
 
 func _parentReady() -> void:
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a, previous):
-		if previous == Parent and Parent.faction == Actor.PlayerFaction:
+		if previous == parent and parent.faction == Actor.PlayerFaction:
 			resetState()
 	)
-	Parent.Skills.SelectedSkillChanged.connect(func(skill):
+	parent.Skills.SelectedSkillChanged.connect(func(skill):
 		onSkillSelected(skill)
 	)
 
 func _process(_delta: float) -> void:
 	for telegraph in telegraphs:
-		var target = telegraph.ParentSkill.Parent.InputProvider.CursorPosition
-		if telegraph.Definition.Attachment == Telegraph.Attachment.Mouse:
+		var target = telegraph.ParentSkill.parent.InputProvider.CursorPosition
+		if telegraph.definition.Attachment == Telegraph.Attachment.Mouse:
 			var updatedTarget = target
 			updatedTarget.y = 1
 			telegraph.global_position = updatedTarget
 
 		telegraph.Tint = TelegraphColor.NoTarget
-		for processor in telegraph.Definition.Processors:
+		for processor in telegraph.definition.Processors:
 			processor.call(telegraph)
 
 func resetState() -> void:
@@ -66,7 +66,7 @@ func onSkillSelected(skill: Skill):
 	if skill == null:
 		return
 
-	for def in skill.Definition.Telegraphs:
+	for def in skill.definition.telegraphs:
 		def.ParentSkill = skill
 		def.Load(skill)
 		var telegraph = instantiateTelegraph(def, skill)
@@ -75,7 +75,7 @@ func onSkillSelected(skill: Skill):
 		if def.Attachment == Telegraph.Attachment.Mouse:
 			add_child(telegraph)
 		elif def.Attachment == Telegraph.Attachment.Caster:
-			skill.Parent.add_child(telegraph)
+			skill.parent.add_child(telegraph)
 		else:
 			get_tree().root.add_child(telegraph)
 
@@ -97,7 +97,7 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 		telegraph = rect
 
 	telegraph.growPercentage = 1.0
-	telegraph.Definition = def
+	telegraph.definition = def
 	telegraph.GeneralValidator = func() -> bool:
 		if telegraph.IsLeaving:
 			return false
@@ -121,9 +121,9 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 				return false
 		return true
 	telegraph.TargetsChanged.connect(func():
-		var targets = skill.Parent.Telegraphs.Targets
-		skill.Parent.Telegraphs.TargetsChanged.emit(targets)
-		SignalBus.TargetsChanged.emit(skill.Parent, targets)
+		var targets = skill.parent.telegraphs.Targets
+		skill.parent.telegraphs.TargetsChanged.emit(targets)
+		SignalBus.TargetsChanged.emit(skill.parent, targets)
 	)
 	if def.Icon != null:
 		var icon = Asset.Instantiate(TelegraphIcon)
@@ -138,7 +138,7 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 		icon.position.y = RenderHeight.AboveWalls - RenderHeight.TelegraphBase
 	telegraph.ParentSkill = skill
 	if def.ShootFromCover:
-		telegraph.IgnoredObstacleGroups = PropWall.FindAllIgnoredFor(skill.Parent)
+		telegraph.IgnoredObstacleGroups = PropWall.FindAllIgnoredFor(skill.parent)
 	return telegraph
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()

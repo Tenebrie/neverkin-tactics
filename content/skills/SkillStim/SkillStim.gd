@@ -2,8 +2,8 @@ extends Skill
 class_name SkillStim
 
 func _ready() -> void:
-	Definition = preload("./SkillStim.tres").duplicate()
-	Definition.Telegraphs = [
+	definition = preload("./SkillStim.tres").duplicate()
+	definition.telegraphs = [
 		TelegraphPreset.SelfCast.new()
 	]
 	super._ready()
@@ -11,4 +11,4 @@ func _ready() -> void:
 func _cast(_targets: Skill.TargetData) -> void:
 	var stim = BuffStim.new()
 	stim.turnsRemaining = 1
-	Parent.Buffs.Add(stim)
+	parent.Buffs.Add(stim)

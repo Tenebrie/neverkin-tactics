@@ -19,7 +19,7 @@ func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 
 	var threatValue = actor.Stats.ThreatCurrent * aggroWeightThreat
 
-	var distance = Parent.global_position.distance_to(actor.global_position)
+	var distance = parent.global_position.distance_to(actor.global_position)
 	var apSaved = maxf(0.0, (ENGAGEMENT_REFERENCE_METERS - distance) / METERS_PER_AP)
 	var proximityValue = apSaved * aggroWeightProximity
 
@@ -35,7 +35,7 @@ func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 	return result
 
 func PlanTurnActions() -> Array[TurnAction]:
-	if Parent.actions.ActionPointsUsed == 0:
+	if parent.actions.ActionPointsUsed == 0:
 		return [await planMovementAction()]
 
 	return [planCombatAction()]
@@ -44,25 +44,25 @@ func planMovementAction() -> TurnAction:
 	var adjacentTargetCount = 0
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
-		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.physicalSize
-		if dist <= SkillRoundhouseSlash.AttackArea + Parent.physicalSize:
+		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
+		if dist <= SkillRoundhouseSlash.AttackArea + parent.physicalSize:
 			adjacentTargetCount += 1
 
 	if adjacentTargetCount >= 2:
 		return TurnAction.UseSkillOnSelf(SkillRoundhouseSlash)
 
-	var coverMap = await BehaviourUtils.createActorValueMap(Parent)
+	var coverMap = await BehaviourUtils.createActorValueMap(parent)
 	if coverMap.points.size() == 0:
 		printerr("No points in reach")
 		return TurnAction.Skip()
 
 	var bestPointIndex = coverMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
-		return ActorUtils.isPointReachable(Parent, point.point, 1)
+		return ActorUtils.isPointReachable(parent, point.point, 1)
 	)
 	if bestPointIndex == -1:
 		printerr("No points in reach")
 		return TurnAction.Skip()
-	var currentCover = coverMap.read(Parent.global_position)
+	var currentCover = coverMap.read(parent.global_position)
 	var bestPoint = coverMap.scoredPoints[bestPointIndex].point
 	var bestCover = coverMap.read(bestPoint)
 
@@ -77,8 +77,8 @@ func planCombatAction() -> TurnAction:
 	var adjacentTargetCount = 0
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
-		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.physicalSize
-		if dist <= Parent.Skills.Get(SkillKnifeSlash).Definition.TargetingMaxRange + Parent.physicalSize:
+		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
+		if dist <= parent.Skills.Get(SkillKnifeSlash).definition.TargetingMaxRange + parent.physicalSize:
 			adjacentTargetCount += 1
 
 	if adjacentTargetCount == 0:
@@ -87,8 +87,8 @@ func planCombatAction() -> TurnAction:
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
 
-		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.physicalSize
-		var knifeRange = Parent.Skills.Get(SkillKnifeSlash).Definition.TargetingMaxRange
+		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
+		var knifeRange = parent.Skills.Get(SkillKnifeSlash).definition.TargetingMaxRange
 		if dist < knifeRange:
 			return TurnAction.UseSkillOnActor(SkillKnifeSlash, target)
 

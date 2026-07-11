@@ -4,8 +4,8 @@ class_name SkillKnifeSlash
 const Damage = 2
 
 func _ready() -> void:
-	Definition = preload("./SkillKnifeSlashDefinition.tres").duplicate()
-	Definition.Telegraphs = [
+	definition = preload("./SkillKnifeSlashDefinition.tres").duplicate()
+	definition.telegraphs = [
 		TelegraphPreset.MaxCastRange.new(),
 		TelegraphPreset.SingleActor.new().WithDamageToHostiles(Damage)
 	]

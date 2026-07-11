@@ -9,7 +9,7 @@ signal TargetExited(target: Actor)
 signal TargetsChanged(targets: Array[Actor])
 
 var ParentSkill: Skill
-var Definition: TelegraphDefinition
+var definition: TelegraphDefinition
 
 @export var Tint: Color = Color.GRAY:
 	set(value):
@@ -30,7 +30,7 @@ var FilteredOnlyTargets: Array[Actor]
 
 func _ready():
 	setColor(Tint)
-	Definition.created.emit(self)
+	definition.created.emit(self)
 
 func _physics_process(_d: float) -> void:
 	checkTargetsDiff()
@@ -41,16 +41,16 @@ func checkTargetsDiff() -> void:
 	for target in current:
 		if not previousSeenTargets.has(target):
 			TargetEntered.emit(target)
-			BuffHealthThreat.AddToActor(target, Definition.HealthThreatSelector.call(target), self)
+			BuffHealthThreat.AddToActor(target, definition.HealthThreatSelector.call(target), self)
 		else:
-			BuffHealthThreat.EnsureIntensity(target, Definition.HealthThreatSelector.call(target), self)
+			BuffHealthThreat.EnsureIntensity(target, definition.HealthThreatSelector.call(target), self)
 	for target in previousSeenTargets:
 		if not current.has(target):
 			TargetExited.emit(target)
 			BuffHealthThreat.RemoveByOwner(target, self)
 	if current != previousSeenTargets:
 		TargetsChanged.emit(current)
-		Definition.targetsChanged.emit(current)
+		definition.targetsChanged.emit(current)
 	previousSeenTargets = current
 
 var previousSeenTargets: Array[Actor] = []

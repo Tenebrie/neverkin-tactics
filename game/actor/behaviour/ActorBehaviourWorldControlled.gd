@@ -63,7 +63,7 @@ func _ready() -> void:
 
 func _parentReady() -> void:
 	super._parentReady()
-	Parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
+	parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
 		RecordGrudge(damage, damage.sourceActor)
 	)
 
@@ -81,8 +81,8 @@ func RecordGrudge(damage: DamageInstance, grudgeTarget: Actor) -> void:
 	if not damage.sourceActor or not damage.sourceSkill:
 		return
 
-	var message = damage.sourceActor.pronouns.evaluate(damage.sourceSkill.Definition.GrudgeString)
-	var key = [grudgeTarget, damage.sourceSkill.Definition]
+	var message = damage.sourceActor.pronouns.evaluate(damage.sourceSkill.definition.GrudgeString)
+	var key = [grudgeTarget, damage.sourceSkill.definition]
 	if Grudges.has(key):
 		Grudges[key].value += damage.Value
 		return
@@ -114,7 +114,7 @@ func updateRanking():
 func _computeRanking() -> Array[RankedTarget]:
 	var result: Array[RankedTarget] = []
 	var targets = Actor.Repository.Alive.List.filter(func(actor):
-		return ActorUtils.isHostileTo(actor, Parent) and actor.isAlive
+		return ActorUtils.isHostileTo(actor, parent) and actor.isAlive
 	)
 	if targets.size() == 0:
 		return result
@@ -129,7 +129,7 @@ func _computeRanking() -> Array[RankedTarget]:
 		return targetToThreat[actor].Total >= FearThreshold
 	)
 
-	var parentPosition = Parent.global_position
+	var parentPosition = parent.global_position
 	var scoreOf = func(actor):
 		return targetToThreat[actor].Total if fearThresholdReached else targetToReason[actor].Total
 

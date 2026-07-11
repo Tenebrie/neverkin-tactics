@@ -9,7 +9,7 @@ var turnsRemaining = -1
 func _init():
 	tree_entered.connect(func():
 		controller = get_parent()
-		Parent = controller.Parent
+		parent = controller.parent
 	, CONNECT_ONE_SHOT)
 
 func _ready() -> void:
@@ -32,7 +32,7 @@ func _prepare() -> void:
 			return
 		Intensity = v
 		if is_node_ready():
-			Parent.Buffs.Changed.emit()
+			parent.Buffs.Changed.emit()
 
 @export var Owner: Node:
 	set(v):

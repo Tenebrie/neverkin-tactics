@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://dl7vkytdo5y4r"]
 
-[ext_resource type="Texture2D" uid="uid://c5yahcpqsp0sm" path="res://content/actors/WolfpackTrooper/skills/SkillCripplingShot/SkillCripplingShotIcon.png" id="1_xta2s"]
+[ext_resource type="Texture2D" uid="uid://c5yahcpqsp0sm" path="res://content/actors/WolfpackTrooper/skills/CripplingShot/SkillCripplingShotIcon.png" id="1_xta2s"]
 [ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_hpvjh"]
 
 [resource]

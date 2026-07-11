@@ -1,7 +1,7 @@
 extends MeshInstance3D
 class_name TelegraphIcon
 
-@onready var Parent: Telegraph = get_parent()
+@onready var parent: Telegraph = get_parent()
 
 func SetIcon(icon: Texture2D):
 	var material = get_surface_override_material(0) as StandardMaterial3D
@@ -16,4 +16,4 @@ func SetTint(tint: Color):
 		material.albedo_color = tint
 
 func _process(_d):
-	SetTint(Parent.Tint)
+	SetTint(parent.Tint)

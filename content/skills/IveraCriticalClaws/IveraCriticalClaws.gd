@@ -4,7 +4,7 @@ class_name IveraCriticalClaws
 const Damage = 1
 
 func _ready() -> void:
-	Definition = load("res://content/skills/IveraClaws/IveraClaws.tres")
+	definition = load("res://content/skills/IveraClaws/IveraClaws.tres")
 	super._ready()
 
 func _cast(targets: Skill.TargetData) -> void:

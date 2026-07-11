@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffDefinition" format=3 uid="uid://dn184lf4h372q"]
+
+[ext_resource type="Texture2D" uid="uid://c2a3dew7q413x" path="res://content/actors/Ivera/skills/GriffonGrip/SkillGriffonGripIcon.png" id="1_yjwmj"]
+[ext_resource type="Script" uid="uid://tbbvo8dei2ke" path="res://game/buff/BuffDefinition.gd" id="2_3578x"]
+
+[resource]
+script = ExtResource("2_3578x")
+name = "Griffon Grapple"
+description = "$They $are very much grappled!"
+iconTexture = ExtResource("1_yjwmj")
+metadata/_custom_type_script = "uid://tbbvo8dei2ke"

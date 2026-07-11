@@ -92,7 +92,7 @@ func executeUseSkillAction(actor: Actor, params: ActorBehaviour.TurnAction.UseSk
 
 	## Delayed skill will get resolved next turn
 	## TODO: Prepay the AP cost
-	#if plan.chosenSkill.Definition.TargetingResolvesNextTurn:
+	#if plan.chosenSkill.definition.TargetingResolvesNextTurn:
 		#return true
 
 	await actor.targeting.PerformAction_CastSelectedSkill()

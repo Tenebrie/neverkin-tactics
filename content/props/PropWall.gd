@@ -68,7 +68,7 @@ func checkDistances():
 		setIgnored(false)
 		return
 
-	var shootFromCover = selectedSkill.Definition.Telegraphs.any(func(telegraph: TelegraphDefinition) -> bool:
+	var shootFromCover = selectedSkill.definition.telegraphs.any(func(telegraph: TelegraphDefinition) -> bool:
 		return telegraph.ShootFromCover
 	)
 	if shootFromCover:
@@ -115,7 +115,7 @@ func rebuild():
 				prototype.position = Vector3(xOffset, prototype.position.y, yOffset)
 				prototype.add_to_group(WallGroupName)
 				if prototype is Actor:
-					prototype.Definition.HealthMaximum = SegmentHealth
+					prototype.definition.HealthMaximum = SegmentHealth
 				continue
 			var clone = prototype.duplicate() as Node3D
 			clone.position = Vector3(
@@ -125,7 +125,7 @@ func rebuild():
 			)
 			add_child(clone)
 			if clone is Actor:
-				clone.Definition.HealthMaximum = SegmentHealth
+				clone.definition.HealthMaximum = SegmentHealth
 			clone.add_to_group(WallGroupName)
 
 	physicsFieldObstacle = buildPhysicsFieldObstacle()

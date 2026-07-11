@@ -1,9 +1,9 @@
 @abstract class_name TelegraphValidator
 
 static func MaximumSkillRange(telegraph: Telegraph) -> Variant:
-	var parent = telegraph.ParentSkill.Parent
+	var parent = telegraph.ParentSkill.parent
 	var dist = ActorUtils.flatDistanceBetween(parent, telegraph) - parent.physicalSize
-	if dist > telegraph.ParentSkill.Definition.TargetingMaxRange:
+	if dist > telegraph.ParentSkill.definition.TargetingMaxRange:
 		return Error.new("Out of range")
 	return true
 
@@ -18,8 +18,8 @@ static func MaximumSkillRangeTargetingActor(telegraph: Telegraph) -> Variant:
 	if targets.size() == 0:
 		return true
 
-	var parent = telegraph.ParentSkill.Parent
+	var parent = telegraph.ParentSkill.parent
 	var dist = ActorUtils.flatDistanceBetween(parent, telegraph) - parent.physicalSize - targets[0].physicalSize
-	if dist > telegraph.ParentSkill.Definition.TargetingMaxRange:
+	if dist > telegraph.ParentSkill.definition.TargetingMaxRange:
 		return Error.new("Out of range")
 	return true

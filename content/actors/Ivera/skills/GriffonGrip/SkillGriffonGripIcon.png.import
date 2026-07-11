@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5yahcpqsp0sm"
-path="res://.godot/imported/SkillCripplingShotIcon.png-272d89260578090c01bd48e641ce4b43.ctex"
+uid="uid://c2a3dew7q413x"
+path="res://.godot/imported/SkillGriffonGripIcon.png-19c67b44f5d6fec85213460b0533f476.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://content/actors/WolfpackTrooper/skills/SkillCripplingShot/SkillCripplingShotIcon.png"
-dest_files=["res://.godot/imported/SkillCripplingShotIcon.png-272d89260578090c01bd48e641ce4b43.ctex"]
+source_file="res://content/actors/Ivera/skills/GriffonGrip/SkillGriffonGripIcon.png"
+dest_files=["res://.godot/imported/SkillGriffonGripIcon.png-19c67b44f5d6fec85213460b0533f476.ctex"]
 
 [params]
 

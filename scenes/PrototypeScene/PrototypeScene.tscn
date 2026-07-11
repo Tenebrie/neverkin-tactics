@@ -100,7 +100,7 @@ transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70
 CanBeIgnored = false
 
 [node name="PropWallObstacleCover2" parent="." unique_id=803991088 instance=ExtResource("3_gahja")]
-transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 2.2725918, -0.1, 3.2818494)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 1.9725919, -0.1, 3.1818495)
 CanBeIgnored = false
 
 [node name="PropWallObstacleCover3" parent="." unique_id=21449405 instance=ExtResource("3_gahja")]

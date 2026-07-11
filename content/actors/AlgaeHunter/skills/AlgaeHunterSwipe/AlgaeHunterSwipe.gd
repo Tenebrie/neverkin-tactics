@@ -6,13 +6,13 @@ const Damage = 1
 var damageTelegraph = TelegraphPreset.SingleActor.new()
 
 func _ready() -> void:
-	Definition = preload("./AlgaeHunterSwipe.tres").duplicate()
+	definition = preload("./AlgaeHunterSwipe.tres").duplicate()
 	damageTelegraph.HealthThreat = Damage
 	damageTelegraph.TargetFilters.push_back(func(actor: Actor) -> bool:
-		return ActorUtils.isHostileTo(actor, Parent)
+		return ActorUtils.isHostileTo(actor, parent)
 	)
 
-	Definition.Telegraphs = [
+	definition.telegraphs = [
 		TelegraphPreset.MaxCastRange.new(),
 		damageTelegraph,
 	]

@@ -7,7 +7,7 @@ signal MovementPointsChanged(current: float)
 var ActionPointsUsed: int = 0
 
 var ActionPointsMax: int:
-	get: return Parent.Definition.ActionPointsMax + ActionPointsSavedMax
+	get: return parent.definition.ActionPointsMax + ActionPointsSavedMax
 var ActionPointsSavedMax: int = 0
 
 var ActionPointsAvailable: int:
@@ -23,7 +23,7 @@ func ConsumeActionPoints(value: int):
 	ActionPointsUsed += value
 	MovementBuffer = 0.0
 	ActionPointsChanged.emit(ActionPointsAvailable)
-	SignalBus.ActionPointsConsumedPermanently.emit(Parent, value)
+	SignalBus.ActionPointsConsumedPermanently.emit(parent, value)
 
 func ConsumeActionPointsRefundable(value: int):
 	ActionPointsUsed += value
@@ -38,7 +38,7 @@ func RefundActionPoints(value: int):
 #region Movement
 var MovementSpeedPerAP: float:
 	get:
-		return Parent.movementSpeedPerAction
+		return parent.movementSpeedPerAction
 var MovementBuffer: float = 0.0:
 	set(v):
 		MovementBuffer = v
@@ -48,9 +48,9 @@ var MovementAvailable: float:
 		return MovementBuffer + MovementSpeedPerAP * ActionPointsAvailable
 
 func _parentReady() -> void:
-	Parent.Skills.SelectedSkillChanged.connect(func(skill):
+	parent.Skills.SelectedSkillChanged.connect(func(skill):
 		if skill:
-			_actionPointsThreatenedFromSkill = skill.Definition.ActionPointCost
+			_actionPointsThreatenedFromSkill = skill.definition.ActionPointCost
 		else:
 			_actionPointsThreatenedFromSkill = 0
 	)
@@ -91,7 +91,7 @@ func IsPerformingAnyAction() -> bool:
 #endregion
 
 func onTurnEnded(faction: Actor.Faction) -> void:
-	if faction != Parent.faction:
+	if faction != parent.faction:
 		return
 	MovementBuffer = 0.0
 	#if ActionPointsUsed < ActionPointsMax:
@@ -103,11 +103,11 @@ func onTurnEnded(faction: Actor.Faction) -> void:
 #region Orders
 func IssueOrder_MoveThroughPath(path: PackedVector3Array):
 	var lastPoint := path[path.size() - 1]
-	Parent.navigator.StartMovingTowards(lastPoint)
+	parent.navigator.StartMovingTowards(lastPoint)
 	var pathCost = ActorNavigator.GetPathMovementCost(path)
-	Parent.actions.ConsumeMovement(pathCost)
+	parent.actions.ConsumeMovement(pathCost)
 	ActionQueue.Push("dummy value")
-	Parent.navigator.agent.target_reached.connect(func():
+	parent.navigator.agent.target_reached.connect(func():
 		ActionQueue.ConsumeFirst(),
 	CONNECT_ONE_SHOT)
 
@@ -117,8 +117,8 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		MessageLog.PrintMessage("Not enough AP")
 		return
 
-	for telegraph in Parent.Telegraphs.telegraphs:
-		for validator in telegraph.Definition.Validators:
+	for telegraph in parent.telegraphs.telegraphs:
+		for validator in telegraph.definition.Validators:
 			var result: Variant = validator.call(telegraph)
 			if result is bool and result == false:
 				return
@@ -133,10 +133,10 @@ func IssueOrder_Stop():
 	if ActionQueue.Empty():
 		return
 	ActionQueue.Clear()
-	var toRefund = (roundf(Parent.navigator.GetRemainingPathLength() * 1000) / 1000)
+	var toRefund = (roundf(parent.navigator.GetRemainingPathLength() * 1000) / 1000)
 	RefundMovement(maxf(0.0, toRefund - 0.1))
 
-	Parent.navigator.HardStop()
+	parent.navigator.HardStop()
 
 #endregion
 

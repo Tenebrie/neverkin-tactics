@@ -6,14 +6,14 @@ func planCombatAction() -> TurnAction:
 		if target.isDead:
 			continue
 
-		var hasLineOfSight = ActorUtils.hasLineOfSight(Parent, target)
-		var dist = ActorUtils.flatDistanceBetween(Parent, target) - Parent.Definition.physicalSize
-		var cripplingShotRange = Parent.Skills.Get(SkillCripplingShot).Definition.TargetingMaxRange
+		var hasLineOfSight = ActorUtils.hasLineOfSight(parent, target)
+		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
+		var cripplingShotRange = parent.Skills.Get(SkillCripplingShot).definition.TargetingMaxRange
 		if target.Buffs.Has(BuffWolfHowlTarget) and dist < cripplingShotRange and hasLineOfSight:
 			return TurnAction.UseSkillOnActor(SkillCripplingShot, target)
 
-		var pistolRange = Parent.Skills.Get(SkillPistolShot).Definition.TargetingMaxRange
-		var grenadeRange = Parent.Skills.Get(SkillFragGrenade).Definition.TargetingMaxRange
+		var pistolRange = parent.Skills.Get(SkillPistolShot).definition.TargetingMaxRange
+		var grenadeRange = parent.Skills.Get(SkillFragGrenade).definition.TargetingMaxRange
 		if dist < pistolRange and hasLineOfSight:
 			return TurnAction.UseSkillOnActor(SkillPistolShot, target)
 		elif dist < grenadeRange:

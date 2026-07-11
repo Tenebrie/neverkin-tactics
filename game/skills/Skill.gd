@@ -4,24 +4,24 @@ class_name Skill
 signal beforeCast(targets: TargetData)
 signal afterCast(targets: TargetData)
 
-@export var Definition: SkillDefinition
+@export var definition: SkillDefinition
 
 @onready var Controller: SkillController = get_parent().get_parent()
 @onready var ControlGroup: SkillController.ControlGroup:
 	get: return get_parent()
-@onready var Parent: Actor = Controller.Parent
+@onready var parent: Actor = Controller.parent
 
 func _ready() -> void:
-	if not Definition:
+	if not definition:
 		var scriptPath = get_script().resource_path
 		var definitionPath = scriptPath.get_basename() + ".tres"
 		var definitionObject = load(definitionPath).duplicate() as SkillDefinition
 		if not definitionObject:
 			push_error("Missing definition: %s" % definitionPath)
-		Definition = definitionObject
+		definition = definitionObject
 
-	if Definition:
-		name = Definition.Name
+	if definition:
+		name = definition.Name
 	_prepare()
 
 func _prepare() -> void:
@@ -29,13 +29,13 @@ func _prepare() -> void:
 
 var ActionPointCost: int:
 	get:
-		return Definition.ActionPointCost
+		return definition.ActionPointCost
 var MovementRequired: float:
 	get:
-		return Definition.MovementRequired
+		return definition.MovementRequired
 
 func PerformCast(targets: TargetData) -> void:
-	MessageLog.PrintActorMessage(Definition.Name, Parent)
+	MessageLog.PrintActorMessage(definition.Name, parent)
 	_emitSkillEvent([beforeCast, SignalBus.beforeCast], targets)
 	await _cast(targets)
 	_emitSkillEvent([afterCast, SignalBus.afterCast], targets)
@@ -77,13 +77,13 @@ class TargetData:
 	static func Collect(actor: Actor) -> Skill.TargetData:
 		var targetData = Skill.TargetData.new()
 		targetData.sourceSkill = actor.Skills.SelectedSkill
-		if actor.Telegraphs.Targets.size() > 0:
-			targetData.actor = actor.Telegraphs.Targets.get(0)
-		targetData.actors = actor.Telegraphs.Targets
+		if actor.telegraphs.Targets.size() > 0:
+			targetData.actor = actor.telegraphs.Targets.get(0)
+		targetData.actors = actor.telegraphs.Targets
 		targetData.mousePoint = actor.InputProvider.CursorPosition
-		for telegraph in actor.Telegraphs.telegraphs:
-			targetData.pointPerTelegraph[telegraph.Definition] = ActorUtils.flatPositionOf(telegraph)
-		targetData.perTelegraph = actor.Telegraphs.TargetsPerTelegraphDefinition
+		for telegraph in actor.telegraphs.telegraphs:
+			targetData.pointPerTelegraph[telegraph.definition] = ActorUtils.flatPositionOf(telegraph)
+		targetData.perTelegraph = actor.telegraphs.TargetsPerTelegraphDefinition
 		targetData.perTelegraphIndex = targetData.perTelegraph.values()
 		return targetData
 

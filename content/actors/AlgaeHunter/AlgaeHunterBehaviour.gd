@@ -11,7 +11,7 @@ const ENGAGEMENT_REFERENCE_METERS: float = 100.0
 
 func _parentReady() -> void:
 	super._parentReady()
-	Parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
+	parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
 		RecordGrudge(damage, damage.sourceActor)
 	)
 
@@ -25,7 +25,7 @@ func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 
 	var threatValue = actor.Stats.ThreatCurrent * WEIGHT_THREAT
 
-	var distance = Parent.global_position.distance_to(actor.global_position)
+	var distance = parent.global_position.distance_to(actor.global_position)
 	var apSaved = maxf(0.0, (ENGAGEMENT_REFERENCE_METERS - distance) / METERS_PER_AP)
 	var proximityValue = apSaved * WEIGHT_PROXIMITY
 

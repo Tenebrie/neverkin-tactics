@@ -42,7 +42,7 @@ func update() -> void:
 	nameLabel.label_settings.outline_color = behaviour.PortraitColor
 	nameLabel.label_settings.shadow_size = 1
 	hotkeyLabel.text = "F" + str(HotkeyIndex + 1)
-	portrait.texture_normal = TrackedActor.Definition.AvatarTexture
+	portrait.texture_normal = TrackedActor.definition.AvatarTexture
 	updateModulate()
 
 func updateModulate() -> void:

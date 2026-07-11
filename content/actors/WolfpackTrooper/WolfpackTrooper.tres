@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="2_eabg8"]
 [ext_resource type="Script" uid="uid://cyt4dokmb4uau" path="res://content/skills/SkillFragGrenade/SkillCheapFragGrenade.gd" id="3_sjd6c"]
 [ext_resource type="Script" uid="uid://c4lp5jogtqgdr" path="res://content/skills/SkillHunkerDown/SkillHunkerDown.gd" id="4_nr03p"]
-[ext_resource type="Script" uid="uid://7sil2be4hewh" path="res://content/actors/WolfpackTrooper/skills/SkillCripplingShot/SkillCripplingShot.gd" id="5_n2wkc"]
+[ext_resource type="Script" uid="uid://7sil2be4hewh" path="res://content/actors/WolfpackTrooper/skills/CripplingShot/SkillCripplingShot.gd" id="5_n2wkc"]
 [ext_resource type="Texture2D" uid="uid://bwvanpwgd5uiw" path="res://content/actors/WolfpackTrooper/WolfpackTrooperToken.webp" id="6_pl1j3"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="7_sf3wy"]
 

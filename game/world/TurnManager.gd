@@ -118,7 +118,7 @@ func activatePlayerActorByHotkey(index: int) -> void:
 		return
 
 	if selectedActor.isDead:
-		MessageLog.PrintMessage("%s is incapacitated!"%selectedActor.Definition.Name)
+		MessageLog.PrintMessage("%s is incapacitated!"%selectedActor.definition.Name)
 		return
 
 	var previousActor = activePlayerActor

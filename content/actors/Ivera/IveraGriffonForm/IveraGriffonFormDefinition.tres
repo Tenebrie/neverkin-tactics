@@ -2,7 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://dwj7xlfrk0163" path="res://content/actors/Ivera/IveraGriffonForm/Ivera.GriffonForm.Avatar.webp" id="1_6x3wb"]
 [ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/skills/IveraClaws/IveraClaws.gd" id="2_p5t07"]
+[ext_resource type="Script" uid="uid://c6txfqbi3tpo" path="res://content/actors/Ivera/skills/GriffonFlight/SkillGriffonFlight.gd" id="3_3rd3g"]
 [ext_resource type="Script" uid="uid://cl7dg242eqiye" path="res://content/skills/IveraHumanForm/IveraHumanForm.gd" id="3_6x3wb"]
+[ext_resource type="Script" uid="uid://5fpiocikuyvr" path="res://content/actors/Ivera/skills/GriffonGrip/SkillGriffonGrip.gd" id="3_i04aw"]
 [ext_resource type="Texture2D" uid="uid://dc6h1yjmt6g8x" path="res://content/actors/Ivera/IveraGriffonForm/Ivera.GriffonForm.Token.webp" id="4_mpfqu"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="5_7bfqy"]
 
@@ -20,5 +22,5 @@ HealthMaximum = 10
 HealthHumanityThreshold = 5
 ActionPointsMax = 4
 MovementSpeedPerActionPoint = 6.5
-Skills = Array[GDScript]([ExtResource("2_p5t07"), null, null, null, null, null, null, ExtResource("3_6x3wb")])
+Skills = Array[GDScript]([ExtResource("2_p5t07"), ExtResource("3_i04aw"), null, null, null, null, ExtResource("3_3rd3g"), ExtResource("3_6x3wb")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

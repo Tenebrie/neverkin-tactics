@@ -23,4 +23,4 @@ class_name SkillDefinition
 @export var BehaviourRequireLineOfSight = true
 @export var BehaviourTargetsGround = false
 
-var Telegraphs: Array[TelegraphDefinition]
+var telegraphs: Array[TelegraphDefinition]

@@ -18,32 +18,32 @@ static func InvisibleTint(telegraph: Telegraph):
 	telegraph.Tint = Color.TRANSPARENT
 
 static func OutOfRangeTint(telegraph: Telegraph):
-	var parent = telegraph.ParentSkill.Parent
+	var parent = telegraph.ParentSkill.parent
 	var parentPosition = parent.global_position
 	parentPosition.y = 0
 	var telegraphPosition = telegraph.global_position
 	telegraphPosition.y = 0
 	var dist = parentPosition.distance_to(telegraphPosition) - parent.physicalSize
-	if dist > telegraph.ParentSkill.Definition.TargetingMaxRange:
+	if dist > telegraph.ParentSkill.definition.TargetingMaxRange:
 		telegraph.Tint = TelegraphColor.OutOfRange
 
 static func NoTransparency(telegraph: Telegraph):
 	telegraph.Tint = Color(telegraph.Tint.r, telegraph.Tint.g, telegraph.Tint.b, 1.0)
 
 static func LookAtMouse(telegraph: Telegraph):
-	var target = telegraph.ParentSkill.Parent.InputProvider.CursorPosition
+	var target = telegraph.ParentSkill.parent.InputProvider.CursorPosition
 	target.y = telegraph.global_position.y
 	telegraph.look_at(target)
 
 static func ApplyCollisionRules(telegraph: RectangularTelegraph):
-	var definition = telegraph.Definition
+	var definition = telegraph.definition
 	var basis = telegraph.global_basis.orthonormalized()
 	var direction = -basis.z
 	var origin = Vector3(telegraph.global_position.x, telegraph.height / 2.0, telegraph.global_position.z)
 	var mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.ACTOR
 	var excludeMask = CollisionLayer.IGNORED_COVER
 
-	var initialExclude: Array[RID] = [telegraph.ParentSkill.Parent.get_rid()]
+	var initialExclude: Array[RID] = [telegraph.ParentSkill.parent.get_rid()]
 
 	var spaceState = telegraph.get_world_3d().direct_space_state
 	var contacts = RaycastUtils.GatherBeamContacts(

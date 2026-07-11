@@ -28,8 +28,8 @@ func rebuildItems() -> void:
 		var skill = controller.commonSkillGroup.GetByIndex(i)
 		if skill:
 			newItem.TrackedSkill = controller.commonSkillGroup.GetByIndex(i)
-			if skill.Definition.Hotkey:
-				newItem.Hotkey = skill.Definition.Hotkey
+			if skill.definition.Hotkey:
+				newItem.Hotkey = skill.definition.Hotkey
 		else:
 			newItem.Transparent = true
 		commonBarContainer.add_child(newItem)
@@ -39,8 +39,8 @@ func rebuildItems() -> void:
 		var skill = controller.GetByIndex(i)
 		if skill:
 			newItem.TrackedSkill = skill
-			if skill.Definition.Hotkey:
-				newItem.Hotkey = skill.Definition.Hotkey
+			if skill.definition.Hotkey:
+				newItem.Hotkey = skill.definition.Hotkey
 			else:
 				var hotkey = InputEventKey.new()
 				hotkey.keycode = KEY_1 + i as Key

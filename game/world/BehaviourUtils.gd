@@ -420,8 +420,8 @@ static func gatherAttackSkills(actor: Actor) -> Array[SkillDefinition]:
 		var skill = actor.Skills.GetByIndex(i)
 		if skill == null:
 			continue
-		var hasDamage: bool = skill.Definition.Telegraphs.any(func(t): return t.HealthThreat > 0)
+		var hasDamage: bool = skill.definition.telegraphs.any(func(t): return t.HealthThreat > 0)
 		if hasDamage:
-			out.push_back(skill.Definition)
+			out.push_back(skill.definition)
 	return out
 #endregion

@@ -7,9 +7,9 @@ const AttackArea = 1.2
 var damageArea = TelegraphPreset.PointArea.new(AttackArea).WithDamageToHostiles(Damage)
 
 func _ready() -> void:
-	Definition = preload("./SkillRoundhouseSlash.tres").duplicate()
+	definition = preload("./SkillRoundhouseSlash.tres").duplicate()
 	damageArea.Attachment = Telegraph.Attachment.Caster
-	Definition.Telegraphs = [
+	definition.telegraphs = [
 		damageArea
 	]
 	super._ready()

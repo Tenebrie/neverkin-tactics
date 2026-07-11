@@ -18,7 +18,7 @@ height = 0.2
 radius = 0.4
 
 [node name="AlgaeHunter" unique_id=807014692 instance=ExtResource("1_8v85i")]
-Definition = ExtResource("2_nkocr")
+definition = ExtResource("2_nkocr")
 
 [node name="TokenMeshInstance3D" parent="." index="0" unique_id=405721016]
 material_override = SubResource("StandardMaterial3D_s6oeb")
@@ -34,6 +34,5 @@ WeightCover = 0.0
 WeightHasShot = 3.0
 WeightAvoidLineOfSight = 0.0
 WeightDistanceToMove = 3.0
-WeightProximityToAllies = 0.0
 WeightProximityToAlliesFalloffMeters = 0.0
 WeightProximityToEnemiesFalloffMeters = 5.0

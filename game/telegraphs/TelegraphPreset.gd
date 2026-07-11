@@ -8,7 +8,7 @@ class SelfCast extends TelegraphDefinition:
 		Processors.push_back(TelegraphProcessor.ConstantTint(TelegraphColor.MaxRange))
 
 	func Load(skill: Skill):
-		CircleRadius = skill.Parent.physicalSize + 0.05
+		CircleRadius = skill.parent.physicalSize + 0.05
 
 class MaxCastRange extends TelegraphDefinition:
 	func _init():
@@ -18,7 +18,7 @@ class MaxCastRange extends TelegraphDefinition:
 		Processors.push_back(TelegraphProcessor.ConstantTint(TelegraphColor.MaxRange))
 
 	func Load(skill: Skill):
-		CircleRadius = skill.Definition.TargetingMaxRange + skill.Parent.physicalSize
+		CircleRadius = skill.definition.TargetingMaxRange + skill.parent.physicalSize
 
 class SingleActor extends TelegraphDefinition:
 	func _init():
@@ -45,7 +45,7 @@ class SingleActor extends TelegraphDefinition:
 	func WithDamageToHostiles(damage: int):
 		HealthThreat = damage
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return ActorUtils.isTargetableBy(actor, ParentSkill.Parent)
+			return ActorUtils.isTargetableBy(actor, ParentSkill.parent)
 		)
 		return self
 
@@ -61,7 +61,7 @@ class Projectile extends TelegraphDefinition:
 		Processors.push_back(TelegraphProcessor.ApplyCollisionRules)
 
 	func Load(skill: Skill):
-		RectLength = skill.Definition.TargetingMaxRange
+		RectLength = skill.definition.TargetingMaxRange
 
 	func WithDamage(damage: int) -> Projectile:
 		HealthThreat = damage
@@ -69,7 +69,7 @@ class Projectile extends TelegraphDefinition:
 
 	func TargetingHostiles() -> Projectile:
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return ActorUtils.isTargetableBy(actor, ParentSkill.Parent) && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
+			return ActorUtils.isTargetableBy(actor, ParentSkill.parent) && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
 		)
 		return self
 
@@ -103,6 +103,6 @@ class PointArea extends TelegraphDefinition:
 	func WithDamageToHostiles(damage: int) -> TelegraphDefinition:
 		HealthThreat = damage
 		TargetFilters.push_back(func(actor: Actor) -> bool:
-			return ActorUtils.isTargetableBy(actor, ParentSkill.Parent)
+			return ActorUtils.isTargetableBy(actor, ParentSkill.parent)
 		)
 		return self

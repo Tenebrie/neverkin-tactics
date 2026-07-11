@@ -12,16 +12,16 @@ func _to_string() -> String:
 static func ForDelayedTelegraph(target: Actor, sourceSkill: Skill, telegraph: Telegraph) -> DamageInstance:
 	var instance = DamageInstance.new()
 	instance.sourceSkill = sourceSkill
-	instance.sourceActor = sourceSkill.Parent
-	instance.Value = telegraph.Definition.HealthThreatSelector.call(target)
+	instance.sourceActor = sourceSkill.parent
+	instance.Value = telegraph.definition.HealthThreatSelector.call(target)
 	return instance
 
 static func ForSkillCast(target: Actor, targetData: Skill.TargetData) -> DamageInstance:
 	var instance = DamageInstance.new()
 	instance.sourceSkill = targetData.sourceSkill
-	instance.sourceActor = targetData.sourceSkill.Parent
+	instance.sourceActor = targetData.sourceSkill.parent
 
-	for def in targetData.sourceSkill.Definition.Telegraphs:
+	for def in targetData.sourceSkill.definition.telegraphs:
 		var telegraphTargets = targetData.perTelegraph[def]
 		if not telegraphTargets.has(target):
 			continue
@@ -31,6 +31,13 @@ static func ForSkillCast(target: Actor, targetData: Skill.TargetData) -> DamageI
 static func ForAggroGeneration(sourceSkill: Skill, value: int) -> DamageInstance:
 	var instance = DamageInstance.new()
 	instance.sourceSkill = sourceSkill
-	instance.sourceActor = sourceSkill.Parent
+	instance.sourceActor = sourceSkill.parent
+	instance.Value = value
+	return instance
+
+static func ForExtraSkillEffect(sourceSkill: Skill, value: int) -> DamageInstance:
+	var instance = DamageInstance.new()
+	instance.sourceSkill = sourceSkill
+	instance.sourceActor = sourceSkill.parent
 	instance.Value = value
 	return instance

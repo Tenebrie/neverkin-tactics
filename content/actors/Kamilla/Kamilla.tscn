@@ -18,7 +18,7 @@ height = 0.2
 radius = 0.4
 
 [node name="Kamilla" unique_id=807014692 instance=ExtResource("1_tq261")]
-Definition = ExtResource("2_q0caw")
+definition = ExtResource("2_q0caw")
 
 [node name="TokenMeshInstance3D" parent="." index="0" unique_id=405721016]
 material_override = SubResource("StandardMaterial3D_3vndw")

@@ -2,8 +2,8 @@ extends Skill
 class_name SkillWolfHowl
 
 func _ready() -> void:
-	Definition = preload("./SkillWolfHowl.tres").duplicate()
-	Definition.Telegraphs = [
+	definition = preload("./SkillWolfHowl.tres").duplicate()
+	definition.telegraphs = [
 		TelegraphPreset.MaxCastRange.new(),
 		TelegraphPreset.SingleActor.new()
 	]
@@ -14,7 +14,7 @@ func _cast(targets: Skill.TargetData) -> void:
 	target.Buffs.Add(BuffWolfHowlTarget.new())
 
 	var damageInstance = DamageInstance.ForAggroGeneration(self, 10)
-	for ally in BehaviourUtils.findAllies(Parent):
+	for ally in BehaviourUtils.findAllies(parent):
 		if ally.Behaviour is not ActorBehaviourWorldControlled allyBehaviour:
 			continue
 		allyBehaviour.RecordGrudge(damageInstance, target)

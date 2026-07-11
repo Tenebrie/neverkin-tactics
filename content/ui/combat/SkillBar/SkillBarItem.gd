@@ -8,13 +8,13 @@ var TrackedSkill: Skill:
 	set(value):
 		if TrackedSkill != null:
 			TrackedSkill.Controller.SelectedSkillChanged.disconnect(updateModulate)
-			TrackedSkill.Controller.Parent.actions.ActionPointsChanged.disconnect(updateModulate)
-			TrackedSkill.Controller.Parent.actions.MovementPointsChanged.disconnect(updateModulate)
+			TrackedSkill.Controller.parent.actions.ActionPointsChanged.disconnect(updateModulate)
+			TrackedSkill.Controller.parent.actions.MovementPointsChanged.disconnect(updateModulate)
 		TrackedSkill = value
 		if TrackedSkill != null:
 			TrackedSkill.Controller.SelectedSkillChanged.connect(updateModulate)
-			TrackedSkill.Controller.Parent.actions.ActionPointsChanged.connect(updateModulate)
-			TrackedSkill.Controller.Parent.actions.MovementPointsChanged.connect(updateModulate)
+			TrackedSkill.Controller.parent.actions.ActionPointsChanged.connect(updateModulate)
+			TrackedSkill.Controller.parent.actions.MovementPointsChanged.connect(updateModulate)
 
 var Transparent: bool = false
 var Hotkey: InputEventKey
@@ -38,11 +38,11 @@ func onPortraitClick() -> void:
 
 	if TrackedSkill.Controller.SelectedSkill == TrackedSkill:
 		TrackedSkill.Controller.Select(null)
-	elif TrackedSkill.Parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
+	elif TrackedSkill.parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
 		MessageLog.PrintMessage("Not enough movement")
-	elif TrackedSkill.Parent.isDead:
-		MessageLog.PrintMessage("%s is incapacitated!"%TrackedSkill.Parent.Definition.Name)
-	elif TrackedSkill.Parent.actions.ActionPointsAvailable >= TrackedSkill.ActionPointCost:
+	elif TrackedSkill.parent.isDead:
+		MessageLog.PrintMessage("%s is incapacitated!"%TrackedSkill.parent.definition.Name)
+	elif TrackedSkill.parent.actions.ActionPointsAvailable >= TrackedSkill.ActionPointCost:
 		TrackedSkill.Controller.Select(TrackedSkill)
 	else:
 		MessageLog.PrintMessage("Not enough AP")
@@ -65,7 +65,7 @@ func update() -> void:
 		hotkeyLabel.text = Hotkey.as_text()
 	else:
 		hotkeyLabel.text = ""
-	iconButton.texture_normal = TrackedSkill.Definition.IconTexture
+	iconButton.texture_normal = TrackedSkill.definition.IconTexture
 	setActionPointCost(TrackedSkill.ActionPointCost)
 
 func setActionPointCost(cost: int):
@@ -94,11 +94,11 @@ func updateModulate() -> void:
 		base = base.darkened(0.2)
 
 	if TrackedSkill != null:
-		if TrackedSkill.Parent.actions.ActionPointsAvailable < TrackedSkill.ActionPointCost:
+		if TrackedSkill.parent.actions.ActionPointsAvailable < TrackedSkill.ActionPointCost:
 			base = Color(0.4, 0.4, 0.4)
-		if TrackedSkill.Parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
+		if TrackedSkill.parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
 			base = Color(0.4, 0.4, 0.4)
-		if TrackedSkill.Parent.isDead:
+		if TrackedSkill.parent.isDead:
 			base = Color(0.4, 0.4, 0.4)
 
 	iconButton.self_modulate = base

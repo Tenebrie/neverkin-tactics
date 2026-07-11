@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/skills/IveraClaws/IveraClaws.gd" id="2_5mj32"]
 [ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="3_bh363"]
 [ext_resource type="Script" uid="uid://owis1ce0c2b2" path="res://content/skills/IveraGriffonForm/IveraGriffonForm.gd" id="3_vtik3"]
-[ext_resource type="Script" uid="uid://7sil2be4hewh" path="res://content/actors/WolfpackTrooper/skills/SkillCripplingShot/SkillCripplingShot.gd" id="4_sx4dn"]
+[ext_resource type="Script" uid="uid://7sil2be4hewh" path="res://content/actors/WolfpackTrooper/skills/CripplingShot/SkillCripplingShot.gd" id="4_sx4dn"]
 
 [resource]
 script = ExtResource("1_n1w0k")

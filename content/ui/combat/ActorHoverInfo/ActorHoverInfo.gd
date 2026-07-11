@@ -73,7 +73,7 @@ func loadActorData(actor: Actor):
 		_: stylebox.bg_color = Color(0.01, 0.01, 0.1, tooltipOpacity)
 	panelContainer.add_theme_stylebox_override("panel", stylebox)
 
-	nameLabel.text = actor.Definition.Name
+	nameLabel.text = actor.definition.Name
 	factionLabel.text = ActorUtils.getFactionName(actor.Stats.Faction)
 	factionLabel.add_theme_color_override("font_color", ActorUtils.getFactionColor(actor.Stats.Faction))
 	healthLabel.text = "%d / %d"%[actor.Stats.HealthCurrent, actor.Stats.HealthMaximum]
@@ -133,7 +133,7 @@ func addTargetRow(actor: Actor, total: float, behaviour: ActorBehaviourWorldCont
 	rowIndexLabel.text = str(index + 1) + "."
 	row.add_child(rowIndexLabel)
 	var rowNameLabel = Label.new()
-	rowNameLabel.text = actor.Definition.Name
+	rowNameLabel.text = actor.definition.Name
 	rowNameLabel.add_theme_color_override("font_color", ActorUtils.getFactionColor(actor.Stats.Faction))
 	row.add_child(rowNameLabel)
 	if behaviour.FocusedTarget == actor:

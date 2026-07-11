@@ -8,10 +8,10 @@ var damageArea = TelegraphPreset.PointArea.new(1.2).WithDamageToHostiles(Damage)
 var exclusionArea = TelegraphPreset.PointArea.new(GRIFFON_SIZE)
 
 func _ready() -> void:
-	Definition = preload("./IveraGriffonForm.tres").duplicate()
+	definition = preload("./IveraGriffonForm.tres").duplicate()
 
 	damageArea.Validators.push_back(func(_telegraph: Telegraph):
-		var exclusionAreaTelegraph = Parent.Telegraphs.FindTelegraph(exclusionArea)
+		var exclusionAreaTelegraph = parent.telegraphs.FindTelegraph(exclusionArea)
 		if not exclusionAreaTelegraph.IsPathable(GRIFFON_SIZE):
 			return Error.new("Not enough free space at destination.")
 	)
@@ -23,7 +23,7 @@ func _ready() -> void:
 			telegraph.Tint = TelegraphColor.ExclusionOccupied
 	)
 
-	Definition.Telegraphs = [
+	definition.telegraphs = [
 		TelegraphPreset.MaxCastRange.new(),
 		damageArea,
 		exclusionArea,
@@ -41,9 +41,9 @@ func _cast(targets: Skill.TargetData) -> void:
 				effect.Play())
 			.AddStep(0.4, func(): target.Stats.DealSkillDamage(targets))
 
-	Parent.Definition = Definition.ShapeshiftTargetActor
-	create_tween().tween_property(Parent, "global_position", targets.mousePoint, 0.3)
-	var collision = Parent.collision_layer
-	Parent.collision_layer = 0
+	parent.definition = definition.ShapeshiftTargetActor
+	create_tween().tween_property(parent, "global_position", targets.mousePoint, 0.3)
+	var collision = parent.collision_layer
+	parent.collision_layer = 0
 	await get_tree().create_timer(0.3).timeout
-	Parent.collision_layer = collision
+	parent.collision_layer = collision

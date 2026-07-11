@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://dsubohlt5aoox"]
+
+[ext_resource type="Texture2D" uid="uid://bgjkesaje06gh" path="res://content/actors/Ivera/skills/GriffonFlight/SkillGriffonFlightIcon.png" id="1_fo1hb"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_n7oki"]
+
+[resource]
+script = ExtResource("1_n7oki")
+Name = "Griffon Flight"
+GrudgeString = ""
+IconTexture = ExtResource("1_fo1hb")
+ActionPointCost = 0
+TargetingMaxRange = 5.0
+BehaviourUsagePreference = 0.0
+BehaviourRequireLineOfSight = false
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

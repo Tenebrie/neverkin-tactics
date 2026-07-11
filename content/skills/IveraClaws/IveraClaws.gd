@@ -4,8 +4,8 @@ class_name IveraClaws
 const Damage = 1
 
 func _ready() -> void:
-	Definition = preload("./IveraClaws.tres").duplicate()
-	Definition.Telegraphs = [
+	definition = preload("./IveraClaws.tres").duplicate()
+	definition.telegraphs = [
 		TelegraphPreset.MaxCastRange.new(),
 		TelegraphPreset.SingleActor.new().WithDamageToHostiles(Damage)
 	]

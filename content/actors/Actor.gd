@@ -6,7 +6,7 @@ extends CharacterBody3D
 
 #region Engine Events
 func _ready() -> void:
-	if Definition != null:
+	if definition != null:
 		loadDefinition()
 
 	if Engine.is_editor_hint():
@@ -17,7 +17,8 @@ func _ready() -> void:
 	if has_node("TokenMeshInstance3D"):
 		TurnManager.Instance.CurrentActorChanged.connect(func(actor):
 			if actor == self:
-				$TokenMeshInstance3D.position.y = RenderHeight.SelectedActor
+				#$TokenMeshInstance3D.position.y = RenderHeight.SelectedActor
+				$TokenMeshInstance3D.position.y = -0.02
 			else:
 				$TokenMeshInstance3D.position.y = -0.02
 	)
@@ -32,20 +33,20 @@ func _exit_tree() -> void:
 #region Proxy Getters
 var physicalSize:
 	get:
-		return Definition.physicalSize
+		return definition.physicalSize
 var pronouns: Pronouns:
 	get:
-		return Pronouns.FromPreset(Definition.pronouns)
+		return Pronouns.FromPreset(definition.pronouns)
 var faction: Faction:
 	get:
 		if Buffs:
 			var mindControl = Buffs.Get(BuffMindControl) as BuffMindControl
 			if mindControl:
 				return mindControl.faction
-		return Definition.Faction
+		return definition.Faction
 var movementSpeedPerAction: float:
 	get:
-		var base = Definition.MovementSpeedPerActionPoint
+		var base = definition.MovementSpeedPerActionPoint
 		if not Buffs:
 			return base
 		if Buffs.Has(BuffCrippled):
@@ -55,7 +56,7 @@ var movementSpeedPerAction: float:
 		return base
 var initiative: float:
 	get:
-		return Definition.initiative
+		return definition.initiative
 #endregion
 
 #region Components
@@ -67,7 +68,7 @@ var initiative: float:
 @onready var Skills: SkillController = GetComponent(SkillController)
 @onready var Behaviour: ActorBehaviour = GetComponent(ActorBehaviour)
 @onready var InputProvider: ActorInputProvider = GetComponent(ActorInputProvider)
-@onready var Telegraphs: ActorTelegraphs = GetComponent(ActorTelegraphs)
+@onready var telegraphs: ActorTelegraphs = GetComponent(ActorTelegraphs)
 
 func GetComponent(type: GDScript[Component]) -> Component:
 	for child in get_children():
@@ -87,12 +88,12 @@ func RemoveComponent(type: GDScript[Component]):
 			remove_child(child)
 #endregion
 
-#region Definition
+#region definition
 signal DefinitionChanged(def: ActorDefinition)
 
-@export var Definition: ActorDefinition:
+@export var definition: ActorDefinition:
 	set(v):
-		Definition = v
+		definition = v
 		if isReady:
 			loadDefinition()
 		DefinitionChanged.emit(v)
@@ -100,15 +101,15 @@ signal DefinitionChanged(def: ActorDefinition)
 			SignalBus.ActorDefinitionChanged.emit(self)
 
 func loadDefinition():
-	if Definition.TokenTexture:
+	if definition.TokenTexture:
 		var material: StandardMaterial3D = $TokenMeshInstance3D.material_override
-		material.albedo_texture = Definition.TokenTexture
-		var scaleMod = Definition.physicalSize / 0.4
+		material.albedo_texture = definition.TokenTexture
+		var scaleMod = definition.physicalSize / 0.4
 		var tween = create_tween().set_parallel()
 		tween.tween_property($TokenMeshInstance3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
 		tween.tween_property($CollisionShape3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
-		$TokenMeshInstance3D.position.x = Definition.TokenOffset.x
-		$TokenMeshInstance3D.position.z = Definition.TokenOffset.y
+		$TokenMeshInstance3D.position.x = definition.TokenOffset.x
+		$TokenMeshInstance3D.position.z = definition.TokenOffset.y
 #endregion
 
 #region Lifecycle (Game)

@@ -16,7 +16,7 @@ func Add(buff: Buff) -> void:
 	add_child(buff)
 	Changed.emit()
 	if buff is not BuffHealthThreat:
-		MessageLog.PrintChatMessage("%s has received buff %s"%[Parent.Definition.Name, buff.get_script().get_global_name()])
+		MessageLog.PrintChatMessage("%s has received buff %s"%[parent.definition.Name, buff.get_script().get_global_name()])
 
 func Get(buffClass: GDScript[Buff]) -> Buff:
 	for child in get_children():
@@ -42,4 +42,9 @@ func Remove(buff: Buff) -> void:
 	remove_child(buff)
 	Changed.emit()
 	if buff is not BuffHealthThreat:
-		MessageLog.PrintChatMessage("%s has lost buff %s"%[Parent.Definition.Name, buff])
+		MessageLog.PrintChatMessage("%s has lost buff %s"%[parent.definition.Name, buff.get_script().get_global_name()])
+
+func RemoveAll(buffClass: GDScript[Buff]) -> void:
+	for child in get_children():
+		if child is Buff buff and Utils.IsNodeDescendantOf(child, buffClass) and not child.is_queued_for_deletion():
+			Remove(buff)
