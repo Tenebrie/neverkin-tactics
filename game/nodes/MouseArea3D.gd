@@ -39,6 +39,8 @@ static func updateHoverStates() -> void:
 	var camera = viewport.get_camera_3d()
 	if camera == null:
 		return
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		return
 
 	var nowHovered: MouseArea3D = null
 

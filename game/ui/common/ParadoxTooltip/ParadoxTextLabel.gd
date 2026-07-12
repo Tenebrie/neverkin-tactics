@@ -2,18 +2,23 @@
 class_name ParadoxTextLabel
 extends RichTextLabel
 
-static var _stack: Array[ParadoxTextLabel]
-
 class Metadata:
-	var test: String
+	var keywordId: int = -1
+
+var enableColor = true
 
 var _activeTagId: String
 var _activeMetadata: Metadata = null
+var _activeTooltip: ParadoxTooltip
 
 func _ready() -> void:
 	bbcode_enabled = true
 	meta_hover_started.connect(_onHoverStarted)
 	meta_hover_ended.connect(_onHoverEnded)
+	meta_clicked.connect(func():
+		if _activeTooltip:
+			_activeTooltip.lockTooltip()
+	)
 	reset_size()
 
 	text_changed.connect(_processText)
@@ -21,15 +26,52 @@ func _ready() -> void:
 
 func _onHoverStarted(tagId: String) -> void:
 	_activeTagId = tagId
-	#_activeMetadata = meta
-	print(tagId)
 
-func _onHoverEnded(tagId: String) -> void:
-	if tagId == _activeTagId:
-		print("Exit")
+	var metadata = Metadata.new()
+	if tagId.begins_with("keyword:"):
+		metadata.keywordId = int(tagId.split(":")[1])
+	_activeMetadata = metadata
+
+	if metadata.keywordId > -1:
+		var tooltipScene = Asset.Instantiate(ParadoxTooltipKeyword)
+		get_tree().root.add_child(tooltipScene)
+		var def = KeywordManager.Instance.allKeywords[metadata.keywordId].definition
+		tooltipScene.setKeyword(def)
+		_activeTooltip = tooltipScene
+		tooltipScene.layer = getCurrentRenderLayer() + 1
+		tooltipScene.visible = true
+
+		var parent = getCurrentTooltip()
+		if parent:
+			tooltipScene.usesForcedPosition = true
+			if parent.offset.x >= get_viewport_rect().size.x / 2.0:
+				tooltipScene.forcedPosition = Vector2(parent.offset - Vector2(tooltipScene.root.size.x + 16, 0))
+			else:
+				tooltipScene.forcedPosition = Vector2(parent.offset + Vector2(parent.root.size.x + 16, 0))
+
+func getCurrentRenderLayer() -> int:
+	var node = get_parent()
+	while node:
+		if node is CanvasLayer canvas:
+			return canvas.layer
+		node = node.get_parent()
+	return 0
+
+func getCurrentTooltip() -> ParadoxTooltip:
+	var node = get_parent()
+	while node:
+		if node is ParadoxTooltip tooltip:
+			return tooltip
+		node = node.get_parent()
+	return null
+
+func _onHoverEnded() -> void:
+	if _activeTooltip and not _activeTooltip.isLocked:
+		_activeTooltip.queue_free()
+		_activeTooltip = null
 
 const OPENING_MARKER = "[url][/url]"
 func _processText() -> void:
 	if text.begins_with(OPENING_MARKER):
 		return
-	text = OPENING_MARKER + text.replace("Concerning", "[u][url=\"threat_concerning\"]Concerning[/url][/u]")
+	text = OPENING_MARKER + StringUtils.EvaluateTemplate(text, enableColor)

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://de4nhbnjnm8ts"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_hc3u3"]
+
+[resource]
+script = ExtResource("1_hc3u3")
+name = "Threat"
+category = "Mechanic"
+description = "How dangerous this character appears to others.
+
+Higher threat characters are more likely to become a target of an enemy attack, and if the threat gets too high to handle, enemies may fall into a fight-or-flight response, losing the ability to act reasonably.
+
+[b]Levels:[/b]
+- Harmless
+- Concerning
+- Dangerous
+- Deadly
+- Existential"
+aliases = Array[String](["Harmless", "Concerning", "Dangerous", "Deadly", "Existential"])
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

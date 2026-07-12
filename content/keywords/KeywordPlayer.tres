@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://b7d8n6u5e37n5"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_8rpqr"]
+
+[resource]
+script = ExtResource("1_8rpqr")
+name = "Player"
+category = "Faction"
+description = "That's you! <3"
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

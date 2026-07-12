@@ -20,11 +20,11 @@ class_name HLabeledValueContainer
 		text_color = v
 		update()
 
-var _labelControl: Label
+var _labelControl: ParadoxTextLabel
 var _valueControl: Label
 
 func _ready():
-	_labelControl = Label.new()
+	_labelControl = ParadoxTextLabel.new()
 	_valueControl = Label.new()
 	_labelControl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	add_child(_labelControl)
@@ -36,5 +36,5 @@ func update():
 		return
 	_labelControl.text = label
 	_valueControl.text = text
-	_labelControl.add_theme_color_override("font_color", label_color)
+	_labelControl.add_theme_color_override("default_color", label_color)
 	_valueControl.add_theme_color_override("font_color", text_color)

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://c4rsvh0ti6y25"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_c8mc4"]
+
+[resource]
+script = ExtResource("1_c8mc4")
+name = "Algae"
+category = "Lore"
+description = "A biological experiment gone wrong. The genetically engineered algae that was once released into the world's oceans to counteract the global warming and compensate for the falling oxygen levels has since become one of the larger problems for the world. The algae growth has been responsible for destroying most of the aquacultures across the globe, and making seafaring a signifncant challenge.
+For most inhabitants of $Veridian, this is a constant annoyance and a maintenance nightmare."
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

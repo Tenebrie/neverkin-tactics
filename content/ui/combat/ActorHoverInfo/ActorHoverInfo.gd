@@ -75,10 +75,12 @@ func loadActorData(actor: Actor):
 	panelContainer.add_theme_stylebox_override("panel", stylebox)
 
 	nameLabel.text = actor.definition.Name
-	factionLabel.text = ActorUtils.getFactionName(actor.Stats.Faction)
+	factionLabel.enableColor = false
+	factionLabel.text = "$" + ActorUtils.getFactionName(actor.Stats.Faction)
 	factionLabel.add_theme_color_override("default_color", ActorUtils.getFactionColor(actor.Stats.Faction))
 	healthLabel.text = "%d / %d"%[actor.Stats.HealthCurrent, actor.Stats.HealthMaximum]
-	threatLabel.text = ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent)
+	threatLabel.enableColor = false
+	threatLabel.text = "$" + ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent)
 	threatLabel.add_theme_color_override("default_color", ActorUtils.getThreatLevelColor(actor.Stats.ThreatCurrent))
 	movementSpeedLabel.text = "%.1f m/a" % actor.movementSpeedPerAction
 

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://b8xnuiu5myphr"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_u1cst"]
+
+[resource]
+script = ExtResource("1_u1cst")
+name = "Wolfpack"
+category = "Faction"
+description = "A militarized mercenary company based in $Veridian. Formed in 2085 shortly after the fall of the $syndicates, the Wolfpack seized the opportunity and declared $Northshore an area under their protection.
+They are a common sight in different parts of the city though as the Wolves are commonly hired as bouncers, thugs or security"
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

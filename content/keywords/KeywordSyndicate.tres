@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://yoqfefr676hn"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_65gt6"]
+
+[resource]
+script = ExtResource("1_65gt6")
+name = "Syndicate"
+category = "Lore"
+description = "Soon after $Veridian became independent, the criminal organisations known collectively as the Syndicates started to accumulate power. Even while the city nominally kept being a democracy, most de-facto decisions have been handled by the Syndicates one way or another.
+
+These large, omnipresent criminal organisations were operating with barely any opposition up until a massive operation by Veridian police in 2087.
+
+According to the police reports, they have received a large amount of sensitive information about the heads of the Syndicates from an anonymous source that allowed them to strike a decisive and unexpected blow."
+aliases = Array[String](["Syndicates"])
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

@@ -7,6 +7,9 @@ var root: Control
 var mainCanvas: CanvasLayer
 var backdropCanvas: CanvasLayer
 
+var usesForcedPosition = false
+var forcedPosition: Vector2
+
 func _ready() -> void:
 	visible = false
 	if get_child_count() != 1:
@@ -24,18 +27,23 @@ func _process(_delta: float):
 
 	var firstChild: Control = get_child(0)
 	if not isLocked:
-		offset = get_viewport().get_mouse_position() - Vector2(0, firstChild.size.y)
+		if usesForcedPosition:
+			offset = forcedPosition
+		else:
+			offset = get_viewport().get_mouse_position() - Vector2(firstChild.size.x, firstChild.size.y / 2.0)
 		offset.x = clampf(offset.x, 0, get_viewport().get_visible_rect().size.x - firstChild.size.x)
-		offset.y = clampf(offset.y, 0, get_viewport().get_visible_rect().size.y)
+		offset.y = clampf(offset.y, 0, get_viewport().get_visible_rect().size.y - firstChild.size.y)
 
 func lockTooltip():
+	if isLocked:
+		return
 	isLocked = true
 	backdropCanvas = CanvasLayer.new()
 	backdropCanvas.layer = layer
 	var panel = Panel.new()
 	backdropCanvas.add_child(panel)
 	var stylebox = StyleBoxFlat.new()
-	stylebox.bg_color = Color(0,0,0, 0.5)
+	stylebox.bg_color = Color(0,0,0, 0.2)
 	panel.add_theme_stylebox_override(&"panel", stylebox)
 	panel.size = get_viewport().get_visible_rect().size
 	panel.gui_input.connect(func(event: InputEvent):
@@ -51,9 +59,10 @@ func unlockTooltip():
 	isLocked = false
 	visible = false
 	layer -= 1
-	backdropCanvas.queue_free()
-	backdropCanvas.visible = false
-	backdropCanvas = null
+	if backdropCanvas:
+		backdropCanvas.queue_free()
+		backdropCanvas.visible = false
+		backdropCanvas = null
 	MouseArea3D.updateHoverStates()
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
@@ -63,6 +72,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("lockParadoxTooltip"):
 		lockTooltip()
+		get_viewport().set_input_as_handled()
 
 func resizeToContent() -> void:
 	if root == null:

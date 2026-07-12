@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://co6eh0634btga"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_tplml"]
+
+[resource]
+script = ExtResource("1_tplml")
+name = "Veridian"
+category = "Location"
+description = "You are here.
+
+Humanity's greatest achievement of the 21st century, Veridian stands tall where once used to be naught but deep sea.
+
+Surrounded by tall dykes and sea walls, this multi-layered city protects hundreds of thousands of people - humans and otherwise - against the rising sea levels, the blooming $algae, and the dangers now plaguing the old European continent."
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://c01gao2g7w1vo"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_8tawm"]
+
+[resource]
+script = ExtResource("1_8tawm")
+name = "Northshore"
+category = "Location"
+description = "An industrious region of $Veridian housing most of the city's heavy industry and production."
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"
