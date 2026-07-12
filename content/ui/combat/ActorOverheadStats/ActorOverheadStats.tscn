@@ -37,10 +37,12 @@ label_settings = SubResource("LabelSettings_8tiyd")
 unique_name_in_owner = true
 modulate = Color(0.95468724, 0.3055162, 0.28918967, 1)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/CurrentFocusTargetCount" unique_id=437123913]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 texture = ExtResource("3_l7a6n")
 expand_mode = 2
 

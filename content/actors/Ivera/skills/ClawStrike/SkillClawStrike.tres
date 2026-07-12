@@ -7,7 +7,9 @@
 script = ExtResource("2_ivmhk")
 Name = "Kin Claws"
 Category = 2
-Description = "Strike an enemy in melee range with your claws dealing %Damage damage."
+Description = "Strike an enemy in melee range with your claws dealing %Damage damage and applying $Bleeding up to a maximum of %MaxBleedStacks stacks.
+
+$Shifted: Apply up to %MaxShiftedBleedStacks stacks instead."
 IconTexture = ExtResource("1_k3mi7")
 TargetingMaxRange = 0.75
 BehaviourRequireLineOfSight = false

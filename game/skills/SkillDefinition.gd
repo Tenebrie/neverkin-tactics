@@ -5,7 +5,7 @@ class_name SkillDefinition
 @export var Name: String = "Unnamed"
 @export var Category: Skill.Category = Skill.Category.None
 @export_multiline var Description: String
-@export var GrudgeString: String = "$They attacked me"
+@export var GrudgeString: String = ""
 @export var IconTexture: Texture2D
 @export var ActionPointCost: int = 1
 @export var MovementRequired: float = 0.0

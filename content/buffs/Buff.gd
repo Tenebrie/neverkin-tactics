@@ -4,8 +4,6 @@ class_name Buff
 var controller: ActorBuffs
 var definition: BuffDefinition
 
-var turnsRemaining = -1
-
 func _init():
 	tree_entered.connect(func():
 		controller = get_parent()
@@ -21,6 +19,16 @@ func _ready() -> void:
 
 	if definition:
 		name = definition.name
+		Duration = definition.durationTurns
+
+	TurnManager.Instance.FactionTurnEnded.connect(func(faction):
+		if faction != parent.faction:
+			return
+
+		Duration -= 1
+		if Duration <= 0:
+			parent.buffs.Remove(self)
+	)
 	_prepare()
 
 func _prepare() -> void:
@@ -32,7 +40,15 @@ func _prepare() -> void:
 			return
 		Intensity = v
 		if is_node_ready():
-			parent.Buffs.Changed.emit()
+			parent.buffs.Changed.emit()
+
+@export var Duration: int = 1:
+	set(v):
+		if Duration == v:
+			return
+		Duration = v
+		if is_node_ready():
+			parent.buffs.Changed.emit()
 
 @export var Owner: Node:
 	set(v):
@@ -45,4 +61,15 @@ enum Alignment {
 	Neutral,
 	Positive,
 	Negative
+}
+
+enum StackType {
+	## No special handling
+	Parallel,
+	## If the buff with the same intensity is already present, combine their durations
+	StacksDuration,
+	## Combine intensity, set remaining duration to the longest
+	StacksIntensity,
+	## Remove all others, apply latest
+	None,
 }

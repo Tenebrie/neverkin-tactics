@@ -27,6 +27,12 @@ func _ready() -> void:
 func _prepare() -> void:
 	pass
 
+func isCastable() -> Variant:
+	return true
+
+func isVisible() -> bool:
+	return true
+
 var ActionPointCost: int:
 	get:
 		return definition.ActionPointCost
@@ -96,5 +102,5 @@ class TargetData:
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 class SignalBusImplementation extends NodeSignalBus:
-	signal beforeCast(targets: TargetData)
-	signal afterCast(targets: TargetData)
+	signal beforeCast(targets: Skill.TargetData)
+	signal afterCast(targets: Skill.TargetData)

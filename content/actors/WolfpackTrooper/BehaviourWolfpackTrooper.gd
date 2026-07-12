@@ -7,9 +7,9 @@ func planCombatAction() -> TurnAction:
 			continue
 
 		var hasLineOfSight = ActorUtils.hasLineOfSight(parent, target)
-		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
+		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.physicalSize
 		var cripplingShotRange = parent.Skills.Get(SkillCripplingShot).definition.TargetingMaxRange
-		if target.Buffs.Has(BuffWolfHowlTarget) and dist < cripplingShotRange and hasLineOfSight:
+		if target.buffs.Has(BuffWolfHowlTarget) and dist < cripplingShotRange and hasLineOfSight:
 			return TurnAction.UseSkillOnActor(SkillCripplingShot, target)
 
 		var pistolRange = parent.Skills.Get(SkillPistolShot).definition.TargetingMaxRange

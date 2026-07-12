@@ -25,3 +25,6 @@ class_name ActorDefinition
 
 @export_group("Innate Skills")
 @export var Skills: Array[GDScript[Skill]] = []
+
+@export_group("Shapeshifting")
+@export var enablesShifted = false

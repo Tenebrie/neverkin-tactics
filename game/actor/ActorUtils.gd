@@ -176,6 +176,9 @@ static func flatPositionOf(node: Node3D) -> Vector3:
 static func flatDistanceBetween(a: Node3D, b: Node3D) -> float:
 	return flatPositionOf(a).distance_to(flatPositionOf(b))
 
+static func flatDistanceBetweenActors(a: Actor, b: Actor) -> float:
+	return flatPositionOf(a).distance_to(flatPositionOf(b)) - a.physicalSize - b.physicalSize
+
 static func flatDistanceTo(node: Node3D, point: Vector3) -> float:
 	point.y = 0.0
 	return flatPositionOf(node).distance_to(point)

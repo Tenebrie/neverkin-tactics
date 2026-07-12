@@ -81,7 +81,10 @@ func RecordGrudge(damage: DamageInstance, grudgeTarget: Actor) -> void:
 	if not damage.sourceActor or not damage.sourceSkill:
 		return
 
-	var message = damage.sourceActor.pronouns.evaluate(damage.sourceSkill.definition.GrudgeString)
+	var grudgeString = damage.sourceSkill.definition.GrudgeString
+	if not grudgeString:
+		grudgeString = "Attacked me!"
+	var message = damage.sourceActor.pronouns.evaluate(grudgeString)
 	var key = [grudgeTarget, damage.sourceSkill.definition]
 	if Grudges.has(key):
 		Grudges[key].value += damage.Value
@@ -154,3 +157,9 @@ func evaluateTargetThreat(actor: Actor) -> ExplainedThreatValue:
 
 @abstract func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue
 @abstract func PlanTurnActions() -> Array[TurnAction]
+
+func PlanTurnActionsWithCrowdControl() -> Array[TurnAction]:
+	if parent.buffs.Has(SkillGriffonGripBuff):
+		return [TurnAction.UseSkillOnSelf(SkillBreakFree)]
+
+	return await PlanTurnActions()

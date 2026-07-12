@@ -7,6 +7,10 @@ class_name BuffDefinition
 @export var alignment: Buff.Alignment
 @export var iconTexture: Texture2D
 
+## Number of the target's turns this effect is active for, with -1 for infinite.
+@export var durationTurns: int = -1
+@export var stackType: Buff.StackType = Buff.StackType.Parallel
+
 func toKeyword(script: GDScript) -> KeywordDefinition:
 	var keyword = KeywordDefinition.new()
 	keyword.source = KeywordDefinition.Source.Buff

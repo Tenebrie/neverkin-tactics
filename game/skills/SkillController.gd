@@ -6,6 +6,7 @@ var SelectedSkill: Skill = null:
 		if v == SelectedSkill:
 			return
 		var previous = SelectedSkill
+		BeforeSelectedSkillChanged.emit(v, previous)
 		SelectedSkill = v
 		SelectedSkillChanged.emit(v, previous)
 		SignalBus.SelectedSkillChanged.emit(parent, v, previous)
@@ -15,6 +16,7 @@ var SelectedSkill: Skill = null:
 @onready var inactiveSkillGroup: ControlGroup = ControlGroup.new()
 @onready var simulationSkillGroup: ControlGroup = ControlGroup.new()
 
+signal BeforeSelectedSkillChanged(current: Skill, previous: Skill)
 signal SkillsChanged
 signal SelectedSkillChanged(current: Skill, previous: Skill)
 
@@ -41,6 +43,7 @@ func _parentReady() -> void:
 func LoadCommonSkills() -> void:
 	commonSkillGroup.Add(SkillMove.new())
 	commonSkillGroup.Add(SkillVault.new())
+	commonSkillGroup.Add(SkillBreakFree.new())
 
 func LoadSkills() -> void:
 	for skillOrNode in activeSkillGroup.get_children():
@@ -70,7 +73,10 @@ func Count(ability: GDScript[Skill]) -> int:
 	return activeSkillGroup.Count(ability)
 
 func Get(ability: GDScript[Skill]) -> Skill:
-	return activeSkillGroup.Get(ability)
+	var activeAbility = activeSkillGroup.Get(ability)
+	if activeAbility:
+		return activeAbility
+	return commonSkillGroup.Get(ability)
 
 func GetByIndex(index: int) -> Skill:
 	return activeSkillGroup.GetByIndex(index)
@@ -83,6 +89,7 @@ func Simulate(skillScript: GDScript[Skill], cb: func(skill: Skill) -> void) -> v
 	simulationSkillGroup.Add(skill)
 	cb.call(skill)
 	simulationSkillGroup.Remove(skill)
+	skill.queue_free()
 
 func Activate(skill: Skill) -> bool:
 	if skill.ControlGroup != inactiveSkillGroup:

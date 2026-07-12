@@ -13,7 +13,10 @@ extends Camera3D
 var cameraTarget: Vector3
 var targetZoom: float
 
+static var _instance: MainCamera
+
 func _ready() -> void:
+	_instance = self
 	targetZoom = size
 	cameraTarget = position
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a):
@@ -68,7 +71,9 @@ func _process(delta: float) -> void:
 static var lockedTarget: Node3D
 static func lock(node: Node3D):
 	lockedTarget = node
+	await _instance.get_tree().create_timer(1.0).timeout
 
-static func unlock(node: Node3D):
-	if lockedTarget == node:
+static func unlock(node: Node3D = null):
+	if lockedTarget == node or node == null:
 		lockedTarget = null
+	await _instance.get_tree().create_timer(0.5).timeout

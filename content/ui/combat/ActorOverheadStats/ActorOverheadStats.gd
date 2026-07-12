@@ -21,7 +21,7 @@ func _ready():
 	actionPointBar.InhumanColor = Color(1.6, 0.6, 0.0)
 	nameLabel.label_settings.outline_color = ActorUtils.getFactionColor(parent.faction)
 	await get_tree().process_frame
-	parent.Buffs.Changed.connect(rebuildBuffs)
+	parent.buffs.Changed.connect(rebuildBuffs)
 	rebuildBuffs()
 
 func _process(_delta: float):
@@ -71,7 +71,7 @@ func updateValues():
 func rebuildBuffs():
 	for child in buffContainer.get_children():
 		child.queue_free()
-	for buff in parent.Buffs.listAllVisible():
+	for buff in parent.buffs.listAllVisible():
 		var buffView = Asset.Instantiate(ActorOverheadStatsBuff)
 		buffView.parent = parent
 		buffContainer.add_child(buffView)

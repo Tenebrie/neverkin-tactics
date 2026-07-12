@@ -60,7 +60,7 @@ func _process(_delta: float) -> void:
 		PredictedActionPointCost = shownApCount
 
 func _unhandled_input(event: InputEvent) -> void:
-	if TurnManager.Instance.activeActor != parent:
+	if TurnManager.Instance.activeActor != parent or parent.faction != Actor.PlayerFaction:
 		return
 
 	if event is not InputEventMouseButton:

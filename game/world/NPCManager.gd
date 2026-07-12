@@ -51,11 +51,10 @@ func takeTurn(actor: Actor) -> void:
 		if actor.actions.ActionPointsAvailable <= 0:
 			break
 		behaviour.updateRanking()
-		var start = Time.get_ticks_usec()
+		var perfTimer = PerformanceUtils.startMeasure("[behaviour] Planning phase for %s"%actor.name)
 		@warning_ignore("redundant_await")
-		var plan = await behaviour.PlanTurnActions()
-		var elapsed = Time.get_ticks_usec() - start
-		print("AI planning phase took %.2f ms" % [elapsed / 1000.0])
+		var plan = await behaviour.PlanTurnActionsWithCrowdControl()
+		perfTimer.endMeasure()
 		for action in plan:
 			if actor.actions.ActionPointsAvailable <= 0:
 				return
@@ -87,7 +86,12 @@ func executeUseSkillAction(actor: Actor, params: ActorBehaviour.TurnAction.UseSk
 		printerr("Actor %s does not have skill %s"%[actor, params.skill])
 		return
 	actor.Skills.Select(skill)
-	actor.InputProvider.CursorPosition = params.targetPoint
+	if skill.definition.BehaviourTargetsGround:
+		var dir = (params.targetPoint - ActorUtils.flatPositionOf(actor)).normalized()
+		var dist = (params.targetPoint - ActorUtils.flatPositionOf(actor)).length()
+		actor.InputProvider.CursorPosition = ActorUtils.flatPositionOf(actor) + dir * min(dist, skill.definition.TargetingMaxRange)
+	else:
+		actor.InputProvider.CursorPosition = params.targetPoint
 	await get_tree().create_timer(FACE_TARGET_TIME).timeout
 
 	## Delayed skill will get resolved next turn

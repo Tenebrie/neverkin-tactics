@@ -54,7 +54,7 @@ class TurnAction:
 		var action = TurnAction.new(ActionVariant.UseSkill)
 		action.useSkillParams = UseSkillParams.new()
 		action.useSkillParams.skill = skill
-		action.useSkillParams.targetPoint = target.global_position
+		action.useSkillParams.targetPoint = ActorUtils.flatPositionOf(target)
 		return action
 
 	## Force end turn without performing any further actions

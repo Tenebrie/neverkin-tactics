@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://boxfpedgn2ax7"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_va35x"]
+
+[resource]
+script = ExtResource("1_va35x")
+name = "Status Effect Stacking"
+category = "Mechanic"
+description = "Stacking dictates the way multiple copies of the same status effects combine on the same target.
+
+- [b]Stacks duration:[/b] Effects with the same intensity are combined 
+- [b]Stacks intensity:[/b] Effect power is combined, duration is refreshed.
+- [b]Does not stack:[/b] The later effect overwrites any that were applied before."
+aliases = Array[String](["Stacks Duration", "Stacks Intensity", "Does not stack"])
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

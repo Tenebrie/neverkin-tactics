@@ -32,6 +32,9 @@ class_name SegmentedBar
 @export var TickColor = Color(0, 0, 0, 0.5):
 	set(v): TickColor = v; queue_redraw()
 
+@export var MediumTickColor = Color(0, 0, 0, 0.8):
+	set(v): TickColor = v; queue_redraw()
+
 func _notification(what: int):
 	if what == NOTIFICATION_RESIZED:
 		queue_redraw()
@@ -75,5 +78,8 @@ func _draw():
 		box.draw(get_canvas_item(), Rect2(x, 0, w, size.y))
 
 	for i in range(1, MaxValue):
-		var px = roundf(unit * i) + 0.5
-		draw_line(Vector2(px, 0.5), Vector2(px, size.y - 0.5), TickColor, 1.0, true)
+		var px = unit * i + 0.5
+		if i % 5 == 0:
+			draw_line(Vector2(px, 0.0), Vector2(px, size.y - 0.0), MediumTickColor, 1.0, true)
+		else:
+			draw_line(Vector2(px, 2.0), Vector2(px, size.y - 2.0), TickColor, 1.0, true)

@@ -4,41 +4,25 @@ class_name ActorOverheadStatsBuff
 var parent: Actor
 
 @onready var tooltipMount: Control = %TooltipMount
-@onready var tooltipContainer: Control = %TooltipContainer
-@onready var paradoxTooltip: ParadoxTooltip = %ParadoxTooltip
+@onready var tooltip: ActorOverheadStatsBuffTooltip = %Tooltip
 @onready var icon: TextureRect = %Icon
-@onready var nameLabel: Label = %NameLabel
-@onready var descriptionLabel: Label = %DescriptionLabel
-@onready var durationLabel: Label = %DurationLabel
-
-func _ready() -> void:
-	set_process(false)
-	tooltipContainer.position = Vector2.ZERO
+@onready var stackCount: Label = %StackCount
 
 func loadBuff(buff: Buff) -> void:
 	icon.texture = buff.definition.iconTexture
 	icon.self_modulate = getAlignmentColor(buff.definition.alignment)
-
-	nameLabel.text = buff.definition.name
-	descriptionLabel.text = parent.pronouns.evaluate(buff.definition.description)
-
-	durationLabel.visible = true
-	if buff.turnsRemaining <= -1:
-		durationLabel.visible = false
-	elif buff.turnsRemaining == 0:
-		durationLabel.text = "Until the end of this turn"
-	elif buff.turnsRemaining == 1:
-		durationLabel.text = "Until the end of their next turn"
-	elif buff.turnsRemaining >= 2:
-		durationLabel.text = "Lasts %d more turn(s)"%buff.turnsRemaining
+	tooltip.setBuff(self, buff)
+	if buff.Intensity > 1:
+		stackCount.visible = true
+		stackCount.text = str(buff.Intensity)
+	else:
+		stackCount.visible = false
 
 	mouse_entered.connect(func():
-		#set_process(true)
-		paradoxTooltip.visible = true
+		tooltip.visible = true
 	)
 	mouse_exited.connect(func():
-		#set_process(false)
-		paradoxTooltip.visible = false
+		tooltip.visible = false
 	)
 
 static func getAlignmentColor(alignment: Buff.Alignment) -> Color:

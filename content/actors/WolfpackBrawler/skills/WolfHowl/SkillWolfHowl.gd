@@ -11,7 +11,7 @@ func _ready() -> void:
 
 func _cast(targets: Skill.TargetData) -> void:
 	var target = targets.actor
-	target.Buffs.Add(BuffWolfHowlTarget.new())
+	target.buffs.Add(BuffWolfHowlTarget.new())
 
 	var damageInstance = DamageInstance.ForAggroGeneration(self, 10)
 	for ally in BehaviourUtils.findAllies(parent):

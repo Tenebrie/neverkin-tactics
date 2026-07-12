@@ -9,19 +9,22 @@ func _ready() -> void:
 	if definition != null:
 		loadDefinition()
 
+	pronouns = Pronouns.FromPreset(definition.pronouns)
 	if Engine.is_editor_hint():
 		return
 	Repository.All.Register(self)
 	Repository.Alive.Register(self)
 
-	if has_node("TokenMeshInstance3D"):
-		TurnManager.Instance.CurrentActorChanged.connect(func(actor):
-			if actor == self:
-				#$TokenMeshInstance3D.position.y = RenderHeight.SelectedActor
-				$TokenMeshInstance3D.position.y = -0.02
-			else:
-				$TokenMeshInstance3D.position.y = -0.02
-	)
+	#if has_node("TokenMeshInstance3D"):
+		#TurnManager.Instance.CurrentActorChanged.connect(func(actor):
+			#if actor == self:
+				##$TokenMeshInstance3D.position.y = RenderHeight.SelectedActor
+				#$TokenMeshInstance3D.position.y = 0
+			#else:
+				#$TokenMeshInstance3D.position.y = 0
+	#)
+
+	_setupProxySignals()
 
 func _exit_tree() -> void:
 	if not Engine.is_editor_hint():
@@ -31,36 +34,47 @@ func _exit_tree() -> void:
 #endregion
 
 #region Proxy Getters
-var physicalSize:
+var physicalSize: float:
 	get:
 		return definition.physicalSize
-var pronouns: Pronouns:
-	get:
-		return Pronouns.FromPreset(definition.pronouns)
+var pronouns: Pronouns
 var faction: Faction:
 	get:
-		if Buffs:
-			var mindControl = Buffs.Get(BuffMindControl) as BuffMindControl
+		if buffs:
+			var mindControl = buffs.Get(BuffMindControl) as BuffMindControl
 			if mindControl:
 				return mindControl.faction
 		return definition.Faction
 var movementSpeedPerAction: float:
 	get:
 		var base = definition.MovementSpeedPerActionPoint
-		if not Buffs:
+		if not buffs:
 			return base
-		if Buffs.Has(BuffCrippled):
+		if buffs.Has(BuffCrippled):
 			base /= 2.0
-		if Buffs.Has(BuffStim):
+		if buffs.Has(BuffStim):
 			base *= 2.0
 		return base
 var initiative: float:
 	get:
 		return definition.initiative
+var isShapeshifted: bool:
+	get:
+		return definition.enablesShifted
+#endregion
+
+#region Proxy signals
+signal turnEnded()
+
+func _setupProxySignals():
+	TurnManager.Instance.BeforeFactionTurnEnded.connect(func(finishingFaction):
+		if finishingFaction == faction:
+			await SignalUtils.emitAsync([turnEnded])
+	)
 #endregion
 
 #region Components
-@onready var Buffs: ActorBuffs = GetComponent(ActorBuffs)
+@onready var buffs: ActorBuffs = GetComponent(ActorBuffs)
 @onready var Stats: ActorStats = GetComponent(ActorStats)
 @onready var actions: ActorActions = GetComponent(ActorActions)
 @onready var navigator: ActorNavigator = GetComponent(ActorNavigator)
@@ -88,7 +102,7 @@ func RemoveComponent(type: GDScript[Component]):
 			remove_child(child)
 #endregion
 
-#region definition
+#region Definition
 signal DefinitionChanged(def: ActorDefinition)
 
 @export var definition: ActorDefinition:
@@ -101,6 +115,10 @@ signal DefinitionChanged(def: ActorDefinition)
 			SignalBus.ActorDefinitionChanged.emit(self)
 
 func loadDefinition():
+	if not definition:
+		return
+
+	name = definition.Name
 	if definition.TokenTexture:
 		var material: StandardMaterial3D = $TokenMeshInstance3D.material_override
 		material.albedo_texture = definition.TokenTexture

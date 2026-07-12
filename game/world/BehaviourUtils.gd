@@ -115,7 +115,7 @@ class MapTask:
 static func createActorValueMap(actor: Actor) -> FloatFieldMap:
 	var task = await MapTask.collect(actor)
 
-	var timer = PerformanceUtils.startMeasure("AI evaluation for %s"%actor)
+	var timer = PerformanceUtils.startMeasure("[behaviour] Created value map for %s"%actor.name)
 	var coverPromise = Promise.run(func(): return _dispatchCreateActorCoverMapTask(task))
 	var lineOfSightPromise = Promise.run(func(): return _dispatchCreateActorLineOfSightMapTask(task))
 	var proximityPromise = Promise.run(func(): return _dispatchCreateActorProximityMapTask(task))

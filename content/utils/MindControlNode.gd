@@ -10,8 +10,9 @@ func _ready():
 	for child in get_children():
 		if child is not Actor actor:
 			continue
-		if not actor.Buffs:
+		if not actor.buffs:
 			continue
 		var buff = BuffMindControl.new()
+		buff.Duration = INF
 		buff.faction = faction
-		actor.Buffs.Add(buff)
+		actor.buffs.Add(buff)

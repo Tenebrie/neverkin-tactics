@@ -22,9 +22,9 @@ var HealthCurrent: int:
 var HealthThreatened: int = 0
 
 func _parentReady() -> void:
-	if parent.Buffs:
-		parent.Buffs.Changed.connect(func():
-			HealthThreatened = parent.Buffs.Count(BuffHealthThreat)
+	if parent.buffs:
+		parent.buffs.Changed.connect(func():
+			HealthThreatened = parent.buffs.Count(BuffHealthThreat)
 		)
 
 func DealDamage(damage: DamageInstance):

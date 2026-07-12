@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://d130d87bwpmrj"]
+
+[ext_resource type="Texture2D" uid="uid://ds5lcbvry1ldm" path="res://content/skills/SkillBreakFree/SkillBreakFreeIcon.png" id="1_8u4fw"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_jukb4"]
+
+[resource]
+script = ExtResource("2_jukb4")
+Name = "Break Free"
+Description = "Fight against your opponent holding you down to regain your mobility."
+IconTexture = ExtResource("1_8u4fw")
+TargetingMaxRange = 0.0
+BehaviourUsagePreference = 0.0
+BehaviourRequireLineOfSight = false
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

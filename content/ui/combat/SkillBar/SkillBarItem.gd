@@ -34,8 +34,21 @@ func _ready():
 	updateModulate()
 	$Button.pressed.connect(onPortraitClick)
 
+	Skill.SignalBus.afterCast.connect(func(targets):
+		if targets.sourceSkill == TrackedSkill:
+			updateModulate()
+	)
+
 func onPortraitClick() -> void:
-	if TrackedSkill == null:
+	if TrackedSkill == null or not TrackedSkill.isVisible():
+		return
+
+	var validationResult: Variant = TrackedSkill.isCastable()
+	if validationResult is Error:
+		MessageLog.PrintErrorObject(validationResult)
+		return
+
+	if validationResult is bool and validationResult == false:
 		return
 
 	if TrackedSkill.Controller.SelectedSkill == TrackedSkill:
@@ -81,19 +94,23 @@ func setActionPointCost(cost: int):
 		container.add_child(point)
 
 func updateModulate() -> void:
+	if TrackedSkill and not TrackedSkill.isVisible():
+		visible = false
+		return
+
 	if TrackedSkill:
 		tooltip.visible = isHovered
+		if isHovered:
+			tooltip.updatePosition()
 
 	if TrackedSkill == null and Transparent:
 		%Panel.self_modulate = Color.TRANSPARENT
-		#%Panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		#mainButton.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		mainButton.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
 		return
 
 	mainButton.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_ENABLED
-	var isActive := TrackedSkill != null and TrackedSkill.Controller.SelectedSkill == TrackedSkill
-	var base := Color.WHITE if TrackedSkill != null else Color(0, 0, 0, 0.5)
+	var isActive = TrackedSkill != null and TrackedSkill.Controller.SelectedSkill == TrackedSkill
+	var base = Color.WHITE if TrackedSkill != null else Color(0, 0, 0, 0.5)
 
 	if isActive:
 		base = base.blend(Color(0, 1, 0, 0.5))
@@ -105,9 +122,13 @@ func updateModulate() -> void:
 	if TrackedSkill != null:
 		if TrackedSkill.parent.actions.ActionPointsAvailable < TrackedSkill.ActionPointCost:
 			base = Color(0.4, 0.4, 0.4)
-		if TrackedSkill.parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
+		elif TrackedSkill.parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
 			base = Color(0.4, 0.4, 0.4)
-		if TrackedSkill.parent.isDead:
+		elif TrackedSkill.parent.isDead:
+			base = Color(0.4, 0.4, 0.4)
+
+		var castableCheck: Variant = TrackedSkill.isCastable()
+		if castableCheck is not bool or castableCheck != true:
 			base = Color(0.4, 0.4, 0.4)
 
 	mainButton.modulate = base

@@ -2,6 +2,14 @@ extends Skill
 class_name SkillClawStrike
 
 const Damage = 1
+const MaxBleedStacks = 3
+const MaxShiftedBleedStacks = 5
+
+var currentMaxBleedStacks:
+	get:
+		if parent.isShapeshifted:
+			return MaxShiftedBleedStacks
+		return MaxBleedStacks
 
 func _prepare() -> void:
 	definition.telegraphs = [
@@ -18,4 +26,6 @@ func _cast(targets: Skill.TargetData) -> void:
 	effect.Play()
 	get_tree().create_timer(0.1).timeout.connect(func():
 		actor.Stats.DealSkillDamage(targets)
+		var maxStacks = MaxShiftedBleedStacks if parent.isShapeshifted else MaxBleedStacks
+		actor.buffs.AddUpToMaxIntensity(BuffBleeding.Build(self), maxStacks)
 	)

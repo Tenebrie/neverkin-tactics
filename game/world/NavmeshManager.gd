@@ -63,7 +63,7 @@ func drainQueue():
 
 func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 	currentMapActor = actor
-	var bakeStartUsec = Time.get_ticks_usec()
+	var bakeStartTimer = PerformanceUtils.startMeasure("[navbake] Baked for %s"%actor.name)
 	var allExceptions: Array[Actor] = exceptions.duplicate()
 	allExceptions.push_back(actor)
 	var characters = get_tree().current_scene.find_children("*", "Actor", true, false)
@@ -95,9 +95,7 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 		NavigationServer3D.bake_from_source_geometry_data_async(navMesh, source, onRegionBakeFinished)
 	if activeBakeCount > 0:
 		await batchFinished
-	var elapsedMs = (Time.get_ticks_usec() - bakeStartUsec) / 1000.0
-	if is_instance_valid(actor):
-		print("[navbake] finished for %s in %.3f ms (%d region(s))" % [actor.name, elapsedMs, touchedMaps.size()])
+	bakeStartTimer.endMeasure()
 	return touchedMaps
 
 func GetRegion(rid: RID) -> NavigationRegion3D:

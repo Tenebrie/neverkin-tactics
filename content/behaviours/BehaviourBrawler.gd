@@ -75,6 +75,7 @@ func planMovementAction() -> TurnAction:
 
 func planCombatAction() -> TurnAction:
 	var adjacentTargetCount = 0
+	print(Ranking.size())
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
 		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
@@ -87,7 +88,7 @@ func planCombatAction() -> TurnAction:
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
 
-		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
+		var dist = ActorUtils.flatDistanceBetweenActors(parent, target)
 		var knifeRange = parent.Skills.Get(SkillKnifeSlash).definition.TargetingMaxRange
 		if dist < knifeRange:
 			return TurnAction.UseSkillOnActor(SkillKnifeSlash, target)

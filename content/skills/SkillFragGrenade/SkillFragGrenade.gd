@@ -1,7 +1,7 @@
 extends Skill
 class_name SkillFragGrenade
 
-var Damage = 3
+var Damage = 2
 var Radius = 1.5
 
 var damageTelegraph: TelegraphDefinition = TelegraphPreset.PointArea.new(Radius).WithDamageToHostiles(Damage).allowObstacles()

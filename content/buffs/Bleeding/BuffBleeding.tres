@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BuffDefinition" format=3 uid="uid://d0cayt014jj4h"]
+
+[ext_resource type="Script" uid="uid://tbbvo8dei2ke" path="res://game/buff/BuffDefinition.gd" id="1_0fdej"]
+[ext_resource type="Texture2D" uid="uid://70ne06pjvpxb" path="res://content/buffs/Bleeding/BuffBleedingIcon64.svg" id="1_82fe3"]
+
+[resource]
+script = ExtResource("1_0fdej")
+name = "Bleeding"
+description = "Deals %damageToDeal damage at the end of their turn."
+alignment = 2
+iconTexture = ExtResource("1_82fe3")
+durationTurns = 2
+stackType = 2
+metadata/_custom_type_script = "uid://tbbvo8dei2ke"

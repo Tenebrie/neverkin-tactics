@@ -1,8 +1,8 @@
 extends SkillPistolShot
 class_name SkillCripplingShot
 
-func _ready() -> void:
-	super._ready()
+func _prepare() -> void:
+	super._prepare()
 	var newDefinition = preload("./SkillCripplingShot.tres").duplicate()
 	newDefinition.telegraphs = definition.telegraphs
 	definition = newDefinition
@@ -12,5 +12,4 @@ func _cast(targets: Skill.TargetData) -> void:
 
 	for actor in targets.perTelegraph[damageTelegraph]:
 		var buff = BuffCrippled.new()
-		buff.turnsRemaining = 1
-		actor.Buffs.Add(buff)
+		actor.buffs.Add(buff)

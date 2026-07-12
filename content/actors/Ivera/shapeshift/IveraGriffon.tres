@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cl7dg242eqiye" path="res://content/actors/Ivera/skills/HumanForm/SkillIveraHumanForm.gd" id="3_6x3wb"]
 [ext_resource type="Script" uid="uid://5fpiocikuyvr" path="res://content/actors/Ivera/skills/GriffonGrip/SkillGriffonGrip.gd" id="3_i04aw"]
 [ext_resource type="Texture2D" uid="uid://dc6h1yjmt6g8x" path="res://content/actors/Ivera/shapeshift/IveraGriffonToken.webp" id="4_mpfqu"]
+[ext_resource type="Script" uid="uid://dug3s4ovy83ja" path="res://content/actors/Ivera/skills/GriffonToss/SkillGriffonToss.gd" id="4_x1qaf"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="5_7bfqy"]
 
 [resource]
@@ -14,13 +15,15 @@ Name = "Winged Ivera"
 Faction = 0
 PerceivedThreat = 2
 pronouns = 3
+initiative = 5
 physicalSize = 0.8
-TokenOffset = Vector2(0, -0.03)
+TokenOffset = Vector2(0, -0.08)
 TokenTexture = ExtResource("4_mpfqu")
 AvatarTexture = ExtResource("1_6x3wb")
-HealthMaximum = 10
-HealthHumanityThreshold = 5
+HealthMaximum = 20
+HealthHumanityThreshold = 10
 ActionPointsMax = 4
 MovementSpeedPerActionPoint = 6.5
-Skills = Array[GDScript]([ExtResource("2_p5t07"), ExtResource("3_i04aw"), null, null, null, null, ExtResource("3_3rd3g"), ExtResource("3_6x3wb")])
+Skills = Array[GDScript]([ExtResource("2_p5t07"), ExtResource("3_i04aw"), ExtResource("4_x1qaf"), null, null, null, ExtResource("3_3rd3g"), ExtResource("3_6x3wb")])
+enablesShifted = true
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

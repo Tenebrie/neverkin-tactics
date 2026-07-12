@@ -33,8 +33,8 @@ func EnableFuse(origin: Vector3, telegraphDefinition: TelegraphDefinition):
 		if apSpentTotal >= fuseDuration:
 			explode()
 	)
-	TurnManager.Instance.BeforeFactionTurnEnded.connect(func(faction):
-		if fuse.IsLeaving or faction != Actor.PlayerFaction:
+	TurnManager.Instance.BeforeFactionTurnEnded.connect(func():
+		if fuse.IsLeaving:
 			return
 		AdvanceFuse(1000)
 		MainCamera.lock(self)

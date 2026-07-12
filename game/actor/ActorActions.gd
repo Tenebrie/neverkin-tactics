@@ -128,6 +128,8 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 
 	ConsumeActionPoints(apCost)
 	await skill.PerformCast(targets)
+	if parent.Skills.SelectedSkill == skill and not skill.isVisible():
+		parent.Skills.Unselect()
 
 func IssueOrder_Stop():
 	if ActionQueue.Empty():

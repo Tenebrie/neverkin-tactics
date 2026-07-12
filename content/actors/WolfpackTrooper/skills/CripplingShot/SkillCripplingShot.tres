@@ -8,7 +8,6 @@ script = ExtResource("2_hpvjh")
 Name = "Crippling Shot"
 Category = 1
 Description = "Aim at the target's legs to apply $Crippled without dealing damage."
-GrudgeString = "$They shot me"
 IconTexture = ExtResource("1_xta2s")
 TargetingMaxRange = 5.0
 BehaviourTargetsGround = true

@@ -1,25 +1,24 @@
 [gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://dnf8uhhthqlbx"]
 
-[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://content/actors/Ivera/IveraToken.webp" id="1_2wdr7"]
-[ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://content/actors/Ivera/IveraAvatar.webp" id="1_4qsbl"]
-[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="1_n1w0k"]
-[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/actors/Ivera/skills/ClawStrike/SkillClawStrike.gd" id="2_5mj32"]
-[ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="3_bh363"]
-[ext_resource type="Script" uid="uid://owis1ce0c2b2" path="res://content/actors/Ivera/skills/GriffonForm/SkillGriffonForm.gd" id="3_vtik3"]
-[ext_resource type="Script" uid="uid://7sil2be4hewh" path="res://content/actors/WolfpackTrooper/skills/CripplingShot/SkillCripplingShot.gd" id="4_sx4dn"]
+[ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://content/actors/Ivera/IveraAvatar.webp" id="1_780p1"]
+[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/actors/Ivera/skills/ClawStrike/SkillClawStrike.gd" id="2_63lyh"]
+[ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="3_e671e"]
+[ext_resource type="Script" uid="uid://owis1ce0c2b2" path="res://content/actors/Ivera/skills/GriffonForm/SkillGriffonForm.gd" id="5_68nlt"]
+[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://content/actors/Ivera/IveraToken.webp" id="6_26ehw"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="7_xw0yp"]
 
 [resource]
-script = ExtResource("1_n1w0k")
+script = ExtResource("7_xw0yp")
 Name = "Ivera"
 Faction = 0
 pronouns = 1
 initiative = 5
-physicalSize = null
-TokenTexture = ExtResource("1_2wdr7")
-AvatarTexture = ExtResource("1_4qsbl")
-HealthMaximum = 8
-HealthHumanityThreshold = 3
+TokenTexture = ExtResource("6_26ehw")
+AvatarTexture = ExtResource("1_780p1")
+HealthMaximum = 15
+HealthHumanityThreshold = 5
 ActionPointsMax = 4
 MovementSpeedPerActionPoint = 5.5
-Skills = Array[GDScript]([ExtResource("2_5mj32"), ExtResource("3_bh363"), ExtResource("4_sx4dn"), null, null, null, null, ExtResource("3_vtik3")])
+Skills = Array[GDScript]([ExtResource("2_63lyh"), ExtResource("3_e671e"), null, null, null, null, null, ExtResource("5_68nlt")])
+enablesShifted = null
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

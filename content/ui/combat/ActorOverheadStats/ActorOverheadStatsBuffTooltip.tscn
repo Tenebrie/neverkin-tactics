@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://0ee6ioiym1k0"]
+
+[ext_resource type="Script" uid="uid://dkyw4m4cueff5" path="res://content/ui/combat/ActorOverheadStats/ActorOverheadStatsBuffTooltip.gd" id="1_5mrw5"]
+[ext_resource type="FontFile" uid="uid://t3jmp4pamdks" path="res://assets/fonts/roboto/Roboto-Regular.ttf" id="2_shfxd"]
+[ext_resource type="FontFile" uid="uid://b0gkxntpe3rt4" path="res://assets/fonts/roboto/Roboto-Bold.ttf" id="3_tmsg4"]
+[ext_resource type="Script" uid="uid://x71tl38kn1dg" path="res://game/ui/common/ParadoxTooltip/ParadoxTextLabel.gd" id="4_e2qoo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ii06"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.09985284, 0.09985284, 0.09985284, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="ActorOverheadStatsBuffTooltip" type="CanvasLayer" unique_id=388092998]
+script = ExtResource("1_5mrw5")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=585905873]
+offset_right = 356.0
+offset_bottom = 37.0
+mouse_filter = 2
+mouse_behavior_recursive = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_5ii06")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1002917395]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=386885444]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1407605588]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=39395660]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Name"
+
+[node name="Category" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1262141705]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.51, 0.51, 0.51, 1)
+theme_override_font_sizes/font_size = 16
+text = "Skill"
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1980152389]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=706682009]
+layout_mode = 2
+theme_override_constants/margin_top = 4
+
+[node name="Description" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=1994612913]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(340, 10)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_constants/line_separation = 6
+theme_override_constants/paragraph_separation = 16
+theme_override_fonts/normal_font = ExtResource("2_shfxd")
+theme_override_fonts/bold_font = ExtResource("3_tmsg4")
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
+bbcode_enabled = true
+text = "[url][/url]Some description"
+fit_content = true
+script = ExtResource("4_e2qoo")
+metadata/_custom_type_script = "uid://x71tl38kn1dg"

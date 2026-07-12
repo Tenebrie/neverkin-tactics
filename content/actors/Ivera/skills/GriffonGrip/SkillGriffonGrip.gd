@@ -13,8 +13,8 @@ func _prepare() -> void:
 	]
 
 func _cast(targets: Skill.TargetData) -> void:
-	if targets.actor.Buffs.Has(SkillGriffonGripBuff):
-		targets.actor.Buffs.RemoveAll(SkillGriffonGripBuff)
+	if targets.actor.buffs.Has(SkillGriffonGripBuff):
+		targets.actor.buffs.RemoveAll(SkillGriffonGripBuff)
 	else:
 		var buff = SkillGriffonGripBuff.new()
-		targets.actor.Buffs.Add(buff)
+		targets.actor.buffs.Add(buff)

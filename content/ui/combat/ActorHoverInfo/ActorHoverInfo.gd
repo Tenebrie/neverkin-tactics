@@ -115,7 +115,7 @@ func renderBehaviourSection(behaviour: ActorBehaviourWorldControlled) -> void:
 		return
 
 	addSectionHeader("Threats")
-	for i in ranking.size():
+	for i in min(ranking.size(), 5):
 		var ranked = ranking[i]
 		addTargetRow(ranked.Target, ranked.Value.Total, behaviour, i)
 		addSortedReasons(ranked.Value.Highlights)

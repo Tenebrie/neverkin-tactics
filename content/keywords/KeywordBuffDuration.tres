@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://bik1w15oofwdg"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_njux8"]
+
+[resource]
+script = ExtResource("1_njux8")
+name = "Status Effect Duration"
+category = "Mechanic"
+description = "Duration of a status effect represents the number of turns this effect is active.
+
+At the end of a faction's turn, all their characters reduce remaining duration of their status effects by 1. If the remaining duration is now 0 or less, the effect is removed."
+aliases = Array[String](["Duration"])
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

@@ -1,7 +1,7 @@
 extends Skill
 class_name SkillPistolShot
 
-var Damage = 1
+var Damage = 2
 var HitboxWidth = 0.04
 
 var damageTelegraph: TelegraphDefinition = TelegraphPreset.StandardProjectile.new().WithDamage(Damage).WithWidth(HitboxWidth)

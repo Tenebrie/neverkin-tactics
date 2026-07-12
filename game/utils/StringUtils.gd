@@ -43,8 +43,14 @@ static func populateNodeValues(text: String, skill: Node) -> String:
 			result += "[color=orange]%.2fm[/color]" % value
 		elif value is int:
 			result += "[color=orange]%d[/color]" % value
-		else:
+		elif value is float:
 			result += "[color=orange]%.2f[/color]" % value
+		elif value is bool and value == true:
+			result += "[color=#55DD55]Active[/color]"
+		elif value is bool and value == false:
+			result += "[color=#DD5555]Inactive[/color]"
+		else:
+			result += "[color=orange]%s[/color]" % value
 
 		lastEnd = regexMatch.get_end()
 
@@ -54,11 +60,35 @@ static func populateNodeValues(text: String, skill: Node) -> String:
 
 static func populateBuffValues(text: String, buff: Buff) -> String:
 	var result = populateNodeValues(text, buff)
+	if not result:
+		return result
+
+	if buff.definition and buff.Duration >= 0:
+		result += "\n\n$Duration: "
+		if buff.Duration == 0:
+			result += "Until the end of this turn"
+		elif buff.Duration == 1:
+			result += "Until the end of $their next turn"
+		elif buff.Duration >= 2:
+			result += "Lasts [color=orange]%d[/color] turns"%buff.Duration
+
+	if buff.definition and buff.definition.stackType != Buff.StackType.Parallel:
+		result += "\n"
+		if buff.definition.stackType == Buff.StackType.StacksDuration:
+			result += "$Stacks Duration"
+		elif buff.definition.stackType == Buff.StackType.StacksIntensity:
+			result += "$Stacks Intensity"
+		elif buff.definition.stackType == Buff.StackType.None:
+			result += "$Does not stack"
 
 	return result
 
+static func populateActorValues(text: String, actor: Actor) -> String:
+	return populateNodeValues(text, actor)
+
 static func populateSkillValues(text: String, skill: Skill) -> String:
 	var result = populateNodeValues(text, skill)
+	result = skill.parent.pronouns.evaluate(result)
 
 	if skill.definition.TargetingMaxRange > 0.0:
 		if result.length() > 0:
