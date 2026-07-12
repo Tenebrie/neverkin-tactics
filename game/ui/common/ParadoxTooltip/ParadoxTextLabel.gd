@@ -44,10 +44,12 @@ func _onHoverStarted(tagId: String) -> void:
 		var parent = getCurrentTooltip()
 		if parent:
 			tooltipScene.usesForcedPosition = true
-			if parent.offset.x >= get_viewport_rect().size.x / 2.0:
-				tooltipScene.forcedPosition = Vector2(parent.offset - Vector2(tooltipScene.root.size.x + 16, 0))
+			var mouse = get_viewport().get_mouse_position().y
+			if (parent.offset.x + parent.root.size.x / 2.0) >= get_viewport_rect().size.x / 2.0:
+				tooltipScene.forcedPosition = Vector2(parent.offset.x - tooltipScene.root.size.x - 16, mouse - tooltipScene.root.size.y / 2.0)
 			else:
-				tooltipScene.forcedPosition = Vector2(parent.offset + Vector2(parent.root.size.x + 16, 0))
+				tooltipScene.forcedPosition = Vector2(parent.offset.x + parent.root.size.x + 16, mouse - tooltipScene.root.size.y / 2.0)
+
 
 func getCurrentRenderLayer() -> int:
 	var node = get_parent()
