@@ -1,6 +1,6 @@
 @tool
 extends Node3D
-class_name IveraClawsStrikeEffect
+class_name SkillClawStrikeEffect
 
 @export_tool_button("Play")
 var hello_world := func() -> void:

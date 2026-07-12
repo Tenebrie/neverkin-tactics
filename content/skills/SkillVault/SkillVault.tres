@@ -12,6 +12,7 @@ unicode = 106
 script = ExtResource("2_ry4fp")
 Name = "Vault"
 GrudgeString = ""
+Description = "Hop over an ally, obstacle or low cover. Larger creatures may also hop over high cover."
 IconTexture = ExtResource("1_yawl1")
 Hotkey = SubResource("InputEventKey_r1dwb")
 TargetingMaxRange = 0.5

@@ -12,3 +12,11 @@ class_name KeywordDefinition
 @export var aliases: Array[String]
 ## Color to use in descriptions
 @export var color: Color = Color.ORANGE
+
+var source: Source = Source.Native
+var sourceScript: GDScript = null
+enum Source {
+	Native,
+	Buff,
+	Skill,
+}

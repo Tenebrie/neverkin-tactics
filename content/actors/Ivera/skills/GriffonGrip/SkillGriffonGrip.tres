@@ -6,7 +6,12 @@
 [resource]
 script = ExtResource("1_khmqf")
 Name = "Griffon Grip"
+Category = 2
+Description = "Grab another creature with your talons, keeping them nice and close.
+
+Grabbed enemies are unable to use any movement actions until they break free.
+
+Applies ${Griffon Grip!buff}."
 GrudgeString = ""
 IconTexture = ExtResource("1_2pflu")
-ActionPointCost = 0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

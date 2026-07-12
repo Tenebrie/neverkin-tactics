@@ -1,9 +1,12 @@
 extends Skill
 class_name SkillGriffonFlight
 
-var casterTelegraph = TelegraphPreset.PointArea.new(IveraGriffonForm.GRIFFON_SIZE)
+var landingDamage = 1
+
+var casterTelegraph = TelegraphPreset.PointArea.new(0.1)
 
 func _prepare() -> void:
+	casterTelegraph.CircleRadius = parent.physicalSize
 	casterTelegraph.Validators.push_back(func(telegraph: Telegraph):
 		if not telegraph.IsPathable(parent.physicalSize):
 			return Error.new("Not enough free space at destination.")
@@ -11,7 +14,7 @@ func _prepare() -> void:
 
 	casterTelegraph.Processors = []
 	casterTelegraph.Processors.push_back(func(telegraph: Telegraph):
-		if telegraph.IsPathable(IveraGriffonForm.GRIFFON_SIZE):
+		if telegraph.IsPathable(parent.physicalSize):
 			telegraph.Tint = TelegraphColor.ExclusionGood
 		else:
 			telegraph.Tint = TelegraphColor.ExclusionOccupied
@@ -28,7 +31,6 @@ func _cast(targets: TargetData) -> void:
 	parent.collision_layer = 0
 	var direction = (targets.mousePoint - parent.global_position).normalized()
 	var springDist = 0.2
-	var overshootDist = 0
 	var startPos = parent.global_position - direction * springDist + Vector3(0, 0, 0.2)
 	var endPos = targets.mousePoint
 	var arcHeight = startPos.distance_to(endPos) / 4.0
@@ -70,7 +72,7 @@ func _cast(targets: TargetData) -> void:
 
 	tween.tween_callback(func():
 		if grabTimer and ActorUtils.isHostileTo(parent, grabbedActors[0]):
-			grabbedActors[0].Stats.DealDamage(DamageInstance.ForExtraSkillEffect(self, 1))
+			grabbedActors[0].Stats.DealDamage(DamageInstance.ForExtraSkillEffect(self, landingDamage))
 	)
 
 	var landZ = targets.mousePoint.z

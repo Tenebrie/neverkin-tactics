@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm5k2px86d32f"
-path="res://.godot/imported/ivera.Avatar.webp-07db25a2fff63c03533bec5ab3ed0a63.ctex"
+uid="uid://dwj7xlfrk0163"
+path="res://.godot/imported/IveraGriffonAvatar.webp-2f97bad643cfde63a30e0677e8291413.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://content/actors/Ivera/ivera.Avatar.webp"
-dest_files=["res://.godot/imported/ivera.Avatar.webp-07db25a2fff63c03533bec5ab3ed0a63.ctex"]
+source_file="res://content/actors/Ivera/shapeshift/IveraGriffonAvatar.webp"
+dest_files=["res://.godot/imported/IveraGriffonAvatar.webp-2f97bad643cfde63a30e0677e8291413.ctex"]
 
 [params]
 

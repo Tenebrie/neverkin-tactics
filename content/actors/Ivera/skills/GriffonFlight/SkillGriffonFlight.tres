@@ -6,7 +6,11 @@
 [resource]
 script = ExtResource("1_n7oki")
 Name = "Griffon Flight"
-GrudgeString = ""
+Category = 2
+Description = "Flap your wings to quickly reposition in the fight.
+
+If you have another character grabbed with $Griffon Grip, they come along for a ride. You are gentle with your allies, but anyone else takes %landingDamage damage upon landing."
+GrudgeString = "Dropped me on the ground"
 IconTexture = ExtResource("1_fo1hb")
 ActionPointCost = 0
 TargetingMaxRange = 5.0

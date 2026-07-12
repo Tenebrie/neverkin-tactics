@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://x5sms1i1tc64"]
 
-[ext_resource type="Texture2D" uid="uid://dwj7xlfrk0163" path="res://content/actors/Ivera/IveraGriffonForm/Ivera.GriffonForm.Avatar.webp" id="1_6x3wb"]
-[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/skills/IveraClaws/IveraClaws.gd" id="2_p5t07"]
+[ext_resource type="Texture2D" uid="uid://dwj7xlfrk0163" path="res://content/actors/Ivera/shapeshift/IveraGriffonAvatar.webp" id="1_6x3wb"]
+[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/actors/Ivera/skills/ClawStrike/SkillClawStrike.gd" id="2_p5t07"]
 [ext_resource type="Script" uid="uid://c6txfqbi3tpo" path="res://content/actors/Ivera/skills/GriffonFlight/SkillGriffonFlight.gd" id="3_3rd3g"]
-[ext_resource type="Script" uid="uid://cl7dg242eqiye" path="res://content/skills/IveraHumanForm/IveraHumanForm.gd" id="3_6x3wb"]
+[ext_resource type="Script" uid="uid://cl7dg242eqiye" path="res://content/actors/Ivera/skills/HumanForm/SkillIveraHumanForm.gd" id="3_6x3wb"]
 [ext_resource type="Script" uid="uid://5fpiocikuyvr" path="res://content/actors/Ivera/skills/GriffonGrip/SkillGriffonGrip.gd" id="3_i04aw"]
-[ext_resource type="Texture2D" uid="uid://dc6h1yjmt6g8x" path="res://content/actors/Ivera/IveraGriffonForm/Ivera.GriffonForm.Token.webp" id="4_mpfqu"]
+[ext_resource type="Texture2D" uid="uid://dc6h1yjmt6g8x" path="res://content/actors/Ivera/shapeshift/IveraGriffonToken.webp" id="4_mpfqu"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="5_7bfqy"]
 
 [resource]

@@ -1,19 +1,17 @@
 extends Skill
-class_name IveraClaws
+class_name SkillClawStrike
 
 const Damage = 1
 
-func _ready() -> void:
-	definition = preload("./IveraClaws.tres").duplicate()
+func _prepare() -> void:
 	definition.telegraphs = [
 		TelegraphPreset.MaxCastRange.new(),
 		TelegraphPreset.SingleActor.new().WithDamageToHostiles(Damage)
 	]
-	super._ready()
 
 func _cast(targets: Skill.TargetData) -> void:
 	var actor = targets.actor
-	var effect = IveraClawsStrikeEffect.new()
+	var effect = SkillClawStrikeEffect.new()
 	get_tree().current_scene.add_child(effect)
 	effect.global_position = actor.global_position
 	effect.global_position.y = 2

@@ -37,6 +37,12 @@ func Count(buffClass: GDScript[Buff]) -> int:
 			total += buff.Intensity
 	return total
 
+func Simulate(buffScript: GDScript[Buff], cb: func(buff: Buff) -> void) -> void:
+	var buff = buffScript.new()
+	add_child(buff)
+	cb.call(buff)
+	remove_child(buff)
+
 func Remove(buff: Buff) -> void:
 	buff.queue_free()
 	remove_child(buff)

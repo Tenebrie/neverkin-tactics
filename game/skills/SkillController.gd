@@ -13,6 +13,7 @@ var SelectedSkill: Skill = null:
 @onready var commonSkillGroup: ControlGroup = ControlGroup.new()
 @onready var activeSkillGroup: ControlGroup = ControlGroup.new()
 @onready var inactiveSkillGroup: ControlGroup = ControlGroup.new()
+@onready var simulationSkillGroup: ControlGroup = ControlGroup.new()
 
 signal SkillsChanged
 signal SelectedSkillChanged(current: Skill, previous: Skill)
@@ -21,6 +22,7 @@ func _parentReady() -> void:
 	add_child(commonSkillGroup)
 	add_child(activeSkillGroup)
 	add_child(inactiveSkillGroup)
+	add_child(simulationSkillGroup)
 	TurnManager.Instance.CurrentActorChanged.connect(func():
 		if parent.Behaviour is ActorBehaviourPlayerControlled:
 			Select(null)
@@ -72,6 +74,15 @@ func Get(ability: GDScript[Skill]) -> Skill:
 
 func GetByIndex(index: int) -> Skill:
 	return activeSkillGroup.GetByIndex(index)
+
+func GetByName(skillName: String) -> Skill:
+	return activeSkillGroup.GetByName(skillName)
+
+func Simulate(skillScript: GDScript[Skill], cb: func(skill: Skill) -> void) -> void:
+	var skill = skillScript.new()
+	simulationSkillGroup.Add(skill)
+	cb.call(skill)
+	simulationSkillGroup.Remove(skill)
 
 func Activate(skill: Skill) -> bool:
 	if skill.ControlGroup != inactiveSkillGroup:
@@ -133,6 +144,18 @@ class ControlGroup extends Node3D:
 					return child
 			childrenSeen += 1
 		return null
+
+	func GetByName(skillName: String) -> Skill:
+		for child in get_children():
+			if child is not Skill skill:
+				continue
+			if skill.definition.Name == skillName:
+				return skill
+
+		return null
+
+	func Remove(skill: Skill) -> void:
+		remove_child(skill)
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 class SignalBusImplementation extends NodeSignalBus:

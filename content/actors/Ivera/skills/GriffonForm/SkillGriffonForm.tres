@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://d14mr8ctgwnl5"]
+
+[ext_resource type="Texture2D" uid="uid://dwj7xlfrk0163" path="res://content/actors/Ivera/shapeshift/IveraGriffonAvatar.webp" id="1_ojcdp"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_nrb5n"]
+[ext_resource type="Resource" uid="uid://x5sms1i1tc64" path="res://content/actors/Ivera/shapeshift/IveraGriffon.tres" id="2_ojcdp"]
+
+[resource]
+script = ExtResource("2_nrb5n")
+Name = "Griffon Shape"
+Category = 2
+Description = "Jump towards the target point while rapidly shifting into a majestic griffon form.
+
+All enemies up to %{LandingMaxDist}m away from the landing griffon get buffeted by the wind and claws, taking %Damage damage."
+IconTexture = ExtResource("1_ojcdp")
+ActionPointCost = 2
+TargetingMaxRange = 6.0
+ShapeshiftTargetActor = ExtResource("2_ojcdp")
+BehaviourUsagePreference = 0.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

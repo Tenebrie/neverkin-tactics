@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dywuub3ltetny"]
 
 [ext_resource type="Script" uid="uid://bxb66aiirhihw" path="res://content/ui/combat/ActorOverheadStats/ActorOverheadStatsBuff.gd" id="1_a3su4"]
-[ext_resource type="Texture2D" uid="uid://wman2lsal5wm" path="res://content/skills/IveraGriffonForm/IveraGriffonFormIcon.png" id="2_tw514"]
+[ext_resource type="Texture2D" uid="uid://wman2lsal5wm" path="res://assets/icons/icon-skill-placeholder.png" id="2_tw514"]
 [ext_resource type="Script" uid="uid://d0qhuo3fkn356" path="res://game/ui/common/ParadoxTooltip/ParadoxTooltip.gd" id="3_5exnc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x5vy7"]

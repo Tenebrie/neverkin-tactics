@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dc6h1yjmt6g8x"
-path="res://.godot/imported/Ivera.GriffonForm.Token.webp-8259262e17af353bfe8d8889ec162ce9.ctex"
+uid="uid://dm5k2px86d32f"
+path="res://.godot/imported/IveraAvatar.webp-3cf3036bce4b26e093d3611a32e469e9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://content/actors/Ivera/IveraGriffonForm/Ivera.GriffonForm.Token.webp"
-dest_files=["res://.godot/imported/Ivera.GriffonForm.Token.webp-8259262e17af353bfe8d8889ec162ce9.ctex"]
+source_file="res://content/actors/Ivera/IveraAvatar.webp"
+dest_files=["res://.godot/imported/IveraAvatar.webp-3cf3036bce4b26e093d3611a32e469e9.ctex"]
 
 [params]
 

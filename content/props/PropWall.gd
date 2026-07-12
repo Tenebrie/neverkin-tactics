@@ -115,6 +115,8 @@ func rebuild():
 				prototype.position = Vector3(xOffset, prototype.position.y, yOffset)
 				prototype.add_to_group(WallGroupName)
 				if prototype is Actor:
+					prototype.definition.ActionPointsMax = 0
+					prototype.definition.MovementSpeedPerActionPoint = 0
 					prototype.definition.HealthMaximum = SegmentHealth
 				continue
 			var clone = prototype.duplicate() as Node3D
@@ -125,6 +127,8 @@ func rebuild():
 			)
 			add_child(clone)
 			if clone is Actor:
+				clone.definition.ActionPointsMax = 0
+				clone.definition.MovementSpeedPerActionPoint = 0
 				clone.definition.HealthMaximum = SegmentHealth
 			clone.add_to_group(WallGroupName)
 

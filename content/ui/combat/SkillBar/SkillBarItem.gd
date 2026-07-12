@@ -2,7 +2,9 @@ extends Control
 class_name SkillBarItem
 
 @onready var hotkeyLabel: Label = $%HotkeyLabel
+@onready var mainButton: Button = $Button
 @onready var iconButton: TextureButton = $%TextureButton
+@onready var tooltip: SkillBarItemTooltip = %SkillBarItemTooltip
 
 var TrackedSkill: Skill:
 	set(value):
@@ -25,12 +27,12 @@ func _ready():
 	update()
 	TurnManager.Instance.CurrentPlayerActorChanged.connect(update)
 	TurnManager.Instance.TurnChanged.connect(updateModulate)
-	iconButton.mouse_entered.connect(func(): isHovered = true; updateModulate())
-	iconButton.mouse_exited.connect(func(): isHovered = false; updateModulate())
-	iconButton.button_up.connect(updateModulate)
-	iconButton.button_down.connect(updateModulate)
+	$Button.mouse_entered.connect(func(): isHovered = true; updateModulate())
+	$Button.mouse_exited.connect(func(): isHovered = false; updateModulate())
+	$Button.button_up.connect(updateModulate)
+	$Button.button_down.connect(updateModulate)
 	updateModulate()
-	iconButton.pressed.connect(onPortraitClick)
+	$Button.pressed.connect(onPortraitClick)
 
 func onPortraitClick() -> void:
 	if TrackedSkill == null:
@@ -55,10 +57,10 @@ func update() -> void:
 	if TrackedSkill == null:
 		iconButton.texture_normal = null
 		$%HotkeyLabel.visible = false
-		$Panel.visible = true
+		%Panel.visible = true
 		setActionPointCost(0)
 		return
-	$Panel.visible = false
+	%Panel.visible = false
 	$%HotkeyLabel.visible = true
 
 	if Hotkey != null:
@@ -67,6 +69,8 @@ func update() -> void:
 		hotkeyLabel.text = ""
 	iconButton.texture_normal = TrackedSkill.definition.IconTexture
 	setActionPointCost(TrackedSkill.ActionPointCost)
+	await get_tree().process_frame
+	tooltip.setSkill(self, TrackedSkill)
 
 func setActionPointCost(cost: int):
 	var container = $%ActionPointCost
@@ -77,12 +81,17 @@ func setActionPointCost(cost: int):
 		container.add_child(point)
 
 func updateModulate() -> void:
+	if TrackedSkill:
+		tooltip.visible = isHovered
+
 	if TrackedSkill == null and Transparent:
-		$Panel.self_modulate = Color.TRANSPARENT
-		$Panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		$%TextureButton.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		%Panel.self_modulate = Color.TRANSPARENT
+		#%Panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#mainButton.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		mainButton.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
 		return
 
+	mainButton.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_ENABLED
 	var isActive := TrackedSkill != null and TrackedSkill.Controller.SelectedSkill == TrackedSkill
 	var base := Color.WHITE if TrackedSkill != null else Color(0, 0, 0, 0.5)
 
@@ -90,7 +99,7 @@ func updateModulate() -> void:
 		base = base.blend(Color(0, 1, 0, 0.5))
 	if isHovered:
 		base = base.darkened(0.15)
-	if iconButton.button_pressed:
+	if mainButton.button_pressed:
 		base = base.darkened(0.2)
 
 	if TrackedSkill != null:
@@ -101,4 +110,4 @@ func updateModulate() -> void:
 		if TrackedSkill.parent.isDead:
 			base = Color(0.4, 0.4, 0.4)
 
-	iconButton.self_modulate = base
+	mainButton.modulate = base

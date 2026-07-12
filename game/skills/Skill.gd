@@ -60,6 +60,13 @@ enum TargetMode {
 	LineFromSelf,
 }
 
+enum Category {
+	None,
+	Item,
+	Innate,
+	Learned,
+}
+
 class TargetData:
 	var sourceSkill: Skill
 	var actor: Actor

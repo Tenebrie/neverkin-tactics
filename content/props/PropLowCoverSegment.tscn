@@ -8,7 +8,9 @@
 script = ExtResource("2_ko0qu")
 Name = "Unnamed Prop"
 PerceivedThreat = 0
-PhysicalSize = 0.1
+physicalSize = 0.1
+ActionPointsMax = 0
+MovementSpeedPerActionPoint = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_y63i5")
@@ -28,7 +30,7 @@ size = Vector3(0.2, 0.526, 0.2)
 
 [node name="PropLowCover" unique_id=842978226 instance=ExtResource("1_0mw2e")]
 collision_layer = 257
-Definition = SubResource("Resource_0mw2e")
+definition = SubResource("Resource_0mw2e")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="0" unique_id=1641116588]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)

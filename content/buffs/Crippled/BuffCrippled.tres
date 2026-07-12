@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_mjegy")
 name = "Crippled"
-description = "Movement speed is reduced by 50%."
+description = "Movement speed is reduced by %speedLossFactor%."
 alignment = 2
 iconTexture = ExtResource("1_5f3xh")
 metadata/_custom_type_script = "uid://tbbvo8dei2ke"

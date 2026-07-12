@@ -8,7 +8,9 @@
 script = ExtResource("2_2vx1h")
 Name = "Unnamed Prop"
 PerceivedThreat = 0
-PhysicalSize = 0.1
+physicalSize = 0.1
+ActionPointsMax = 0
+MovementSpeedPerActionPoint = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_6whv4")
@@ -28,7 +30,7 @@ size = Vector3(0.2, 0.357, 0.2)
 
 [node name="PropObstacle" unique_id=842978226 instance=ExtResource("1_6whv4")]
 collision_layer = 5
-Definition = SubResource("Resource_slab6")
+definition = SubResource("Resource_slab6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="0" unique_id=1641116588]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bdgt33qjttv1o"]
 
 [ext_resource type="Script" uid="uid://dlpk1jf2ghjm2" path="res://content/actors/Actor.gd" id="1_ocm0e"]
-[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://content/actors/Ivera/ivera.Token.webp" id="2_1yc4f"]
+[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://content/actors/Ivera/IveraToken.webp" id="2_1yc4f"]
 [ext_resource type="Script" uid="uid://bwyipm7pkrsw1" path="res://game/actor/ActorStats.gd" id="3_2qf6d"]
 [ext_resource type="Script" uid="uid://x0dicygbgdp2" path="res://game/actor/ActorBuffs.gd" id="4_2qf6d"]
 [ext_resource type="Script" uid="uid://dk1i4lds5ke56" path="res://game/actor/ActorActions.gd" id="4_pe7q2"]

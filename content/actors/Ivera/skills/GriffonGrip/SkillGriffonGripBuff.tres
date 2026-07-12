@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("2_3578x")
-name = "Griffon Grapple"
-description = "$They $are very much grappled!"
+name = "Griffon Grip"
+description = "You are grabbed by a griffon."
 iconTexture = ExtResource("1_yjwmj")
 metadata/_custom_type_script = "uid://tbbvo8dei2ke"

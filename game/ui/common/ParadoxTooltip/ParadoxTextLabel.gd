@@ -76,4 +76,4 @@ const OPENING_MARKER = "[url][/url]"
 func _processText() -> void:
 	if text.begins_with(OPENING_MARKER):
 		return
-	text = OPENING_MARKER + StringUtils.EvaluateTemplate(text, enableColor)
+	text = OPENING_MARKER + StringUtils.evaluateTemplate(text, enableColor)

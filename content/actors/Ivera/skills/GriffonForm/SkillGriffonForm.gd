@@ -1,23 +1,25 @@
 extends Skill
 class_name IveraGriffonForm
 
+var griffonDefinition = preload("res://content/actors/Ivera/shapeshift/IveraGriffon.tres")
+
 var Damage = 3
+var GriffonSize = griffonDefinition.physicalSize
+var LandingAreaSize = 1.3
+var LandingMaxDist = LandingAreaSize - GriffonSize
 
-const GRIFFON_SIZE = 0.8
-var damageArea = TelegraphPreset.PointArea.new(1.2).WithDamageToHostiles(Damage)
-var exclusionArea = TelegraphPreset.PointArea.new(GRIFFON_SIZE)
+var damageArea = TelegraphPreset.PointArea.new(LandingAreaSize).WithDamageToHostiles(Damage)
+var exclusionArea = TelegraphPreset.PointArea.new(GriffonSize)
 
-func _ready() -> void:
-	definition = preload("./IveraGriffonForm.tres").duplicate()
-
+func _prepare() -> void:
 	damageArea.Validators.push_back(func(_telegraph: Telegraph):
 		var exclusionAreaTelegraph = parent.telegraphs.FindTelegraph(exclusionArea)
-		if not exclusionAreaTelegraph.IsPathable(GRIFFON_SIZE):
+		if not exclusionAreaTelegraph.IsPathable(GriffonSize):
 			return Error.new("Not enough free space at destination.")
 	)
 
 	exclusionArea.Processors.push_back(func(telegraph: Telegraph):
-		if telegraph.IsPathable(GRIFFON_SIZE):
+		if telegraph.IsPathable(GriffonSize):
 			telegraph.Tint = TelegraphColor.ExclusionGood
 		else:
 			telegraph.Tint = TelegraphColor.ExclusionOccupied
@@ -28,13 +30,12 @@ func _ready() -> void:
 		damageArea,
 		exclusionArea,
 	]
-	super._ready()
 
 func _cast(targets: Skill.TargetData) -> void:
 	for target in targets.perTelegraph[damageArea]:
 		StartSequence()
 			.AddStep(0.3, func():
-				var effect = IveraClawsStrikeEffect.new()
+				var effect = SkillClawStrikeEffect.new()
 				get_tree().current_scene.add_child(effect)
 				effect.global_position = target.global_position
 				effect.global_position.y = 2

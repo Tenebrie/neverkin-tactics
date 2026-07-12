@@ -1,14 +1,17 @@
 [gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://b4kk0xu3px88y"]
 
-[ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://content/actors/Ivera/ivera.Avatar.webp" id="1_in8uy"]
-[ext_resource type="Resource" uid="uid://dnf8uhhthqlbx" path="res://content/actors/Ivera/IveraDefinition.tres" id="2_in8uy"]
+[ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://content/actors/Ivera/IveraAvatar.webp" id="1_in8uy"]
+[ext_resource type="Resource" uid="uid://dnf8uhhthqlbx" path="res://content/actors/Ivera/Ivera.tres" id="2_in8uy"]
 [ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="3_5vg0j"]
 
 [resource]
 script = ExtResource("3_5vg0j")
-Name = "Griffon Form"
+Name = "Human Form"
+Category = 3
+Description = "Turn back into Ivera's humanoid form."
+GrudgeString = ""
 IconTexture = ExtResource("1_in8uy")
 ActionPointCost = 2
-TargetingMaxRange = 6.0
+TargetingMaxRange = 0.0
 ShapeshiftTargetActor = ExtResource("2_in8uy")
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"
