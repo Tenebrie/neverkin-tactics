@@ -19,10 +19,13 @@ func _ready() -> void:
 	_instance = self
 	targetZoom = size
 	cameraTarget = position
+	position = Vector3(-1000, position.y, -1000)
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a):
 		var actor = TurnManager.Instance.activeActor
 		if actor != null:
 			snapToTarget(actor.global_position)
+			if position.distance_to(cameraTarget) > 50:
+				position = cameraTarget
 	)
 
 func snapToTarget(worldPos: Vector3) -> void:

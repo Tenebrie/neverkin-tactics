@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://ceeab5x7dnrd1"]
+
+[ext_resource type="Script" uid="uid://c3w0tijy8cnql" path="res://content/ui/combat/SkillBar/SkillBarItemCooldownCost.gd" id="1_ckbg3"]
+[ext_resource type="Texture2D" uid="uid://d1jwk2upaogqd" path="res://assets/icons/backward-time-32.svg" id="1_rgkav"]
+
+[sub_resource type="Shader" id="Shader_bpnaq"]
+code = "shader_type canvas_item;
+
+uniform vec4 outline_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform float outline_width : hint_range(0.0, 10.0) = 2.0;
+
+varying vec4 modulate;
+
+void vertex() {
+    modulate = COLOR;
+}
+
+void fragment() {
+    vec4 col = texture(TEXTURE, UV);
+    float a = col.a;
+
+    const int SAMPLES = 64;
+    float outline = 0.0;
+    for (int i = 0; i < SAMPLES; i++) {
+        float ang = TAU * float(i) / float(SAMPLES);
+        vec2 off = vec2(cos(ang), sin(ang)) * TEXTURE_PIXEL_SIZE * outline_width;
+        outline = max(outline, texture(TEXTURE, UV + off).a);
+    }
+
+    vec4 result = mix(outline_color, col, a);
+    result.a = max(a, outline);
+
+    COLOR = result * modulate;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nvo6o"]
+shader = SubResource("Shader_bpnaq")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_width = 4.00000019
+
+[node name="SkillBarItemCooldownCost" type="HBoxContainer" unique_id=401918131]
+custom_maximum_size = Vector2(-1, 20)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1918.0
+offset_bottom = -1368.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ckbg3")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=254951922]
+material = SubResource("ShaderMaterial_nvo6o")
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture = ExtResource("1_rgkav")
+expand_mode = 1

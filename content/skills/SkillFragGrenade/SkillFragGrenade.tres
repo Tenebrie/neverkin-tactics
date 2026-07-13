@@ -7,7 +7,9 @@
 script = ExtResource("2_42eyi")
 Name = "Fragmentation Grenade"
 IconTexture = ExtResource("1_lu6fx")
-ActionPointCost = 2
+ChargesCost = 1
+ChargesMaximum = 1
+Cooldown = null
 TargetingMaxRange = 5.0
 BehaviourUsagePreference = 0.5
 BehaviourRequireLineOfSight = false

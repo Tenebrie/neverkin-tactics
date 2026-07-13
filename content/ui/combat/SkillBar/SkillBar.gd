@@ -17,32 +17,34 @@ func connectSignals(actor: Actor) -> void:
 	rebuildItems()
 
 func rebuildItems() -> void:
-	for child in commonBarContainer.get_children():
-		child.queue_free()
-	for child in mainBarContainer.get_children():
-		child.queue_free()
-
 	var controller = TurnManager.Instance.activePlayerActor.Skills
 	for i in range(8):
-		var newItem = Asset.Instantiate(SkillBarItem)
-		var skill = controller.commonSkillGroup.GetByIndex(i)
-		if skill:
-			newItem.TrackedSkill = controller.commonSkillGroup.GetByIndex(i)
-			if skill.definition.Hotkey:
-				newItem.Hotkey = skill.definition.Hotkey
+		var newItem: SkillBarItem
+		if commonBarContainer.get_child_count() > i:
+			newItem = commonBarContainer.get_child(i)
 		else:
-			newItem.Transparent = true
-		commonBarContainer.add_child(newItem)
+			newItem = Asset.Instantiate(SkillBarItem)
+			commonBarContainer.add_child(newItem)
+		var skill = controller.commonSkillGroup.GetByIndex(i)
+		newItem.Transparent = skill == null
+		newItem.Hotkey = skill.definition.Hotkey if skill and skill.definition.Hotkey else null
+		newItem.TrackedSkill = skill
 
 	for i in range(8):
-		var newItem = Asset.Instantiate(SkillBarItem)
+		var newItem: SkillBarItem
+		if mainBarContainer.get_child_count() > i:
+			newItem = mainBarContainer.get_child(i)
+		else:
+			newItem = Asset.Instantiate(SkillBarItem)
+			mainBarContainer.add_child(newItem)
 		var skill = controller.GetByIndex(i)
+		var hotkey: InputEventKey = null
 		if skill:
-			newItem.TrackedSkill = skill
 			if skill.definition.Hotkey:
-				newItem.Hotkey = skill.definition.Hotkey
+				hotkey = skill.definition.Hotkey
 			else:
-				var hotkey = InputEventKey.new()
+				hotkey = InputEventKey.new()
 				hotkey.keycode = KEY_1 + i as Key
-				newItem.Hotkey = hotkey
-		mainBarContainer.add_child(newItem)
+		newItem.Transparent = false
+		newItem.Hotkey = hotkey
+		newItem.TrackedSkill = skill

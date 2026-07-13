@@ -3,4 +3,4 @@ class_name SkillCheapFragGrenade
 
 func _ready() -> void:
 	super._ready()
-	definition.ActionPointCost = 1
+	definition.ChargesMaximum = 3

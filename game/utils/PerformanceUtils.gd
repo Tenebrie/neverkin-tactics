@@ -1,4 +1,11 @@
+extends Node
 class_name PerformanceUtils
+
+func _ready():
+	Log.debug("- %s: %.2f ms"%["[init] Engine startup", Time.get_ticks_usec() / 1000.0], "Profiler")
+	var timer = startMeasure("[init] Scene tree ready")
+	await get_tree().process_frame
+	timer.endMeasure()
 
 class ProfileTimer:
 	var label: String

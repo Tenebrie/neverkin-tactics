@@ -63,7 +63,7 @@ func drainQueue():
 
 func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 	currentMapActor = actor
-	var bakeStartTimer = PerformanceUtils.startMeasure("[navbake] Baked for %s"%actor.name)
+	var bakeStartTimer = PerformanceUtils.startMeasure("[navmesh] Baked for %s"%actor.name)
 	var allExceptions: Array[Actor] = exceptions.duplicate()
 	allExceptions.push_back(actor)
 	var characters = get_tree().current_scene.find_children("*", "Actor", true, false)
@@ -164,7 +164,7 @@ func addObstruction(source: NavigationMeshSourceGeometryData3D, other: Actor, co
 		shapeRadius = shape.radius
 		height = shape.radius * 2.0
 	else:
-		push_warning("[navbake] Unsupported collision shape type: %s" % shape.get_class())
+		push_warning("[navmesh] Unsupported collision shape type: %s" % shape.get_class())
 		return
 
 	var footprint = maxf(shapeRadius * horizontalScale, other.physicalSize)

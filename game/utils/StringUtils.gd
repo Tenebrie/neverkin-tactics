@@ -102,6 +102,8 @@ static func populateSkillValues(text: String, skill: Skill) -> String:
 		commonLines.push_back("[color=#FF5555]$Health Cost:[/color] %d"%skill.HealthCost)
 	if skill.definition.ManaCost > 0.0:
 		commonLines.push_back("[color=#7777FF]$Mana Cost:[/color] %d"%skill.ManaCost)
+	if skill.definition.Cooldown > 0:
+		commonLines.push_back("[color=orange]$Cooldown:[/color] %d turn%s"%[skill.definition.Cooldown, "s" if skill.definition.Cooldown == 1 else ""])
 	if skill.definition.ChargesMaximum > 0:
 		var charges = "%d / %d"%[skill.chargesLeft, skill.chargesMaximum] if skill.chargesLeft < skill.chargesMaximum else "%d"%skill.chargesMaximum
 		charges = "[color=orange]$Charges:[/color] %s"%charges

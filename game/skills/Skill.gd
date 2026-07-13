@@ -23,12 +23,18 @@ func _ready() -> void:
 	if definition:
 		name = definition.Name
 
-	afterCast.connect(func():
+	beforeCast.connect(func():
 		if parent.Skills.SelectedSkill != self:
 			return
 		if not Error.AsBoolean(isVisible()) or not Error.AsBoolean(isCastable()):
 			parent.Skills.Unselect()
 	)
+
+	TurnManager.Instance.FactionTurnEnded.connect(func(faction):
+		if faction == parent.faction and cooldownRemaining > 0:
+			cooldownRemaining -= 1
+	)
+
 	_prepare()
 
 func _prepare() -> void:
@@ -37,11 +43,15 @@ func _prepare() -> void:
 func isCastable() -> Variant:
 	if parent.isDead:
 		return Error.new("%s is incapacitated!"%parent.definition.Name)
+	if TurnManager.Instance.activeFaction != parent.faction:
+		return Error.new("Can't use skills on enemy turn")
+	if cooldownRemaining > 0:
+		return Error.new("Cooling down")
 	if parent.actions.MovementAvailable < MovementRequired:
 		return Error.new("Not enough movement")
 	if parent.actions.ActionPointsAvailable < ActionPointCost:
 		return Error.new("Not enough AP")
-	if parent.stats.healthCurrent <= HealthCost:
+	if HealthCost > 0 and parent.stats.healthCurrent <= HealthCost:
 		return Error.new("Not enough health")
 	if parent.stats.manaCurrent < ManaCost:
 		return Error.new("Not enough mana")
@@ -87,17 +97,27 @@ func _emitSkillEvent(signals: Array[Signal], targets: TargetData):
 func StartSequence() -> Sequencer:
 	return Sequencer.Start(self)
 
-var _chargesUsed = 0
+#region Charges
+var chargesUsed = 0
 
 var chargesLeft:
 	get:
-		return definition.ChargesMaximum - _chargesUsed
+		return definition.ChargesMaximum - chargesUsed
+
 var chargesMaximum:
 	get:
 		return definition.ChargesMaximum
 
 func consumeCharges(count: int) -> void:
-	_chargesUsed += count
+	chargesUsed += count
+#endregion
+
+#region Cooldown
+var cooldownRemaining = 0
+func startCooldown():
+	if definition.Cooldown > 0:
+		cooldownRemaining = definition.Cooldown
+#endregion
 
 enum TargetMode {
 	Self,

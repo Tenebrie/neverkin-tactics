@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://drubw221xpify" path="res://content/ui/combat/SkillBar/SkillBarItem.gd" id="1_bbwqj"]
 [ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://content/actors/Ivera/IveraAvatar.webp" id="2_cnihy"]
 [ext_resource type="PackedScene" uid="uid://dbssbd5tja4hl" path="res://content/ui/combat/SkillBar/SkillBarItemActionPoint.tscn" id="3_n32wj"]
+[ext_resource type="PackedScene" uid="uid://ceeab5x7dnrd1" path="res://content/ui/combat/SkillBar/SkillBarItemCooldownCost.tscn" id="3_phvhl"]
 [ext_resource type="FontFile" uid="uid://b0gkxntpe3rt4" path="res://assets/fonts/roboto/Roboto-Bold.ttf" id="4_qdslx"]
 [ext_resource type="PackedScene" uid="uid://6kspj7pk8wjx" path="res://content/ui/combat/SkillBar/SkillBarItemTooltip.tscn" id="4_ypyt1"]
 
@@ -34,19 +35,6 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bpnaq"]
 shader = SubResource("Shader_61go4")
 shader_parameter/radius = 16.00000076
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qdslx"]
-resource_local_to_scene = true
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.9063318, 0.9063318, 0, 1)
-corner_radius_top_left = 100
-corner_radius_top_right = 100
-corner_radius_bottom_right = 100
-corner_radius_bottom_left = 100
-corner_detail = 16
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phvhl"]
 resource_local_to_scene = true
@@ -165,32 +153,6 @@ corner_radius_bottom_right = 100
 corner_radius_bottom_left = 100
 corner_detail = 16
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bb56u"]
-resource_local_to_scene = true
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.9063318, 0.9063318, 0, 1)
-corner_radius_top_left = 100
-corner_radius_top_right = 100
-corner_radius_bottom_right = 100
-corner_radius_bottom_left = 100
-corner_detail = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1t74b"]
-resource_local_to_scene = true
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.9063318, 0.9063318, 0, 1)
-corner_radius_top_left = 100
-corner_radius_top_right = 100
-corner_radius_bottom_right = 100
-corner_radius_bottom_left = 100
-corner_detail = 16
-
 [sub_resource type="LabelSettings" id="LabelSettings_nvo6o"]
 font = ExtResource("4_qdslx")
 outline_size = 2
@@ -201,6 +163,11 @@ shadow_color = Color(0, 0, 0, 1)
 font = ExtResource("4_qdslx")
 outline_size = 2
 outline_color = Color(1, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_bb56u"]
+font = ExtResource("4_qdslx")
+font_size = 32
 shadow_color = Color(0, 0, 0, 1)
 
 [node name="SkillBarItem" type="Control" unique_id=544254672]
@@ -281,6 +248,15 @@ theme_override_constants/margin_bottom = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin" unique_id=1257857478]
 layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="CooldownCost" type="HBoxContainer" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer" unique_id=639381679]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="SkillBarItemCooldownCost" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/CooldownCost" unique_id=688026740 instance=ExtResource("3_phvhl")]
+layout_mode = 2
 
 [node name="ActionPointCost" type="HBoxContainer" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer" unique_id=65654529]
 unique_name_in_owner = true
@@ -289,17 +265,13 @@ theme_override_constants/separation = 2
 
 [node name="SkillBarItemActionPoint" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=668084793 instance=ExtResource("3_n32wj")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_qdslx")
-
-[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=800911617 instance=ExtResource("3_n32wj")]
-layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_phvhl")
 
-[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=1318659154 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=1725407613 instance=ExtResource("3_n32wj")]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u2054")
 
-[node name="SkillBarItemActionPoint4" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=121549357 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=1778429712 instance=ExtResource("3_n32wj")]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_r71yn")
 
@@ -308,42 +280,34 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="SkillBarItemActionPoint" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=440802980 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=509232998 instance=ExtResource("3_n32wj")]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_n4lju")
 
-[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=776840836 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=1398432918 instance=ExtResource("3_n32wj")]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_a8lhn")
 
-[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=152653911 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=442268153 instance=ExtResource("3_n32wj")]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bs5co")
-
-[node name="SkillBarItemActionPoint4" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=1035570302 instance=ExtResource("3_n32wj")]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_g8d4w")
 
 [node name="ManaPointCost" type="HBoxContainer" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer" unique_id=1591968557]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="SkillBarItemActionPoint" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=147022907 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=1471057123 instance=ExtResource("3_n32wj")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g8d4w")
+
+[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=58063728 instance=ExtResource("3_n32wj")]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4pcqt")
 
-[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=1304779214 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=777069770 instance=ExtResource("3_n32wj")]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rikvc")
-
-[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=1828435311 instance=ExtResource("3_n32wj")]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bb56u")
-
-[node name="SkillBarItemActionPoint4" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=8479031 instance=ExtResource("3_n32wj")]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_1t74b")
 
 [node name="TopInfo" type="MarginContainer" parent="Button/MarginContainer/Control" unique_id=200020046]
 layout_mode = 1
@@ -395,3 +359,25 @@ label_settings = SubResource("LabelSettings_ypyt1")
 [node name="SkillBarItemTooltip" parent="Button/MarginContainer/Control" unique_id=388092998 instance=ExtResource("4_ypyt1")]
 unique_name_in_owner = true
 visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=307346168]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="CooldownLabel" type="Label" parent="MarginContainer" unique_id=1870999454]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+text = "1"
+label_settings = SubResource("LabelSettings_bb56u")
+horizontal_alignment = 1
+vertical_alignment = 1

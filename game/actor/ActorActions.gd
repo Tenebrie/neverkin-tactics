@@ -134,6 +134,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		ConsumeActionPoints(skill.ActionPointCost)
 	if skill.ChargesRequired > 0:
 		skill.consumeCharges(skill.ChargesRequired)
+	skill.startCooldown()
 	await skill.PerformCast(targets)
 	if parent.Skills.SelectedSkill == skill and not skill.isVisible():
 		parent.Skills.Unselect()

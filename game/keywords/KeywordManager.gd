@@ -13,10 +13,14 @@ class KeywordWithPattern:
 var allKeywords: Array[KeywordWithPattern] = []
 
 func _enter_tree() -> void:
+	var timer = PerformanceUtils.startMeasure("[init] Loading keywords")
+
 	_loadKeywords("res://content/keywords")
 	_loadResources("res://content/buffs")
 	_loadResources("res://content/actors")
 	_loadResources("res://content/skills")
+
+	timer.endMeasure()
 
 class ResourcePair:
 	var scriptPath: String

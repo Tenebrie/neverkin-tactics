@@ -13,7 +13,7 @@ Deals %landingDamage upon landing to the target regardless if it's an ally or an
 
 Requires a target grabbed by $Griffon Grip."
 IconTexture = ExtResource("1_ekdc7")
-ActionPointCost = 2
+Cooldown = 2
 TargetingMaxRange = 12.0
 BehaviourRequireLineOfSight = false
 BehaviourTargetsGround = true

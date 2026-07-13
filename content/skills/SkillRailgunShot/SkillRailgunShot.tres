@@ -6,8 +6,12 @@
 [resource]
 script = ExtResource("2_hn53t")
 Name = "Railgun"
+Category = 1
 IconTexture = ExtResource("1_jo0yr")
-ActionPointCost = 2
+ActionPointCost = 0
+ChargesCost = null
+ChargesMaximum = null
+Cooldown = 2
 TargetingMaxRange = 10.0
 BehaviourUsagePreference = 2.0
 BehaviourTargetsGround = true

@@ -7,17 +7,26 @@ var parent: SkillBarItem
 @onready var categoryLabel: Label = %Category
 @onready var descriptionLabel: ParadoxTextLabel = %Description
 
+var trackedSkill: Skill
+
+func _ready():
+	super()
+	visibility_changed.connect(func():
+		if trackedSkill and visible:
+			loadDescription()
+	)
+
 func setSkill(item: SkillBarItem, skill: Skill):
 	parent = item
 	nameLabel.text = skill.definition.Name
 	categoryLabel.text = StringUtils.getSkillCategoryString(skill.definition.Category)
-	#descriptionLabel.text = StringUtils.populateSkillValues(skill.definition.Description, skill)
-	updatePosition()
+	trackedSkill = skill
+	if visible:
+		loadDescription()
 
-	visibility_changed.connect(func():
-		if visible:
-			descriptionLabel.text = StringUtils.populateSkillValues(skill.definition.Description, skill)
-	)
+func loadDescription():
+	descriptionLabel.text = StringUtils.populateSkillValues(trackedSkill.definition.Description, trackedSkill)
+	updatePosition()
 
 func updatePosition():
 	if not parent:

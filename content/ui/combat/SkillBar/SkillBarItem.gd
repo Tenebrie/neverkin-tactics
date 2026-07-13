@@ -17,6 +17,9 @@ var TrackedSkill: Skill:
 			TrackedSkill.Controller.SelectedSkillChanged.connect(updateModulate)
 			TrackedSkill.Controller.parent.actions.ActionPointsChanged.connect(updateModulate)
 			TrackedSkill.Controller.parent.actions.MovementPointsChanged.connect(updateModulate)
+		if is_node_ready():
+			update()
+			updateModulate()
 
 var Transparent: bool = false
 var Hotkey: InputEventKey
@@ -25,7 +28,7 @@ var isHovered: bool = false
 
 func _ready():
 	update()
-	TurnManager.Instance.CurrentPlayerActorChanged.connect(update)
+	#TurnManager.Instance.CurrentPlayerActorChanged.connect(update)
 	TurnManager.Instance.TurnChanged.connect(updateModulate)
 	$Button.mouse_entered.connect(func(): isHovered = true; updateModulate())
 	$Button.mouse_exited.connect(func(): isHovered = false; updateModulate())
@@ -84,11 +87,13 @@ func hideSkillCosts():
 	%ActionPointCost.visible = false
 	%HealthPointCost.visible = false
 	%ManaPointCost.visible = false
+	%CooldownCost.visible = false
 
 func setSkillCosts(skill: Skill):
 	updateCostContainer(%ActionPointCost, skill.ActionPointCost, ColorUtils.Common.ActionPoint)
 	updateCostContainer(%HealthPointCost, skill.HealthCost, ColorUtils.Common.Health)
 	updateCostContainer(%ManaPointCost, skill.ManaCost, ColorUtils.Common.Mana)
+	%CooldownCost.visible = skill.definition.Cooldown > 0
 
 func updateCostContainer(container: Control, cost: int, color: Color):
 	if cost == 0:
@@ -96,7 +101,9 @@ func updateCostContainer(container: Control, cost: int, color: Color):
 		return
 	container.visible = true
 	while container.get_child_count() > cost:
-		container.remove_child(container.get_child(0))
+		var child = container.get_child(0)
+		container.remove_child(child)
+		child.queue_free()
 	while container.get_child_count() < cost:
 		var point = Asset.Instantiate(SkillBarItemActionPoint)
 		container.add_child(point)
@@ -104,33 +111,53 @@ func updateCostContainer(container: Control, cost: int, color: Color):
 		child.setColor(color)
 
 func updateModulate() -> void:
-	if not TrackedSkill:
-		%ChargesLabel.visible = false
-
 	if TrackedSkill and not TrackedSkill.isVisible():
 		visible = false
+		tooltip.visible = false
+		%ChargesLabel.visible = false
+		%CooldownLabel.visible = false
 		return
 
-	if TrackedSkill:
-		tooltip.visible = isHovered
-		if isHovered:
-			tooltip.updatePosition()
+	visible = true
 
-		# Charge count
-		if TrackedSkill.chargesMaximum <= 0:
-			%ChargesLabel.visible = false
-		else:
-			%ChargesLabel.visible = true
-			%ChargesLabel.text = "%d/%d"%[TrackedSkill.chargesLeft, TrackedSkill.chargesMaximum]
+	if TrackedSkill == null:
+		%ChargesLabel.visible = false
+		%CooldownLabel.visible = false
+		tooltip.visible = false
 
-	if TrackedSkill == null and Transparent:
-		%Panel.self_modulate = Color.TRANSPARENT
-		mainButton.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
+		if Transparent:
+			%Panel.self_modulate = Color.TRANSPARENT
+			mainButton.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			mainButton.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_DISABLED
+			return
+
+		%Panel.self_modulate = Color.WHITE
+		mainButton.mouse_filter = Control.MOUSE_FILTER_STOP
+		mainButton.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_ENABLED
+		mainButton.modulate = Color(0, 0, 0, 0.5)
 		return
 
+	%Panel.self_modulate = Color.WHITE
+	mainButton.mouse_filter = Control.MOUSE_FILTER_STOP
 	mainButton.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_ENABLED
-	var isActive = TrackedSkill != null and TrackedSkill.Controller.SelectedSkill == TrackedSkill
-	var base = Color.WHITE if TrackedSkill != null else Color(0, 0, 0, 0.5)
+	tooltip.visible = isHovered
+	if isHovered:
+		tooltip.updatePosition()
+
+	if TrackedSkill.chargesMaximum <= 0:
+		%ChargesLabel.visible = false
+	else:
+		%ChargesLabel.visible = true
+		%ChargesLabel.text = "%d/%d"%[TrackedSkill.chargesLeft, TrackedSkill.chargesMaximum]
+
+	if TrackedSkill.cooldownRemaining > 0:
+		%CooldownLabel.visible = true
+		%CooldownLabel.text = str(TrackedSkill.cooldownRemaining)
+	else:
+		%CooldownLabel.visible = false
+
+	var isActive = TrackedSkill.Controller.SelectedSkill == TrackedSkill
+	var base = Color.WHITE
 
 	if isActive:
 		base = base.blend(Color(0, 1, 0, 0.5))
@@ -139,8 +166,7 @@ func updateModulate() -> void:
 	if mainButton.button_pressed:
 		base = base.darkened(0.2)
 
-	if TrackedSkill != null:
-		if not Error.AsBoolean(TrackedSkill.isCastable()):
-			base = Color(0.4, 0.4, 0.4)
+	if not Error.AsBoolean(TrackedSkill.isCastable()):
+		base = Color(0.4, 0.4, 0.4)
 
 	mainButton.modulate = base
