@@ -45,7 +45,7 @@ func isCastable() -> Variant:
 	)
 	if validTargets.is_empty():
 		return Error.new("No grabbed target")
-	return true
+	return super.isCastable()
 
 func _cast(targets: TargetData) -> void:
 	if not currentTossTarget:

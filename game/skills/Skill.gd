@@ -22,12 +22,29 @@ func _ready() -> void:
 
 	if definition:
 		name = definition.Name
+
+	afterCast.connect(func():
+		if parent.Skills.SelectedSkill != self:
+			return
+		if not Error.AsBoolean(isVisible()) or not Error.AsBoolean(isCastable()):
+			parent.Skills.Unselect()
+	)
 	_prepare()
 
 func _prepare() -> void:
 	pass
 
 func isCastable() -> Variant:
+	if parent.isDead:
+		return Error.new("%s is incapacitated!"%parent.definition.Name)
+	if parent.actions.MovementAvailable < MovementRequired:
+		return Error.new("Not enough movement")
+	if parent.actions.ActionPointsAvailable < ActionPointCost:
+		return Error.new("Not enough AP")
+	if parent.stats.healthCurrent < HealthCost:
+		return Error.new("Not enough health")
+	if parent.stats.manaCurrent < ManaCost:
+		return Error.new("Not enough mana")
 	return true
 
 func isVisible() -> bool:

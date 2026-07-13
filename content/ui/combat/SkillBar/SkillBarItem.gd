@@ -43,6 +43,10 @@ func onPortraitClick() -> void:
 	if TrackedSkill == null or not TrackedSkill.isVisible():
 		return
 
+	if TrackedSkill.Controller.SelectedSkill == TrackedSkill:
+		TrackedSkill.Controller.Select(null)
+		return
+
 	var validationResult: Variant = TrackedSkill.isCastable()
 	if validationResult is Error:
 		MessageLog.PrintErrorObject(validationResult)
@@ -51,16 +55,7 @@ func onPortraitClick() -> void:
 	if validationResult is bool and validationResult == false:
 		return
 
-	if TrackedSkill.Controller.SelectedSkill == TrackedSkill:
-		TrackedSkill.Controller.Select(null)
-	elif TrackedSkill.parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
-		MessageLog.PrintMessage("Not enough movement")
-	elif TrackedSkill.parent.isDead:
-		MessageLog.PrintMessage("%s is incapacitated!"%TrackedSkill.parent.definition.Name)
-	elif TrackedSkill.parent.actions.ActionPointsAvailable >= TrackedSkill.ActionPointCost:
-		TrackedSkill.Controller.Select(TrackedSkill)
-	else:
-		MessageLog.PrintMessage("Not enough AP")
+	TrackedSkill.Controller.Select(TrackedSkill)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Hotkey != null and event.is_match(Hotkey) and not event.is_echo() and event.is_pressed():
@@ -131,8 +126,7 @@ func updateModulate() -> void:
 		elif TrackedSkill.parent.isDead:
 			base = Color(0.4, 0.4, 0.4)
 
-		var castableCheck: Variant = TrackedSkill.isCastable()
-		if castableCheck is not bool or castableCheck != true:
+		if not Error.AsBoolean(TrackedSkill.isCastable()):
 			base = Color(0.4, 0.4, 0.4)
 
 	mainButton.modulate = base
