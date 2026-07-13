@@ -6,11 +6,14 @@
 
 [sub_resource type="Resource" id="Resource_0mw2e"]
 script = ExtResource("2_ko0qu")
-Name = "Unnamed Prop"
+Name = "Low Cover"
 PerceivedThreat = 0
 physicalSize = 0.1
+healthMaximum = 3
+ManaMaximum = null
 ActionPointsMax = 0
 MovementSpeedPerActionPoint = 0.0
+showHoverInfo = false
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_y63i5")
@@ -28,7 +31,7 @@ size = Vector3(0.2, 0.5, 0.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_8twf3"]
 size = Vector3(0.2, 0.526, 0.2)
 
-[node name="PropLowCover" unique_id=842978226 instance=ExtResource("1_0mw2e")]
+[node name="PropLowCoverSegment" unique_id=842978226 instance=ExtResource("1_0mw2e")]
 collision_layer = 257
 definition = SubResource("Resource_0mw2e")
 

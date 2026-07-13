@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://cxoxb77d1144u" path="res://content/actors/WolfpackTrooper/WolfpackTrooper.tscn" id="5_7s5hy"]
 [ext_resource type="PackedScene" uid="uid://dmyet57hfpj6u" path="res://content/actors/Kamilla/Kamilla.tscn" id="6_xs4ih"]
 [ext_resource type="PackedScene" uid="uid://2ohwekfgbpuc" path="res://scenes/PrototypeScene/PrototypeScene.tscn" id="7_6ytau"]
-[ext_resource type="Script" uid="uid://bm3n567le1rhf" path="res://content/utils/MindControlNode.gd" id="8_pynjx"]
 [ext_resource type="PackedScene" uid="uid://bm6mqj82bco5k" path="res://content/actors/WolfpackBrawler/WolfpackBrawler.tscn" id="8_vijgj"]
 
 [sub_resource type="Environment" id="Environment_vh257"]
@@ -61,36 +60,19 @@ directional_shadow_max_distance = 25.0
 script = SubResource("GDScript_6ytau")
 
 [node name="Ivera" parent="." unique_id=197562730 instance=ExtResource("2_xy3my")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6672273, 0.00049996376, 0.14141822)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.16952, 0.00049996376, -1.017937)
 
 [node name="Kamilla" parent="." unique_id=220179378 instance=ExtResource("6_xs4ih")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3626308, 0.00049996376, -0.9837465)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0874615, 0.00049996376, -2.004982)
 
-[node name="WolfpackTrooper" parent="." unique_id=410591199 instance=ExtResource("5_7s5hy")]
+[node name="Trooper" parent="." unique_id=410591199 instance=ExtResource("5_7s5hy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8937922, 0.00050091743, 5.1751)
 
-[node name="WolfpackTrooper2" parent="." unique_id=611624937 instance=ExtResource("5_7s5hy")]
+[node name="Trooper2" parent="." unique_id=611624937 instance=ExtResource("5_7s5hy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.832835, 0.0005002022, 6.2261996)
 
-[node name="WolfpackBrawler" parent="." unique_id=141319436 instance=ExtResource("8_vijgj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5316734, 0.0005002022, 6.393017)
+[node name="Brawler" parent="." unique_id=141319436 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.970889, 0.0005002022, 3.6694553)
 
-[node name="WolfpackBrawler2" parent="." unique_id=168031144 instance=ExtResource("8_vijgj")]
+[node name="Brawler2" parent="." unique_id=168031144 instance=ExtResource("8_vijgj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.4807982, 0.00049972534, 5.102641)
-
-[node name="MindControlNode" type="Node3D" parent="." unique_id=1689570924]
-script = ExtResource("8_pynjx")
-faction = 2
-metadata/_custom_type_script = "uid://bm3n567le1rhf"
-
-[node name="WolfpackTrooper" parent="MindControlNode" unique_id=807014692 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.481642, -4.7683716e-07, 2.5066426)
-
-[node name="WolfpackTrooper2" parent="MindControlNode" unique_id=673216426 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2385608, -4.7683716e-07, 1.7339323)
-
-[node name="WolfpackBrawler" parent="MindControlNode" unique_id=296734400 instance=ExtResource("8_vijgj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2685194, 7.1525574e-07, 0.87453866)
-
-[node name="WolfpackBrawler2" parent="MindControlNode" unique_id=1594408601 instance=ExtResource("8_vijgj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1298878, 4.7683716e-07, 0.7798166)

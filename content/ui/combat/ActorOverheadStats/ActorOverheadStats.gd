@@ -3,9 +3,10 @@ class_name ActorOverheadStats
 
 @onready var parent: Actor = get_parent()
 
-@onready var nameLabel: Label = $%NameLabel
-@onready var healthBar: SegmentedBar = $%HealthBar
-@onready var actionPointBar: SegmentedBar = $%ActionPointBar
+@onready var nameLabel: Label = %NameLabel
+@onready var healthBar: SegmentedBar = %HealthBar
+@onready var manaBar: SegmentedBar = %ManaBar
+@onready var actionPointBar: SegmentedBar = %ActionPointBar
 
 @onready var focusTargetCount: Control = %CurrentFocusTargetCount
 @onready var buffContainer: HBoxContainer = %BuffContainer
@@ -16,6 +17,9 @@ func _ready():
 	healthBar.FillColor = Color(0.0, 0.6, 0.2)
 	healthBar.ThreatColor = Color(0.0, 0.4, 0.2)
 	healthBar.InhumanColor = Color(0.8, 0.6, 0.0)
+	manaBar.FillColor = Color(0.4, 0.5, 1.0)
+	manaBar.ThreatColor = manaBar.FillColor.darkened(0.5)
+	manaBar.InhumanColor = Color(0.0, 0.8, 0.6)
 	actionPointBar.FillColor = Color(0.8, 0.8, 0.0)
 	actionPointBar.ThreatColor = Color(0.6, 0.4, 0.0)
 	actionPointBar.InhumanColor = Color(1.6, 0.6, 0.0)
@@ -43,15 +47,21 @@ func world_to_pixels(world_size: float) -> float:
 	return world_size * viewport_height / camera.size
 
 func updateValues():
-	var stats = parent.Stats
+	var stats = parent.stats
 	var actions = parent.actions
 
 	nameLabel.text = stats.Name
 
-	healthBar.Value = stats.HealthCurrent
-	healthBar.MaxValue = stats.HealthMaximum
-	healthBar.InhumanValue = stats.HealthHumanityThreshold
-	healthBar.ThreatValue = stats.HealthThreatened
+	healthBar.Value = stats.healthCurrent
+	healthBar.MaxValue = stats.healthMaximum
+	healthBar.InhumanValue = stats.healthHumanityThreshold
+	healthBar.ThreatValue = stats.healthThreatened
+
+	manaBar.visible = stats.manaMaximum > 0
+	if manaBar.visible:
+		manaBar.Value = stats.manaCurrent
+		manaBar.MaxValue = stats.manaMaximum
+		manaBar.ThreatValue = stats.manaThreatened
 
 	actionPointBar.Value = actions.ActionPointsAvailable
 	actionPointBar.MaxValue = max(actions.ActionPointsMax, actions.ActionPointsAvailable)

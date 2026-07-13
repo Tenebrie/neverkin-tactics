@@ -6,11 +6,14 @@
 
 [sub_resource type="Resource" id="Resource_vxb7g"]
 script = ExtResource("2_4f2ks")
-Name = "Unnamed Prop"
+Name = "Full Cover"
 PerceivedThreat = 0
 physicalSize = 0.1
+healthMaximum = 9999
+ManaMaximum = null
 ActionPointsMax = 0
 MovementSpeedPerActionPoint = 0.0
+showHoverInfo = null
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_3vya2")
@@ -26,7 +29,7 @@ size = Vector3(0.2, 1, 0.2)
 resource_local_to_scene = true
 size = Vector3(0.2, 1, 0.2)
 
-[node name="PropFullCover" unique_id=842978226 instance=ExtResource("1_vxb7g")]
+[node name="PropFullCoverSegment" unique_id=842978226 instance=ExtResource("1_vxb7g")]
 collision_layer = 1025
 definition = SubResource("Resource_vxb7g")
 

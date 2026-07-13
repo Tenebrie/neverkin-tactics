@@ -21,12 +21,12 @@ func EnableFuse(origin: Vector3, telegraphDefinition: TelegraphDefinition):
 	)
 
 	ActorActions.SignalBus.ActionPointsConsumedPermanently.connect(func(actor: Actor, apConsumed):
-		if actor.Stats.Faction != Actor.PlayerFaction or fuse.IsLeaving:
+		if actor.stats.Faction != Actor.PlayerFaction or fuse.IsLeaving:
 			return
 		AdvanceFuse(apConsumed)
 	)
 	ActorNavigator.SignalBus.ActorTraversed.connect(func(actor, dist):
-		if actor.Stats.Faction != Actor.PlayerFaction or fuse.IsLeaving:
+		if actor.stats.Faction != Actor.PlayerFaction or fuse.IsLeaving:
 			return
 		var apSpent = dist / actor.movementSpeedPerAction
 		AdvanceFuse(apSpent)
@@ -76,7 +76,7 @@ func explode():
 	fuse.tree_exiting.connect(queue_free)
 	PlayExplosionEffect()
 	for target in fuse.Targets:
-		target.Stats.DealDamage(DamageInstance.ForDelayedTelegraph(target, TriggeringSkill, fuse))
+		target.stats.dealDamage(DamageInstance.ForDelayedTelegraph(target, TriggeringSkill, fuse))
 
 func PlayExplosionEffect():
 	for i in 150:

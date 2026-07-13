@@ -87,15 +87,30 @@ static func populateActorValues(text: String, actor: Actor) -> String:
 	return populateNodeValues(text, actor)
 
 static func populateSkillValues(text: String, skill: Skill) -> String:
-	var result = populateNodeValues(text, skill)
-	result = skill.parent.pronouns.evaluate(result)
+	var description = populateNodeValues(text, skill)
+	description = skill.parent.pronouns.evaluate(description)
 
+	var commonLines: Array[String]
 	if skill.definition.TargetingMaxRange > 0.0:
-		if result.length() > 0:
-			result += "\n\n"
-		result += "[color=orange]$Range:[/color] %.2fm"%skill.definition.TargetingMaxRange
+		commonLines.push_back("[color=orange]$Range:[/color] %.2fm"%skill.definition.TargetingMaxRange)
+	if skill.definition.HealthCost > 0.0:
+		commonLines.push_back("[color=#FF5555]$Health cost:[/color] %d"%skill.HealthCost)
+	if skill.definition.ManaCost > 0.0:
+		commonLines.push_back("[color=#7777FF]$Mana cost:[/color] %d"%skill.ManaCost)
 
-	return result
+	if commonLines.size() == 0:
+		return description
+
+	var commonInfo = commonLines[0]
+	for i in range(1, commonLines.size()):
+		commonInfo += "\n" + commonLines[i]
+
+	if commonInfo.length() == 0:
+		return description
+	if description.length() == 0:
+		return commonInfo
+
+	return commonInfo + "\n\n" + description
 
 static func getSkillCategoryString(category: Skill.Category):
 	match (category):

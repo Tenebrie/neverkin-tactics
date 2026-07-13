@@ -63,7 +63,7 @@ func _ready() -> void:
 
 func _parentReady() -> void:
 	super._parentReady()
-	parent.Stats.DamageTaken.connect(func(damage: DamageInstance):
+	parent.stats.damageTaken.connect(func(damage: DamageInstance):
 		RecordGrudge(damage, damage.sourceActor)
 	)
 
@@ -151,8 +151,8 @@ func _computeRanking() -> Array[RankedTarget]:
 
 func evaluateTargetThreat(actor: Actor) -> ExplainedThreatValue:
 	var value = ExplainedThreatValue.new()
-	value.Total = floori(actor.Stats.ThreatCurrent)
-	value.Highlights["Scary!"] = actor.Stats.ThreatCurrent
+	value.Total = floori(actor.stats.threatCurrent)
+	value.Highlights["Scary!"] = actor.stats.threatCurrent
 	return value
 
 @abstract func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue

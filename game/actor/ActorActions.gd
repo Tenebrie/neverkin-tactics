@@ -113,8 +113,16 @@ func IssueOrder_MoveThroughPath(path: PackedVector3Array):
 
 func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	var apCost = skill.ActionPointCost
+	var healthCost = skill.HealthCost
+	var manaCost = skill.ManaCost
 	if ActionPointsAvailable < apCost:
 		MessageLog.PrintMessage("Not enough AP")
+		return
+	if parent.stats.healthCurrent < healthCost:
+		MessageLog.PrintMessage("Not enough health")
+		return
+	if parent.stats.manaCurrent < manaCost:
+		MessageLog.PrintMessage("Not enough mana")
 		return
 
 	for telegraph in parent.telegraphs.telegraphs:
@@ -126,7 +134,12 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 				MessageLog.PrintErrorObject(result)
 				return
 
-	ConsumeActionPoints(apCost)
+	if healthCost > 0:
+		parent.stats.dealDamage(DamageInstance.ForSkill(skill, healthCost))
+	if manaCost > 0:
+		parent.stats.consumeMana(DamageInstance.ForSkill(skill, manaCost))
+	if apCost > 0:
+		ConsumeActionPoints(apCost)
 	await skill.PerformCast(targets)
 	if parent.Skills.SelectedSkill == skill and not skill.isVisible():
 		parent.Skills.Unselect()

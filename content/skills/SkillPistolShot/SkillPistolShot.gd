@@ -26,7 +26,7 @@ func _cast(targets: Skill.TargetData) -> void:
 
 	var furthest: Actor = null
 	for actor in targets.perTelegraph[damageTelegraph]:
-		actor.Stats.DealSkillDamage(targets)
+		actor.stats.dealSkillDamage(targets)
 		if not furthest or furthest.global_position.distance_squared_to(parent.global_position) < actor.global_position.distance_squared_to(parent.global_position):
 			furthest = actor
 	if furthest:

@@ -35,7 +35,7 @@ func update() -> void:
 		portrait.texture_normal = null
 		return
 
-	nameLabel.text = TrackedActor.Stats.Name
+	nameLabel.text = TrackedActor.stats.Name
 	nameLabel.label_settings = LabelSettings.new()
 	nameLabel.label_settings.font_size = 14
 	nameLabel.label_settings.outline_size = 2

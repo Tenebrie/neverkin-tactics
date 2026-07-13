@@ -16,15 +16,20 @@ class_name ActorDefinition
 @export_group("Avatar")
 @export var AvatarTexture: Texture2D
 
-@export_group("Stats")
-@export var HealthMaximum: int = 3
-@export var HealthHumanityThreshold: int = 0
+@export_group("Resources")
+@export var healthMaximum: int = 10
+@export var healthHumanityThreshold: int = 0
 
-@export var ActionPointsMax: int = 3
-@export var MovementSpeedPerActionPoint: float = 2.0
+@export var ManaMaximum: int = 0
+
+@export var ActionPointsMax: int = 2
+@export var MovementSpeedPerActionPoint: float = 5.0
 
 @export_group("Innate Skills")
 @export var Skills: Array[GDScript[Skill]] = []
 
 @export_group("Shapeshifting")
 @export var enablesShifted = false
+
+@export_group("User Interface")
+@export var showHoverInfo = true

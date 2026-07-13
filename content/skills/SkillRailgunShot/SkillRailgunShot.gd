@@ -25,4 +25,4 @@ func _cast(targets: Skill.TargetData) -> void:
 	effect.Play(furthestPoint)
 
 	for actor in targets.perTelegraph[damageTelegraph]:
-		actor.Stats.DealSkillDamage(targets)
+		actor.stats.dealSkillDamage(targets)

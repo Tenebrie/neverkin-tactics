@@ -12,7 +12,7 @@ var damageToDeal: int:
 func _prepare():
 	parent.turnEnded.connect(func():
 		await MainCamera.lock(parent)
-		parent.Stats.DealDamage(DamageInstance.ForExtraSkillEffect(sourceSkill, damageToDeal))
+		parent.stats.dealDamage(DamageInstance.ForSkill(sourceSkill, damageToDeal))
 		await MainCamera.unlock()
 	)
 

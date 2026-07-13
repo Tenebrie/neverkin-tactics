@@ -35,6 +35,14 @@ func _parentReady() -> void:
 	parent.DefinitionChanged.connect(func():
 		LoadSkills()
 	)
+	parent.stats.damageTaken.connect(func():
+		if SelectedSkill != null and SelectedSkill.HealthCost > parent.stats.healthCurrent:
+			Select(null)
+	)
+	parent.stats.manaSpent.connect(func():
+		if SelectedSkill != null and SelectedSkill.ManaCost > parent.stats.manaCurrent:
+			Select(null)
+	)
 	parent.actions.ActionPointsChanged.connect(func(current):
 		if SelectedSkill != null and SelectedSkill.ActionPointCost > current:
 			Select(null)

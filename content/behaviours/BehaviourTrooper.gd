@@ -10,14 +10,14 @@ const ENGAGEMENT_REFERENCE_METERS: float = 20.0
 @export var aggroWeightProximity: float = 1.0
 
 func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
-	var effectiveMax = maxi(actor.Stats.HealthMaximum - actor.Stats.HealthHumanityThreshold, 1)
-	var effectiveCurrent = clampi(actor.Stats.HealthCurrent - actor.Stats.HealthHumanityThreshold, 0, effectiveMax)
+	var effectiveMax = maxi(actor.stats.healthMaximum - actor.stats.healthHumanityThreshold, 1)
+	var effectiveCurrent = clampi(actor.stats.healthCurrent - actor.stats.healthHumanityThreshold, 0, effectiveMax)
 	var lowFraction = 1.0 - float(effectiveCurrent) / float(effectiveMax)
 	var highFraction = float(effectiveCurrent) / float(effectiveMax)
 	var woundedValue = (aggroWeightLowHealth - 1.0) * lowFraction * float(effectiveMax)
 	var unhurtValue = (aggroWeightHighHealth - 1.0) * highFraction * float(effectiveMax)
 
-	var threatValue = actor.Stats.ThreatCurrent * aggroWeightThreat
+	var threatValue = actor.stats.threatCurrent * aggroWeightThreat
 
 	var distance = parent.global_position.distance_to(actor.global_position)
 	var apSaved = maxf(0.0, (ENGAGEMENT_REFERENCE_METERS - distance) / METERS_PER_AP)
@@ -27,7 +27,7 @@ func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 
 	explainThreatEntry(result, "Wounded", woundedValue)
 	explainThreatEntry(result, "Unhurt", unhurtValue)
-	explainThreatEntry(result, "%s threat" % ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent), threatValue)
+	explainThreatEntry(result, "%s threat" % ActorUtils.getThreatLevelName(actor.stats.threatCurrent), threatValue)
 	explainThreatEntry(result, "Within reach", proximityValue)
 	for grudge in getGrudges(actor):
 		explainThreatEntry(result, grudge.message, grudge.value)

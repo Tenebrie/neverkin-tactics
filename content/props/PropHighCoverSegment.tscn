@@ -6,11 +6,13 @@
 
 [sub_resource type="Resource" id="Resource_edw6u"]
 script = ExtResource("2_e01l6")
-Name = "Unnamed Prop"
+Name = "High Cover"
 PerceivedThreat = 0
 physicalSize = 0.1
+healthMaximum = 3
 ActionPointsMax = 0
 MovementSpeedPerActionPoint = 0.0
+showHoverInfo = false
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_gh54c")
@@ -29,7 +31,7 @@ size = Vector3(0.2, 1, 0.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_kleub"]
 size = Vector3(0.2, 1.046, 0.2)
 
-[node name="PropHighCover" unique_id=842978226 instance=ExtResource("1_edw6u")]
+[node name="PropHighCoverSegment" unique_id=842978226 instance=ExtResource("1_edw6u")]
 collision_layer = 513
 definition = SubResource("Resource_edw6u")
 

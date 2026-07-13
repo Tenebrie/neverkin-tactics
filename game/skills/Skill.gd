@@ -33,6 +33,12 @@ func isCastable() -> Variant:
 func isVisible() -> bool:
 	return true
 
+var HealthCost: int:
+	get:
+		return definition.HealthCost
+var ManaCost: int:
+	get:
+		return definition.ManaCost
 var ActionPointCost: int:
 	get:
 		return definition.ActionPointCost

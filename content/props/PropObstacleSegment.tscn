@@ -6,11 +6,13 @@
 
 [sub_resource type="Resource" id="Resource_slab6"]
 script = ExtResource("2_2vx1h")
-Name = "Unnamed Prop"
+Name = "Obstacle"
 PerceivedThreat = 0
 physicalSize = 0.1
+healthMaximum = 3
 ActionPointsMax = 0
 MovementSpeedPerActionPoint = 0.0
+showHoverInfo = false
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_6whv4")
@@ -28,7 +30,7 @@ size = Vector3(0.2, 0.3, 0.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_8twf3"]
 size = Vector3(0.2, 0.357, 0.2)
 
-[node name="PropObstacle" unique_id=842978226 instance=ExtResource("1_6whv4")]
+[node name="PropObstacleSegment" unique_id=842978226 instance=ExtResource("1_6whv4")]
 collision_layer = 5
 definition = SubResource("Resource_slab6")
 

@@ -75,7 +75,7 @@ func _setupProxySignals():
 
 #region Components
 @onready var buffs: ActorBuffs = GetComponent(ActorBuffs)
-@onready var Stats: ActorStats = GetComponent(ActorStats)
+@onready var stats: ActorStats = GetComponent(ActorStats)
 @onready var actions: ActorActions = GetComponent(ActorActions)
 @onready var navigator: ActorNavigator = GetComponent(ActorNavigator)
 @onready var targeting: ActorTargeting = GetComponent(ActorTargeting)
@@ -118,7 +118,8 @@ func loadDefinition():
 	if not definition:
 		return
 
-	name = definition.Name
+	if not Engine.is_editor_hint():
+		name = definition.Name
 	if definition.TokenTexture:
 		var material: StandardMaterial3D = $TokenMeshInstance3D.material_override
 		material.albedo_texture = definition.TokenTexture
@@ -135,7 +136,7 @@ signal destroyed
 
 var isAlive: bool:
 	get:
-		return Stats.HealthCurrent > 0 and not isDead
+		return stats.healthCurrent > 0 and not isDead
 var isDead = false
 
 func Destroy() -> void:

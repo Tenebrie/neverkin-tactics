@@ -13,6 +13,6 @@ func _ready():
 		if not actor.buffs:
 			continue
 		var buff = BuffMindControl.new()
-		buff.Duration = INF
+		buff.Duration = 9999
 		buff.faction = faction
 		actor.buffs.Add(buff)

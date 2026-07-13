@@ -55,5 +55,5 @@ func _cast(targets: TargetData) -> void:
 	currentTossTarget.collision_layer = 0
 	await create_tween().tween_property(currentTossTarget, "global_position", targets.mousePoint, 0.4).finished
 	currentTossTarget.collision_layer = collision
-	currentTossTarget.Stats.DealDamage(DamageInstance.ForExtraSkillEffect(self, landingDamage))
+	currentTossTarget.stats.dealDamage(DamageInstance.ForSkill(self, landingDamage))
 	currentTossTarget.buffs.RemoveAll(SkillGriffonGripBuff)

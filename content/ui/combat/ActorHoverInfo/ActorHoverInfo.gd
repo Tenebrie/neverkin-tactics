@@ -24,6 +24,8 @@ func _ready() -> void:
 	ActorHoverArea.SignalBus.MouseEntered.connect(func(actor):
 		if TurnManager.Instance.activePlayerActor and TurnManager.Instance.activePlayerActor.Skills.SelectedSkill != null:
 			return
+		if not actor.definition.showHoverInfo:
+			return
 		loadActorData(actor)
 	)
 	ActorHoverArea.SignalBus.MouseExited.connect(func(actor):
@@ -67,7 +69,7 @@ func loadActorData(actor: Actor):
 	stylebox.corner_radius_bottom_left = 0
 	stylebox.corner_radius_bottom_right = 0
 	var tooltipOpacity = 0.95
-	match(actor.Stats.Faction):
+	match(actor.stats.Faction):
 		Actor.PlayerFaction: stylebox.bg_color = Color(0.01, 0.15, 0.01, tooltipOpacity)
 		Actor.Faction.CityThugs: stylebox.bg_color = Color(0.15, 0.01, 0.01, tooltipOpacity)
 		Actor.Faction.Algae: stylebox.bg_color = Color(0.01, 0.01, 0.15, tooltipOpacity)
@@ -76,12 +78,12 @@ func loadActorData(actor: Actor):
 
 	nameLabel.text = actor.definition.Name
 	factionLabel.enableColor = false
-	factionLabel.text = "$" + ActorUtils.getFactionName(actor.Stats.Faction)
-	factionLabel.add_theme_color_override("default_color", ActorUtils.getFactionColor(actor.Stats.Faction))
-	healthLabel.text = "%d / %d"%[actor.Stats.HealthCurrent, actor.Stats.HealthMaximum]
+	factionLabel.text = "$" + ActorUtils.getFactionName(actor.stats.Faction)
+	factionLabel.add_theme_color_override("default_color", ActorUtils.getFactionColor(actor.stats.Faction))
+	healthLabel.text = "%d / %d"%[actor.stats.healthCurrent, actor.stats.healthMaximum]
 	threatLabel.enableColor = false
-	threatLabel.text = "$" + ActorUtils.getThreatLevelName(actor.Stats.ThreatCurrent)
-	threatLabel.add_theme_color_override("default_color", ActorUtils.getThreatLevelColor(actor.Stats.ThreatCurrent))
+	threatLabel.text = "$" + ActorUtils.getThreatLevelName(actor.stats.threatCurrent)
+	threatLabel.add_theme_color_override("default_color", ActorUtils.getThreatLevelColor(actor.stats.threatCurrent))
 	movementSpeedLabel.text = "%.1f m/a" % actor.movementSpeedPerAction
 
 	renderSectionVisibility()
@@ -137,7 +139,7 @@ func addTargetRow(actor: Actor, total: float, behaviour: ActorBehaviourWorldCont
 	row.add_child(rowIndexLabel)
 	var rowNameLabel = Label.new()
 	rowNameLabel.text = actor.definition.Name
-	rowNameLabel.add_theme_color_override("font_color", ActorUtils.getFactionColor(actor.Stats.Faction))
+	rowNameLabel.add_theme_color_override("font_color", ActorUtils.getFactionColor(actor.stats.Faction))
 	row.add_child(rowNameLabel)
 	if behaviour.FocusedTarget == actor:
 		var icon = TextureRect.new()

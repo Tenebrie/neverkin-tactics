@@ -22,5 +22,5 @@ func _cast(targets: Skill.TargetData) -> void:
 		effect.global_position.y = 2
 		effect.Play()
 		get_tree().create_timer(0.1).timeout.connect(func():
-			target.Stats.DealSkillDamage(targets)
+			target.stats.dealSkillDamage(targets)
 		)

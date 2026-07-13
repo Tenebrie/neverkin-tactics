@@ -94,7 +94,7 @@ class MapTask:
 
 		static func collect(actor: Actor) -> ActorData:
 			var data = ActorData.new()
-			data.threat = actor.Stats.ThreatCurrent
+			data.threat = actor.stats.threatCurrent
 			data.physicalSize = actor.physicalSize
 			data.globalPosition = actor.global_position
 			data.ignoredWalls = PropWall.GetIgnoredWallRidsAt(PropWall.collectBehaviourMapTaskData(), actor.global_position, actor.physicalSize)

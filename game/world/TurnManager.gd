@@ -82,7 +82,7 @@ func advanceTurn():
 	if activeFaction >= Actor.Faction.size() - 1:
 		activeFaction = Actor.PlayerFaction
 	var factionHasActors = Actor.Repository.Alive.List.any(func(a):
-		return a.Stats.Faction == activeFaction and a.HasComponent(ActorBehaviour)
+		return a.stats.Faction == activeFaction and a.HasComponent(ActorBehaviour)
 	)
 	if not factionHasActors:
 		advanceTurn()

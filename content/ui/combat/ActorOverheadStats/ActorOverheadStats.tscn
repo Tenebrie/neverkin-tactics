@@ -55,12 +55,21 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 mouse_filter = 2
+TickColor = Color(0, 0, 0, 0.9019608)
+
+[node name="ManaBar" parent="VBoxContainer" unique_id=384748473 instance=ExtResource("2_171gv")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+mouse_filter = 2
+TickColor = Color(0, 0, 0, 0.9019608)
 
 [node name="ActionPointBar" parent="VBoxContainer" unique_id=1588530800 instance=ExtResource("2_171gv")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 mouse_filter = 2
+TickColor = Color(0, 0, 0, 0.9019608)
 
 [node name="BuffContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1121555862]
 unique_name_in_owner = true

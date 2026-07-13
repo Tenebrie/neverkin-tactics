@@ -35,7 +35,7 @@ static func ForAggroGeneration(sourceSkill: Skill, value: int) -> DamageInstance
 	instance.Value = value
 	return instance
 
-static func ForExtraSkillEffect(sourceSkill: Skill, value: int) -> DamageInstance:
+static func ForSkill(sourceSkill: Skill, value: int) -> DamageInstance:
 	var instance = DamageInstance.new()
 	instance.sourceSkill = sourceSkill
 	instance.sourceActor = sourceSkill.parent

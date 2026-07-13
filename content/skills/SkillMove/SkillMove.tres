@@ -13,8 +13,8 @@ script = ExtResource("2_5jy3r")
 Name = "Stride"
 Description = "Just walk somewhere. Equivalent to using [color=orange]RMB[/color] to move."
 IconTexture = ExtResource("1_wvoif")
-ActionPointCost = 0
 MovementRequired = 0.01
 Hotkey = SubResource("InputEventKey_wvoif")
+ActionPointCost = 0
 TargetingMaxRange = 0.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

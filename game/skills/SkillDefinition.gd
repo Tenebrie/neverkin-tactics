@@ -7,10 +7,15 @@ class_name SkillDefinition
 @export_multiline var Description: String
 @export var GrudgeString: String = ""
 @export var IconTexture: Texture2D
-@export var ActionPointCost: int = 1
+
 @export var MovementRequired: float = 0.0
 
 @export var Hotkey: InputEventKey
+
+@export_group("Resource Cost")
+@export var HealthCost: int = 0
+@export var ManaCost: int = 0
+@export var ActionPointCost: int = 1
 
 @export_group("Skill Targeting", "Targeting")
 @export var TargetingMaxRange: float = 1.0

@@ -122,6 +122,10 @@ func updateModulate() -> void:
 	if TrackedSkill != null:
 		if TrackedSkill.parent.actions.ActionPointsAvailable < TrackedSkill.ActionPointCost:
 			base = Color(0.4, 0.4, 0.4)
+		elif TrackedSkill.parent.stats.healthCurrent < TrackedSkill.HealthCost:
+			base = Color(0.4, 0.4, 0.4)
+		elif TrackedSkill.parent.stats.manaCurrent < TrackedSkill.ManaCost:
+			base = Color(0.4, 0.4, 0.4)
 		elif TrackedSkill.parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
 			base = Color(0.4, 0.4, 0.4)
 		elif TrackedSkill.parent.isDead:

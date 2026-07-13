@@ -2,21 +2,11 @@
 
 [ext_resource type="Script" uid="uid://dhli2awq6fw2a" path="res://content/props/PropWall.gd" id="1_g2rid"]
 [ext_resource type="PackedScene" uid="uid://bfov4a1ba7otj" path="res://content/props/PropLowCoverSegment.tscn" id="1_icchu"]
-[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="2_g2rid"]
-
-[sub_resource type="Resource" id="Resource_g2rid"]
-script = ExtResource("2_g2rid")
-Name = "Low Cover"
-PhysicalSize = 0.1
-PerceivedThreat = 0
-MovementSpeedPerActionPoint = 0.0
 
 [node name="PropWallLowCover" type="Node3D" unique_id=1850641905]
 script = ExtResource("1_g2rid")
 ObstacleWidth = 5
 CoverValue = 1
 
-[node name="PropLowCover" parent="." unique_id=842978226 instance=ExtResource("1_icchu")]
+[node name="PropLowCoverSegment" parent="." unique_id=842978226 instance=ExtResource("1_icchu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 0)
-Name = "Low Cover"
-Definition = SubResource("Resource_g2rid")

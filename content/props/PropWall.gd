@@ -117,7 +117,7 @@ func rebuild():
 				if prototype is Actor:
 					prototype.definition.ActionPointsMax = 0
 					prototype.definition.MovementSpeedPerActionPoint = 0
-					prototype.definition.HealthMaximum = SegmentHealth
+					prototype.definition.healthMaximum = SegmentHealth
 				continue
 			var clone = prototype.duplicate() as Node3D
 			clone.position = Vector3(
@@ -129,7 +129,7 @@ func rebuild():
 			if clone is Actor:
 				clone.definition.ActionPointsMax = 0
 				clone.definition.MovementSpeedPerActionPoint = 0
-				clone.definition.HealthMaximum = SegmentHealth
+				clone.definition.healthMaximum = SegmentHealth
 			clone.add_to_group(WallGroupName)
 
 	physicsFieldObstacle = buildPhysicsFieldObstacle()

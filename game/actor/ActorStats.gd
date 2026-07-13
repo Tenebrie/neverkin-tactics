@@ -1,55 +1,85 @@
 extends Component
 class_name ActorStats
 
-signal DamageTaken(damage: DamageInstance)
+signal damageTaken(damage: DamageInstance)
+signal manaSpent(damage: DamageInstance)
 
 var Name: String:
 	get: return parent.definition.Name
 var Faction: Actor.Faction:
 	get: return parent.faction
 
-#region Health
-var HealthDamageTaken: int = 0
-var HealthMaximum: int:
-	get: return parent.definition.HealthMaximum
-var HealthHumanityThreshold: int:
-	get: return parent.definition.HealthHumanityThreshold
-
-var HealthCurrent: int:
-	get:
-		return HealthMaximum - HealthDamageTaken
-
-var HealthThreatened: int = 0
-
+#region Engine events
 func _parentReady() -> void:
 	if parent.buffs:
 		parent.buffs.Changed.connect(func():
-			HealthThreatened = parent.buffs.Count(BuffHealthThreat)
+			var selectedSkillCost = parent.Skills.SelectedSkill.HealthCost if parent.Skills.SelectedSkill else 0
+			healthThreatened = parent.buffs.Count(BuffHealthThreat) + selectedSkillCost
 		)
-
-func DealDamage(damage: DamageInstance):
-	HealthDamageTaken = clampi(HealthDamageTaken + damage.Value, 0, HealthMaximum)
-	if HealthCurrent <= 0:
-		parent.Destroy()
-	DamageTaken.emit(damage)
-
-func DealSkillDamage(targets: Skill.TargetData):
-	DealDamage(DamageInstance.ForSkillCast(parent, targets))
+	if parent.Skills:
+		parent.Skills.SelectedSkillChanged.connect(func(skill):
+			if skill:
+				healthThreatened = parent.buffs.Count(BuffHealthThreat) + skill.HealthCost
+				manaThreatened = skill.definition.ManaCost
+			else:
+				healthThreatened = parent.buffs.Count(BuffHealthThreat)
+				manaThreatened = 0
+		)
 #endregion
-#region Threat
-var ThreatCurrent: float:
+
+#region Health
+var healthDamageTaken: int = 0
+var healthMaximum: int:
+	get: return parent.definition.healthMaximum
+var healthHumanityThreshold: int:
+	get: return parent.definition.healthHumanityThreshold
+
+var healthCurrent: int:
 	get:
-		var inhumanVitalityThreat = 1 if HealthCurrent <= HealthHumanityThreshold else 0
-		return parent.definition.PerceivedThreat + ThreatGenerated + inhumanVitalityThreat
-var ThreatGenerated: float = 0
+		return healthMaximum - healthDamageTaken
 
-func GenerateThreat(value: float):
-	ThreatGenerated = clampf(ThreatGenerated + value, 0.0, 10.0)
+var healthThreatened: int = 0
 
-func ReleaseThreat(value: float):
-	GenerateThreat(-value)
+func dealDamage(damage: DamageInstance):
+	healthDamageTaken = clampi(healthDamageTaken + damage.Value, 0, healthMaximum)
+	if healthCurrent <= 0:
+		parent.Destroy()
+	damageTaken.emit(damage)
+
+func dealSkillDamage(targets: Skill.TargetData):
+	dealDamage(DamageInstance.ForSkillCast(parent, targets))
+#endregion
+
+#region Mana
+var manaMissing: int = 0
+var manaMaximum: int:
+	get: return parent.definition.ManaMaximum
+
+var manaCurrent: int:
+	get:
+		return manaMaximum - manaMissing
+
+var manaThreatened: int = 0
+
+func consumeMana(damage: DamageInstance):
+	manaMissing = clampi(manaMissing + damage.Value, 0, manaMaximum)
+	manaSpent.emit(damage)
+#endregion
+
+#region Threat
+var threatCurrent: float:
+	get:
+		var inhumanVitalityThreat = 1 if healthCurrent <= healthHumanityThreshold else 0
+		return parent.definition.PerceivedThreat + threatGenerated + inhumanVitalityThreat
+var threatGenerated: float = 0
+
+func generateThreat(value: float):
+	threatGenerated = clampf(threatGenerated + value, 0.0, 10.0)
+
+func releaseThreat(value: float):
+	generateThreat(-value)
 #endregion
 
 #static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 #class SignalBusImplementation:
-	#signal DamageTaken(actor: Actor, value: float, source: Actor)
+	#signal damageTaken(actor: Actor, value: float, source: Actor)

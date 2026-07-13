@@ -2,21 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dhli2awq6fw2a" path="res://content/props/PropWall.gd" id="1_xily6"]
 [ext_resource type="PackedScene" uid="uid://cghexqyspkk4d" path="res://content/props/PropObstacleSegment.tscn" id="2_xily6"]
-[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="3_5th6o"]
-
-[sub_resource type="Resource" id="Resource_xily6"]
-script = ExtResource("3_5th6o")
-Name = "Obstacle"
-PerceivedThreat = 0
-physicalSize = 0.1
-ActionPointsMax = 0
-MovementSpeedPerActionPoint = 0.0
 
 [node name="PropWallObstacleCover" type="Node3D" unique_id=1850641905]
 script = ExtResource("1_xily6")
 ObstacleWidth = 5
 
-[node name="PropObstacle" parent="." unique_id=842978226 instance=ExtResource("2_xily6")]
+[node name="PropObstacleSegment" parent="." unique_id=842978226 instance=ExtResource("2_xily6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 0)
-Name = "Obstacle"
-definition = SubResource("Resource_xily6")

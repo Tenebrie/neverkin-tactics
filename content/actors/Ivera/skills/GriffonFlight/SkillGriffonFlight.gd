@@ -72,7 +72,7 @@ func _cast(targets: TargetData) -> void:
 
 	tween.tween_callback(func():
 		if grabTimer and ActorUtils.isHostileTo(parent, grabbedActors[0]):
-			grabbedActors[0].Stats.DealDamage(DamageInstance.ForExtraSkillEffect(self, landingDamage))
+			grabbedActors[0].stats.dealDamage(DamageInstance.ForSkill(self, landingDamage))
 	)
 
 	var landZ = targets.mousePoint.z
