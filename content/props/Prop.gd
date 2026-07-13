@@ -3,6 +3,7 @@ extends Actor
 class_name Prop
 
 func _ready() -> void:
+	buffs = GetComponent(PropBuffs)
 	if not definition:
 		definition = ActorDefinition.new()
 		definition.Faction = Faction.Neutral

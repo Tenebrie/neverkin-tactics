@@ -8,7 +8,6 @@ class_name ParadoxTooltipKeyword
 func setKeyword(keyword: KeywordDefinition):
 	nameLabel.text = keyword.name
 	categoryLabel.text = keyword.category
-	#descriptionLabel.text = keyword.description
 	if keyword.source == KeywordDefinition.Source.Native:
 		descriptionLabel.text = StringUtils.populateActorValues(keyword.description, TurnManager.Instance.activePlayerActor)
 	elif keyword.source == KeywordDefinition.Source.Skill:

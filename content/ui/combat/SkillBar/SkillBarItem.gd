@@ -66,7 +66,7 @@ func update() -> void:
 		iconButton.texture_normal = null
 		$%HotkeyLabel.visible = false
 		%Panel.visible = true
-		setActionPointCost(0)
+		hideSkillCosts()
 		return
 	%Panel.visible = false
 	$%HotkeyLabel.visible = true
@@ -76,19 +76,37 @@ func update() -> void:
 	else:
 		hotkeyLabel.text = ""
 	iconButton.texture_normal = TrackedSkill.definition.IconTexture
-	setActionPointCost(TrackedSkill.ActionPointCost)
+	setSkillCosts(TrackedSkill)
 	await get_tree().process_frame
 	tooltip.setSkill(self, TrackedSkill)
 
-func setActionPointCost(cost: int):
-	var container = $%ActionPointCost
+func hideSkillCosts():
+	%ActionPointCost.visible = false
+	%HealthPointCost.visible = false
+	%ManaPointCost.visible = false
+
+func setSkillCosts(skill: Skill):
+	updateCostContainer(%ActionPointCost, skill.ActionPointCost, ColorUtils.Common.ActionPoint)
+	updateCostContainer(%HealthPointCost, skill.HealthCost, ColorUtils.Common.Health)
+	updateCostContainer(%ManaPointCost, skill.ManaCost, ColorUtils.Common.Mana)
+
+func updateCostContainer(container: Control, cost: int, color: Color):
+	if cost == 0:
+		container.visible = false
+		return
+	container.visible = true
 	while container.get_child_count() > cost:
 		container.remove_child(container.get_child(0))
 	while container.get_child_count() < cost:
 		var point = Asset.Instantiate(SkillBarItemActionPoint)
 		container.add_child(point)
+	for child: SkillBarItemActionPoint in container.get_children():
+		child.setColor(color)
 
 func updateModulate() -> void:
+	if not TrackedSkill:
+		%ChargesLabel.visible = false
+
 	if TrackedSkill and not TrackedSkill.isVisible():
 		visible = false
 		return
@@ -97,6 +115,13 @@ func updateModulate() -> void:
 		tooltip.visible = isHovered
 		if isHovered:
 			tooltip.updatePosition()
+
+		# Charge count
+		if TrackedSkill.chargesMaximum <= 0:
+			%ChargesLabel.visible = false
+		else:
+			%ChargesLabel.visible = true
+			%ChargesLabel.text = "%d/%d"%[TrackedSkill.chargesLeft, TrackedSkill.chargesMaximum]
 
 	if TrackedSkill == null and Transparent:
 		%Panel.self_modulate = Color.TRANSPARENT
@@ -115,17 +140,6 @@ func updateModulate() -> void:
 		base = base.darkened(0.2)
 
 	if TrackedSkill != null:
-		if TrackedSkill.parent.actions.ActionPointsAvailable < TrackedSkill.ActionPointCost:
-			base = Color(0.4, 0.4, 0.4)
-		elif TrackedSkill.parent.stats.healthCurrent < TrackedSkill.HealthCost:
-			base = Color(0.4, 0.4, 0.4)
-		elif TrackedSkill.parent.stats.manaCurrent < TrackedSkill.ManaCost:
-			base = Color(0.4, 0.4, 0.4)
-		elif TrackedSkill.parent.actions.MovementAvailable < TrackedSkill.MovementRequired:
-			base = Color(0.4, 0.4, 0.4)
-		elif TrackedSkill.parent.isDead:
-			base = Color(0.4, 0.4, 0.4)
-
 		if not Error.AsBoolean(TrackedSkill.isCastable()):
 			base = Color(0.4, 0.4, 0.4)
 

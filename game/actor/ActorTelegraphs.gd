@@ -116,7 +116,7 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 			if actor.is_in_group(group):
 				return false
 		for filter in def.TargetFilters:
-			var result: Variant = filter.call(actor)
+			var result: Variant = filter.call(actor, telegraph)
 			if result is bool and result == false:
 				return false
 		return true

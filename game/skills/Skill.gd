@@ -41,10 +41,12 @@ func isCastable() -> Variant:
 		return Error.new("Not enough movement")
 	if parent.actions.ActionPointsAvailable < ActionPointCost:
 		return Error.new("Not enough AP")
-	if parent.stats.healthCurrent < HealthCost:
+	if parent.stats.healthCurrent <= HealthCost:
 		return Error.new("Not enough health")
 	if parent.stats.manaCurrent < ManaCost:
 		return Error.new("Not enough mana")
+	if chargesLeft < definition.ChargesCost:
+		return Error.new("Not enough charges")
 	return true
 
 func isVisible() -> bool:
@@ -62,6 +64,9 @@ var ActionPointCost: int:
 var MovementRequired: float:
 	get:
 		return definition.MovementRequired
+var ChargesRequired:
+	get:
+		return definition.ChargesCost
 
 func PerformCast(targets: TargetData) -> void:
 	MessageLog.PrintActorMessage(definition.Name, parent)
@@ -81,6 +86,18 @@ func _emitSkillEvent(signals: Array[Signal], targets: TargetData):
 
 func StartSequence() -> Sequencer:
 	return Sequencer.Start(self)
+
+var _chargesUsed = 0
+
+var chargesLeft:
+	get:
+		return definition.ChargesMaximum - _chargesUsed
+var chargesMaximum:
+	get:
+		return definition.ChargesMaximum
+
+func consumeCharges(count: int) -> void:
+	_chargesUsed += count
 
 enum TargetMode {
 	Self,

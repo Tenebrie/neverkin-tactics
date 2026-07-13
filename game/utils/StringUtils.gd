@@ -34,6 +34,8 @@ static func populateNodeValues(text: String, skill: Node) -> String:
 		var suffix = regexMatch.get_string(2)
 		var value: Variant = skill.get(propName)
 
+		lastEnd = regexMatch.get_end()
+
 		if value == null:
 			push_warning("Unknown template variable: %%%s" % propName)
 			result += regexMatch.get_string()
@@ -49,10 +51,13 @@ static func populateNodeValues(text: String, skill: Node) -> String:
 			result += "[color=#55DD55]Active[/color]"
 		elif value is bool and value == false:
 			result += "[color=#DD5555]Inactive[/color]"
+		elif value is String and value.length() == 0:
+			if result.ends_with("\r\n"):
+				result = result.substr(0, result.length() - 2)
+			elif result.ends_with("\n"):
+				result = result.substr(0, result.length() - 1)
 		else:
-			result += "[color=orange]%s[/color]" % value
-
-		lastEnd = regexMatch.get_end()
+			result += value
 
 	result += text.substr(lastEnd)
 
@@ -94,9 +99,15 @@ static func populateSkillValues(text: String, skill: Skill) -> String:
 	if skill.definition.TargetingMaxRange > 0.0:
 		commonLines.push_back("[color=orange]$Range:[/color] %.2fm"%skill.definition.TargetingMaxRange)
 	if skill.definition.HealthCost > 0.0:
-		commonLines.push_back("[color=#FF5555]$Health cost:[/color] %d"%skill.HealthCost)
+		commonLines.push_back("[color=#FF5555]$Health Cost:[/color] %d"%skill.HealthCost)
 	if skill.definition.ManaCost > 0.0:
-		commonLines.push_back("[color=#7777FF]$Mana cost:[/color] %d"%skill.ManaCost)
+		commonLines.push_back("[color=#7777FF]$Mana Cost:[/color] %d"%skill.ManaCost)
+	if skill.definition.ChargesMaximum > 0:
+		var charges = "%d / %d"%[skill.chargesLeft, skill.chargesMaximum] if skill.chargesLeft < skill.chargesMaximum else "%d"%skill.chargesMaximum
+		charges = "[color=orange]$Charges:[/color] %s"%charges
+		commonLines.push_back(charges)
+		if skill.ChargesRequired > 1:
+			commonLines.push_back("[color=orange]$Charges Per Use:[/color] %d"%skill.ChargesRequired)
 
 	if commonLines.size() == 0:
 		return description

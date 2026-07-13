@@ -16,6 +16,8 @@ class_name SkillDefinition
 @export var HealthCost: int = 0
 @export var ManaCost: int = 0
 @export var ActionPointCost: int = 1
+@export var ChargesCost: int = 0
+@export var ChargesMaximum: int = 0
 
 @export_group("Skill Targeting", "Targeting")
 @export var TargetingMaxRange: float = 1.0

@@ -56,18 +56,20 @@ func updateValues():
 	healthBar.MaxValue = stats.healthMaximum
 	healthBar.InhumanValue = stats.healthHumanityThreshold
 	healthBar.ThreatValue = stats.healthThreatened
+	healthBar.PromiseValue = stats.healthPromised
 
 	manaBar.visible = stats.manaMaximum > 0
 	if manaBar.visible:
 		manaBar.Value = stats.manaCurrent
 		manaBar.MaxValue = stats.manaMaximum
 		manaBar.ThreatValue = stats.manaThreatened
+		manaBar.PromiseValue = stats.manaPromised
 
 	actionPointBar.Value = actions.ActionPointsAvailable
 	actionPointBar.MaxValue = max(actions.ActionPointsMax, actions.ActionPointsAvailable)
 	actionPointBar.InhumanValue = actions.ActionPointsSavedMax
-
 	actionPointBar.ThreatValue = parent.targeting.PredictedActionPointCost + actions.ActionPointsThreatened
+	actionPointBar.PromiseValue = 0
 
 	var focusedTargets = Actor.Repository.Alive.List.filter(func(actor):
 		if actor.Behaviour is ActorBehaviourWorldControlled behaviour:

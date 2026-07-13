@@ -8,7 +8,7 @@ var damageTelegraph = TelegraphPreset.SingleActor.new()
 func _ready() -> void:
 	definition = preload("./AlgaeHunterSwipe.tres").duplicate()
 	damageTelegraph.HealthThreat = Damage
-	damageTelegraph.TargetFilters.push_back(func(actor: Actor) -> bool:
+	damageTelegraph.addTargetFilter(func(actor: Actor) -> bool:
 		return ActorUtils.isHostileTo(actor, parent)
 	)
 

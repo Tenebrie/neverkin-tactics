@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://drubw221xpify" path="res://content/ui/combat/SkillBar/SkillBarItem.gd" id="1_bbwqj"]
 [ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://content/actors/Ivera/IveraAvatar.webp" id="2_cnihy"]
 [ext_resource type="PackedScene" uid="uid://dbssbd5tja4hl" path="res://content/ui/combat/SkillBar/SkillBarItemActionPoint.tscn" id="3_n32wj"]
+[ext_resource type="FontFile" uid="uid://b0gkxntpe3rt4" path="res://assets/fonts/roboto/Roboto-Bold.ttf" id="4_qdslx"]
 [ext_resource type="PackedScene" uid="uid://6kspj7pk8wjx" path="res://content/ui/combat/SkillBar/SkillBarItemTooltip.tscn" id="4_ypyt1"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ypyt1"]
@@ -33,6 +34,174 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bpnaq"]
 shader = SubResource("Shader_61go4")
 shader_parameter/radius = 16.00000076
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qdslx"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phvhl"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u2054"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r71yn"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n4lju"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a8lhn"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bs5co"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g8d4w"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4pcqt"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rikvc"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bb56u"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1t74b"]
+resource_local_to_scene = true
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9063318, 0.9063318, 0, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 16
+
+[sub_resource type="LabelSettings" id="LabelSettings_nvo6o"]
+font = ExtResource("4_qdslx")
+outline_size = 2
+outline_color = Color(1, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ypyt1"]
+font = ExtResource("4_qdslx")
+outline_size = 2
+outline_color = Color(1, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 1)
 
 [node name="SkillBarItem" type="Control" unique_id=544254672]
 custom_minimum_size = Vector2(72, 72)
@@ -102,7 +271,7 @@ stretch_mode = 0
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 12.0
+offset_bottom = 36.0
 grow_horizontal = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 2
@@ -110,33 +279,106 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="ActionPointCost" type="HBoxContainer" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin" unique_id=65654529]
+[node name="VBoxContainer" type="VBoxContainer" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin" unique_id=1257857478]
+layout_mode = 2
+
+[node name="ActionPointCost" type="HBoxContainer" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer" unique_id=65654529]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="SkillBarItemActionPoint" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/ActionPointCost" unique_id=668084793 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=668084793 instance=ExtResource("3_n32wj")]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qdslx")
 
-[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/ActionPointCost" unique_id=800911617 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=800911617 instance=ExtResource("3_n32wj")]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_phvhl")
 
-[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/ActionPointCost" unique_id=1318659154 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=1318659154 instance=ExtResource("3_n32wj")]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2054")
 
-[node name="SkillBarItemActionPoint4" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/ActionPointCost" unique_id=121549357 instance=ExtResource("3_n32wj")]
+[node name="SkillBarItemActionPoint4" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ActionPointCost" unique_id=121549357 instance=ExtResource("3_n32wj")]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_r71yn")
 
-[node name="MarginContainer" type="MarginContainer" parent="Button/MarginContainer/Control" unique_id=1985181292]
+[node name="HealthPointCost" type="HBoxContainer" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer" unique_id=1396474256]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="SkillBarItemActionPoint" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=440802980 instance=ExtResource("3_n32wj")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_n4lju")
+
+[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=776840836 instance=ExtResource("3_n32wj")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a8lhn")
+
+[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=152653911 instance=ExtResource("3_n32wj")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bs5co")
+
+[node name="SkillBarItemActionPoint4" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/HealthPointCost" unique_id=1035570302 instance=ExtResource("3_n32wj")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g8d4w")
+
+[node name="ManaPointCost" type="HBoxContainer" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer" unique_id=1591968557]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="SkillBarItemActionPoint" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=147022907 instance=ExtResource("3_n32wj")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4pcqt")
+
+[node name="SkillBarItemActionPoint2" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=1304779214 instance=ExtResource("3_n32wj")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rikvc")
+
+[node name="SkillBarItemActionPoint3" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=1828435311 instance=ExtResource("3_n32wj")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bb56u")
+
+[node name="SkillBarItemActionPoint4" parent="Button/MarginContainer/Control/TextureButton/PointCostMargin/VBoxContainer/ManaPointCost" unique_id=8479031 instance=ExtResource("3_n32wj")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1t74b")
+
+[node name="TopInfo" type="MarginContainer" parent="Button/MarginContainer/Control" unique_id=200020046]
 layout_mode = 1
-anchors_preset = 3
+anchors_preset = 1
 anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -24.0
+offset_top = -4.0
+offset_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HotkeyLabel" type="Label" parent="Button/MarginContainer/Control/TopInfo" unique_id=1834196451]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 16
+text = "Q"
+label_settings = SubResource("LabelSettings_nvo6o")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BottomInfo" type="MarginContainer" parent="Button/MarginContainer/Control" unique_id=1985181292]
+layout_mode = 1
+anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -18.0
-offset_top = -31.0
-grow_horizontal = 0
+offset_top = -27.0
+grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/margin_left = 4
@@ -144,13 +386,11 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="HotkeyLabel" type="Label" parent="Button/MarginContainer/Control/MarginContainer" unique_id=272396443]
+[node name="ChargesLabel" type="Label" parent="Button/MarginContainer/Control/BottomInfo" unique_id=1674600342]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "3"
-horizontal_alignment = 1
-vertical_alignment = 1
+text = "3/3"
+label_settings = SubResource("LabelSettings_ypyt1")
 
 [node name="SkillBarItemTooltip" parent="Button/MarginContainer/Control" unique_id=388092998 instance=ExtResource("4_ypyt1")]
 unique_name_in_owner = true

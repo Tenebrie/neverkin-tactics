@@ -11,9 +11,17 @@ signal targetsChanged(targets: Array[Actor])
 ## Returns whether the telegraph as a whole is valid
 @export var Validators: Array[func(Telegraph) -> bool] = [func(_t): return true]
 ## Returns whether an individual actor is a valid target
-@export var TargetFilters: Array[func(Actor) -> bool] = [func(_a): return true]
+@export var TargetFilters: Array[func(Actor, Telegraph) -> bool] = [func(_a, _t): return true]
+## Health to be damaged
 @export var HealthThreat: int = 0
 @export var HealthThreatSelector = func(_actor: Actor) -> int: return HealthThreat
+@export var ManaThreat: int = 0
+@export var ManaThreatSelector = func(_actor: Actor) -> int: return ManaThreat
+## Health to be restored
+@export var HealthPromise: int = 0
+@export var HealthPromiseSelector = func(_actor: Actor) -> int: return HealthPromise
+@export var ManaPromise: int = 0
+@export var ManaPromiseSelector = func(_actor: Actor) -> int: return ManaPromise
 
 ## While this telegraph is active, close cover is disabled
 @export var ShootFromCover: bool = false
@@ -44,6 +52,12 @@ func addValidator(filter: func(Telegraph) -> bool) -> TelegraphDefinition:
 	return self
 
 func addTargetFilter(filter: func(Actor) -> bool) -> TelegraphDefinition:
+	TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph):
+		return filter.call(actor)
+	)
+	return self
+
+func addTargetFilterOnTelegraph(filter: func(Actor, Telegraph) -> bool) -> TelegraphDefinition:
 	TargetFilters.push_back(filter)
 	return self
 

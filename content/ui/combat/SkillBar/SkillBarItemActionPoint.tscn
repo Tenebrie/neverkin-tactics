@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://wwiiie0hh750" path="res://content/ui/combat/SkillBar/SkillBarItemActionPoint.gd" id="1_oba0q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oba0q"]
+resource_local_to_scene = true
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
@@ -17,6 +18,7 @@ corner_detail = 16
 [node name="SkillBarItemActionPoint" type="Panel" unique_id=668084793]
 custom_minimum_size = Vector2(8, 8)
 custom_maximum_size = Vector2(8, 8)
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -2552.0

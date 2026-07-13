@@ -4,7 +4,9 @@ class SelfCast extends TelegraphDefinition:
 	func _init():
 		Shape = Telegraph.Shape.Circle
 		Attachment = Telegraph.Attachment.Caster
-		TargetFilters.push_back(func(_a): return false)
+		TargetFilters.push_back(func(actor: Actor, telegraph: Telegraph):
+			return actor == telegraph.ParentSkill.parent
+		)
 		Processors.push_back(TelegraphProcessor.ConstantTint(TelegraphColor.MaxRange))
 
 	func Load(skill: Skill):
@@ -44,7 +46,7 @@ class SingleActor extends TelegraphDefinition:
 
 	func WithDamageToHostiles(damage: int):
 		HealthThreat = damage
-		TargetFilters.push_back(func(actor: Actor) -> bool:
+		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
 			return ActorUtils.isTargetableBy(actor, ParentSkill.parent)
 		)
 		return self
@@ -68,7 +70,7 @@ class Projectile extends TelegraphDefinition:
 		return self
 
 	func TargetingHostiles() -> Projectile:
-		TargetFilters.push_back(func(actor: Actor) -> bool:
+		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
 			return ActorUtils.isTargetableBy(actor, ParentSkill.parent) && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
 		)
 		return self
@@ -102,7 +104,7 @@ class PointArea extends TelegraphDefinition:
 
 	func WithDamageToHostiles(damage: int) -> TelegraphDefinition:
 		HealthThreat = damage
-		TargetFilters.push_back(func(actor: Actor) -> bool:
+		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
 			return ActorUtils.isTargetableBy(actor, ParentSkill.parent)
 		)
 		return self

@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://7a2ajnl6rw8u" path="res://content/skills/SkillRailgunShot/SkillRailgunShot.gd" id="3_12fl6"]
 [ext_resource type="Script" uid="uid://c23c6w60lgxia" path="res://content/skills/SkillFragGrenade/SkillFragGrenade.gd" id="4_12fl6"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="4_20xv1"]
+[ext_resource type="Script" uid="uid://dxwwtirxpl5p7" path="res://content/skills/SkillSecondWind/SkillSecondWind.gd" id="5_nkwvk"]
 
 [resource]
 script = ExtResource("4_20xv1")
@@ -15,7 +16,8 @@ pronouns = 1
 initiative = 4
 TokenTexture = ExtResource("3_4wdsm")
 AvatarTexture = ExtResource("1_kb7sr")
-HealthHumanityThreshold = 2
+healthMaximum = 12
+healthHumanityThreshold = 2
 ActionPointsMax = 3
-Skills = Array[GDScript]([ExtResource("2_4wdsm"), ExtResource("3_12fl6"), ExtResource("4_12fl6")])
+Skills = Array[GDScript]([ExtResource("2_4wdsm"), ExtResource("3_12fl6"), ExtResource("4_12fl6"), null, null, null, null, ExtResource("5_nkwvk")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

@@ -2,7 +2,9 @@ extends Component
 class_name ActorStats
 
 signal damageTaken(damage: DamageInstance)
+signal healthChanged(current: int)
 signal manaSpent(damage: DamageInstance)
+signal manaChanged(current: int)
 
 var Name: String:
 	get: return parent.definition.Name
@@ -13,17 +15,25 @@ var Faction: Actor.Faction:
 func _parentReady() -> void:
 	if parent.buffs:
 		parent.buffs.Changed.connect(func():
-			var selectedSkillCost = parent.Skills.SelectedSkill.HealthCost if parent.Skills.SelectedSkill else 0
-			healthThreatened = parent.buffs.Count(BuffHealthThreat) + selectedSkillCost
+			var selectedSkillHealthCost = parent.Skills.SelectedSkill.HealthCost if parent.Skills.SelectedSkill else 0
+			var selectedSkillManaCost = parent.Skills.SelectedSkill.HealthCost if parent.Skills.SelectedSkill else 0
+			healthThreatened = parent.buffs.Count(BuffHealthThreat) + selectedSkillHealthCost
+			healthPromised = parent.buffs.Count(BuffHealthPromise)
+			manaThreatened = parent.buffs.Count(BuffManaThreat) + selectedSkillManaCost
+			manaPromised = parent.buffs.Count(BuffManaPromise)
 		)
 	if parent.Skills:
 		parent.Skills.SelectedSkillChanged.connect(func(skill):
 			if skill:
 				healthThreatened = parent.buffs.Count(BuffHealthThreat) + skill.HealthCost
-				manaThreatened = skill.definition.ManaCost
+				healthPromised = parent.buffs.Count(BuffHealthPromise)
+				manaThreatened = parent.buffs.Count(BuffManaThreat) + skill.ManaCost
+				manaPromised = parent.buffs.Count(BuffManaPromise)
 			else:
 				healthThreatened = parent.buffs.Count(BuffHealthThreat)
-				manaThreatened = 0
+				healthPromised = parent.buffs.Count(BuffHealthPromise)
+				manaThreatened = parent.buffs.Count(BuffManaThreat)
+				manaPromised = parent.buffs.Count(BuffManaPromise)
 		)
 #endregion
 
@@ -39,15 +49,21 @@ var healthCurrent: int:
 		return healthMaximum - healthDamageTaken
 
 var healthThreatened: int = 0
+var healthPromised: int = 0
 
 func dealDamage(damage: DamageInstance):
 	healthDamageTaken = clampi(healthDamageTaken + damage.Value, 0, healthMaximum)
 	if healthCurrent <= 0:
 		parent.Destroy()
 	damageTaken.emit(damage)
+	healthChanged.emit(healthCurrent)
 
 func dealSkillDamage(targets: Skill.TargetData):
 	dealDamage(DamageInstance.ForSkillCast(parent, targets))
+
+func restoreHealth(value: int):
+	healthDamageTaken = clampi(healthDamageTaken - value, 0, healthMaximum)
+	healthChanged.emit(healthCurrent)
 #endregion
 
 #region Mana
@@ -60,10 +76,16 @@ var manaCurrent: int:
 		return manaMaximum - manaMissing
 
 var manaThreatened: int = 0
+var manaPromised: int = 0
 
 func consumeMana(damage: DamageInstance):
 	manaMissing = clampi(manaMissing + damage.Value, 0, manaMaximum)
 	manaSpent.emit(damage)
+	manaChanged.emit(manaCurrent)
+
+func restoreMana(value: int):
+	manaMissing = clampi(manaMissing - value, 0, manaMaximum)
+	manaChanged.emit(manaCurrent)
 #endregion
 
 #region Threat

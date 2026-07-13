@@ -3,15 +3,6 @@ class_name ActorBuffs
 
 signal Changed()
 
-func listAllVisible() -> Array[Buff]:
-	var buffs: Array[Buff]
-	for child in get_children():
-		if child is not Buff buff:
-			continue
-		if buff.definition:
-			buffs.push_back(child)
-	return buffs
-
 func Add(buff: Buff) -> void:
 	if buff.definition and buff.definition.stackType == Buff.StackType.None:
 		RemoveAll(buff.get_script())
@@ -72,6 +63,15 @@ func GetAll(buffClass: GDScript[Buff]) -> Array[Buff]:
 		if child is Buff buff and Utils.IsNodeDescendantOf(child, buffClass) and not child.is_queued_for_deletion():
 			out.push_back(buff)
 	return out
+
+func listAllVisible() -> Array[Buff]:
+	var buffs: Array[Buff]
+	for child in get_children():
+		if child is not Buff buff:
+			continue
+		if buff.definition:
+			buffs.push_back(child)
+	return buffs
 
 func Has(buffClass: GDScript[Buff]) -> int:
 	for child in get_children():

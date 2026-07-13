@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://da1o0qfq551df"]
+
+[ext_resource type="Texture2D" uid="uid://s66r45lnn8en" path="res://content/skills/SkillSecondWind/SkillSecondWindIcon.png" id="1_i70o3"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_lqk7r"]
+
+[resource]
+script = ExtResource("1_lqk7r")
+Name = "Second Wind"
+Category = 2
+Description = "Take a moment to focus and get yourself back into the fight. Restores %resourceRestored% of your health and other resources.
+
+%healthRestoredString
+%manaRestoredString"
+IconTexture = ExtResource("1_i70o3")
+ActionPointCost = 3
+ChargesCost = 1
+ChargesMaximum = 1
+TargetingMaxRange = 0.0
+BehaviourUsagePreference = 0.0
+BehaviourRequireLineOfSight = false
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

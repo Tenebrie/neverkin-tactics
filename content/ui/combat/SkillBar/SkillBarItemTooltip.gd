@@ -11,8 +11,13 @@ func setSkill(item: SkillBarItem, skill: Skill):
 	parent = item
 	nameLabel.text = skill.definition.Name
 	categoryLabel.text = StringUtils.getSkillCategoryString(skill.definition.Category)
-	descriptionLabel.text = StringUtils.populateSkillValues(skill.definition.Description, skill)
+	#descriptionLabel.text = StringUtils.populateSkillValues(skill.definition.Description, skill)
 	updatePosition()
+
+	visibility_changed.connect(func():
+		if visible:
+			descriptionLabel.text = StringUtils.populateSkillValues(skill.definition.Description, skill)
+	)
 
 func updatePosition():
 	if not parent:
