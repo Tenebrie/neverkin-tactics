@@ -41,19 +41,18 @@ func _exit_tree() -> void:
 	if not Engine.is_editor_hint():
 		Repository.Unregister(self)
 
-func IsIgnoredFor(actor: Actor) -> bool:
+func IsIgnoredFor(origin: Vector3, physicalSize: float = 0.4) -> bool:
 	if not CanBeIgnored:
 		return false
-	if not actor.Skills.SelectedSkill:
-		return false
 
-	var actorPosition = actor.global_position
-	var distanceThreshold = pow(actor.physicalSize * 2, 2)
+	origin.y = 0
+
+	var distanceThreshold = pow(physicalSize * 2, 2)
 
 	for child in get_children():
 		if child is not Node3D:
 			continue
-		if child.global_position.distance_squared_to(actorPosition) < distanceThreshold:
+		if ActorUtils.flatPositionOf(child).distance_squared_to(origin) < distanceThreshold:
 			return true
 	return false
 
@@ -71,8 +70,8 @@ func checkDistances():
 	var shootFromCover = selectedSkill.definition.telegraphs.any(func(telegraph: TelegraphDefinition) -> bool:
 		return telegraph.ShootFromCover
 	)
-	if shootFromCover:
-		setIgnored(IsIgnoredFor(activeActor))
+	if shootFromCover and activeActor.Skills.SelectedSkill:
+		setIgnored(IsIgnoredFor(activeActor.global_position, activeActor.physicalSize))
 	else:
 		setIgnored(false)
 
@@ -261,10 +260,10 @@ static func collectPhysicsFieldObstaclesGD() -> Array[PhysicsFieldGD.Obstacle]:
 
 #region Repository
 static var Repository = RepositoryImplementation.new()
-static func FindAllIgnoredFor(actor: Actor) -> Array[StringName]:
+static func FindAllIgnoredFor(origin: Vector3, physicalSize: float = 0.4) -> Array[StringName]:
 	var ignored: Array[StringName]
 	for wall in Repository.List:
-		if wall.IsIgnoredFor(actor):
+		if wall.IsIgnoredFor(origin, physicalSize):
 			ignored.push_back(wall.WallGroupName)
 	return ignored
 

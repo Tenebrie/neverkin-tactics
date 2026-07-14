@@ -13,5 +13,6 @@ All charges replenish at the end of your turn."
 IconTexture = ExtResource("1_kfe7t")
 ChargesCost = 1
 ChargesMaximum = 3
+Cooldown = 1
 TargetingMaxRange = 10.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

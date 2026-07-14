@@ -151,7 +151,8 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 		icon.position.y = RenderHeight.AboveWalls - RenderHeight.TelegraphBase
 	telegraph.ParentSkill = skill
 	if def.ShootFromCover:
-		telegraph.IgnoredObstacleGroups = PropWall.FindAllIgnoredFor(skill.parent)
+		var shootOrigin = def.ShootFromCoverOrigin if def.ShootFromCoverOrigin.length_squared() > 0 else skill.parent.global_position
+		telegraph.IgnoredObstacleGroups = PropWall.FindAllIgnoredFor(shootOrigin, skill.parent.physicalSize)
 	return telegraph
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()

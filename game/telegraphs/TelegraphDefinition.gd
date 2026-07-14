@@ -26,6 +26,7 @@ signal targetsChanged(targets: Array[Actor])
 
 ## While this telegraph is active, close cover is disabled
 @export var ShootFromCover: bool = false
+@export var ShootFromCoverOrigin: Vector3 = Vector3.ZERO
 
 @export var PiercingPower = 0
 @export var PenetrationPower = 0
@@ -36,6 +37,9 @@ signal targetsChanged(targets: Array[Actor])
 @export var Processors: Array[Callable] = []
 
 @export var collisionMask: int = CollisionLayer.SKILL_TARGETABLE
+
+@export_group("Projectile", "Projectile")
+@export var projectileCanHitCaster = false
 
 @export_group("Circular Shape", "Circle")
 @export var CircleRadius: float = 1.0

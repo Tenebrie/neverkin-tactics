@@ -44,6 +44,8 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 	var excludeMask = CollisionLayer.IGNORED_COVER
 
 	var initialExclude: Array[RID] = [telegraph.ParentSkill.parent.get_rid()]
+	if telegraph.definition.projectileCanHitCaster:
+		initialExclude = []
 
 	var spaceState = telegraph.get_world_3d().direct_space_state
 	var contacts = RaycastUtils.GatherBeamContacts(
