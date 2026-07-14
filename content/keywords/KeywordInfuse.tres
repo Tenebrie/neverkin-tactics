@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://dm0u5heehas6r"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_6txya"]
+
+[resource]
+script = ExtResource("1_6txya")
+name = "Infuse (X)"
+category = "Keyword"
+description = "Spend extra X mana to alter the effect of a skill in some way.
+
+[color=orange]Usage:[/color] Press the skill button once to select it, then again to switch to infused version. Press again to deselect."
+aliases = Array[String](["Infuse (1)", "Infuse (2)", "Infuse (3)", "Infuse (4)"])
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

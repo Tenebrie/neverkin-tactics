@@ -39,5 +39,5 @@ func _unhandled_input(event: InputEvent) -> void:
 func _getStatusWord(status: bool):
 	return "shown" if status else "hidden"
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	%FramerateLabel.text = "%d"%Engine.get_frames_per_second()

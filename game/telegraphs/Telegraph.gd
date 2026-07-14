@@ -11,6 +11,8 @@ signal TargetsChanged(targets: Array[Actor])
 var ParentSkill: Skill
 var definition: TelegraphDefinition
 
+var childText: TelegraphText
+
 @export var Tint: Color = Color.GRAY:
 	set(value):
 		Tint = value

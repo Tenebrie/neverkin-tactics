@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://85ilnv88texk"]
+
+[ext_resource type="Texture2D" uid="uid://cptx82hmnc11h" path="res://content/skills/SkillReload/SkillReloadIcon.png" id="1_1lemr"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_164s3"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_wdy14"]
+device = -1
+keycode = 82
+unicode = 114
+
+[resource]
+script = ExtResource("1_164s3")
+Name = "Reload"
+Category = 1
+Description = "Replenish your weapon's magazine and restore all charges."
+IconTexture = ExtResource("1_1lemr")
+Hotkey = SubResource("InputEventKey_wdy14")
+BehaviourUsagePreference = 0.2
+BehaviourRequireLineOfSight = false
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

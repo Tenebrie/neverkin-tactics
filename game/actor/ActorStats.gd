@@ -16,7 +16,10 @@ func _parentReady() -> void:
 	if parent.buffs:
 		parent.buffs.Changed.connect(func():
 			var selectedSkillHealthCost = parent.Skills.SelectedSkill.HealthCost if parent.Skills.SelectedSkill else 0
-			var selectedSkillManaCost = parent.Skills.SelectedSkill.HealthCost if parent.Skills.SelectedSkill else 0
+			var selectedSkillManaCost = parent.Skills.SelectedSkill.ManaCost if parent.Skills.SelectedSkill else 0
+			if parent.actions.isFreeRecast():
+				selectedSkillHealthCost = 0
+				selectedSkillManaCost = 0
 			healthThreatened = parent.buffs.Count(BuffHealthThreat) + selectedSkillHealthCost
 			healthPromised = parent.buffs.Count(BuffHealthPromise)
 			manaThreatened = parent.buffs.Count(BuffManaThreat) + selectedSkillManaCost
@@ -24,7 +27,7 @@ func _parentReady() -> void:
 		)
 	if parent.Skills:
 		parent.Skills.SelectedSkillChanged.connect(func(skill):
-			if skill:
+			if skill and not parent.actions.isFreeRecast():
 				healthThreatened = parent.buffs.Count(BuffHealthThreat) + skill.HealthCost
 				healthPromised = parent.buffs.Count(BuffHealthPromise)
 				manaThreatened = parent.buffs.Count(BuffManaThreat) + skill.ManaCost
@@ -59,7 +62,11 @@ func dealDamage(damage: DamageInstance):
 	healthChanged.emit(healthCurrent)
 
 func dealSkillDamage(targets: Skill.TargetData):
-	dealDamage(DamageInstance.ForSkillCast(parent, targets))
+	var instance = DamageInstance.ForSkillCast(parent, targets)
+	if instance.Value > 0:
+		dealDamage(instance)
+	else:
+		restoreHealth(-instance.Value)
 
 func restoreHealth(value: int):
 	healthDamageTaken = clampi(healthDamageTaken - value, 0, healthMaximum)

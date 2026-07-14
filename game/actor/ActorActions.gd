@@ -49,10 +49,12 @@ var MovementAvailable: float:
 
 func _parentReady() -> void:
 	parent.Skills.SelectedSkillChanged.connect(func(skill):
-		if skill:
-			_actionPointsThreatenedFromSkill = skill.definition.ActionPointCost
-		else:
+		if not skill:
+			recastsRemaining = 0
 			_actionPointsThreatenedFromSkill = 0
+
+		if skill and not isFreeRecast():
+			_actionPointsThreatenedFromSkill = skill.definition.ActionPointCost
 	)
 	TurnManager.Instance.FactionTurnEnded.connect(onTurnEnded)
 
@@ -84,10 +86,15 @@ func GetMovementActionPointCost(value: float) -> int:
 #endregion
 
 #region ActionQueue
+var recastsRemaining: int = 0
 var ActionQueue: ActorActionQueue = ActorActionQueue.new()
+
+func isFreeRecast() -> bool:
+	return recastsRemaining > 0
 
 func IsPerformingAnyAction() -> bool:
 	return ActionQueue.Busy()
+
 #endregion
 
 func onTurnEnded(faction: Actor.Faction) -> void:
@@ -112,6 +119,12 @@ func IssueOrder_MoveThroughPath(path: PackedVector3Array):
 	CONNECT_ONE_SHOT)
 
 func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
+	if recastsRemaining > 0:
+		recastsRemaining -= 1
+		await skill.PerformCast(targets)
+		parent.Skills.Reselect()
+		return
+
 	var validationResult: Variant = skill.isCastable()
 	if not Error.AsBoolean(skill.isCastable()):
 		MessageLog.PrintErrorObject(validationResult)
@@ -126,6 +139,8 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 				MessageLog.PrintErrorObject(result)
 				return
 
+	recastsRemaining = skill.getRecastCount()
+
 	if skill.HealthCost > 0:
 		parent.stats.dealDamage(DamageInstance.ForSkill(skill, skill.HealthCost))
 	if skill.ManaCost > 0:
@@ -136,8 +151,8 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		skill.consumeCharges(skill.ChargesRequired)
 	skill.startCooldown()
 	await skill.PerformCast(targets)
-	if parent.Skills.SelectedSkill == skill and not skill.isVisible():
-		parent.Skills.Unselect()
+	if recastsRemaining > 0:
+		parent.Skills.Reselect()
 
 func IssueOrder_Stop():
 	if ActionQueue.Empty():

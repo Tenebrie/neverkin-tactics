@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://q3gnungh0svq"]
+
+[ext_resource type="Texture2D" uid="uid://vrisatjvygse" path="res://content/actors/Kamilla/skills/ChromaShot/SkillChromaShotIcon.png" id="1_kfe7t"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_tjk31"]
+
+[resource]
+script = ExtResource("1_tjk31")
+Name = "Chroma Shot"
+Category = 1
+Description = "Release a short burst of fire from your rifle towards an enemy. Deal %damagePerShot damage to the target %shotCount times and generate $Heat per shot.
+
+All charges replenish at the end of your turn."
+IconTexture = ExtResource("1_kfe7t")
+ChargesCost = 1
+ChargesMaximum = 3
+TargetingMaxRange = 10.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

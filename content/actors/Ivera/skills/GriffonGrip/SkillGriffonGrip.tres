@@ -12,6 +12,6 @@ Description = "Grab another creature with your talons, keeping them nice and clo
 Grabbed enemies are unable to use any movement actions until they break free.
 
 Applies ${Griffon Grip!buff}."
-GrudgeString = ""
 IconTexture = ExtResource("1_2pflu")
+TargetingMaxRange = 1.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

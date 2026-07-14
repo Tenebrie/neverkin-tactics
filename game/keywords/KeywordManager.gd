@@ -94,11 +94,22 @@ func _registerKeyword(keyword: KeywordDefinition):
 		_pushKeyword(alias.to_lower(), keyword)
 
 func _pushKeyword(substring: String, definition: KeywordDefinition):
+	var escaped = _escapeRegex(substring)
 	var regex = RegEx.new()
-	regex.compile("\\$(?|\\{(%s)\\}|(%s)\\b)" % [substring, substring])
+	regex.compile("\\$(?|\\{(%s)\\}|(%s)(?!\\w))" % [escaped, escaped])
 
 	var keyword = KeywordWithPattern.new()
 	keyword.id = allKeywords.size()
 	keyword.pattern = regex
 	keyword.definition = definition
 	allKeywords.push_back(keyword)
+
+func _escapeRegex(s: String) -> String:
+	const specials = "\\^$.|?*+()[]{}"
+	var result = ""
+	for c in s:
+		if specials.contains(c):
+			result += "\\" + c
+		else:
+			result += c
+	return result

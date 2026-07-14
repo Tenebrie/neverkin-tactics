@@ -8,7 +8,7 @@ var damageTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithD
 
 func _ready() -> void:
 	definition = preload("res://content/skills/SkillRailgunShot/SkillRailgunShot.tres").duplicate()
-	damageTelegraph.PenetrationPower = 1
+	damageTelegraph.PenetrationPower = 9
 	damageTelegraph.PiercingPower = 1
 	definition.telegraphs = [
 		damageTelegraph

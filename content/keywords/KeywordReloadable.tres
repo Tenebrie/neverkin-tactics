@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://d8ssxmh83rbi"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_yew8d"]
+
+[resource]
+script = ExtResource("1_yew8d")
+name = "Reloadable"
+category = "Keyword"
+description = "A skill that contains charges which can be restored using a $Reload."
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cxoxb77d1144u" path="res://content/actors/WolfpackTrooper/WolfpackTrooper.tscn" id="5_7s5hy"]
 [ext_resource type="PackedScene" uid="uid://dmyet57hfpj6u" path="res://content/actors/Kamilla/Kamilla.tscn" id="6_xs4ih"]
 [ext_resource type="PackedScene" uid="uid://2ohwekfgbpuc" path="res://scenes/PrototypeScene/PrototypeScene.tscn" id="7_6ytau"]
+[ext_resource type="PackedScene" uid="uid://gpma5d48l6ft" path="res://content/actors/Char/Char.tscn" id="8_pynjx"]
 [ext_resource type="PackedScene" uid="uid://bm6mqj82bco5k" path="res://content/actors/WolfpackBrawler/WolfpackBrawler.tscn" id="8_vijgj"]
 
 [sub_resource type="Environment" id="Environment_vh257"]
@@ -76,3 +77,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.970889, 0.0005002022, 3.669
 
 [node name="Brawler2" parent="." unique_id=168031144 instance=ExtResource("8_vijgj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.4807982, 0.00049972534, 5.102641)
+
+[node name="Actor" parent="." unique_id=807014692 instance=ExtResource("8_pynjx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.812845, 0.0005002022, 1.8580823)

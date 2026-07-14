@@ -69,6 +69,16 @@ class Projectile extends TelegraphDefinition:
 		HealthThreat = damage
 		return self
 
+	func WithHealing(healing: int) -> Projectile:
+		HealthPromise = healing
+		return self
+
+	func TargetingAllies() -> Projectile:
+		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
+			return ActorUtils.isAlliedTo(actor, ParentSkill.parent)
+		)
+		return self
+
 	func TargetingHostiles() -> Projectile:
 		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
 			return ActorUtils.isTargetableBy(actor, ParentSkill.parent) && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
@@ -108,3 +118,19 @@ class PointArea extends TelegraphDefinition:
 			return ActorUtils.isTargetableBy(actor, ParentSkill.parent)
 		)
 		return self
+
+class MouseText extends TelegraphDefinition:
+	func _init(text: String):
+		Shape = Telegraph.Shape.Circle
+		Attachment = Telegraph.Attachment.Mouse
+		CircleRadius = 0
+		TextMessage = text
+		Processors.push_back(func(telegraph: Telegraph):
+			if not telegraph.childText:
+				return
+			telegraph.childText.offset = telegraph.get_viewport().get_mouse_position() - Vector2(telegraph.childText.size.x / 2, telegraph.childText.size.y + 8)
+			telegraph.Tint = Color.WHITE
+		)
+
+	func Load(_skill: Skill):
+		pass

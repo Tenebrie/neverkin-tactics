@@ -37,9 +37,8 @@ func _ready():
 	updateModulate()
 	$Button.pressed.connect(onPortraitClick)
 
-	Skill.SignalBus.afterCast.connect(func(targets):
-		if targets.sourceSkill == TrackedSkill:
-			updateModulate()
+	Skill.SignalBus.afterCast.connect(func(_t):
+		updateModulate()
 	)
 
 func onPortraitClick() -> void:
@@ -47,7 +46,7 @@ func onPortraitClick() -> void:
 		return
 
 	if TrackedSkill.Controller.SelectedSkill == TrackedSkill:
-		TrackedSkill.Controller.Select(null)
+		TrackedSkill.Controller.ScrollSkillOptions()
 		return
 
 	var validationResult: Variant = TrackedSkill.isCastable()
@@ -93,7 +92,7 @@ func setSkillCosts(skill: Skill):
 	updateCostContainer(%ActionPointCost, skill.ActionPointCost, ColorUtils.Common.ActionPoint)
 	updateCostContainer(%HealthPointCost, skill.HealthCost, ColorUtils.Common.Health)
 	updateCostContainer(%ManaPointCost, skill.ManaCost, ColorUtils.Common.Mana)
-	%CooldownCost.visible = skill.definition.Cooldown > 0
+	#%CooldownCost.visible = skill.definition.Cooldown > 0
 
 func updateCostContainer(container: Control, cost: int, color: Color):
 	if cost == 0:

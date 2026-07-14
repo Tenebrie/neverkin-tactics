@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://cy75gprtx7qro"]
+
+[ext_resource type="Script" uid="uid://ctm8jgop1a2lm" path="res://content/actors/Char/skills/InfusedWeaponShot/SkillInfusedWeaponShot.gd" id="1_0pl1p"]
+[ext_resource type="Texture2D" uid="uid://byhwirkvtng2e" path="res://icon.svg" id="1_owghs"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="1_uddh2"]
+[ext_resource type="Script" uid="uid://12hi1o64uvl7" path="res://content/actors/Char/skills/Trickshot/SkillTrickshot.gd" id="2_7e6o6"]
+[ext_resource type="Script" uid="uid://bjo1gyqxojwtd" path="res://content/actors/Char/skills/SpeedControl/SkillSpeedControl.gd" id="3_hjdp6"]
+[ext_resource type="Script" uid="uid://qtp6i3pkw2x4" path="res://content/actors/Char/skills/StealTime/SkillStealTime.gd" id="4_ofhwb"]
+[ext_resource type="Script" uid="uid://bir3dr48cnhdg" path="res://content/actors/Char/skills/DebtOfTime/SkillDebtOfTime.gd" id="5_j6rah"]
+[ext_resource type="Script" uid="uid://b5yqf5sj1wguc" path="res://content/skills/SkillManaDrain/SkillManaDrain.gd" id="6_7e6o6"]
+
+[resource]
+script = ExtResource("1_uddh2")
+Name = "Char"
+Faction = 0
+initiative = 3
+TokenTexture = ExtResource("1_owghs")
+AvatarTexture = ExtResource("1_owghs")
+ManaMaximum = 10
+ActionPointsMax = 3
+Skills = Array[GDScript]([ExtResource("1_0pl1p"), ExtResource("2_7e6o6"), ExtResource("3_hjdp6"), ExtResource("4_ofhwb"), ExtResource("5_j6rah"), null, null, ExtResource("6_7e6o6")])
+metadata/_custom_type_script = "uid://xdmrao02bm7l"

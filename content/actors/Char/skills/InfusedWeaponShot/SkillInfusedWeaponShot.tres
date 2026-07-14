@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://bsscf1eoqwhj8"]
+
+[ext_resource type="Texture2D" uid="uid://b8784cqc1277d" path="res://content/actors/Char/skills/InfusedWeaponShot/SkillInfusedWeaponShotIcon.png" id="1_y64a7"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_3neur"]
+
+[resource]
+script = ExtResource("2_3neur")
+Name = "Infused Weapon"
+Category = 1
+Description = "Release a kinetic projectile at your enemy dealing %Damage damage.
+
+$Infuse (1): Turn damage into healing. Projectile targets allies instead."
+IconTexture = ExtResource("1_y64a7")
+ChargesCost = 1
+ChargesMaximum = 5
+TargetingMaxRange = 10.0
+BehaviourTargetsGround = true
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

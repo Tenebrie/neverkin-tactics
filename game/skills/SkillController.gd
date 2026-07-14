@@ -8,6 +8,8 @@ var SelectedSkill: Skill = null:
 		var previous = SelectedSkill
 		BeforeSelectedSkillChanged.emit(v, previous)
 		SelectedSkill = v
+		if v:
+			SelectedSkill.selected.emit()
 		SelectedSkillChanged.emit(v, previous)
 		SignalBus.SelectedSkillChanged.emit(parent, v, previous)
 
@@ -52,6 +54,7 @@ func LoadCommonSkills() -> void:
 	commonSkillGroup.Add(SkillMove.new())
 	commonSkillGroup.Add(SkillVault.new())
 	commonSkillGroup.Add(SkillBreakFree.new())
+	commonSkillGroup.Add(SkillReload.new())
 
 func LoadSkills() -> void:
 	for skillOrNode in activeSkillGroup.get_children():
@@ -92,6 +95,9 @@ func GetByIndex(index: int) -> Skill:
 func GetByName(skillName: String) -> Skill:
 	return activeSkillGroup.GetByName(skillName)
 
+func GetByKeyword(keyword: KeywordDefinition) -> Skill:
+	return activeSkillGroup.GetByKeyword(keyword)
+
 func Simulate(skillScript: GDScript[Skill], cb: func(skill: Skill) -> void) -> void:
 	var skill = skillScript.new()
 	simulationSkillGroup.Add(skill)
@@ -116,14 +122,29 @@ func Deactivate(skill: Skill) -> bool:
 	return true
 
 func SelectByIndex(index: int) -> void:
-	var skill = GetByIndex(index)
-	SelectedSkill = skill
+	Select(GetByIndex(index))
 
 func Select(skill: Skill) -> void:
+	if SelectedSkill:
+		SelectedSkill.preparingInfuse = false
 	SelectedSkill = skill
 
+func Reselect() -> void:
+	SelectedSkillChanged.emit(SelectedSkill, SelectedSkill)
+
 func Unselect() -> void:
+	if SelectedSkill:
+		SelectedSkill.preparingInfuse = false
 	SelectedSkill = null
+
+func ScrollSkillOptions() -> void:
+	if SelectedSkill.isInfusable() and not SelectedSkill.preparingInfuse:
+		SelectedSkill.preparingInfuse = true
+		SelectedSkillChanged.emit(SelectedSkill, SelectedSkill)
+		return
+
+	SelectedSkill.preparingInfuse = false
+	Unselect()
 
 class ControlGroup extends Node3D:
 	func Add(ability: Skill) -> void:
@@ -165,6 +186,15 @@ class ControlGroup extends Node3D:
 			if child is not Skill skill:
 				continue
 			if skill.definition.Name == skillName:
+				return skill
+
+		return null
+
+	func GetByKeyword(keyword: KeywordDefinition) -> Skill:
+		for child in get_children():
+			if child is not Skill skill:
+				continue
+			if skill.definition.keywords.has(keyword):
 				return skill
 
 		return null

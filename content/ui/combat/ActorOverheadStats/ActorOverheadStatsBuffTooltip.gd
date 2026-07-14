@@ -5,7 +5,7 @@ class_name ActorOverheadStatsBuffTooltip
 @onready var categoryLabel: Label = %Category
 @onready var descriptionLabel: ParadoxTextLabel = %Description
 
-func setBuff(item: ActorOverheadStatsBuff, buff: Buff):
+func setBuff(_item: ActorOverheadStatsBuff, buff: Buff):
 	nameLabel.text = buff.definition.name
 	categoryLabel.text = "Status"
 	descriptionLabel.text  = StringUtils.populateBuffValues(buff.definition.description, buff)

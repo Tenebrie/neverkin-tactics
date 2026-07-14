@@ -1,6 +1,7 @@
 @abstract extends Node3D
 class_name Skill
 
+signal selected
 signal beforeCast(targets: TargetData)
 signal afterCast(targets: TargetData)
 
@@ -24,7 +25,14 @@ func _ready() -> void:
 		name = definition.Name
 
 	beforeCast.connect(func():
-		if parent.Skills.SelectedSkill != self:
+		if parent.Skills.SelectedSkill != self or parent.actions.isFreeRecast():
+			return
+		if not Error.AsBoolean(isVisible()) or not Error.AsBoolean(isCastable()):
+			parent.Skills.Unselect()
+	)
+
+	afterCast.connect(func():
+		if parent.Skills.SelectedSkill != self or parent.actions.isFreeRecast():
 			return
 		if not Error.AsBoolean(isVisible()) or not Error.AsBoolean(isCastable()):
 			parent.Skills.Unselect()
@@ -61,6 +69,24 @@ func isCastable() -> Variant:
 
 func isVisible() -> bool:
 	return true
+
+#region Infuse
+signal preparingInfuseChanged
+var preparingInfuse: bool:
+	get:
+		return preparingInfuse
+	set(v):
+		preparingInfuse = v
+		preparingInfuseChanged.emit()
+
+func isInfusable() -> bool:
+	return false
+#endregion
+
+#region Recast
+func getRecastCount() -> int:
+	return 0
+#endregion
 
 var HealthCost: int:
 	get:
@@ -109,7 +135,10 @@ var chargesMaximum:
 		return definition.ChargesMaximum
 
 func consumeCharges(count: int) -> void:
-	chargesUsed += count
+	chargesUsed = clampi(chargesUsed + count, 0, chargesMaximum)
+
+func restoreCharges(count: int) -> void:
+	chargesUsed = clampi(chargesUsed - count, 0, chargesMaximum)
 #endregion
 
 #region Cooldown

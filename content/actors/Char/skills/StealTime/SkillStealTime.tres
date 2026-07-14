@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://bcf7l7ia8gd83"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_n678e"]
+[ext_resource type="Texture2D" uid="uid://fx2qgqanbygh" path="res://content/actors/Char/skills/StealTime/SkillStealTimelIcon.png" id="1_uge25"]
+
+[resource]
+script = ExtResource("1_n678e")
+Name = "Steal Time"
+Category = 3
+Description = "Touch an ally to subtly manipulate their local passage of time. Reset all of their cooldowns.
+
+Cooldown of this ability becomes the sum of all cooldowns removed."
+IconTexture = ExtResource("1_uge25")
+ManaCost = 2
+Cooldown = 1
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

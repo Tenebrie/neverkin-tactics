@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://r3wmcl7ll0sw"]
+
+[ext_resource type="Texture2D" uid="uid://dsu2or3tgksxs" path="res://content/actors/Char/skills/Trickshot/SkillTrickshotIcon.png" id="1_vywo6"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_6bb17"]
+
+[resource]
+script = ExtResource("2_6bb17")
+Name = "Trickshot"
+Category = 1
+Description = "Release a kinetic projectile at your enemy dealing %Damage damage to enemies or restoring %Healing health to allies.
+
+At the end of the bullet's travel it ricochets in any direction of your choice.
+
+$Infuse (1): Give the projectile $Piercing (2), but also increase cooldown of this ability by 1 turn."
+IconTexture = ExtResource("1_vywo6")
+ManaCost = 1
+Cooldown = 1
+TargetingMaxRange = 10.0
+BehaviourTargetsGround = true
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

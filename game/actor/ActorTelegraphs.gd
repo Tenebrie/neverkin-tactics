@@ -125,6 +125,14 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 		skill.parent.telegraphs.TargetsChanged.emit(targets)
 		SignalBus.TargetsChanged.emit(skill.parent, targets)
 	)
+	if def.TextMessage != null:
+		var label = Asset.Instantiate(TelegraphText)
+		label.text = def.TextMessage
+		telegraph.childText = label
+		telegraph.cleaningStarted.connect(func():
+			label.queue_free()
+		)
+		telegraph.add_child(label)
 	if def.Icon != null:
 		var icon = Asset.Instantiate(TelegraphIcon)
 		icon.SetIcon(def.Icon)

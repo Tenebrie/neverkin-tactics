@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://douepw8p2fb45"]
+
+[ext_resource type="Texture2D" uid="uid://cyc6xhsbr44ot" path="res://content/actors/Char/skills/DebtOfTime/SkillDebtOfTimeIcon.png" id="1_0hhfb"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_mmpl8"]
+
+[resource]
+script = ExtResource("1_mmpl8")
+Name = "Debt of Time"
+Category = 3
+Description = "Turn time itself into a weapon. Target all enemies in an area. For each combined AP they have, reduce cooldown on your left-most ability on cooldown by 1 and drain 1 AP from the enemy. Stop when no abilities other than this one are on cooldown, or when all enemies have no AP left."
+IconTexture = ExtResource("1_0hhfb")
+ManaCost = 2
+Cooldown = 2
+TargetingMaxRange = 10.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

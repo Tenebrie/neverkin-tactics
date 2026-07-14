@@ -7,6 +7,7 @@ signal targetsChanged(targets: Array[Actor])
 @export var Shape: Telegraph.Shape = Telegraph.Shape.Circle
 @export var Attachment: Telegraph.Attachment = Telegraph.Attachment.None
 @export var Icon: Texture2D
+@export var TextMessage: String
 
 ## Returns whether the telegraph as a whole is valid
 @export var Validators: Array[func(Telegraph) -> bool] = [func(_t): return true]

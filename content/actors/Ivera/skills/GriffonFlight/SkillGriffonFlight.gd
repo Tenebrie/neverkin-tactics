@@ -75,7 +75,7 @@ func _cast(targets: TargetData) -> void:
 			grabbedActors[0].stats.dealDamage(DamageInstance.ForSkill(self, landingDamage))
 	)
 
-	var landZ = targets.mousePoint.z
+	#var landZ = targets.mousePoint.z
 	#tween.tween_property(parent, "global_position:z", landZ, duration * 0.5)
 		#.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	await tween.finished

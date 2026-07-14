@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://86yotqi3o76i"]
 
 [ext_resource type="Texture2D" uid="uid://dnx6v7s1conns" path="res://content/actors/Kamilla/kamilla.Avatar.webp" id="1_kb7sr"]
-[ext_resource type="Script" uid="uid://bpn3qq3pcl4ga" path="res://content/skills/SkillPistolShot/SkillPistolShot.gd" id="2_4wdsm"]
+[ext_resource type="Script" uid="uid://duwqtv0jwcfgr" path="res://content/actors/Kamilla/skills/ChromaShot/SkillChromaShot.gd" id="2_nkwvk"]
 [ext_resource type="Texture2D" uid="uid://dvn23v5qlr8h2" path="res://content/actors/Kamilla/kamilla.Token.webp" id="3_4wdsm"]
 [ext_resource type="Script" uid="uid://7a2ajnl6rw8u" path="res://content/skills/SkillRailgunShot/SkillRailgunShot.gd" id="3_12fl6"]
 [ext_resource type="Script" uid="uid://c23c6w60lgxia" path="res://content/skills/SkillFragGrenade/SkillFragGrenade.gd" id="4_12fl6"]
@@ -19,5 +19,5 @@ AvatarTexture = ExtResource("1_kb7sr")
 healthMaximum = 12
 healthHumanityThreshold = 2
 ActionPointsMax = 3
-Skills = Array[GDScript]([ExtResource("2_4wdsm"), ExtResource("3_12fl6"), ExtResource("4_12fl6"), null, null, null, null, ExtResource("5_nkwvk")])
+Skills = Array[GDScript]([ExtResource("2_nkwvk"), ExtResource("3_12fl6"), ExtResource("4_12fl6"), null, null, null, null, ExtResource("5_nkwvk")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

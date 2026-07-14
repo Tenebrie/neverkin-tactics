@@ -9,6 +9,7 @@ var damageTelegraph: TelegraphDefinition = TelegraphPreset.StandardProjectile.ne
 func _ready() -> void:
 	definition = preload("res://content/skills/SkillPistolShot/SkillPistolShot.tres").duplicate()
 
+	definition.keywords = [Keyword.Reloadable]
 	definition.telegraphs = [
 		damageTelegraph
 	]

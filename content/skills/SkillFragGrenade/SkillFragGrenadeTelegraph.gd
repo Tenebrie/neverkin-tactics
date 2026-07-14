@@ -8,6 +8,7 @@ var TriggeringSkill: Skill
 var apSpentTotal = 0.0
 var fuseDuration = 1.0 # action points
 var fuse: CircularTelegraph
+var waitingOnFuse = false
 
 func EnableFuse(origin: Vector3, telegraphDefinition: TelegraphDefinition):
 	fuse = ActorTelegraphs.instantiateTelegraph(telegraphDefinition, TriggeringSkill)
@@ -46,9 +47,10 @@ func EnableFuse(origin: Vector3, telegraphDefinition: TelegraphDefinition):
 	)
 
 	Skill.SignalBus.afterCast.connect(func(_t):
-		if apSpentTotal < fuseDuration:
+		if apSpentTotal < fuseDuration or waitingOnFuse:
 			return
 
+		waitingOnFuse = true
 		while fuse.growPercentage < 1.0:
 			await get_tree().process_frame
 		explode()

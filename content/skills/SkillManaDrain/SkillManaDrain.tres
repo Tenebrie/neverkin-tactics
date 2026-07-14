@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://doxn5homuld6v"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_aw0m6"]
+[ext_resource type="Texture2D" uid="uid://ctx7o266oonyg" path="res://content/skills/SkillManaDrain/SkillManaDrainIcon.png" id="1_ekmok"]
+
+[resource]
+script = ExtResource("1_aw0m6")
+Name = "Mana Drain"
+Category = 3
+Description = "Choose one actor missing at least 2 health in range, including yourself, an ally or an enemy. Reduce their maximum health by 2 to restore 2 mana.
+
+$Passive: Restore 1 mana at the start of your turn."
+IconTexture = ExtResource("1_ekmok")
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

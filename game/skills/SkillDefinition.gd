@@ -5,8 +5,8 @@ class_name SkillDefinition
 @export var Name: String = "Unnamed"
 @export var Category: Skill.Category = Skill.Category.None
 @export_multiline var Description: String
-@export var GrudgeString: String = ""
 @export var IconTexture: Texture2D
+@export var GrudgeString: String = ""
 
 @export var MovementRequired: float = 0.0
 
@@ -21,7 +21,7 @@ class_name SkillDefinition
 @export var Cooldown: int = 0
 
 @export_group("Skill Targeting", "Targeting")
-@export var TargetingMaxRange: float = 1.0
+@export var TargetingMaxRange: float = 0.0
 @export var TargetingResolvesNextTurn: bool = false
 
 @export_group("Shapeshifting", "Shapeshift")
@@ -33,6 +33,7 @@ class_name SkillDefinition
 @export var BehaviourTargetsGround = false
 
 var telegraphs: Array[TelegraphDefinition]
+var keywords: Array[KeywordDefinition]
 
 func toKeyword(script: GDScript) -> KeywordDefinition:
 	var keyword = KeywordDefinition.new()

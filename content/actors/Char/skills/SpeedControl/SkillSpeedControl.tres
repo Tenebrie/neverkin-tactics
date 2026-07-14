@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://b2j48g3yw3lsr"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_fnt7u"]
+[ext_resource type="Texture2D" uid="uid://d0bowd7gb1b1e" path="res://content/actors/Char/skills/SpeedControl/SkillSpeedControlIcon.png" id="1_yirsa"]
+
+[resource]
+script = ExtResource("1_fnt7u")
+Name = "Speed Control"
+Category = 3
+Description = "Choose yourself or another actor in range and apply $Quickened for 1 turn on allies or $Slowed for 1 turn on enemies.
+
+$Infused (1): Increase duration by 1 turn, but also increase cooldown of this ability by 1 turn."
+IconTexture = ExtResource("1_yirsa")
+ManaCost = 1
+Cooldown = 1
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"
