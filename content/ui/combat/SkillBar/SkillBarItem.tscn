@@ -17,7 +17,17 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r71yn"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nvo6o"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bb56u"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 5
 
 [sub_resource type="Shader" id="Shader_61go4"]
 code = "shader_type canvas_item;
@@ -232,7 +242,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_nvo6o")
+theme_override_styles/panel = SubResource("StyleBoxFlat_bb56u")
 
 [node name="TextureButton" type="TextureButton" parent="Button/MarginContainer/Control" unique_id=1706521116]
 unique_name_in_owner = true
@@ -401,4 +411,5 @@ vertical_alignment = 1
 [node name="InfusedOverlay" type="Panel" parent="OverlayContainer" unique_id=753585385]
 unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_bpnaq")

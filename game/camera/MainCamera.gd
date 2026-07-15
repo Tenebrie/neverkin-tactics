@@ -14,8 +14,6 @@ var cameraTarget: Vector3
 var targetZoom: float
 
 var isDragging = false
-var dragMoved = false
-var dragStartScreen: Vector2
 var dragAnchor: Vector3
 
 static var Instance: MainCamera
@@ -25,6 +23,7 @@ func _ready() -> void:
 	targetZoom = size
 	cameraTarget = position
 	position = Vector3(-1000, position.y, -1000)
+	add_child(CameraMotionBlur.new())
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a):
 		var actor = TurnManager.Instance.activeActor
 		if actor != null:
@@ -45,11 +44,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		targetZoom = clampf(targetZoom - zoomStep, zoomMin, zoomMax)
 	elif button.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 		targetZoom = clampf(targetZoom + zoomStep, zoomMin, zoomMax)
-	elif button.button_index == MOUSE_BUTTON_LEFT:
-		dragMoved = false
+	elif button.button_index == MOUSE_BUTTON_MIDDLE:
 		if canDrag():
 			isDragging = true
-			dragStartScreen = button.position
 			dragAnchor = groundPoint(button.position)
 
 func canDrag() -> bool:
@@ -57,8 +54,7 @@ func canDrag() -> bool:
 		return false
 	if TurnManager.Instance.activeFaction != Actor.PlayerFaction:
 		return false
-	var actor = TurnManager.Instance.activePlayerActor
-	return actor != null and actor.Skills.SelectedSkill == null
+	return TurnManager.Instance.activePlayerActor != null
 
 func groundPoint(screenPos: Vector2) -> Vector3:
 	var hit: Vector3 = Plane(Vector3.UP, 0.0).intersects_ray(project_ray_origin(screenPos), project_ray_normal(screenPos))
@@ -69,15 +65,10 @@ func groundPoint(screenPos: Vector2) -> Vector3:
 func updateDrag() -> void:
 	if not isDragging:
 		return
-	if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+	if not Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE):
 		isDragging = false
 		return
-	var mousePos = get_viewport().get_mouse_position()
-	if not dragMoved and mousePos.distance_to(dragStartScreen) > 4.0:
-		dragMoved = true
-	if not dragMoved:
-		return
-	var current = groundPoint(mousePos)
+	var current = groundPoint(get_viewport().get_mouse_position())
 	cameraTarget.x = position.x + dragAnchor.x - current.x
 	cameraTarget.z = position.z + dragAnchor.z - current.z
 
@@ -89,6 +80,7 @@ func _process(delta: float) -> void:
 	var isPlayerTurn = TurnManager.Instance.activeFaction == Actor.PlayerFaction
 	updateDrag()
 
+	var isMovingKeyboard = false
 	if lockedTarget:
 		cameraTarget = lockedTarget.global_position
 	elif isPlayerTurn:
@@ -101,20 +93,25 @@ func _process(delta: float) -> void:
 			movementVector.x -= 1
 		if Input.is_key_pressed(KEY_D):
 			movementVector.x += 1
-		movementVector = movementVector.normalized()
+		movementVector = movementVector.normalized() * 1.2
 		cameraTarget += movementVector * delta * size
+		if movementVector.length() > 0:
+			isMovingKeyboard = true
 	elif TurnManager.Instance.activeActor:
 		cameraTarget = TurnManager.Instance.activeActor.global_position
 
 	cameraTarget.x = clampf(cameraTarget.x, offsetRangeMinX, offsetRangeMaxX)
 	cameraTarget.z = clampf(cameraTarget.z, offsetRangeMinZ, offsetRangeMaxZ)
 	var targetPosition = Vector3(cameraTarget.x, position.y, cameraTarget.z)
-	if isDragging and dragMoved:
-		var lerpSpeed = 50.0
-		position = position.lerp(targetPosition, delta * lerpSpeed)
+	if isMovingKeyboard:
+		var lerpSpeed = 200.0
+		position = position.lerp(targetPosition, minf(delta * lerpSpeed, 1.0))
+	elif isDragging:
+		var lerpSpeed = 200.0
+		position = position.lerp(targetPosition, minf(delta * lerpSpeed, 1.0))
 	else:
 		var lerpSpeed = 12.0 if isPlayerTurn and not lockedTarget else 5.0
-		position = position.lerp(targetPosition, delta * lerpSpeed)
+		position = position.lerp(targetPosition, minf(delta * lerpSpeed, 1.0))
 
 static var lockedTarget: Node3D
 static func lock(node: Node3D):

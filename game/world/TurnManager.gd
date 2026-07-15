@@ -135,24 +135,7 @@ func activateWorldActor(actor: Actor) -> void:
 	activeWorldActor = actor
 	CurrentActorChanged.emit(activeWorldActor, previousActor)
 
-func trySelectHoveredAlly() -> void:
-	if activeFaction != Actor.PlayerFaction:
-		return
-	if activePlayerActor != null and activePlayerActor.Skills.SelectedSkill != null:
-		return
-	if MainCamera.Instance != null and MainCamera.Instance.dragMoved:
-		return
-	if Actor.Repository.Hovered.List.is_empty():
-		return
-	var index = playerControlledActors.find(Actor.Repository.Hovered.List[0])
-	if index < 0:
-		return
-	activatePlayerActorByHotkey(index)
-
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_released():
-		trySelectHoveredAlly()
-
 	if event.is_action_pressed("endTurn"):
 		endPlayerTurn()
 
