@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://viu42e21g5k3"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_p66ss"]
+
+[resource]
+script = ExtResource("1_p66ss")
+name = "Passive"
+category = "Keyword"
+description = "An effect that triggers automatically without explicit action.
+
+Passive ability effects do not trigger while the ability is on cooldown."
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

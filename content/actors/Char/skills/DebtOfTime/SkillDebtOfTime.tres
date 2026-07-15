@@ -7,7 +7,11 @@
 script = ExtResource("1_mmpl8")
 Name = "Debt of Time"
 Category = 3
-Description = "Turn time itself into a weapon. Target all enemies in an area. For each combined AP they have, reduce cooldown on your left-most ability on cooldown by 1 and drain 1 AP from the enemy. Stop when no abilities other than this one are on cooldown, or when all enemies have no AP left."
+Description = "Drain [color=orange]1[/color] action point from each enemy in a target area, one at a time. Each point drained reduces the cooldown of your left-most ability on cooldown by [color=orange]1[/color].
+
+Ends when no other ability is on cooldown, or when the enemies are out of AP.
+
+[i]Turn time itself into a weapon.[/i]"
 IconTexture = ExtResource("1_0hhfb")
 ManaCost = 2
 Cooldown = 2

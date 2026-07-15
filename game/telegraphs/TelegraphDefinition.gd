@@ -56,6 +56,9 @@ signal targetsChanged(targets: Array[Actor])
 @abstract func Load(skill: Skill) -> void
 var ParentSkill: Skill
 
+func coerce() -> TelegraphDefinition:
+	return self
+
 func addValidator(filter: func(Telegraph) -> bool) -> TelegraphDefinition:
 	Validators.push_back(filter)
 	return self

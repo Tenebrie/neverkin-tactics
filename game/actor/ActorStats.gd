@@ -42,8 +42,9 @@ func _parentReady() -> void:
 
 #region Health
 var healthDamageTaken: int = 0
+var healthMaximumDamageTaken: int = 0
 var healthMaximum: int:
-	get: return parent.definition.healthMaximum
+	get: return parent.definition.healthMaximum - healthMaximumDamageTaken
 var healthHumanityThreshold: int:
 	get: return parent.definition.healthHumanityThreshold
 
@@ -59,6 +60,11 @@ func dealDamage(damage: DamageInstance):
 	if healthCurrent <= 0:
 		parent.Destroy()
 	damageTaken.emit(damage)
+	healthChanged.emit(healthCurrent)
+
+func reduceHealthMaximum(value: int):
+	healthMaximumDamageTaken += value
+	healthDamageTaken -= mini(healthDamageTaken, value)
 	healthChanged.emit(healthCurrent)
 
 func dealSkillDamage(targets: Skill.TargetData):
