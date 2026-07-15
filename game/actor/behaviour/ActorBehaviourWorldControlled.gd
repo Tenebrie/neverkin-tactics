@@ -71,6 +71,7 @@ func _parentReady() -> void:
 		if actor.faction != parent.faction:
 			updateRanking()
 	)
+	TurnManager.Instance.TurnChanged.connect(updateRanking)
 
 func getGrudges(actor: Actor) -> Array[SkillGrudge]:
 	if WeightGrudges == 0:

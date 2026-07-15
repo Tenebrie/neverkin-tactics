@@ -394,12 +394,22 @@ class ShotContext:
 			return Vector2(to.x - from.x, to.z - from.z).length()
 
 static func scoreSkillUsable(shot: ShotContext, skill: SkillDefinition) -> float:
-	if shot.flatDistance > skill.TargetingMaxRange + shot.shooter.physicalSize + shot.target.physicalSize:
+	var reach = skill.TargetingMaxRange + shot.shooter.physicalSize + shot.target.physicalSize
+	if skill.BehaviourTargetsGround:
+		reach = skill.TargetingMaxRange + groundSkillBlastRadius(skill) + shot.target.physicalSize
+	if shot.flatDistance > reach:
 		return 0.0
 	if skill.BehaviourRequireLineOfSight:
 		if not hasLineOfSight(shot):
 			return 0.0
 	return skill.BehaviourUsagePreference
+
+static func groundSkillBlastRadius(skill: SkillDefinition) -> float:
+	var out = 0.0
+	for telegraph in skill.telegraphs:
+		if telegraph.HealthThreat > 0 and telegraph.Shape == Telegraph.Shape.Circle:
+			out = maxf(out, telegraph.CircleRadius)
+	return out
 
 static func hasLineOfSight(shot: ShotContext) -> bool:
 	var query = PhysicsFieldRaycastQuery.new()
@@ -451,7 +461,7 @@ static func findAllies(actor: Actor) -> Array[Actor]:
 			continue
 		if not ActorUtils.isAlliedTo(other, actor):
 			continue
-		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.physicalSize):
+		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.physicalSize + other.physicalSize):
 			result.push_back(other)
 	return result
 
@@ -462,7 +472,7 @@ static func findEnemies(actor: Actor) -> Array[Actor]:
 			continue
 		if not ActorUtils.isHostileTo(other, actor):
 			continue
-		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.physicalSize):
+		if NavigationUtils.isPointEverReachable(other.navigator.agent.get_navigation_map(), other.global_position, actor.physicalSize + other.physicalSize):
 			result.push_back(other)
 	return result
 

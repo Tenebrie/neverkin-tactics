@@ -6,8 +6,11 @@
 [resource]
 script = ExtResource("2_u1iji")
 Name = "Knife Stab"
-GrudgeString = "$They stabbed me"
 IconTexture = ExtResource("1_4qavi")
-TargetingMaxRange = 0.75
+GrudgeString = "$They stabbed me"
+ChargesCost = null
+ChargesMaximum = null
+Cooldown = null
+TargetingMaxRange = 1.0
 BehaviourRequireLineOfSight = false
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

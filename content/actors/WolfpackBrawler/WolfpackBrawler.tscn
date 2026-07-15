@@ -28,6 +28,9 @@ shape = SubResource("CylinderShape3D_c8p40")
 
 [node name="BehaviourBrawler" type="Node" parent="." index="12" unique_id=1101268705]
 script = ExtResource("4_lwem1")
+aggroWeightHighHealth = 1.0
+aggroWeightThreat = 5.0
+aggroWeightProximity = 1.0
 WeightCover = 0.0
 WeightHasShot = 3.0
 WeightAvoidLineOfSight = 0.05

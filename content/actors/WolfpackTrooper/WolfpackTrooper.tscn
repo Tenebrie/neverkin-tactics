@@ -28,4 +28,6 @@ shape = SubResource("CylinderShape3D_1q2ve")
 
 [node name="BehaviourTrooper" type="Node" parent="." index="12" unique_id=1979767382]
 script = ExtResource("4_mmrqk")
+aggroWeightLowHealth = 1.0
+aggroWeightThreat = 5.0
 WeightAvoidMeleeRange = 3.0

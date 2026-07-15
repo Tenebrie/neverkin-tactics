@@ -86,12 +86,13 @@ func tryAttack(target: Actor) -> TurnAction:
 	if not target or target.isDead:
 		return null
 
-	var dist = ActorUtils.flatDistanceBetweenActors(parent, target)
 	var pistolRange = parent.Skills.Get(SkillPistolShot).definition.TargetingMaxRange
-	var grenadeRange = parent.Skills.Get(SkillFragGrenade).definition.TargetingMaxRange
-	if dist < pistolRange and ActorUtils.hasLineOfSight(parent, target):
+	if ActorUtils.flatDistanceBetweenActors(parent, target) < pistolRange and ActorUtils.hasLineOfSight(parent, target):
 		return TurnAction.UseSkillOnActor(SkillPistolShot, target)
-	elif dist < grenadeRange:
+
+	var grenadeDefinition = parent.Skills.Get(SkillFragGrenade).definition
+	var grenadeReach = grenadeDefinition.TargetingMaxRange + BehaviourUtils.groundSkillBlastRadius(grenadeDefinition) + target.physicalSize
+	if ActorUtils.flatDistanceBetween(parent, target) < grenadeReach:
 		return TurnAction.UseSkillOnActor(SkillFragGrenade, target)
 	return null
 
