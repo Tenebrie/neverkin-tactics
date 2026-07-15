@@ -27,4 +27,4 @@ static func isPointEverReachable(mapRid: RID, point: Vector3, physicalSize: floa
 	var closestPoint = NavigationServer3D.map_get_closest_point(mapRid, point)
 	var delta = closestPoint - point
 	delta.y = 0.0
-	return delta.length_squared() <= physicalSize * 2.5
+	return delta.length_squared() <= pow(physicalSize * 2.5, 2)

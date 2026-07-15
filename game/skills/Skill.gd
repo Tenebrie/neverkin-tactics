@@ -106,19 +106,12 @@ var ChargesRequired:
 
 func PerformCast(targets: TargetData) -> void:
 	MessageLog.PrintActorMessage(definition.Name, parent)
-	_emitSkillEvent([beforeCast, SignalBus.beforeCast], targets)
+	SignalUtils.emitAsync([beforeCast, SignalBus.beforeCast], targets)
 	await _cast(targets)
-	_emitSkillEvent([afterCast, SignalBus.afterCast], targets)
+	SignalUtils.emitAsync([afterCast, SignalBus.afterCast], targets)
 
 func _cast(_targets: TargetData) -> void:
 	pass
-
-func _emitSkillEvent(signals: Array[Signal], targets: TargetData):
-	for signalToEmit in signals:
-		var connections = signalToEmit.get_connections()
-		for connection in connections:
-			var callable = connection["callable"]
-			await callable.call(targets)
 
 func StartSequence() -> Sequencer:
 	return Sequencer.Start(self)

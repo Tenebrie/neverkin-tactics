@@ -9,7 +9,9 @@ func _ready() -> void:
 
 func rebuildPortraits() -> void:
 	while portraitContainer.get_child_count() > 0:
-		portraitContainer.remove_child(portraitContainer.get_child(0))
+		var portrait = portraitContainer.get_child(0)
+		portraitContainer.remove_child(portrait)
+		portrait.queue_free()
 
 	for i in TurnManager.Instance.playerControlledActors.size():
 		var actor = TurnManager.Instance.playerControlledActors[i]

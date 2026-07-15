@@ -1,6 +1,6 @@
 @tool
 extends Node3D
-class_name SkillPistolShotEffect
+class_name SkillInfusedWeaponShotEffect
 
 func Play(target: Vector3, duration: float = 0.2) -> void:
 	createSwipeTrail(Vector3.ZERO, target, 0, duration)

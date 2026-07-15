@@ -228,7 +228,7 @@ static func evaluateCoverScoreAtLocation(task: MapTask, candidate: Vector3) -> f
 		if adjustedCoverValue >= minWallValue:
 			continue
 		var minimalDistanceSquared = pow(wall.boundingCircleRadius + wall.boundingCircleRadius, 2)
-		if wall.globalPosition.distance_to(candidate) > minimalDistanceSquared:
+		if wall.globalPosition.distance_squared_to(candidate) > minimalDistanceSquared:
 			continue
 		for segment in wall.segmentPositions:
 			if segment.distance_squared_to(candidate) < threshold:
@@ -317,8 +317,8 @@ static func evaluateLineOfSightScoreAtLocation(task: MapTask, candidate: Vector3
 
 	## Enemies shooting at the agent
 	for enemy in task.threats:
-		if enemy.threat <= 0.0 or task.weightHasShot == 0.0:
-			break
+		if enemy.threat <= 0.0 or task.weightAvoidLineOfSight == 0.0:
+			continue
 		currentShot.from = enemy.globalPosition
 		currentShot.to = candidate
 		currentShot.shooter = enemy

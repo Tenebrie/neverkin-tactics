@@ -169,7 +169,7 @@ class Repository:
 
 		func Register(actor: Actor):
 			var index = List.find(actor)
-			if index > 0:
+			if index >= 0:
 				return
 			List.push_back(actor)
 

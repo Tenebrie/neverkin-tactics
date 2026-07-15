@@ -80,7 +80,7 @@ func advanceTurn():
 	await SignalUtils.emitAsync([BeforeFactionTurnEnded, FactionTurnEnded], activeFaction)
 	activeFaction = (activeFaction + 1) as Actor.Faction
 	if activeFaction >= Actor.Faction.size() - 1:
-		activeFaction = Actor.PlayerFaction
+		activeFaction = Actor.Faction.Kin
 	var factionHasActors = Actor.Repository.Alive.List.any(func(a):
 		return a.stats.Faction == activeFaction and a.HasComponent(ActorBehaviour)
 	)

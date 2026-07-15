@@ -17,6 +17,8 @@ func connectSignals(actor: Actor) -> void:
 	rebuildItems()
 
 func rebuildItems() -> void:
+	if not TurnManager.Instance.activePlayerActor:
+		return
 	var controller = TurnManager.Instance.activePlayerActor.Skills
 	for i in range(8):
 		var newItem: SkillBarItem

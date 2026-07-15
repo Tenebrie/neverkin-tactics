@@ -22,7 +22,7 @@ func _ready() -> void:
 		Duration = definition.durationTurns
 
 	TurnManager.Instance.FactionTurnEnded.connect(func(faction):
-		if faction != parent.faction:
+		if faction != parent.faction or Duration <= -1:
 			return
 
 		Duration -= 1

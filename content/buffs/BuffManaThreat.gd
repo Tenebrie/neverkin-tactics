@@ -6,6 +6,7 @@ static func AddToActor(actor: Actor, value: int, buffOwner: Node):
 		return
 
 	var node = BuffManaThreat.new()
+	node.Duration = 1
 	node.Owner = buffOwner
 	node.Intensity = value
 	actor.buffs.Add(node)
