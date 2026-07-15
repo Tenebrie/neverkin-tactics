@@ -116,6 +116,7 @@ func activatePlayerActorByHotkey(index: int) -> void:
 
 	var selectedActor = playerControlledActors[index]
 	if selectedActor == null or activePlayerActor == selectedActor:
+		MainCamera.Instance.snapToTarget(selectedActor.global_position)
 		return
 
 	if selectedActor.isDead:

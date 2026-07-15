@@ -23,8 +23,8 @@ func _ready() -> void:
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a):
 		var actor = TurnManager.Instance.activeActor
 		if actor != null:
-			snapToTarget(actor.global_position)
 			if position.distance_to(cameraTarget) > 50:
+				snapToTarget(actor.global_position)
 				position = cameraTarget
 	)
 
