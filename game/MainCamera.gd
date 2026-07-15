@@ -13,6 +13,11 @@ extends Camera3D
 var cameraTarget: Vector3
 var targetZoom: float
 
+var isDragging = false
+var dragMoved = false
+var dragStartScreen: Vector2
+var dragAnchor: Vector3
+
 static var Instance: MainCamera
 
 func _ready() -> void:
@@ -40,6 +45,41 @@ func _unhandled_input(event: InputEvent) -> void:
 		targetZoom = clampf(targetZoom - zoomStep, zoomMin, zoomMax)
 	elif button.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 		targetZoom = clampf(targetZoom + zoomStep, zoomMin, zoomMax)
+	elif button.button_index == MOUSE_BUTTON_LEFT:
+		dragMoved = false
+		if canDrag():
+			isDragging = true
+			dragStartScreen = button.position
+			dragAnchor = groundPoint(button.position)
+
+func canDrag() -> bool:
+	if lockedTarget != null:
+		return false
+	if TurnManager.Instance.activeFaction != Actor.PlayerFaction:
+		return false
+	var actor = TurnManager.Instance.activePlayerActor
+	return actor != null and actor.Skills.SelectedSkill == null
+
+func groundPoint(screenPos: Vector2) -> Vector3:
+	var hit: Vector3 = Plane(Vector3.UP, 0.0).intersects_ray(project_ray_origin(screenPos), project_ray_normal(screenPos))
+	if hit == null:
+		return Vector3(cameraTarget.x, 0.0, cameraTarget.z)
+	return hit
+
+func updateDrag() -> void:
+	if not isDragging:
+		return
+	if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		isDragging = false
+		return
+	var mousePos = get_viewport().get_mouse_position()
+	if not dragMoved and mousePos.distance_to(dragStartScreen) > 4.0:
+		dragMoved = true
+	if not dragMoved:
+		return
+	var current = groundPoint(mousePos)
+	cameraTarget.x = position.x + dragAnchor.x - current.x
+	cameraTarget.z = position.z + dragAnchor.z - current.z
 
 func _process(delta: float) -> void:
 	size = lerpf(size, targetZoom, delta * 10.0)
@@ -47,6 +87,7 @@ func _process(delta: float) -> void:
 		return
 
 	var isPlayerTurn = TurnManager.Instance.activeFaction == Actor.PlayerFaction
+	updateDrag()
 
 	if lockedTarget:
 		cameraTarget = lockedTarget.global_position
@@ -68,8 +109,12 @@ func _process(delta: float) -> void:
 	cameraTarget.x = clampf(cameraTarget.x, offsetRangeMinX, offsetRangeMaxX)
 	cameraTarget.z = clampf(cameraTarget.z, offsetRangeMinZ, offsetRangeMaxZ)
 	var targetPosition = Vector3(cameraTarget.x, position.y, cameraTarget.z)
-	var lerpSpeed = 12.0 if isPlayerTurn and not lockedTarget else 5.0
-	position = position.lerp(targetPosition, delta * lerpSpeed)
+	if isDragging and dragMoved:
+		var lerpSpeed = 50.0
+		position = position.lerp(targetPosition, delta * lerpSpeed)
+	else:
+		var lerpSpeed = 12.0 if isPlayerTurn and not lockedTarget else 5.0
+		position = position.lerp(targetPosition, delta * lerpSpeed)
 
 static var lockedTarget: Node3D
 static func lock(node: Node3D):

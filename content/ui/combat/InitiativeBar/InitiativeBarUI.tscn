@@ -19,10 +19,12 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 96.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 16
 
 [node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer" unique_id=758258779]
 layout_mode = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="PortraitContainer" type="HBoxContainer" parent="MarginContainer/HFlowContainer" unique_id=1137474453]
