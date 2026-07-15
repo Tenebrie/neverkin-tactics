@@ -5,6 +5,9 @@ const BEAM_WIDTH: float = 0.1
 
 const gridSize = 0.5
 
+## Weight of attack opportunities against non-focused targets
+const OPPORTUNISM: float = 0.25
+
 static var WEIGHT_BLUR_ITERATIONS = 3
 
 #region Cover Check
@@ -28,6 +31,7 @@ class MapTask:
 	var weightOutOfFightMinDistance = 10.0
 
 	var actor: ActorData
+	var focusTarget: ActorData
 	var allies: Array[ActorData]
 	var targets: Array[ActorData]
 	var threats: Array[ActorData]
@@ -73,16 +77,16 @@ class MapTask:
 		for threat in threats:
 			task.threats.push_back(ActorData.collect(threat))
 
-		## Enemies this actor will attack (sorted by aggro)
-		var targets = threats
+		## Enemies this actor will attack
+		var focusedActor: Actor = null
 		if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
-			targets.sort_custom(func(a, b):
-				var indexOfA = behaviour.Ranking.find_custom(func(rank: ActorBehaviourWorldControlled.RankedTarget): return rank.Target == a)
-				var indexOfB = behaviour.Ranking.find_custom(func(rank: ActorBehaviourWorldControlled.RankedTarget): return rank.Target == b)
-				return indexOfA < indexOfB and indexOfA != -1
-			)
-		for target in targets:
-			task.targets.push_back(ActorData.collect(target))
+			focusedActor = behaviour.FocusedTarget
+		for target in threats:
+			var data = ActorData.collect(target)
+			if target == focusedActor:
+				data.isFocus = true
+				task.focusTarget = data
+			task.targets.push_back(data)
 
 		return task
 
@@ -90,6 +94,7 @@ class MapTask:
 		var threat: float
 		var globalPosition: Vector3
 		var physicalSize: float
+		var isFocus: bool = false
 		var ignoredWalls: Array[PhysicsFieldObstacle]
 
 		static func collect(actor: Actor) -> ActorData:
@@ -112,20 +117,33 @@ class MapTask:
 		func _to_string() -> String:
 			return "<MapTask.WallData %s>"%wallName
 
-static func createActorValueMap(actor: Actor) -> FloatFieldMap:
+class ActorValueMaps:
+	var combined: FloatFieldMap
+	var focusShot: FloatFieldMap
+
+static func createActorValueMaps(actor: Actor) -> ActorValueMaps:
 	var task = await MapTask.collect(actor)
 
 	var timer = PerformanceUtils.startMeasure("[behaviour] Created value map for %s"%actor.name)
 	var coverPromise = Promise.run(func(): return _dispatchCreateActorCoverMapTask(task))
 	var lineOfSightPromise = Promise.run(func(): return _dispatchCreateActorLineOfSightMapTask(task))
 	var proximityPromise = Promise.run(func(): return _dispatchCreateActorProximityMapTask(task))
+	var focusShotPromise = Promise.run(func(): return _dispatchCreateFocusShotMapTask(task))
 
 	var coverMap = await coverPromise.toResolve() as FloatFieldMap
 	var lineOfSightMap = await lineOfSightPromise.toResolve() as FloatFieldMap
 	var proximityMap = await proximityPromise.toResolve() as FloatFieldMap
+	var focusShotMap = await focusShotPromise.toResolve() as FloatFieldMap
 	timer.endMeasure()
 
-	return coverMap.leftMerge(lineOfSightMap).leftMerge(proximityMap)
+	var maps = ActorValueMaps.new()
+	maps.combined = coverMap.leftMerge(lineOfSightMap).leftMerge(proximityMap)
+	maps.focusShot = focusShotMap
+	return maps
+
+static func createActorValueMap(actor: Actor) -> FloatFieldMap:
+	var maps = await createActorValueMaps(actor)
+	return maps.combined
 
 static func createActorCoverMap(actor: Actor) -> FloatFieldMap:
 	var task = await MapTask.collect(actor)
@@ -154,6 +172,31 @@ static func _dispatchCreateActorCoverMapTask(task: MapTask) -> FloatFieldMap:
 		var cell = toCellCoordinates(point, task.gridSize)
 		values[cell] = coverScore
 	return _produceFloatFieldMap(task, values)
+
+static func _dispatchCreateFocusShotMapTask(task: MapTask) -> FloatFieldMap:
+	var values: Dictionary[Vector2i, float]
+	var scored: Array[FloatFieldMap.ScoredPoint] = []
+	var currentShot = ShotContext.new()
+	currentShot.task = task
+	currentShot.shooter = task.actor
+	for point in task.navmeshSample.points:
+		var cell = toCellCoordinates(point, task.gridSize)
+		var value = 0.0
+		if task.focusTarget:
+			currentShot.from = point
+			currentShot.to = task.focusTarget.globalPosition
+			currentShot.target = task.focusTarget
+			currentShot.ignoredWalls = PropWall.GetIgnoredWallRidsAt(task.ignorableWalls, point, task.actor.physicalSize)
+			for skill in task.actorOffensiveSkills:
+				if scoreSkillUsable(currentShot, skill) > 0.0:
+					value = 1.0
+					break
+		values[cell] = value
+		scored.push_back(FloatFieldMap.ScoredPoint.new(cell, point, value))
+	scored.sort_custom(func(a, b):
+		return a.score > b.score
+	)
+	return FloatFieldMap.Build(values, task.navmeshSample.points, task.gridSize, scored)
 
 static func _dispatchCreateActorProximityMapTask(task: MapTask) -> FloatFieldMap:
 	var values: Dictionary[Vector2i, float]
@@ -274,6 +317,7 @@ static func evaluateProximityScoreAtLocation(task: MapTask, candidate: Vector3) 
 	if (task.weightProximityToEnemies != 0.0 or task.weightOutOfFight != 0.0) and task.targets.size() > 0:
 		var closestEnemy: MapTask.ActorData
 		var distToClosestEnemy = INF
+		var distToFocus = INF
 		for enemy in task.targets:
 			#var dist = enemy.globalPosition.distance_to(candidate)
 			var path = NavigationUtils.getPath(task.navigationMapRid, candidate, enemy.globalPosition)
@@ -281,8 +325,13 @@ static func evaluateProximityScoreAtLocation(task: MapTask, candidate: Vector3) 
 			if dist < distToClosestEnemy:
 				closestEnemy = enemy
 				distToClosestEnemy = dist
-		var enemyScore = maxf(0.0, 1.0 - distToClosestEnemy / maxf(0.1, task.weightProximityToEnemiesFalloffMeters))
-		score += enemyScore * task.weightProximityToEnemies * closestEnemy.threat
+			if enemy.isFocus:
+				distToFocus = dist
+
+		var attractionDist = distToFocus if task.focusTarget else distToClosestEnemy
+		var attractionThreat = 1.0 if task.focusTarget else closestEnemy.threat
+		var enemyScore = maxf(0.0, 1.0 - attractionDist / maxf(0.1, task.weightProximityToEnemiesFalloffMeters))
+		score += enemyScore * task.weightProximityToEnemies * attractionThreat
 
 		var outOfFightScore = maxf(0.0, (distToClosestEnemy - task.weightOutOfFightMinDistance) / 5.0)
 		score -= outOfFightScore * task.weightOutOfFight
@@ -305,14 +354,17 @@ static func evaluateLineOfSightScoreAtLocation(task: MapTask, candidate: Vector3
 
 		var skillMax = 0.0
 		for enemy in task.targets:
-			if enemy.threat <= 0.0 or skill.BehaviourUsagePreference * enemy.threat < skillMax:
+			var priority = enemy.threat
+			if task.focusTarget:
+				priority = 1.0 if enemy.isFocus else OPPORTUNISM
+			if priority <= 0.0 or skill.BehaviourUsagePreference * priority < skillMax:
 				continue
 			currentShot.from = candidate
 			currentShot.to = enemy.globalPosition
 			currentShot.shooter = task.actor
 			currentShot.target = enemy
 			currentShot.ignoredWalls = ignoredWallsAtCandidate
-			skillMax = max(scoreSkillUsable(currentShot, skill), skillMax)
+			skillMax = max(scoreSkillUsable(currentShot, skill) * priority, skillMax)
 		score += skillMax * task.weightHasShot
 
 	## Enemies shooting at the agent
@@ -342,7 +394,7 @@ class ShotContext:
 			return Vector2(to.x - from.x, to.z - from.z).length()
 
 static func scoreSkillUsable(shot: ShotContext, skill: SkillDefinition) -> float:
-	if shot.flatDistance > skill.TargetingMaxRange + shot.shooter.physicalSize:
+	if shot.flatDistance > skill.TargetingMaxRange + shot.shooter.physicalSize + shot.target.physicalSize:
 		return 0.0
 	if skill.BehaviourRequireLineOfSight:
 		if not hasLineOfSight(shot):

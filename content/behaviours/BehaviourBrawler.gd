@@ -44,52 +44,64 @@ func planMovementAction() -> TurnAction:
 	var adjacentTargetCount = 0
 	for rankedTarget in Ranking:
 		var target = rankedTarget.Target
-		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
-		if dist <= SkillRoundhouseSlash.AttackArea + parent.physicalSize:
+		if ActorUtils.flatDistanceBetweenActors(parent, target) <= SkillRoundhouseSlash.AttackArea:
 			adjacentTargetCount += 1
 
 	if adjacentTargetCount >= 2:
 		return TurnAction.UseSkillOnSelf(SkillRoundhouseSlash)
 
-	var coverMap = await BehaviourUtils.createActorValueMap(parent)
-	if coverMap.points.size() == 0:
+	var maps = await BehaviourUtils.createActorValueMaps(parent)
+	var valueMap = maps.combined
+	if valueMap.points.size() == 0:
 		printerr("No points in reach")
 		return TurnAction.Skip()
 
-	var bestPointIndex = coverMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
+	var bestOverallIndex = valueMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
 		return ActorUtils.isPointReachable(parent, point.point, 1)
 	)
-	if bestPointIndex == -1:
+	if bestOverallIndex == -1:
 		printerr("No points in reach")
 		return TurnAction.Skip()
-	var currentCover = coverMap.read(parent.global_position)
-	var bestPoint = coverMap.scoredPoints[bestPointIndex].point
-	var bestCover = coverMap.read(bestPoint)
+	var bestOverall = valueMap.scoredPoints[bestOverallIndex]
+	var currentScore = valueMap.read(parent.global_position)
 
-	if currentCover >= bestCover and adjacentTargetCount >= 1:
+	if FocusedTarget:
+		var bestShotIndex = valueMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
+			return maps.focusShot.read(point.point) > 0.0 and ActorUtils.isPointReachable(parent, point.point, 1)
+		)
+		if bestShotIndex != -1:
+			var bestShot = valueMap.scoredPoints[bestShotIndex]
+			var currentHasShot = maps.focusShot.read(parent.global_position) > 0.0
+			if currentHasShot and bestShot.score <= currentScore:
+				return planCombatAction()
+			return TurnAction.MoveTo(bestShot.point)
+
+	if currentScore >= bestOverall.score and adjacentTargetCount >= 1:
 		return TurnAction.UseSkillOnSelf(SkillRoundhouseSlash)
-	elif currentCover >= bestCover:
+	elif currentScore >= bestOverall.score:
 		return TurnAction.UseSkillOnSelf(SkillHunkerDown)
 
-	return TurnAction.MoveTo(bestPoint)
+	return TurnAction.MoveTo(bestOverall.point)
+
+func tryAttack(target: Actor) -> TurnAction:
+	if not target or target.isDead:
+		return null
+	var knifeRange = parent.Skills.Get(SkillKnifeSlash).definition.TargetingMaxRange
+	if ActorUtils.flatDistanceBetweenActors(parent, target) < knifeRange:
+		return TurnAction.UseSkillOnActor(SkillKnifeSlash, target)
+	return null
 
 func planCombatAction() -> TurnAction:
-	var adjacentTargetCount = 0
-	for rankedTarget in Ranking:
-		var target = rankedTarget.Target
-		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
-		if dist <= parent.Skills.Get(SkillKnifeSlash).definition.TargetingMaxRange + parent.physicalSize:
-			adjacentTargetCount += 1
-
-	if adjacentTargetCount == 0:
-		return TurnAction.UseSkillOnSelf(SkillStim)
+	var focusAttack = tryAttack(FocusedTarget)
+	if focusAttack:
+		return focusAttack
 
 	for rankedTarget in Ranking:
-		var target = rankedTarget.Target
+		if rankedTarget.Target == FocusedTarget:
+			continue
+		var fallbackAttack = tryAttack(rankedTarget.Target)
+		if fallbackAttack:
+			RefocusOn(rankedTarget.Target, "Target of opportunity!")
+			return fallbackAttack
 
-		var dist = ActorUtils.flatDistanceBetweenActors(parent, target)
-		var knifeRange = parent.Skills.Get(SkillKnifeSlash).definition.TargetingMaxRange
-		if dist < knifeRange:
-			return TurnAction.UseSkillOnActor(SkillKnifeSlash, target)
-
-	return TurnAction.Skip()
+	return TurnAction.UseSkillOnSelf(SkillStim)

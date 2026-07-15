@@ -8,6 +8,8 @@ const ENGAGEMENT_REFERENCE_METERS: float = 20.0
 @export var aggroWeightHighHealth: float = 1.0
 @export var aggroWeightThreat: float = 2.0
 @export var aggroWeightProximity: float = 1.0
+## How much combined map score this actor is willing to give up for a shot at the focus target
+@export var focusCommitmentMargin: float = 3.0
 
 func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue:
 	var effectiveMax = maxi(actor.stats.healthMaximum - actor.stats.healthHumanityThreshold, 1)
@@ -41,38 +43,69 @@ func PlanTurnActions() -> Array[TurnAction]:
 	return [planCombatAction()]
 
 func planMovementAction() -> TurnAction:
-	var coverMap = await BehaviourUtils.createActorValueMap(parent)
-	if coverMap.points.size() == 0:
+	var maps = await BehaviourUtils.createActorValueMaps(parent)
+	var valueMap = maps.combined
+	if valueMap.points.size() == 0:
 		printerr("No points in reach")
 		return TurnAction.Skip()
 
-	var bestPointIndex = coverMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
+	var bestOverallIndex = valueMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
 		return ActorUtils.isPointReachable(parent, point.point, 1)
 	)
-	if bestPointIndex == -1:
+	if bestOverallIndex == -1:
 		printerr("No points in reach")
 		return TurnAction.Skip()
-	var bestPoint = coverMap.scoredPoints[bestPointIndex].point
-	var currentCover = coverMap.read(parent.global_position)
-	var bestCover = coverMap.read(bestPoint)
+	var bestOverall = valueMap.scoredPoints[bestOverallIndex]
+	var currentScore = valueMap.read(parent.global_position)
 
-	if bestCover <= currentCover:
-		return TurnAction.UseSkillOnSelf(SkillHunkerDown)
+	if not FocusedTarget:
+		if bestOverall.score <= currentScore:
+			return TurnAction.UseSkillOnSelf(SkillHunkerDown)
+		return TurnAction.MoveTo(bestOverall.point)
 
-	return TurnAction.MoveTo(bestPoint)
+	var bestShotIndex = valueMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
+		return maps.focusShot.read(point.point) > 0.0 and ActorUtils.isPointReachable(parent, point.point, 1)
+	)
+
+	if bestShotIndex == -1 or bestOverall.score - valueMap.scoredPoints[bestShotIndex].score > focusCommitmentMargin:
+		var pistolRange = parent.Skills.Get(SkillPistolShot).definition.TargetingMaxRange
+		var approaching = ActorUtils.flatDistanceBetweenActors(parent, FocusedTarget) > pistolRange + parent.movementSpeedPerAction
+		if not approaching:
+			MessageLog.PrintActorMessage("Pinned down!", parent)
+		if bestOverall.score <= currentScore:
+			return TurnAction.UseSkillOnSelf(SkillHunkerDown)
+		return TurnAction.MoveTo(bestOverall.point)
+
+	var bestShot = valueMap.scoredPoints[bestShotIndex]
+	var currentHasShot = maps.focusShot.read(parent.global_position) > 0.0
+	if currentHasShot and bestShot.score <= currentScore:
+		return planCombatAction()
+	return TurnAction.MoveTo(bestShot.point)
+
+func tryAttack(target: Actor) -> TurnAction:
+	if not target or target.isDead:
+		return null
+
+	var dist = ActorUtils.flatDistanceBetweenActors(parent, target)
+	var pistolRange = parent.Skills.Get(SkillPistolShot).definition.TargetingMaxRange
+	var grenadeRange = parent.Skills.Get(SkillFragGrenade).definition.TargetingMaxRange
+	if dist < pistolRange and ActorUtils.hasLineOfSight(parent, target):
+		return TurnAction.UseSkillOnActor(SkillPistolShot, target)
+	elif dist < grenadeRange:
+		return TurnAction.UseSkillOnActor(SkillFragGrenade, target)
+	return null
 
 func planCombatAction() -> TurnAction:
-	for rankedTarget in Ranking:
-		var target = rankedTarget.Target
-		if target.isDead:
-			continue
+	var focusAttack = tryAttack(FocusedTarget)
+	if focusAttack:
+		return focusAttack
 
-		var dist = ActorUtils.flatDistanceBetween(parent, target) - parent.definition.physicalSize
-		var pistolRange = parent.Skills.Get(SkillPistolShot).definition.TargetingMaxRange
-		var grenadeRange = parent.Skills.Get(SkillFragGrenade).definition.TargetingMaxRange
-		if dist < pistolRange and ActorUtils.hasLineOfSight(parent, target):
-			return TurnAction.UseSkillOnActor(SkillPistolShot, target)
-		elif dist < grenadeRange:
-			return TurnAction.UseSkillOnActor(SkillFragGrenade, target)
+	for rankedTarget in Ranking:
+		if rankedTarget.Target == FocusedTarget:
+			continue
+		var fallbackAttack = tryAttack(rankedTarget.Target)
+		if fallbackAttack:
+			RefocusOn(rankedTarget.Target, "Target of opportunity!")
+			return fallbackAttack
 
 	return TurnAction.Skip()
