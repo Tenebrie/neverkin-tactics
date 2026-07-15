@@ -4,6 +4,8 @@
 [ext_resource type="FontFile" uid="uid://t3jmp4pamdks" path="res://assets/fonts/roboto/Roboto-Regular.ttf" id="2_5vghm"]
 [ext_resource type="Script" uid="uid://x71tl38kn1dg" path="res://game/ui/common/ParadoxTooltip/ParadoxTextLabel.gd" id="2_8uj5t"]
 [ext_resource type="FontFile" uid="uid://b0gkxntpe3rt4" path="res://assets/fonts/roboto/Roboto-Bold.ttf" id="3_ushq7"]
+[ext_resource type="FontFile" uid="uid://cs21bpvqax7au" path="res://assets/fonts/roboto/Roboto-BoldItalic.ttf" id="4_56782"]
+[ext_resource type="FontFile" uid="uid://n0thvbe0qdvp" path="res://assets/fonts/roboto/Roboto-Italic.ttf" id="5_v4u1t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ii06"]
 resource_local_to_scene = true
@@ -71,6 +73,8 @@ theme_override_constants/line_separation = 6
 theme_override_constants/paragraph_separation = 16
 theme_override_fonts/normal_font = ExtResource("2_5vghm")
 theme_override_fonts/bold_font = ExtResource("3_ushq7")
+theme_override_fonts/bold_italics_font = ExtResource("4_56782")
+theme_override_fonts/italics_font = ExtResource("5_v4u1t")
 theme_override_font_sizes/normal_font_size = 16
 theme_override_font_sizes/bold_font_size = 16
 bbcode_enabled = true

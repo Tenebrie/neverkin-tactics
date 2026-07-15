@@ -9,6 +9,10 @@ var targetTelegraph = TelegraphPreset.SingleActor.new()
 var selfTelegraph = TelegraphPreset.SelfCast.new()
 
 func _prepare() -> void:
+	parent.turnStarted.connect(func():
+		parent.stats.restoreMana(PassiveRegen)
+	)
+
 	selfTelegraph.Processors.push_back(TelegraphProcessor.InvisibleTint)
 	selfTelegraph.addValidator(func(_t):
 		var targetTelegraphInstance = parent.telegraphs.FindTelegraph(targetTelegraph)

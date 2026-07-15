@@ -17,7 +17,6 @@ TokenTexture = ExtResource("6_26ehw")
 AvatarTexture = ExtResource("1_780p1")
 healthMaximum = 15
 healthHumanityThreshold = 5
-ManaMaximum = 12
 ActionPointsMax = 4
 MovementSpeedPerActionPoint = 5.5
 Skills = Array[GDScript]([ExtResource("2_63lyh"), null, null, null, null, null, ExtResource("4_780p1"), ExtResource("5_68nlt")])

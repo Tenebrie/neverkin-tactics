@@ -23,23 +23,21 @@ func isInfusable() -> bool:
 	return parent.stats.manaCurrent >= 1
 
 func _cast(targets: TargetData) -> void:
-	if preparingInfuse:
-		cooldownRemaining += 1
+	if targets.infusedCast:
+		cooldownRemaining += ExtraCooldown
 
 	var buff: Buff
 	var effect = SkillSpeedControlEffect.new()
 	get_tree().root.add_child(effect)
 	effect.global_position = parent.global_position
 	effect.global_position.y += 0.5
-	var duration = 1.0
-	effect.Play(targets.actor.global_position - parent.global_position, 10, duration)
-	await get_tree().create_timer(duration).timeout
+	var effectDuration = 0.5
+	effect.Play(targets.actor.global_position - parent.global_position, 10, effectDuration)
+	await get_tree().create_timer(effectDuration).timeout
 	if ActorUtils.isAlliedTo(targets.actor, parent):
 		buff = BuffQuickened.new()
-		if preparingInfuse:
-			buff.Duration += 1
 	else:
 		buff = BuffSlowed.new()
-		if preparingInfuse:
-			buff.Duration += 1
 	targets.actor.buffs.Add(buff)
+	if targets.infusedCast:
+		buff.Duration += ExtraDuration

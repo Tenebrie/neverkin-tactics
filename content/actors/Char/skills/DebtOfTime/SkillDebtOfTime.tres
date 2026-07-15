@@ -14,6 +14,7 @@ Ends when no other ability is on cooldown, or when the enemies are out of AP.
 [i]Turn time itself into a weapon.[/i]"
 IconTexture = ExtResource("1_0hhfb")
 ManaCost = 2
-Cooldown = 2
+ActionPointCost = 2
+Cooldown = 3
 TargetingMaxRange = 5.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"
