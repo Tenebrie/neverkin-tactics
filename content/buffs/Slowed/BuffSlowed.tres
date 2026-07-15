@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BuffDefinition" format=3 uid="uid://bslmflr8e3fyw"]
+
+[ext_resource type="Script" uid="uid://tbbvo8dei2ke" path="res://game/buff/BuffDefinition.gd" id="1_i1sx3"]
+[ext_resource type="Texture2D" uid="uid://ml4xwnvsla01" path="res://content/buffs/Slowed/BuffSlowedIcon64.svg" id="1_p8vye"]
+
+[resource]
+script = ExtResource("1_i1sx3")
+name = "Slowed"
+description = "Lose %ActionPointsLost action point at the start of the turn."
+alignment = 2
+iconTexture = ExtResource("1_p8vye")
+durationTurns = 1
+stackType = 1
+metadata/_custom_type_script = "uid://tbbvo8dei2ke"

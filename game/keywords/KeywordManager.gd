@@ -86,12 +86,12 @@ func _loadResources(dirPath: String):
 		_registerFrom(pair.definitionRef, pair.scriptRef)
 
 func _registerKeyword(keyword: KeywordDefinition):
-	_pushKeyword(keyword.name, keyword)
-	_pushKeyword(keyword.name.to_lower(), keyword)
-
 	for alias in keyword.aliases:
 		_pushKeyword(alias, keyword)
 		_pushKeyword(alias.to_lower(), keyword)
+
+	_pushKeyword(keyword.name, keyword)
+	_pushKeyword(keyword.name.to_lower(), keyword)
 
 func _pushKeyword(substring: String, definition: KeywordDefinition):
 	var escaped = _escapeRegex(substring)

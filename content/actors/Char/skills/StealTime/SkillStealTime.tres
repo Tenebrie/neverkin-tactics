@@ -13,4 +13,5 @@ Cooldown of this ability becomes the sum of all cooldowns removed."
 IconTexture = ExtResource("1_uge25")
 ManaCost = 2
 Cooldown = 1
+TargetingMaxRange = 1.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

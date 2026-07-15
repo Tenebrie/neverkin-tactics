@@ -78,7 +78,9 @@ func executeSkipAction(actor: Actor):
 func executeMoveToAction(actor: Actor, params: ActorBehaviour.TurnAction.MoveToParams):
 	var path = ActorUtils.getPathTo(actor, params.point)
 	actor.actions.IssueOrder_MoveThroughPath(path)
-	await actor.actions.ActionQueue.QueueEmptied
+	var timedOut = await SignalUtils.awaitWithTimeout(actor.actions.ActionQueue.QueueEmptied, 5.0)
+	if timedOut:
+		actor.actions.IssueOrder_Stop()
 
 func executeUseSkillAction(actor: Actor, params: ActorBehaviour.TurnAction.UseSkillParams):
 	var skill = actor.Skills.Get(params.skill)

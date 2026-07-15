@@ -67,7 +67,7 @@ func updateValues():
 
 	actionPointBar.Value = actions.ActionPointsAvailable
 	actionPointBar.MaxValue = max(actions.ActionPointsMax, actions.ActionPointsAvailable)
-	actionPointBar.InhumanValue = actions.ActionPointsSavedMax
+	actionPointBar.InhumanValue = actions.ActionPointsTemporary
 	actionPointBar.ThreatValue = parent.targeting.PredictedActionPointCost + actions.ActionPointsThreatened
 	actionPointBar.PromiseValue = 0
 

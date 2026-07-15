@@ -44,21 +44,27 @@ func checkTargetsDiff() -> void:
 		if not previousSeenTargets.has(target):
 			TargetEntered.emit(target)
 			BuffHealthThreat.AddToActor(target, definition.HealthThreatSelector.call(target), self)
-			BuffManaThreat.AddToActor(target, definition.ManaThreatSelector.call(target), self)
 			BuffHealthPromise.AddToActor(target, definition.HealthPromiseSelector.call(target), self)
+			BuffManaThreat.AddToActor(target, definition.ManaThreatSelector.call(target), self)
 			BuffManaPromise.AddToActor(target, definition.ManaPromiseSelector.call(target), self)
+			BuffActionPointThreat.AddToActor(target, definition.ActionPointThreatSelector.call(target), self)
+			BuffActionPointPromise.AddToActor(target, definition.ActionPointPromiseSelector.call(target), self)
 		else:
 			BuffHealthThreat.EnsureIntensity(target, definition.HealthThreatSelector.call(target), self)
-			BuffManaThreat.EnsureIntensity(target, definition.ManaThreatSelector.call(target), self)
 			BuffHealthPromise.EnsureIntensity(target, definition.HealthPromiseSelector.call(target), self)
+			BuffManaThreat.EnsureIntensity(target, definition.ManaThreatSelector.call(target), self)
 			BuffManaPromise.EnsureIntensity(target, definition.ManaPromiseSelector.call(target), self)
+			BuffActionPointThreat.EnsureIntensity(target, definition.ActionPointThreatSelector.call(target), self)
+			BuffActionPointPromise.EnsureIntensity(target, definition.ActionPointPromiseSelector.call(target), self)
 	for target in previousSeenTargets:
 		if not current.has(target):
 			TargetExited.emit(target)
 			BuffHealthThreat.RemoveByOwner(target, self)
-			BuffManaThreat.RemoveByOwner(target, self)
 			BuffHealthPromise.RemoveByOwner(target, self)
+			BuffManaThreat.RemoveByOwner(target, self)
 			BuffManaPromise.RemoveByOwner(target, self)
+			BuffActionPointThreat.RemoveByOwner(target, self)
+			BuffActionPointPromise.RemoveByOwner(target, self)
 	if current != previousSeenTargets:
 		TargetsChanged.emit(current)
 		definition.targetsChanged.emit(current)

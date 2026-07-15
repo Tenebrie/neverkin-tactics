@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://dvcxbmp0ia4tg"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_4td2q"]
+
+[resource]
+script = ExtResource("1_4td2q")
+name = "Penetration (X)"
+category = "Keyword"
+description = "This projectile breaks through cover and walls, dealing full damage to everything it goes through.  Each obstacle reduces the remaining Penetration by a fixed value:
+
+- Low Cover: 1 Penetration
+- High Cover: 2 Penetration
+- Wall: 4 Penetration"
+aliases = Array[String](["Penetrate (1)", "Penetrate (2)", "Penetrate (3)", "Penetrate (4)", "Penetration (1)", "Penetration (2)", "Penetration (3)", "Penetration (4)"])
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

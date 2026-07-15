@@ -1,11 +1,11 @@
 extends Buff
-class_name BuffHealthPromise
+class_name BuffManaThreat
 
 static func AddToActor(actor: Actor, value: int, buffOwner: Node):
-	if not actor.buffs:
+	if not actor.buffs or value == 0:
 		return
 
-	var node = BuffHealthPromise.new()
+	var node = BuffManaThreat.new()
 	node.Duration = 1
 	node.Owner = buffOwner
 	node.Intensity = value
@@ -15,7 +15,7 @@ static func RemoveByOwner(actor: Actor, targetOwner: Node):
 	if not actor.buffs:
 		return
 	for child in actor.buffs.get_children():
-		if child is BuffHealthPromise and child.Owner == targetOwner:
+		if child is BuffManaThreat and child.Owner == targetOwner:
 			actor.buffs.Remove(child)
 
 static func EnsureIntensity(actor: Actor, value: int, buffOwner: Node):
@@ -23,7 +23,7 @@ static func EnsureIntensity(actor: Actor, value: int, buffOwner: Node):
 		return
 
 	for child in actor.buffs.get_children():
-		if child is BuffHealthPromise buff and child.Owner == buffOwner:
+		if child is BuffManaThreat buff and child.Owner == buffOwner:
 			buff.Intensity = value
 			return
 	AddToActor(actor, value, buffOwner)

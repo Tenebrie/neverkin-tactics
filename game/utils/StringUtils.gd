@@ -21,7 +21,7 @@ static func evaluateTemplate(text: String, enableColor: bool) -> String:
 
 	return text
 
-static var _templateRegex: RegEx = RegEx.create_from_string("%(?|\\{(\\w+)\\}([%m]?)|(\\w+)([%m]?))")
+static var _templateRegex: RegEx = RegEx.create_from_string("%(?|\\{(\\w+)\\}([%mt]?)|(\\w+)([%mt]?))")
 
 static func populateNodeValues(text: String, skill: Node) -> String:
 	var result = ""
@@ -43,6 +43,8 @@ static func populateNodeValues(text: String, skill: Node) -> String:
 			result += "[color=orange]%d%%[/color]" % roundi(value * 100.0)
 		elif suffix == "m":
 			result += "[color=orange]%.2fm[/color]" % value
+		elif suffix == "t":
+			result += "[color=orange]%d[/color] turn%s"%[value, "" if value == 1 else "s"]
 		elif value is int:
 			result += "[color=orange]%d[/color]" % value
 		elif value is float:
@@ -103,9 +105,10 @@ static func populateSkillValues(text: String, skill: Skill) -> String:
 	if skill.definition.ManaCost > 0.0:
 		commonLines.push_back("[color=#7777FF]$Mana Cost:[/color] %d"%skill.ManaCost)
 	if skill.definition.Cooldown > 0:
-		var cooldownPassed = skill.definition.Cooldown - skill.cooldownRemaining
-		var cooldown = "%d / %d"%[cooldownPassed, skill.definition.Cooldown] if skill.cooldownRemaining > 0 else "%d"%skill.definition.Cooldown
-		commonLines.push_back("[color=orange]$Cooldown:[/color] %s turn%s"%[cooldown, "" if skill.definition.Cooldown == 1 else "s"])
+		var cooldownMax = maxi(skill.definition.Cooldown, skill.cooldownRemaining)
+		var cooldownPassed = cooldownMax - skill.cooldownRemaining
+		var cooldown = "%d / %d"%[cooldownPassed, cooldownMax] if skill.cooldownRemaining > 0 else "%d"%skill.definition.Cooldown
+		commonLines.push_back("[color=orange]$Cooldown:[/color] %s turn%s"%[cooldown, "" if cooldownMax == 1 else "s"])
 	if skill.definition.ChargesMaximum > 0:
 		var charges = "%d / %d"%[skill.chargesLeft, skill.chargesMaximum] if skill.chargesLeft < skill.chargesMaximum else "%d"%skill.chargesMaximum
 		charges = "[color=orange]$Charges:[/color] %s"%charges

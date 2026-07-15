@@ -5,6 +5,7 @@ class_name SkillBarItem
 @onready var mainButton: Button = $Button
 @onready var iconButton: TextureButton = $%TextureButton
 @onready var tooltip: SkillBarItemTooltip = %SkillBarItemTooltip
+@onready var infusedOverlay: Panel = %InfusedOverlay
 
 var TrackedSkill: Skill:
 	set(value):
@@ -113,16 +114,16 @@ func updateModulate() -> void:
 	if TrackedSkill and not TrackedSkill.isVisible():
 		visible = false
 		tooltip.visible = false
-		%ChargesLabel.visible = false
-		%CooldownLabel.visible = false
+		%TextureButton.visible = false
+		%OverlayContainer.visible = false
 		return
 
 	visible = true
 
-	if TrackedSkill == null:
-		%ChargesLabel.visible = false
-		%CooldownLabel.visible = false
+	if not TrackedSkill:
 		tooltip.visible = false
+		%TextureButton.visible = false
+		%OverlayContainer.visible = false
 
 		if Transparent:
 			%Panel.self_modulate = Color.TRANSPARENT
@@ -135,6 +136,10 @@ func updateModulate() -> void:
 		mainButton.mouse_behavior_recursive = Control.MOUSE_BEHAVIOR_ENABLED
 		mainButton.modulate = Color(0, 0, 0, 0.5)
 		return
+
+	%TextureButton.visible = true
+	%OverlayContainer.visible = true
+	infusedOverlay.visible = TrackedSkill.preparingInfuse
 
 	%Panel.self_modulate = Color.WHITE
 	mainButton.mouse_filter = Control.MOUSE_FILTER_STOP

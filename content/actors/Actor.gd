@@ -64,10 +64,25 @@ var isShapeshifted: bool:
 #endregion
 
 #region Proxy signals
+signal beforeTurnStarted()
+signal turnStarted()
+signal beforeTurnEnded()
 signal turnEnded()
 
 func _setupProxySignals():
+	TurnManager.Instance.BeforeFactionTurnStarted.connect(func(finishingFaction):
+		if finishingFaction == faction:
+			await SignalUtils.emitAsync([beforeTurnStarted])
+	)
+	TurnManager.Instance.FactionTurnStarted.connect(func(finishingFaction):
+		if finishingFaction == faction:
+			await SignalUtils.emitAsync([turnStarted])
+	)
 	TurnManager.Instance.BeforeFactionTurnEnded.connect(func(finishingFaction):
+		if finishingFaction == faction:
+			await SignalUtils.emitAsync([beforeTurnEnded])
+	)
+	TurnManager.Instance.FactionTurnEnded.connect(func(finishingFaction):
 		if finishingFaction == faction:
 			await SignalUtils.emitAsync([turnEnded])
 	)

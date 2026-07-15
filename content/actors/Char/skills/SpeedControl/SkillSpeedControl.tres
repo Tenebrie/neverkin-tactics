@@ -7,10 +7,11 @@
 script = ExtResource("1_fnt7u")
 Name = "Speed Control"
 Category = 3
-Description = "Choose yourself or another actor in range and apply $Quickened for 1 turn on allies or $Slowed for 1 turn on enemies.
+Description = "Choose yourself or another actor in range and apply $Quickened on an ally or $Slowed on an enemy.
 
-$Infused (1): Increase duration by 1 turn, but also increase cooldown of this ability by 1 turn."
+$Infuse: Increase duration by %{ExtraDuration}t, but also increase cooldown of this ability by %{ExtraCooldown}t."
 IconTexture = ExtResource("1_yirsa")
 ManaCost = 1
 Cooldown = 1
+TargetingMaxRange = 1.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

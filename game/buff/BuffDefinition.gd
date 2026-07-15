@@ -19,5 +19,5 @@ func toKeyword(script: GDScript) -> KeywordDefinition:
 	keyword.description = description
 	keyword.sourceScript = script
 	# Allow using !buff to force resolution
-	keyword.aliases = [name + "\\s?!buff"]
+	keyword.aliases = [name + "\\s?!buff", name + " 1", name + " 2", name + " 3"]
 	return keyword

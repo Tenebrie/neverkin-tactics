@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BuffDefinition" format=3 uid="uid://d4dequ011n2to"]
+
+[ext_resource type="Script" uid="uid://tbbvo8dei2ke" path="res://game/buff/BuffDefinition.gd" id="1_d0vth"]
+[ext_resource type="Texture2D" uid="uid://dgea0ihweu8fm" path="res://content/buffs/Quickened/BuffQuickenedIcon64.svg" id="1_scav4"]
+
+[resource]
+script = ExtResource("1_d0vth")
+name = "Quickened"
+description = "Gain %ActionPointsGained action point at the end of the turn."
+alignment = 1
+iconTexture = ExtResource("1_scav4")
+durationTurns = 1
+stackType = 1
+metadata/_custom_type_script = "uid://tbbvo8dei2ke"

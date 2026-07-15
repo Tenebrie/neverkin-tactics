@@ -52,6 +52,8 @@ func _process(_delta: float) -> void:
 			telegraph.global_position = updatedTarget
 
 		telegraph.Tint = TelegraphColor.NoTarget
+		#if telegraph.ParentSkill.preparingInfuse:
+			#telegraph.Tint = TelegraphColor.NoTargetInfused
 		for processor in telegraph.definition.Processors:
 			processor.call(telegraph)
 

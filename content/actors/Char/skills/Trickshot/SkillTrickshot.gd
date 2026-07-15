@@ -14,7 +14,6 @@ var _lastTravelLength: float = 0.0
 
 func _prepare() -> void:
 	damageTelegraph = TelegraphPreset.Projectile.new().WithWidth(HitboxWidth)
-	damageTelegraph.PiercingPower = 1
 
 	damageTelegraph.HealthThreatSelector = func(actor: Actor) -> int:
 		return Damage if ActorUtils.isTargetableBy(actor, parent) else 0
@@ -53,8 +52,16 @@ func _prepare() -> void:
 			damageTelegraph.ShootFromCoverOrigin = Vector3.ZERO
 	)
 
+	preparingInfuseChanged.connect(func():
+		damageTelegraph.PiercingPower = 1 if preparingInfuse else 0
+		definition.ManaCost = definition.base.ManaCost + (1 if preparingInfuse else 0)
+	)
+
 func getRecastCount() -> int:
-	return 3
+	return 1
+
+func isInfusable() -> bool:
+	return parent.stats.manaCurrent >= 1
 
 func _cast(targets: Skill.TargetData) -> void:
 	var origin: Vector3 = _pinnedOrigin if _hasPinnedOrigin else parent.global_position
@@ -81,3 +88,6 @@ func _cast(targets: Skill.TargetData) -> void:
 		MainCamera.Instance.snapToTarget(endpoint)
 	damageTelegraph.ShootFromCoverOrigin = _pinnedOrigin
 	damageTelegraph.projectileCanHitCaster = true
+
+	if preparingInfuse:
+		cooldownRemaining += 1

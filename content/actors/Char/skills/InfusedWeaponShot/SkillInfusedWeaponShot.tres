@@ -9,7 +9,7 @@ Name = "Infused Weapon"
 Category = 1
 Description = "Release a kinetic projectile at your enemy dealing %Damage damage.
 
-$Infuse (1): Turn damage into healing. Projectile targets allies instead."
+$Infuse: Turn damage into healing. Projectile targets allies instead."
 IconTexture = ExtResource("1_y64a7")
 ChargesCost = 1
 ChargesMaximum = 5

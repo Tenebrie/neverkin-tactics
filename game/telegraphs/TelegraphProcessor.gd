@@ -11,7 +11,9 @@ static func SnapToHoveredActor(telegraph: Telegraph):
 	telegraph.global_position = hovered[0].global_position
 
 static func TargetFactionTint(telegraph: Telegraph):
-	if telegraph.Targets.size() > 0:
+	if telegraph.ParentSkill.preparingInfuse and telegraph.Targets.size() > 0:
+		telegraph.Tint = TelegraphColor.TargetAcquiredInfused
+	elif telegraph.Targets.size() > 0:
 		telegraph.Tint = TelegraphColor.TargetAcquired
 
 static func InvisibleTint(telegraph: Telegraph):

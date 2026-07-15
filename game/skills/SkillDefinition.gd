@@ -2,6 +2,8 @@
 extends Resource
 class_name SkillDefinition
 
+var base: SkillDefinition = self
+
 @export var Name: String = "Unnamed"
 @export var Category: Skill.Category = Skill.Category.None
 @export_multiline var Description: String

@@ -11,5 +11,5 @@ Description = "Turn time itself into a weapon. Target all enemies in an area. Fo
 IconTexture = ExtResource("1_0hhfb")
 ManaCost = 2
 Cooldown = 2
-TargetingMaxRange = 10.0
+TargetingMaxRange = 5.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

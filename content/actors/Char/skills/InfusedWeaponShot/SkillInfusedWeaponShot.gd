@@ -7,7 +7,6 @@ var HitboxWidth = 0.04
 
 var damageTelegraph: TelegraphDefinition = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
 var healingTelegraph: TelegraphDefinition = TelegraphPreset.Projectile.new().TargetingAllies().WithHealing(Healing).WithWidth(HitboxWidth)
-var infusedTextTelegraph: TelegraphDefinition = TelegraphPreset.MouseText.new("Infused")
 
 func _prepare() -> void:
 	definition.keywords = [Keyword.Reloadable]
@@ -21,7 +20,7 @@ func _prepare() -> void:
 	preparingInfuseChanged.connect(func():
 		if preparingInfuse:
 			definition.ManaCost = 1
-			definition.telegraphs = [healingTelegraph, infusedTextTelegraph]
+			definition.telegraphs = [healingTelegraph]
 		else:
 			definition.ManaCost = 0
 			definition.telegraphs = [damageTelegraph]

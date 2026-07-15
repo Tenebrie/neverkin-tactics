@@ -17,8 +17,9 @@ var playerControlledActors: Array[Actor] = []
 signal KnownActorsChanged
 signal CurrentActorChanged(actor: Actor, previous: Actor)
 signal CurrentPlayerActorChanged(actor: Actor, previous: Actor)
-signal BeforeFactionTurnEnded(faction: Actor.Faction)
+signal BeforeFactionTurnStarted(faction: Actor.Faction)
 signal FactionTurnStarted(faction: Actor.Faction)
+signal BeforeFactionTurnEnded(faction: Actor.Faction)
 signal FactionTurnEnded(faction: Actor.Faction)
 signal TurnChanged
 
@@ -95,7 +96,7 @@ func startTurnForCurrentFaction():
 	MessageLog.PrintChatMessage("Turn Start: %s"%Actor.Faction.keys()[activeFaction + 1])
 	TurnChanged.emit()
 	#FactionTurnStarted.emit(activeFaction)
-	await SignalUtils.emitAsync([FactionTurnStarted], activeFaction)
+	await SignalUtils.emitAsync([BeforeFactionTurnStarted, FactionTurnStarted], activeFaction)
 	if activeFaction == Actor.PlayerFaction:
 		startPlayerTurn()
 

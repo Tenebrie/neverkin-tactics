@@ -13,16 +13,20 @@ signal targetsChanged(targets: Array[Actor])
 @export var Validators: Array[func(Telegraph) -> bool] = [func(_t): return true]
 ## Returns whether an individual actor is a valid target
 @export var TargetFilters: Array[func(Actor, Telegraph) -> bool] = [func(_a, _t): return true]
-## Health to be damaged
+## Resource to be damaged
 @export var HealthThreat: int = 0
 @export var HealthThreatSelector = func(_actor: Actor) -> int: return HealthThreat
 @export var ManaThreat: int = 0
 @export var ManaThreatSelector = func(_actor: Actor) -> int: return ManaThreat
-## Health to be restored
+@export var ActionPointThreat: int = 0
+@export var ActionPointThreatSelector = func(_actor: Actor) -> int: return ActionPointThreat
+## Resource to be restored
 @export var HealthPromise: int = 0
 @export var HealthPromiseSelector = func(_actor: Actor) -> int: return HealthPromise
 @export var ManaPromise: int = 0
 @export var ManaPromiseSelector = func(_actor: Actor) -> int: return ManaPromise
+@export var ActionPointPromise: int = 0
+@export var ActionPointPromiseSelector = func(_actor: Actor) -> int: return ActionPointPromise
 
 ## While this telegraph is active, close cover is disabled
 @export var ShootFromCover: bool = false

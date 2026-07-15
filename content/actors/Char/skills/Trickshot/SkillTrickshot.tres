@@ -11,7 +11,7 @@ Description = "Release a kinetic projectile at your enemy dealing %Damage damage
 
 At the end of the bullet's travel it ricochets in any direction of your choice.
 
-$Infuse (1): Give the projectile $Piercing (2), but also increase cooldown of this ability by 1 turn."
+$Infuse: Give the projectile $Piercing, but also increase cooldown of this ability by 1 turn."
 IconTexture = ExtResource("1_vywo6")
 ManaCost = 1
 Cooldown = 1

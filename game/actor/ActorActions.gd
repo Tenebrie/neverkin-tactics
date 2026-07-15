@@ -7,8 +7,9 @@ signal MovementPointsChanged(current: float)
 var ActionPointsUsed: int = 0
 
 var ActionPointsMax: int:
-	get: return parent.definition.ActionPointsMax + ActionPointsSavedMax
-var ActionPointsSavedMax: int = 0
+	get: return parent.definition.ActionPointsMax + ActionPointsTemporary
+var ActionPointsTemporary: int = 0
+var ActionPointsForNextTurn: int = 0
 
 var ActionPointsAvailable: int:
 	get:
@@ -17,7 +18,10 @@ var ActionPointsAvailable: int:
 var _actionPointsThreatenedFromSkill: int = 0
 var ActionPointsThreatened: int:
 	get:
-		return _actionPointsThreatenedFromSkill
+		return _actionPointsThreatenedFromSkill + parent.buffs.Count(BuffActionPointThreat)
+
+func AddTemporaryActionPoints(value: int):
+	ActionPointsForNextTurn += value
 
 func ConsumeActionPoints(value: int):
 	ActionPointsUsed += value
@@ -52,9 +56,11 @@ func _parentReady() -> void:
 		if not skill:
 			recastsRemaining = 0
 			_actionPointsThreatenedFromSkill = 0
-
-		if skill and not isFreeRecast():
+		elif isFreeRecast():
+			_actionPointsThreatenedFromSkill = 0
+		else:
 			_actionPointsThreatenedFromSkill = skill.definition.ActionPointCost
+
 	)
 	TurnManager.Instance.FactionTurnEnded.connect(onTurnEnded)
 
@@ -101,11 +107,9 @@ func onTurnEnded(faction: Actor.Faction) -> void:
 	if faction != parent.faction:
 		return
 	MovementBuffer = 0.0
-	#if ActionPointsUsed < ActionPointsMax:
-		#ActionPointsSavedMax = 1
-	#else:
-		#ActionPointsSavedMax = 0
 	ActionPointsUsed = 0
+	ActionPointsTemporary = ActionPointsForNextTurn
+	ActionPointsForNextTurn = 0
 
 #region Orders
 func IssueOrder_MoveThroughPath(path: PackedVector3Array):

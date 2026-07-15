@@ -5,7 +5,7 @@ var griffonDefinition = preload("res://content/actors/Ivera/shapeshift/IveraGrif
 
 var Damage = 3
 var GriffonSize = griffonDefinition.physicalSize
-var LandingAreaSize = 1.3
+var LandingAreaSize = 1.8
 var LandingMaxDist = LandingAreaSize - GriffonSize
 
 var damageArea = TelegraphPreset.PointArea.new(LandingAreaSize).WithDamageToHostiles(Damage)

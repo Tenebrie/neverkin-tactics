@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://cnneaa7pdmxld"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_futex"]
+
+[resource]
+script = ExtResource("1_futex")
+name = "Pierce (X)"
+category = "Keyword"
+description = "This projectile passes through the first [color=orange]X[/color] targets in its path, hitting each one, before stopping. Walls and other obstacles still block it.
+
+If not specified otherwise, [color=orange]X[/color] is [color=orange]1[/color]."
+aliases = Array[String](["Pierce", "Pierce (1)", "Pierce (2)", "Pierce (3)", "Pierce (4)", "Piercing", "Piercing (1)", "Piercing (2)", "Piercing (3)", "Piercing (4)"])
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

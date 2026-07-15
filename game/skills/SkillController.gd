@@ -172,6 +172,14 @@ class ControlGroup extends Node3D:
 
 		return null
 
+	func GetAll() -> Array[Skill]:
+		var skills: Array[Skill]
+		for child in get_children():
+			if Utils.IsNodeDescendantOf(child, Skill):
+				skills.push_back(child)
+
+		return skills
+
 	func GetByIndex(index: int) -> Skill:
 		var childrenSeen = 0
 		for child in get_children():

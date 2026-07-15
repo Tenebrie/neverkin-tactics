@@ -16,10 +16,12 @@ func _ready() -> void:
 	if not definition:
 		var scriptPath = get_script().resource_path
 		var definitionPath = scriptPath.get_basename() + ".tres"
-		var definitionObject = load(definitionPath).duplicate() as SkillDefinition
+		var baseDefinition = load(definitionPath) as SkillDefinition
+		var definitionObject = baseDefinition.duplicate() as SkillDefinition
 		if not definitionObject:
 			push_error("Missing definition: %s" % definitionPath)
 		definition = definitionObject
+		definition.base = baseDefinition
 
 	if definition:
 		name = definition.Name
