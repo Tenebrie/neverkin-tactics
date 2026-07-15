@@ -14,7 +14,7 @@ At the end of the bullet's travel it ricochets in any direction of your choice.
 $Infuse: Give the projectile $Piercing, but also increase cooldown of this ability by 1 turn."
 IconTexture = ExtResource("1_vywo6")
 ManaCost = 1
-Cooldown = 1
+Cooldown = 5
 TargetingMaxRange = 5.0
 BehaviourTargetsGround = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

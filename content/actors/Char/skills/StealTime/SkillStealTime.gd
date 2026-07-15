@@ -26,11 +26,14 @@ func _prepare() -> void:
 	]
 
 func _cast(targets: TargetData) -> void:
-	var cooldownsStolen = 0
-	for skill in targets.actor.Skills.activeSkillGroup.GetAll():
-		cooldownsStolen += skill.cooldownRemaining
-		skill.cooldownRemaining = 0
-	if cooldownsStolen == 0:
-		return
+	var effect = SkillStealTimeEffect.new()
+	get_tree().root.add_child(effect)
+	effect.global_position = targets.actor.global_position
+	effect.global_position.y += 0.5
 
-	cooldownRemaining += cooldownsStolen - 1
+	for skill in targets.actor.Skills.activeSkillGroup.GetAll():
+		var cooldownsStolen = skill.cooldownRemaining
+		for i in cooldownsStolen:
+			skill.cooldownRemaining -= 1
+			await effect.Play(parent.global_position, 1)
+			cooldownRemaining += 1

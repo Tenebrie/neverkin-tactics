@@ -10,11 +10,13 @@ class_name SkillBarItem
 var TrackedSkill: Skill:
 	set(value):
 		if TrackedSkill != null:
+			TrackedSkill.cooldownChanged.disconnect(updateModulate)
 			TrackedSkill.Controller.SelectedSkillChanged.disconnect(updateModulate)
 			TrackedSkill.Controller.parent.actions.ActionPointsChanged.disconnect(updateModulate)
 			TrackedSkill.Controller.parent.actions.MovementPointsChanged.disconnect(updateModulate)
 		TrackedSkill = value
 		if TrackedSkill != null:
+			TrackedSkill.cooldownChanged.connect(updateModulate)
 			TrackedSkill.Controller.SelectedSkillChanged.connect(updateModulate)
 			TrackedSkill.Controller.parent.actions.ActionPointsChanged.connect(updateModulate)
 			TrackedSkill.Controller.parent.actions.MovementPointsChanged.connect(updateModulate)

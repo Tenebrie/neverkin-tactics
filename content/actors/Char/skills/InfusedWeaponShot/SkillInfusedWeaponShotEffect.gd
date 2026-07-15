@@ -2,6 +2,8 @@
 extends Node3D
 class_name SkillInfusedWeaponShotEffect
 
+var infused = false
+
 func Play(target: Vector3, duration: float = 0.2) -> void:
 	createSwipeTrail(Vector3.ZERO, target, 0, duration)
 
@@ -17,6 +19,11 @@ func createSwipeTrail(from: Vector3, to: Vector3, arc: float, duration: float) -
 	trail.time_curve = preload("res://content/effects/KineticWeaponTrail/KineticWeaponTrailTimeCurve.tres")
 	trail.color_gradient = preload("res://content/effects/KineticWeaponTrail/KineticWeaponTrailGradient.tres")
 	trail.time_color_gradient = preload("res://content/effects/KineticWeaponTrail/KineticWeaponTrailTimeGradient.tres")
+	if infused:
+		trail.size_curve = preload("res://content/effects/InfusedWeaponTrail/InfusedWeaponTrailCurve.tres")
+		trail.time_curve = preload("res://content/effects/InfusedWeaponTrail/InfusedWeaponTrailTimeCurve.tres")
+		trail.color_gradient = preload("res://content/effects/InfusedWeaponTrail/InfusedWeaponTrailGradient.tres")
+		trail.time_color_gradient = preload("res://content/effects/InfusedWeaponTrail/InfusedWeaponTrailTimeGradient.tres")
 	add_child(trail)
 
 	var direction := (from - to).normalized()

@@ -7,7 +7,7 @@
 script = ExtResource("1_aw0m6")
 Name = "Mana Drain"
 Category = 3
-Description = "Choose one damaged character, including yourself, an ally or an enemy. Reduce their maximum health by %HealthDrain to restore %ManaGained mana.
+Description = "Choose a character missing at least %HealthDrain health, including yourself, an ally or an enemy. Reduce their maximum health by %HealthDrain to restore %ManaGained mana.
 
 $Passive: Restore %PassiveRegen mana at the start of your turn."
 IconTexture = ExtResource("1_ekmok")

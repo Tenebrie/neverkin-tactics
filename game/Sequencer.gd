@@ -2,15 +2,18 @@ extends Node3D
 class_name Sequencer
 
 var Steps: Array[Step]
+signal done
 
 func AddStep(delay: float, callback: Callable) -> Sequencer:
 	var timer = Timer.new()
 	timer.one_shot = true
-	timer.wait_time = delay
+	timer.wait_time = maxf(delay, 0.001)
 	timer.timeout.connect(func():
 		callback.call()
 		timer.queue_free()
-		if get_child_count() == 1:
+		remove_child(timer)
+		if get_child_count() == 0:
+			done.emit()
 			queue_free()
 	)
 	add_child(timer)

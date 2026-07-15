@@ -137,7 +137,13 @@ func restoreCharges(count: int) -> void:
 #endregion
 
 #region Cooldown
-var cooldownRemaining = 0
+signal cooldownChanged(current: int)
+
+var cooldownRemaining = 0:
+	set(v):
+		cooldownRemaining = v
+		cooldownChanged.emit(v)
+
 func startCooldown():
 	if definition.Cooldown > 0:
 		cooldownRemaining = definition.Cooldown
@@ -171,6 +177,8 @@ class TargetData:
 	var perTelegraph: Dictionary[TelegraphDefinition, Array[Actor]]
 	var perTelegraphIndex: Array[Array[Actor]]
 
+	var infusedCast: bool
+
 	static func Collect(actor: Actor) -> Skill.TargetData:
 		var targetData = Skill.TargetData.new()
 		targetData.sourceSkill = actor.Skills.SelectedSkill
@@ -182,6 +190,7 @@ class TargetData:
 			targetData.pointPerTelegraph[telegraph.definition] = ActorUtils.flatPositionOf(telegraph)
 		targetData.perTelegraph = actor.telegraphs.TargetsPerTelegraphDefinition
 		targetData.perTelegraphIndex = targetData.perTelegraph.values()
+		targetData.infusedCast = targetData.sourceSkill.preparingInfuse
 		return targetData
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()

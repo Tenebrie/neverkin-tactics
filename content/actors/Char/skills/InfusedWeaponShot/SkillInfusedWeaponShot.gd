@@ -30,10 +30,11 @@ func isInfusable() -> bool:
 	return parent.stats.manaCurrent >= 1
 
 func _cast(allTargets: Skill.TargetData) -> void:
-	var effect = SkillPistolShotEffect.new()
+	var effect = SkillInfusedWeaponShotEffect.new()
 	get_parent().add_child(effect)
 	effect.global_position = parent.global_position
 	effect.position.y += 0.5
+	effect.infused = allTargets.infusedCast
 
 	var targets: Array[Actor]
 	if allTargets.perTelegraph.has(damageTelegraph):

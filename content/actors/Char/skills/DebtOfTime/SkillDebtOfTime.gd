@@ -67,9 +67,19 @@ func _drainCooldown(value: int) -> void:
 
 func _cast(targets: TargetData) -> void:
 	var pointsToDrain = _computeDrainShares(targets.perTelegraph[areaTelegraph], targets.mousePoint)
+	var effect = SkillDebtOfTimeEffect.new()
+	get_tree().root.add_child(effect)
+	effect.global_position = parent.global_position
+	effect.global_position.y += 1.5
 
 	for actor: Actor in pointsToDrain.keys():
 		var value = pointsToDrain[actor]
 		if value == 0:
 			continue
-		actor.actions.ConsumeActionPoints(value)
+
+		for i in value:
+			effect.Play(actor.global_position, 0.3)
+			_drainCooldown(1)
+			await get_tree().create_timer(0.3).timeout
+			actor.actions.ConsumeActionPoints(1)
+			await get_tree().create_timer(0.3).timeout

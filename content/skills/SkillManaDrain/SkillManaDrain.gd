@@ -1,8 +1,8 @@
 extends Skill
 class_name SkillManaDrain
 
-const HealthDrain = 1
-const ManaGained = 2
+const HealthDrain = 3
+const ManaGained = 3
 const PassiveRegen = 1
 
 var targetTelegraph = TelegraphPreset.SingleActor.new()
@@ -40,5 +40,21 @@ func isCastable() -> Variant:
 	return super.isCastable()
 
 func _cast(targets: TargetData) -> void:
-	targets.actor.stats.reduceHealthMaximum(HealthDrain)
-	parent.stats.restoreMana(ManaGained)
+	var effect = SkillManaDrainEffect.new()
+	get_tree().root.add_child(effect)
+	effect.global_position = ActorUtils.flatPositionOf(targets.actor)
+	effect.Play(ActorUtils.flatPositionOf(parent) - effect.global_position, ManaGained, 0.5)
+	effect.global_position.y += 0.5
+
+	var sequence = StartSequence()
+	for i in HealthDrain:
+		sequence.AddStep(0.1 * i, func():
+			targets.actor.stats.reduceHealthMaximum(1)
+		)
+
+	for i in ManaGained:
+		sequence.AddStep(0.5 + 0.1 * i, func():
+			parent.stats.restoreMana(1)
+		)
+
+	await sequence.done

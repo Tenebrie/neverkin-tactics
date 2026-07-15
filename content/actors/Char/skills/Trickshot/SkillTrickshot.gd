@@ -68,10 +68,11 @@ func _cast(targets: Skill.TargetData) -> void:
 	var endpoint = _lastEndpoint
 	var travelLength = _lastTravelLength
 
-	var effect = SkillPistolShotEffect.new()
+	var effect = SkillInfusedWeaponShotEffect.new()
 	get_tree().root.add_child(effect)
 	effect.global_position = origin
 	effect.position.y += 0.5
+	effect.infused = targets.infusedCast
 
 	var localTarget = endpoint - origin
 	localTarget.y = 0
