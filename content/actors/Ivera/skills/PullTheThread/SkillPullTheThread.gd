@@ -110,7 +110,7 @@ func _cast(targets: TargetData) -> void:
 
 	var tween = create_tween()
 	if ActorUtils.isAlliedTo(victim, parent) or targets.perTelegraph[impactTelegraph].is_empty():
-		tween.tween_property(victim, "global_position", landing, 0.4).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_BACK)
+		tween.tween_property(victim, "global_position", landing, 0.6).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_BACK)
 	else:
 		tween.tween_property(victim, "global_position", landing, dist / 8.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
 
@@ -120,7 +120,7 @@ func _cast(targets: TargetData) -> void:
 	for actor in targets.perTelegraph[impactTelegraph]:
 		actor.stats.dealDamage(bonkReceiverDamage[actor])
 
-	if not targets.perTelegraph[impactTelegraph].is_empty():
+	if ActorUtils.isHostileTo(parent, victim) and not targets.perTelegraph[impactTelegraph].is_empty():
 		victim.stats.dealDamage(victimDamageInstance)
 		victim.buffs.Add(BuffStunned.new())
 	victim.buffs.RemoveAll(BuffSoulbind)
