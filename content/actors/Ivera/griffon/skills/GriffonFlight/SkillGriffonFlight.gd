@@ -20,7 +20,7 @@ func _prepare() -> void:
 		else:
 			telegraph.Tint = TelegraphColor.ExclusionOccupied
 	)
-	casterTelegraph.Processors.push_back(TelegraphProcessor.OutOfRangeTint)
+	casterTelegraph.PostProcessors.push_back(TelegraphProcessor.OutOfRangeTint)
 
 	definition.telegraphs = [
 		casterTelegraph,

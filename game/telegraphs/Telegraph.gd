@@ -34,8 +34,7 @@ func _ready():
 	setColor(Tint)
 	definition.created.emit(self)
 
-func _physics_process(_d: float) -> void:
-	checkTargetsDiff()
+@abstract func pollTargets() -> void
 
 func checkTargetsDiff() -> void:
 	refreshFilteredTargets()

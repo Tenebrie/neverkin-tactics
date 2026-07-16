@@ -38,7 +38,10 @@ signal targetsChanged(targets: Array[Actor])
 @export var TargetSnapping: bool = false
 @export var LookAtMouse: bool = false
 
+## Processors run before targets are checked
 @export var Processors: Array[func(Telegraph) -> void] = []
+## PostProcessors run after targets are checked
+@export var PostProcessors: Array[func(Telegraph) -> void] = []
 
 @export var collisionMask: int = CollisionLayer.SKILL_TARGETABLE
 
@@ -76,6 +79,10 @@ func addTargetFilterOnTelegraph(filter: func(Actor, Telegraph) -> bool) -> Teleg
 
 func addProcessor(processor: func(Telegraph) -> void) -> TelegraphDefinition:
 	Processors.push_back(processor)
+	return self
+
+func addPostProcessor(processor: func(Telegraph) -> void) -> TelegraphDefinition:
+	PostProcessors.push_back(processor)
 	return self
 
 func addCollisionLayer(layer: int) -> TelegraphDefinition:

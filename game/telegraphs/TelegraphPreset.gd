@@ -32,10 +32,10 @@ class SingleActor extends TelegraphDefinition:
 		Validators.push_back(TelegraphValidator.MaximumSkillRangeTargetingActor)
 		Validators.push_back(TelegraphValidator.AtLeastOneTarget)
 
-		Processors.push_back(TelegraphProcessor.SnapToHoveredActor)
-		Processors.push_back(TelegraphProcessor.OutOfRangeTint)
-		Processors.push_back(TelegraphProcessor.TargetFactionTint)
-		Processors.push_back(TelegraphProcessor.NoTransparency)
+		PostProcessors.push_back(TelegraphProcessor.SnapToHoveredActor)
+		PostProcessors.push_back(TelegraphProcessor.OutOfRangeTint)
+		PostProcessors.push_back(TelegraphProcessor.TargetFactionTint)
+		PostProcessors.push_back(TelegraphProcessor.NoTransparency)
 
 		addTargetFilter(func(actor: Actor) -> bool:
 			return TurnManager.Instance.activeFaction != Actor.PlayerFaction or Actor.Repository.Hovered.List.has(actor)
@@ -56,8 +56,8 @@ class Projectile extends TelegraphDefinition:
 		ShootFromCover = true
 
 		Processors.push_back(TelegraphProcessor.LookAtMouse)
-		Processors.push_back(TelegraphProcessor.TargetFactionTint)
 		Processors.push_back(TelegraphProcessor.ApplyCollisionRules)
+		PostProcessors.push_back(TelegraphProcessor.TargetFactionTint)
 
 	func Load(skill: Skill):
 		RectLength = skill.definition.TargetingMaxRange
@@ -103,8 +103,8 @@ class PointArea extends TelegraphDefinition:
 
 		Validators.push_back(TelegraphValidator.MaximumSkillRange)
 
-		Processors.push_back(TelegraphProcessor.TargetFactionTint)
-		Processors.push_back(TelegraphProcessor.OutOfRangeTint)
+		PostProcessors.push_back(TelegraphProcessor.TargetFactionTint)
+		PostProcessors.push_back(TelegraphProcessor.OutOfRangeTint)
 
 	func WithDamageToHostiles(damage: int) -> TelegraphDefinition:
 		HealthThreat = damage

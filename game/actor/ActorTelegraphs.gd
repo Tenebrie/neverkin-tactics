@@ -56,6 +56,9 @@ func _process(_delta: float) -> void:
 			#telegraph.Tint = TelegraphColor.NoTargetInfused
 		for processor in telegraph.definition.Processors:
 			processor.call(telegraph)
+		telegraph.pollTargets()
+		for processor in telegraph.definition.PostProcessors:
+			processor.call(telegraph)
 
 func resetState() -> void:
 	for telegraph in telegraphs:

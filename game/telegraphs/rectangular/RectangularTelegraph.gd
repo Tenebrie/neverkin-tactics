@@ -39,13 +39,7 @@ func _enter_tree():
 	decal = get_node("RectDecal") as RectDecal
 	collisionShape = get_node("Hitbox/CollisionShape3D") as CollisionShape3D
 	collisionShape.shape = collisionShape.shape.duplicate() as Shape3D
-
-	hitbox.body_entered.connect(onBodyEntered)
-	hitbox.body_exited.connect(onBodyExited)
-
-func _exit_tree():
-	hitbox.body_entered.disconnect(onBodyEntered)
-	hitbox.body_exited.disconnect(onBodyExited)
+	hitbox.monitoring = false
 
 func _ready():
 	super._ready()
@@ -72,6 +66,13 @@ func updateOrigin():
 		decal.position = Vector3(decalPos.x, decalPos.y, decalPos.z - length / 2.0)
 		collisionShape.position = Vector3(shapePos.x, shapePos.y, shapePos.z - length / 2.0)
 
+func pollTargets():
+	_targets = []
+	for contact in GatherContacts(hitbox.collision_mask):
+		if contact.Collider is Actor:
+			_targets.push_back(contact.Collider as Actor)
+	checkTargetsDiff()
+
 #region Collision query
 func queryBasis() -> Basis:
 	return global_basis.orthonormalized()
@@ -79,21 +80,33 @@ func queryBasis() -> Basis:
 func queryOrigin() -> Vector3:
 	return Vector3(global_position.x, height / 2.0, global_position.z)
 
-## Colliders overlapping this telegraph at its full untruncated range, sorted near-to-far
-## along the beam.
-func GatherContacts(mask: int, exclude: Array[RID] = []) -> Array[RaycastUtils.ShapeContact]:
-	var basis = queryBasis()
+func measureAlongBeam() -> func(Vector3) -> float:
 	var origin = queryOrigin()
-	var direction = -basis.z
-	var fullLength = definition.RectLength
-	queryShape.size = Vector3(width, height, fullLength)
-	var transform = Transform3D(basis, origin + direction * (fullLength / 2.0))
-	var measure = func(pos: Vector3) -> float:
+	var direction = -queryBasis().z
+	return func(pos: Vector3) -> float:
 		var offset = pos - origin
 		return direction.dot(Vector3(offset.x, 0.0, offset.z))
+
+## Colliders overlapping this telegraph as it currently stands, truncated to [member length],
+## sorted near-to-far along the beam.
+func GatherContacts(mask: int, exclude: Array[RID] = []) -> Array[RaycastUtils.ShapeContact]:
 	return RaycastUtils.GatherContacts(
 		get_world_3d().direct_space_state,
-		queryShape, transform, measure,
+		collisionShape.shape, collisionShape.global_transform, measureAlongBeam(),
+		mask, exclude,
+	)
+
+## Colliders overlapping this telegraph at its full untruncated range, sorted near-to-far
+## along the beam. This is what collision rules search to decide where the beam stops.
+func GatherBeamContacts(mask: int, exclude: Array[RID] = []) -> Array[RaycastUtils.ShapeContact]:
+	var basis = queryBasis()
+	var origin = queryOrigin()
+	var fullLength = definition.RectLength
+	queryShape.size = Vector3(width, height, fullLength)
+	var transform = Transform3D(basis, origin + -basis.z * (fullLength / 2.0))
+	return RaycastUtils.GatherContacts(
+		get_world_3d().direct_space_state,
+		queryShape, transform, measureAlongBeam(),
 		mask, exclude,
 	)
 

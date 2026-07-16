@@ -49,7 +49,7 @@ static func ApplyCollisionRulesCustom(telegraph: RectangularTelegraph, wallPenet
 	if telegraph.definition.projectileCanHitCaster:
 		initialExclude = []
 
-	var contacts = telegraph.GatherContacts(mask, initialExclude)
+	var contacts = telegraph.GatherBeamContacts(mask, initialExclude)
 
 	telegraph.length = definition.RectLength
 	var piercingLeft = definition.PiercingPower

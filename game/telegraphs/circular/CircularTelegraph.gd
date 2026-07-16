@@ -14,9 +14,7 @@ func _enter_tree():
 	hitbox = get_node("Hitbox") as Area3D
 	hitboxShape = get_node("Hitbox/CollisionShape3D")
 	decal = get_node("CircleDecal") as CircleDecal
-
-	hitbox.body_entered.connect(onBodyEntered)
-	hitbox.body_exited.connect(onBodyExited)
+	hitbox.monitoring = false
 
 func _ready() -> void:
 	super._ready()
@@ -26,6 +24,13 @@ func _process(_delta: float):
 	if IsLeaving:
 		return
 	decal.set_instance_shader_parameter(&"PROGRESS", growPercentage)
+
+func pollTargets():
+	_targets = []
+	for contact in GatherContacts(hitbox.collision_mask):
+		if contact.Collider is Actor:
+			_targets.push_back(contact.Collider as Actor)
+	checkTargetsDiff()
 
 func updateRadius():
 	if not isReady:
