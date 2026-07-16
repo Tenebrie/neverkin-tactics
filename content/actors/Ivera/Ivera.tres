@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://cuc6cxmsxr3q7" path="res://content/actors/Ivera/skills/WeaveTogether/SkillWeaveTogether.gd" id="5_68nlt"]
 [ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://content/actors/Ivera/IveraToken.webp" id="6_26ehw"]
 [ext_resource type="Script" uid="uid://v1dnxnob5d8m" path="res://content/actors/Ivera/skills/Harvest/SkillHarvest.gd" id="6_xw0yp"]
+[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/actors/Ivera/griffon/skills/ClawStrike/SkillClawStrike.gd" id="7_qad2i"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="7_xw0yp"]
 
 [resource]
@@ -22,5 +23,5 @@ healthMaximum = 15
 healthHumanityThreshold = 5
 ActionPointsMax = 4
 MovementSpeedPerActionPoint = 5.5
-Skills = Array[GDScript]([ExtResource("2_0gvww"), ExtResource("3_e671e"), ExtResource("4_qad2i"), ExtResource("5_68nlt"), ExtResource("6_xw0yp"), null, null, ExtResource("4_63lyh")])
+Skills = Array[GDScript]([ExtResource("2_0gvww"), ExtResource("3_e671e"), ExtResource("4_qad2i"), ExtResource("5_68nlt"), ExtResource("6_xw0yp"), ExtResource("7_qad2i"), null, ExtResource("4_63lyh")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

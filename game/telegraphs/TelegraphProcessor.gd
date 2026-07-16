@@ -42,9 +42,6 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 
 static func ApplyCollisionRulesCustom(telegraph: RectangularTelegraph, wallPenetration: float = 0.0, bufferDist: float = 0.0) -> Array[Actor]:
 	var definition = telegraph.definition
-	var basis = telegraph.global_basis.orthonormalized()
-	var direction = -basis.z
-	var origin = Vector3(telegraph.global_position.x, telegraph.height / 2.0, telegraph.global_position.z)
 	var mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.ACTOR
 	var excludeMask = CollisionLayer.IGNORED_COVER
 
@@ -52,14 +49,7 @@ static func ApplyCollisionRulesCustom(telegraph: RectangularTelegraph, wallPenet
 	if telegraph.definition.projectileCanHitCaster:
 		initialExclude = []
 
-	var spaceState = telegraph.get_world_3d().direct_space_state
-	var contacts = RaycastUtils.GatherBeamContacts(
-		spaceState,
-		Vector2(telegraph.width, telegraph.height),
-		basis, origin, direction,
-		definition.RectLength,
-		mask, initialExclude,
-	)
+	var contacts = telegraph.GatherContacts(mask, initialExclude)
 
 	telegraph.length = definition.RectLength
 	var piercingLeft = definition.PiercingPower
@@ -69,7 +59,6 @@ static func ApplyCollisionRulesCustom(telegraph: RectangularTelegraph, wallPenet
 	for group in telegraph.IgnoredObstacleGroups:
 		hitGroups[group] = true
 
-	var slab = BoxShape3D.new()
 	var targetsHit: Array[Actor]
 
 	for contact in contacts:
@@ -120,11 +109,7 @@ static func ApplyCollisionRulesCustom(telegraph: RectangularTelegraph, wallPenet
 		if isActor:
 			telegraph.length = minf(contact.Distance - bufferDist, definition.RectLength)
 		else:
-			slab.size = Vector3(telegraph.width, telegraph.height, 0.05)
-			var hit = RaycastUtils.ResolveContactDistance(
-				spaceState, slab, basis, origin, direction,
-				definition.RectLength, mask, contact.Rid, contacts, initialExclude,
-			)
+			var hit = telegraph.DistanceToContact(contact, contacts, mask, initialExclude)
 			telegraph.length = hit + wallPenetration
 
 		targetsHit.push_back(collider)

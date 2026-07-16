@@ -37,6 +37,7 @@ KeywordManagerInstance="*uid://r6w3dqxegpf3"
 gdscript/type_inference/infer_type_from_assignment=true
 gdscript/warnings/unused_signal=0
 gdscript/warnings/shadowed_variable=0
+gdscript/warnings/shadowed_variable_base_class=0
 gdscript/warnings/redundant_await=0
 shapes/navigation/3d/enable_edge_lines=false
 

@@ -11,27 +11,23 @@ class ShapeContact:
 		Distance = distance
 
 
-## Gathers all colliders overlapping a beam volume in a single query, sorted near-to-far
-## by the projection of each collider's center onto [param direction].
-static var beamContactVolumeInstance = BoxShape3D.new()
-static func GatherBeamContacts(
+## Gathers all colliders overlapping [param shape] placed at [param transform] in a single
+## query, sorted near-to-far by [param measure], which maps a collider's global position to
+## the distance recorded on its [ShapeContact].
+static func GatherContacts(
 	spaceState: PhysicsDirectSpaceState3D,
-	crossSection: Vector2,
-	basis: Basis,
-	origin: Vector3,
-	direction: Vector3,
-	length: float,
+	shape: Shape3D,
+	transform: Transform3D,
+	measure: func(Vector3) -> float,
 	collisionMask: int,
-	initialExclude: Array[RID] = [],
+	exclude: Array[RID] = [],
 	maxResults: int = 120,
 ) -> Array[ShapeContact]:
-	beamContactVolumeInstance.size = Vector3(crossSection.x, crossSection.y, length)
-
 	var query = PhysicsShapeQueryParameters3D.new()
-	query.shape = beamContactVolumeInstance
-	query.transform = Transform3D(basis, origin + direction * (length / 2.0))
+	query.shape = shape
+	query.transform = transform
 	query.collision_mask = collisionMask
-	query.exclude = initialExclude
+	query.exclude = exclude
 
 	var results = spaceState.intersect_shape(query, maxResults)
 	var contacts: Array[ShapeContact] = []
@@ -39,23 +35,19 @@ static func GatherBeamContacts(
 		var collider = instance_from_id(result["collider_id"]) as CollisionObject3D
 		if collider == null:
 			continue
-		var offset = collider.global_position - origin
-		var distance = direction.dot(Vector3(offset.x, 0.0, offset.z))
-		contacts.append(ShapeContact.new(result["rid"], collider, distance))
+		contacts.append(ShapeContact.new(result["rid"], collider, measure.call(collider.global_position)))
 
 	contacts.sort_custom(func(a: ShapeContact, b: ShapeContact) -> bool: return a.Distance < b.Distance)
 	return contacts
 
 
-## Precise entry distance of [param targetRid] along the beam, via a single cast_motion
+## Precise entry distance of [param targetRid] along [param motion], via a single cast_motion
 ## that ignores everything else in [param allContacts].
 static func ResolveContactDistance(
 	spaceState: PhysicsDirectSpaceState3D,
 	shape: Shape3D,
-	basis: Basis,
-	origin: Vector3,
-	direction: Vector3,
-	length: float,
+	transform: Transform3D,
+	motion: Vector3,
 	collisionMask: int,
 	targetRid: RID,
 	allContacts: Array[ShapeContact],
@@ -68,11 +60,12 @@ static func ResolveContactDistance(
 
 	var query = PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
-	query.transform = Transform3D(basis, origin)
+	query.transform = transform
 	query.collision_mask = collisionMask
 	query.exclude = exclude
-	query.motion = direction * length
+	query.motion = motion
 
+	var length = motion.length()
 	var fraction = spaceState.cast_motion(query)
 	if fraction.is_empty():
 		return length

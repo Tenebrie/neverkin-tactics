@@ -18,10 +18,6 @@ func _enter_tree():
 	hitbox.body_entered.connect(onBodyEntered)
 	hitbox.body_exited.connect(onBodyExited)
 
-func _exit_tree():
-	hitbox.body_entered.disconnect(onBodyEntered)
-	hitbox.body_exited.disconnect(onBodyExited)
-
 func _ready() -> void:
 	super._ready()
 	updateRadius()
@@ -36,6 +32,20 @@ func updateRadius():
 		return
 	hitboxShape.shape.radius = radius
 	decal.Radius = radius
+
+#region Collision query
+## Colliders overlapping this telegraph's radius, sorted near-to-far from its center.
+func GatherContacts(mask: int, exclude: Array[RID] = []) -> Array[RaycastUtils.ShapeContact]:
+	var center = global_position
+	var measure = func(pos: Vector3) -> float:
+		var offset = pos - center
+		return Vector3(offset.x, 0.0, offset.z).length()
+	return RaycastUtils.GatherContacts(
+		get_world_3d().direct_space_state,
+		hitboxShape.shape, hitboxShape.global_transform, measure,
+		mask, exclude,
+	)
+#endregion
 
 func setColor(color: Color):
 	decal.set_instance_shader_parameter(&"COLOR_R", color.r)

@@ -61,7 +61,7 @@ directional_shadow_max_distance = 25.0
 script = SubResource("GDScript_6ytau")
 
 [node name="Ivera" parent="." unique_id=197562730 instance=ExtResource("2_xy3my")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.721785, 0.00049996376, 0.67253613)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.721785, 0.00049996376, 0.9758333)
 
 [node name="Kamilla" parent="." unique_id=220179378 instance=ExtResource("6_xs4ih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0874615, 0.00049996376, -2.004982)

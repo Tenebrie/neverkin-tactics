@@ -10,6 +10,9 @@ var decal: RectDecal
 var hitbox: Area3D
 var collisionShape: CollisionShape3D
 
+var queryShape = BoxShape3D.new()
+var crossSectionShape = BoxShape3D.new()
+
 var width: float = 1.0:
 	set(value):
 		width = value
@@ -68,6 +71,49 @@ func updateOrigin():
 		var shapePos = Vector3.ZERO
 		decal.position = Vector3(decalPos.x, decalPos.y, decalPos.z - length / 2.0)
 		collisionShape.position = Vector3(shapePos.x, shapePos.y, shapePos.z - length / 2.0)
+
+#region Collision query
+func queryBasis() -> Basis:
+	return global_basis.orthonormalized()
+
+func queryOrigin() -> Vector3:
+	return Vector3(global_position.x, height / 2.0, global_position.z)
+
+## Colliders overlapping this telegraph at its full untruncated range, sorted near-to-far
+## along the beam.
+func GatherContacts(mask: int, exclude: Array[RID] = []) -> Array[RaycastUtils.ShapeContact]:
+	var basis = queryBasis()
+	var origin = queryOrigin()
+	var direction = -basis.z
+	var fullLength = definition.RectLength
+	queryShape.size = Vector3(width, height, fullLength)
+	var transform = Transform3D(basis, origin + direction * (fullLength / 2.0))
+	var measure = func(pos: Vector3) -> float:
+		var offset = pos - origin
+		return direction.dot(Vector3(offset.x, 0.0, offset.z))
+	return RaycastUtils.GatherContacts(
+		get_world_3d().direct_space_state,
+		queryShape, transform, measure,
+		mask, exclude,
+	)
+
+## Distance along this telegraph at which [param contact] is first entered.
+func DistanceToContact(
+	contact: RaycastUtils.ShapeContact,
+	allContacts: Array[RaycastUtils.ShapeContact],
+	mask: int,
+	exclude: Array[RID] = [],
+) -> float:
+	var basis = queryBasis()
+	var origin = queryOrigin()
+	var fullLength = definition.RectLength
+	crossSectionShape.size = Vector3(width, height, 0.05)
+	return RaycastUtils.ResolveContactDistance(
+		get_world_3d().direct_space_state,
+		crossSectionShape, Transform3D(basis, origin), -basis.z * fullLength,
+		mask, contact.Rid, allContacts, exclude,
+	)
+#endregion
 
 func setColor(color: Color):
 	decal.set_instance_shader_parameter(&"COLOR_R", color.r)
