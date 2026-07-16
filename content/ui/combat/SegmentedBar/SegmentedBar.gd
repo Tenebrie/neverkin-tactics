@@ -102,7 +102,7 @@ func _draw():
 	var anim = clampf(_animValue, 0.0, MaxValue)
 	var value = minf(anim, target)
 	var ghost = maxf(anim, target)
-	var promise = clampf(minf(PromiseValue, MaxValue - value), 0.0, MaxValue)
+	var promise = clampf(minf(PromiseValue, MaxValue - target), 0.0, MaxValue)
 	var threat = clampf(minf(ThreatValue, value), 0.0, MaxValue)
 	var inhuman = clampf(minf(InhumanValue, value), 0.0, MaxValue)
 
@@ -124,9 +124,9 @@ func _draw():
 		box.draw(get_canvas_item(), Rect2(0, 0, unit * drawnValue, size.y))
 
 	if promise > 0:
-		var x = unit * value
+		var x = unit * target
 		var w = unit * promise
-		var right_r = r if value + promise >= MaxValue else 0
+		var right_r = r if target + promise >= MaxValue else 0
 		var box = makeBox(PromiseColor, 0, right_r, 0, right_r)
 		box.draw(get_canvas_item(), Rect2(x, 0, w, size.y))
 

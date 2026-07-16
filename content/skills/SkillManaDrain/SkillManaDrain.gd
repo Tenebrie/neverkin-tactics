@@ -25,7 +25,7 @@ func _prepare() -> void:
 		if targets.is_empty():
 			return true
 
-		if targets[0].stats.healthDamageTaken == 0:
+		if targets[0].stats.healthDamageTaken < HealthDrain:
 			return Error.new("Target is not damaged")
 		return true
 	)
