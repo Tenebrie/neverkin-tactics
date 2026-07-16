@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://jf0xgp1knyja"]
+
+[ext_resource type="Texture2D" uid="uid://c5ikfbr37e0vf" path="res://content/actors/Ivera/skills/Soulweave/SkillSoulweaveIcon.png" id="1_ghv1l"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_skdef"]
+
+[resource]
+script = ExtResource("1_skdef")
+Name = "Soulweave"
+Category = 1
+Description = "Release a projectile that ignores walls and $Pierces all targets, applying $Soulbind to all.
+
+Enemies hit take %Damage damage, while allies restore %Healing health."
+IconTexture = ExtResource("1_ghv1l")
+TargetingMaxRange = 5.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

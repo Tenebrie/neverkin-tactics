@@ -146,7 +146,7 @@ func RefocusOn(target: Actor, reason: String) -> void:
 		return
 	FocusedTarget = target
 	var index = Ranking.find_custom(func(rank: RankedTarget): return rank.Target == target)
-	FocusedTargetTotal = Ranking[index].Value.Total if index != -1 else 0.0
+	FocusedTargetTotal = float(Ranking[index].Value.Total) if index != -1 else 0.0
 	FocusedTargetReasons = { reason: maxf(FocusedTargetTotal, 1.0) }
 	MessageLog.PrintActorMessage(reason, parent)
 

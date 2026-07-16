@@ -30,6 +30,7 @@ func _prepare() -> void:
 	landingAreaTelegraph.Validators.push_back(func(telegraph: Telegraph):
 		if not telegraph.IsPathable(parent.physicalSize):
 			return Error.new("Not enough free space at destination.")
+		return true
 	)
 
 	landingAreaTelegraph.Attachment = Telegraph.Attachment.None

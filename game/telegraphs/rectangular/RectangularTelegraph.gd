@@ -56,9 +56,9 @@ func updateSize():
 	if not isReady:
 		return
 	(decal.mesh as PlaneMesh).size = Vector2(32, 32)
-	(collisionShape.shape as BoxShape3D).size = Vector3(width, height, length)
+	(collisionShape.shape as BoxShape3D).size = Vector3(width, height, maxf(length, 0.0))
 	decal.set_instance_shader_parameter(&"SIZE_X", width / 2.0)
-	decal.set_instance_shader_parameter(&"SIZE_Z", length / 2.0)
+	decal.set_instance_shader_parameter(&"SIZE_Z", maxf(length, 0.0) / 2.0)
 
 func updateOrigin():
 	if not isReady:

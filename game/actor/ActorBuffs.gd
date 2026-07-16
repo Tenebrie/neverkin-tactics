@@ -4,9 +4,12 @@ class_name ActorBuffs
 signal Changed()
 
 func Add(buff: Buff) -> void:
-	if buff.definition and buff.definition.stackType == Buff.StackType.None:
-		RemoveAll(buff.get_script())
+	if buff.definition:
+		print(buff.definition.stackType)
+
 	add_child(buff)
+	if buff.definition and buff.definition.stackType == Buff.StackType.None:
+		_removeSameExceptOne(buff)
 	if buff.definition and buff.definition.stackType == Buff.StackType.StacksDuration:
 		_combineDurations(buff)
 	elif buff.definition and buff.definition.stackType == Buff.StackType.StacksIntensity:
@@ -23,6 +26,16 @@ func AddUpToMaxIntensity(prototype: Buff, maxIntensity: int) -> void:
 		return buff.Duration
 	)
 	existing.Duration = maxi(prototypeDuration, existing.Duration)
+
+func _removeSameExceptOne(prototype: Buff):
+	var allBuffs = GetAll(prototype.get_script())
+	if allBuffs.size() == 1:
+		return
+
+	for buff in allBuffs:
+		if buff != prototype:
+			buff.queue_free()
+			remove_child(buff)
 
 func _combineDurations(prototype: Buff):
 	var allBuffs = GetAll(prototype.get_script())

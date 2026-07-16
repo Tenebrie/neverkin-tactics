@@ -1,10 +1,13 @@
 [gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://dnf8uhhthqlbx"]
 
 [ext_resource type="Texture2D" uid="uid://dm5k2px86d32f" path="res://content/actors/Ivera/IveraAvatar.webp" id="1_780p1"]
-[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/actors/Ivera/skills/ClawStrike/SkillClawStrike.gd" id="2_63lyh"]
-[ext_resource type="Script" uid="uid://dxwwtirxpl5p7" path="res://content/skills/SkillSecondWind/SkillSecondWind.gd" id="4_780p1"]
-[ext_resource type="Script" uid="uid://owis1ce0c2b2" path="res://content/actors/Ivera/skills/GriffonForm/SkillGriffonForm.gd" id="5_68nlt"]
+[ext_resource type="Script" uid="uid://fgh26cft0rxu" path="res://content/actors/Ivera/skills/Soulweave/SkillSoulweave.gd" id="2_0gvww"]
+[ext_resource type="Script" uid="uid://nund2et2ixd2" path="res://content/actors/Ivera/skills/PullTheThread/SkillPullTheThread.gd" id="3_e671e"]
+[ext_resource type="Script" uid="uid://owis1ce0c2b2" path="res://content/actors/Ivera/shapeshift/GriffonForm/SkillGriffonForm.gd" id="4_63lyh"]
+[ext_resource type="Script" uid="uid://dqihi3l8tlsf" path="res://content/actors/Ivera/skills/Chainlink/SkillChainlink.gd" id="4_qad2i"]
+[ext_resource type="Script" uid="uid://cuc6cxmsxr3q7" path="res://content/actors/Ivera/skills/WeaveTogether/SkillWeaveTogether.gd" id="5_68nlt"]
 [ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://content/actors/Ivera/IveraToken.webp" id="6_26ehw"]
+[ext_resource type="Script" uid="uid://v1dnxnob5d8m" path="res://content/actors/Ivera/skills/Harvest/SkillHarvest.gd" id="6_xw0yp"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="7_xw0yp"]
 
 [resource]
@@ -19,5 +22,5 @@ healthMaximum = 15
 healthHumanityThreshold = 5
 ActionPointsMax = 4
 MovementSpeedPerActionPoint = 5.5
-Skills = Array[GDScript]([ExtResource("2_63lyh"), null, null, null, null, null, ExtResource("4_780p1"), ExtResource("5_68nlt")])
+Skills = Array[GDScript]([ExtResource("2_0gvww"), ExtResource("3_e671e"), ExtResource("4_qad2i"), ExtResource("5_68nlt"), ExtResource("6_xw0yp"), null, null, ExtResource("4_63lyh")])
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

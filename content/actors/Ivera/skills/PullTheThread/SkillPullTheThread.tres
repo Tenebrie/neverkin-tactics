@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://cg1yj7cq643b"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_skdef"]
+[ext_resource type="Texture2D" uid="uid://bsdyqj4dclrjl" path="res://content/actors/Ivera/skills/PullTheThread/SkillPullTheThreadIcon.png" id="1_sky12"]
+
+[resource]
+script = ExtResource("1_skdef")
+Name = "Pull the Thread"
+Category = 1
+Description = "Consume $Soulbind on a target to pull them toward yourself. Enemies hitting an obstacle take %BonkDamage damage and get $Stunned."
+IconTexture = ExtResource("1_sky12")
+TargetingMaxRange = 5.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

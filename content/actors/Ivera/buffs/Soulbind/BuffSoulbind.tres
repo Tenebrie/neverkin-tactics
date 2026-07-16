@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BuffDefinition" format=3 uid="uid://bgqtq4bprv1cn"]
+
+[ext_resource type="Texture2D" uid="uid://dkitidnv15q21" path="res://content/actors/Ivera/buffs/Soulbind/BuffSoulbindIcon64.svg" id="1_jg3uo"]
+[ext_resource type="Script" uid="uid://tbbvo8dei2ke" path="res://game/buff/BuffDefinition.gd" id="2_i8g65"]
+
+[resource]
+script = ExtResource("2_i8g65")
+name = "Soulbind"
+description = "You feel a strange pull towards Ivera..."
+iconTexture = ExtResource("1_jg3uo")
+stackType = 3
+metadata/_custom_type_script = "uid://tbbvo8dei2ke"

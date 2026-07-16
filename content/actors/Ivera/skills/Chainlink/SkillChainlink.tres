@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://dyffywp4pxfuy"]
+
+[ext_resource type="Texture2D" uid="uid://bm6gt040xb32p" path="res://content/actors/Ivera/skills/Chainlink/SkillChainlinkIcon.png" id="1_dsdlh"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_skdef"]
+
+[resource]
+script = ExtResource("1_skdef")
+Name = "Chainlink"
+Category = 1
+IconTexture = ExtResource("1_dsdlh")
+TargetingMaxRange = 5.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

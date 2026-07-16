@@ -41,9 +41,6 @@ class SingleActor extends TelegraphDefinition:
 			return TurnManager.Instance.activeFaction != Actor.PlayerFaction or Actor.Repository.Hovered.List.has(actor)
 		)
 
-	func Load(_skill: Skill):
-		pass
-
 	func WithDamageToHostiles(damage: int):
 		HealthThreat = damage
 		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
@@ -109,9 +106,6 @@ class PointArea extends TelegraphDefinition:
 		Processors.push_back(TelegraphProcessor.TargetFactionTint)
 		Processors.push_back(TelegraphProcessor.OutOfRangeTint)
 
-	func Load(_skill: Skill):
-		pass
-
 	func WithDamageToHostiles(damage: int) -> TelegraphDefinition:
 		HealthThreat = damage
 		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
@@ -131,6 +125,3 @@ class MouseText extends TelegraphDefinition:
 			telegraph.childText.offset = telegraph.get_viewport().get_mouse_position() - Vector2(telegraph.childText.size.x / 2, telegraph.childText.size.y + 8)
 			telegraph.Tint = Color.WHITE
 		)
-
-	func Load(_skill: Skill):
-		pass

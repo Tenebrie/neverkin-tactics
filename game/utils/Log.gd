@@ -28,7 +28,7 @@ static func _write(level: Level, message, category: String) -> void:
 static func _buildPrefix(level: Level, category: String) -> String:
 	var stamp = "[%s]" % Time.get_time_string_from_system()
 	var lvl = "[%s]" % Level.keys()[level]
-	var cat = " %s " % category if category != "" else " "
+	var cat = " %s - " % category if category != "" else " "
 	return "%s %s%s" % [stamp, lvl, cat]
 
 static func _colorize(level: Level, line: String) -> String:

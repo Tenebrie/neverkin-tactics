@@ -17,6 +17,7 @@ func setKeyword(keyword: KeywordDefinition):
 	elif keyword.source == KeywordDefinition.Source.Buff:
 		TurnManager.Instance.activePlayerActor.buffs.Simulate(keyword.sourceScript, func(buff: Buff):
 			descriptionLabel.text = StringUtils.populateBuffValues(keyword.description, buff)
+			return
 		)
 
 	nameLabel.add_theme_color_override("font_color", keyword.color)

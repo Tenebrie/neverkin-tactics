@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ActorDefinition" format=3 uid="uid://x5sms1i1tc64"]
+
+[ext_resource type="Texture2D" uid="uid://dwj7xlfrk0163" path="res://content/actors/Ivera/griffon/IveraGriffonAvatar.webp" id="1_6x3wb"]
+[ext_resource type="Script" uid="uid://bstbfwqa7mpcs" path="res://content/actors/Ivera/griffon/skills/ClawStrike/SkillClawStrike.gd" id="2_p5t07"]
+[ext_resource type="Script" uid="uid://c6txfqbi3tpo" path="res://content/actors/Ivera/griffon/skills/GriffonFlight/SkillGriffonFlight.gd" id="3_3rd3g"]
+[ext_resource type="Script" uid="uid://cl7dg242eqiye" path="res://content/actors/Ivera/shapeshift/HumanForm/SkillIveraHumanForm.gd" id="3_6x3wb"]
+[ext_resource type="Script" uid="uid://5fpiocikuyvr" path="res://content/actors/Ivera/griffon/skills/GriffonGrip/SkillGriffonGrip.gd" id="3_i04aw"]
+[ext_resource type="Texture2D" uid="uid://dc6h1yjmt6g8x" path="res://content/actors/Ivera/griffon/IveraGriffonToken.webp" id="4_mpfqu"]
+[ext_resource type="Script" uid="uid://dug3s4ovy83ja" path="res://content/actors/Ivera/griffon/skills/GriffonToss/SkillGriffonToss.gd" id="4_x1qaf"]
+[ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="5_7bfqy"]
+
+[resource]
+script = ExtResource("5_7bfqy")
+Name = "Winged Ivera"
+Faction = 0
+PerceivedThreat = 2
+pronouns = 3
+initiative = 5
+physicalSize = 0.8
+TokenOffset = Vector2(0, -0.08)
+TokenTexture = ExtResource("4_mpfqu")
+AvatarTexture = ExtResource("1_6x3wb")
+healthMaximum = 20
+healthHumanityThreshold = 10
+ActionPointsMax = 4
+MovementSpeedPerActionPoint = 6.5
+Skills = Array[GDScript]([ExtResource("2_p5t07"), ExtResource("3_i04aw"), ExtResource("4_x1qaf"), null, null, null, ExtResource("3_3rd3g"), ExtResource("3_6x3wb")])
+enablesShifted = true
+metadata/_custom_type_script = "uid://xdmrao02bm7l"

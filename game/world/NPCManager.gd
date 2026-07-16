@@ -80,12 +80,13 @@ func executeMoveToAction(actor: Actor, params: ActorBehaviour.TurnAction.MoveToP
 	actor.actions.IssueOrder_MoveThroughPath(path)
 	var timedOut = await SignalUtils.awaitWithTimeout(actor.actions.ActionQueue.QueueEmptied, 5.0)
 	if timedOut:
+		Log.error("Actor %s didn't reach destination in time, aborting action"%actor, "NPC Behaviour")
 		actor.actions.IssueOrder_Stop()
 
 func executeUseSkillAction(actor: Actor, params: ActorBehaviour.TurnAction.UseSkillParams):
 	var skill = actor.Skills.Get(params.skill)
 	if not skill:
-		printerr("Actor %s does not have skill %s"%[actor, params.skill])
+		Log.error("Actor %s does not have skill %s"%[actor, params.skill], "NPC Behaviour")
 		return
 	actor.Skills.Select(skill)
 	if skill.definition.BehaviourTargetsGround:

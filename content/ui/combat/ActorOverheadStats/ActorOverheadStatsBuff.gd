@@ -29,4 +29,5 @@ static func getAlignmentColor(alignment: Buff.Alignment) -> Color:
 	match (alignment):
 		Buff.Alignment.Positive: return Color.GREEN
 		Buff.Alignment.Negative: return Color.RED
+		Buff.Alignment.Neutral: return Color.ORANGE
 		_: return Color.GRAY

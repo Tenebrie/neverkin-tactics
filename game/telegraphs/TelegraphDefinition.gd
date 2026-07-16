@@ -1,4 +1,4 @@
-@abstract extends Resource
+extends Resource
 class_name TelegraphDefinition
 
 signal created(telegraph: Telegraph)
@@ -10,9 +10,9 @@ signal targetsChanged(targets: Array[Actor])
 @export var TextMessage: String
 
 ## Returns whether the telegraph as a whole is valid
-@export var Validators: Array[func(Telegraph) -> bool] = [func(_t): return true]
+@export var Validators: Array[func(Telegraph) -> Variant] = [func(_t): return true]
 ## Returns whether an individual actor is a valid target
-@export var TargetFilters: Array[func(Actor, Telegraph) -> bool] = [func(_a, _t): return true]
+@export var TargetFilters: Array[func(Actor, Telegraph) -> Variant] = [func(_a, _t): return true]
 ## Resource to be damaged
 @export var HealthThreat: int = 0
 @export var HealthThreatSelector = func(_actor: Actor) -> int: return HealthThreat
@@ -38,7 +38,7 @@ signal targetsChanged(targets: Array[Actor])
 @export var TargetSnapping: bool = false
 @export var LookAtMouse: bool = false
 
-@export var Processors: Array[Callable] = []
+@export var Processors: Array[func(Telegraph) -> void] = []
 
 @export var collisionMask: int = CollisionLayer.SKILL_TARGETABLE
 
@@ -53,13 +53,14 @@ signal targetsChanged(targets: Array[Actor])
 @export var RectLength: float = 1.0
 @export var RectOrigin: RectangularTelegraph.Origin = RectangularTelegraph.Origin.Center
 
-@abstract func Load(skill: Skill) -> void
+func Load(_skill: Skill) -> void:
+	pass
 var ParentSkill: Skill
 
 func coerce() -> TelegraphDefinition:
 	return self
 
-func addValidator(filter: func(Telegraph) -> bool) -> TelegraphDefinition:
+func addValidator(filter: func(Telegraph) -> Variant) -> TelegraphDefinition:
 	Validators.push_back(filter)
 	return self
 
@@ -71,6 +72,10 @@ func addTargetFilter(filter: func(Actor) -> bool) -> TelegraphDefinition:
 
 func addTargetFilterOnTelegraph(filter: func(Actor, Telegraph) -> bool) -> TelegraphDefinition:
 	TargetFilters.push_back(filter)
+	return self
+
+func addProcessor(processor: func(Telegraph) -> void) -> TelegraphDefinition:
+	Processors.push_back(processor)
 	return self
 
 func addCollisionLayer(layer: int) -> TelegraphDefinition:

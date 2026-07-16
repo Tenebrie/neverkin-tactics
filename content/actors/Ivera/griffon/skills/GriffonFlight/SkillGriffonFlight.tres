@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://dsubohlt5aoox"]
+
+[ext_resource type="Texture2D" uid="uid://bgjkesaje06gh" path="res://content/actors/Ivera/griffon/skills/GriffonFlight/SkillGriffonFlightIcon.png" id="1_fo1hb"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_n7oki"]
+
+[resource]
+script = ExtResource("1_n7oki")
+Name = "Griffon Flight"
+Category = 2
+Description = "Flap your wings to quickly reposition in the fight.
+
+If you have another character grabbed with $Griffon Grip, they come along for a ride. You are gentle with your allies, but anyone else takes %landingDamage damage upon landing."
+GrudgeString = "Dropped me on the ground"
+IconTexture = ExtResource("1_fo1hb")
+TargetingMaxRange = 5.0
+BehaviourUsagePreference = 0.0
+BehaviourRequireLineOfSight = false
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

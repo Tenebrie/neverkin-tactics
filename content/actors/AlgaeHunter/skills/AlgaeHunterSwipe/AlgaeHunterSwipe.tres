@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://b02mvcro27kg5"]
 
-[ext_resource type="Texture2D" uid="uid://qiqw5jfr3rkl" path="res://content/actors/Ivera/skills/ClawStrike/SkillClawStrikeIcon.png" id="1_vypqy"]
+[ext_resource type="Texture2D" uid="uid://qiqw5jfr3rkl" path="res://content/actors/Ivera/griffon/skills/ClawStrike/SkillClawStrikeIcon.png" id="1_vypqy"]
 [ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_xlvr3"]
 
 [resource]

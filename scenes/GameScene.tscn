@@ -61,7 +61,7 @@ directional_shadow_max_distance = 25.0
 script = SubResource("GDScript_6ytau")
 
 [node name="Ivera" parent="." unique_id=197562730 instance=ExtResource("2_xy3my")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.16952, 0.00049996376, -1.017937)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.721785, 0.00049996376, 0.67253613)
 
 [node name="Kamilla" parent="." unique_id=220179378 instance=ExtResource("6_xs4ih")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0874615, 0.00049996376, -2.004982)
@@ -73,10 +73,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8937922, 0.00050091743, 5.1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.832835, 0.0005002022, 6.2261996)
 
 [node name="Brawler" parent="." unique_id=141319436 instance=ExtResource("8_vijgj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.970889, 0.0005002022, 3.6694553)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.7117405, 0.0005002022, 2.6817226)
 
 [node name="Brawler2" parent="." unique_id=168031144 instance=ExtResource("8_vijgj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.4807982, 0.00049972534, 5.102641)
 
 [node name="Actor" parent="." unique_id=807014692 instance=ExtResource("8_pynjx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.812845, 0.0005002022, 1.8580823)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.23481, 0.0005002022, 0.30139947)

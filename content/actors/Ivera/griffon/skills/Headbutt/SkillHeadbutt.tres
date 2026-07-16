@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_skdef"]
+
+[resource]
+script = ExtResource("1_skdef")
+Name = "Headbutt"
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

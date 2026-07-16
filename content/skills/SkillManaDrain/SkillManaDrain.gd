@@ -20,7 +20,8 @@ func _prepare() -> void:
 	)
 	targetTelegraph.addTargetFilter(func(actor: Actor):
 		return actor is not Prop
-	).addValidator(func(telegraph: Telegraph):
+	)
+	targetTelegraph.addValidator(func(telegraph: Telegraph):
 		var targets = telegraph.FilteredOnlyTargets
 		if targets.is_empty():
 			return true

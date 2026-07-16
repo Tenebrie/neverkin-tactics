@@ -68,9 +68,9 @@ func updateDrag() -> void:
 	if not Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE):
 		isDragging = false
 		return
-	var current = groundPoint(get_viewport().get_mouse_position())
-	cameraTarget.x = position.x + dragAnchor.x - current.x
-	cameraTarget.z = position.z + dragAnchor.z - current.z
+	var currentPoint = groundPoint(get_viewport().get_mouse_position())
+	cameraTarget.x = position.x + dragAnchor.x - currentPoint.x
+	cameraTarget.z = position.z + dragAnchor.z - currentPoint.z
 
 func _process(delta: float) -> void:
 	size = lerpf(size, targetZoom, delta * 10.0)

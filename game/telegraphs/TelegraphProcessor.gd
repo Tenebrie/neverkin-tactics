@@ -38,6 +38,9 @@ static func LookAtMouse(telegraph: Telegraph):
 	telegraph.look_at(target)
 
 static func ApplyCollisionRules(telegraph: RectangularTelegraph):
+	return ApplyCollisionRulesCustom(telegraph, 0.1)
+
+static func ApplyCollisionRulesCustom(telegraph: RectangularTelegraph, wallPenetration: float = 0.0, bufferDist: float = 0.0) -> Array[Actor]:
 	var definition = telegraph.definition
 	var basis = telegraph.global_basis.orthonormalized()
 	var direction = -basis.z
@@ -67,6 +70,7 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 		hitGroups[group] = true
 
 	var slab = BoxShape3D.new()
+	var targetsHit: Array[Actor]
 
 	for contact in contacts:
 		var collider = contact.Collider
@@ -77,6 +81,7 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 			continue
 
 		if isInHitGroup(collider, hitGroups):
+			targetsHit.push_back(collider)
 			continue
 
 		var isActor = collider.collision_layer & CollisionLayer.ACTOR != 0
@@ -91,33 +96,41 @@ static func ApplyCollisionRules(telegraph: RectangularTelegraph):
 		if isActor and piercingLeft > 0:
 			piercingLeft -= 1
 			rememberGroups(collider, hitGroups)
+			targetsHit.push_back(collider)
 			continue
 
 		if isLowCover and penetrationLeft > 0:
 			penetrationLeft -= 1
 			rememberGroups(collider, hitGroups)
+			targetsHit.push_back(collider)
 			continue
 
 		if isHighCover and penetrationLeft >= 2:
 			penetrationLeft -= 2
 			rememberGroups(collider, hitGroups)
+			targetsHit.push_back(collider)
 			continue
 
 		if isFullCover and penetrationLeft >= 4:
 			penetrationLeft -= 4
 			rememberGroups(collider, hitGroups)
+			targetsHit.push_back(collider)
 			continue
 
 		if isActor:
-			telegraph.length = minf(contact.Distance, definition.RectLength)
+			telegraph.length = minf(contact.Distance - bufferDist, definition.RectLength)
 		else:
 			slab.size = Vector3(telegraph.width, telegraph.height, 0.05)
 			var hit = RaycastUtils.ResolveContactDistance(
 				spaceState, slab, basis, origin, direction,
 				definition.RectLength, mask, contact.Rid, contacts, initialExclude,
 			)
-			telegraph.length = hit + 0.1
-		return
+			telegraph.length = hit + wallPenetration
+
+		targetsHit.push_back(collider)
+		break
+
+	return targetsHit
 
 static func isInHitGroup(collider: Node, hitGroups: Dictionary[StringName, bool]) -> bool:
 	for group in collider.get_groups():

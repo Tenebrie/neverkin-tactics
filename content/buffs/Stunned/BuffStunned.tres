@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BuffDefinition" format=3 uid="uid://3ssxs71cl0lj"]
+
+[ext_resource type="Texture2D" uid="uid://6qr7krb8myo7" path="res://content/buffs/Stunned/BuffStunnedIcon64.svg" id="1_tbu5j"]
+[ext_resource type="Script" uid="uid://tbbvo8dei2ke" path="res://game/buff/BuffDefinition.gd" id="2_d0jda"]
+
+[resource]
+script = ExtResource("2_d0jda")
+name = "Stunned"
+description = "Lose %ActionPointsLost action point at the start of the turn."
+alignment = 2
+iconTexture = ExtResource("1_tbu5j")
+durationTurns = 1
+stackType = 1
+metadata/_custom_type_script = "uid://tbbvo8dei2ke"

@@ -74,10 +74,8 @@ static func populateBuffValues(text: String, buff: Buff) -> String:
 		result += "\n\n$Duration: "
 		if buff.Duration == 0:
 			result += "Until the end of this turn"
-		elif buff.Duration == 1:
-			result += "Until the end of $their next turn"
-		elif buff.Duration >= 2:
-			result += "Lasts [color=orange]%d[/color] turns"%buff.Duration
+		else:
+			result += "[color=orange]%d[/color] turn%s"%[buff.Duration, "" if buff.Duration == 1 else "s"]
 
 	if buff.definition and buff.definition.stackType != Buff.StackType.Parallel:
 		result += "\n"

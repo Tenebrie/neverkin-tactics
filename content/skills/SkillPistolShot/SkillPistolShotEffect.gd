@@ -6,7 +6,7 @@ func Play(target: Vector3, duration: float = 0.2) -> void:
 	createSwipeTrail(Vector3.ZERO, target, 0, duration)
 
 func createSwipeTrail(from: Vector3, to: Vector3, arc: float, duration: float) -> void:
-	var trail := VaporTrail.new()
+	var trail = VaporTrail.new()
 	trail.position = from
 	trail.size = 0.05
 	trail.emitting = true
@@ -19,12 +19,12 @@ func createSwipeTrail(from: Vector3, to: Vector3, arc: float, duration: float) -
 	trail.time_color_gradient = preload("res://content/effects/KineticWeaponTrail/KineticWeaponTrailTimeGradient.tres")
 	add_child(trail)
 
-	var direction := (from - to).normalized()
-	var sideways := Vector3(-direction.z, 0.0, direction.x)
+	var direction = (from - to).normalized()
+	var sideways = Vector3(-direction.z, 0.0, direction.x)
 
-	var tween := create_tween()
+	var tween = create_tween()
 	tween.tween_method(func(t: float) -> void:
-		var pos := from.lerp(to, t)
+		var pos = from.lerp(to, t)
 		pos -= sideways * arc * 4.0 * t * (1.0 - t)
 		trail.position = pos
 		trail.current_time = t
