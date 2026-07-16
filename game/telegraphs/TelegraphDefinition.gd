@@ -7,6 +7,7 @@ signal targetsChanged(targets: Array[Actor])
 @export var Shape: Telegraph.Shape = Telegraph.Shape.Circle
 @export var Attachment: Telegraph.Attachment = Telegraph.Attachment.None
 @export var Icon: Texture2D
+@export var IconPerTarget: Texture2D
 @export var TextMessage: String
 
 ## Returns whether the telegraph as a whole is valid
@@ -54,7 +55,7 @@ signal targetsChanged(targets: Array[Actor])
 @export_group("Rectangular Shape", "Rect")
 @export var RectWidth: float = 1.0
 @export var RectLength: float = 1.0
-@export var RectOrigin: RectangularTelegraph.Origin = RectangularTelegraph.Origin.Center
+@export var RectOrigin: BeamTelegraph.Origin = BeamTelegraph.Origin.Center
 
 func Load(_skill: Skill) -> void:
 	pass

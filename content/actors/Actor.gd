@@ -164,6 +164,10 @@ func Destroy() -> void:
 	SignalBus.ActorDestroyed.emit(self)
 
 func fadeOut(duration: float = 0.3):
+	if has_node("MeshInstance3D"):
+		var tween = create_tween()
+		tween.tween_property($MeshInstance3D, "transparency", 1.0, duration / 3.0)
+
 	if has_node("TokenMeshInstance3D"):
 		var tween = create_tween()
 		tween.tween_property($TokenMeshInstance3D, "transparency", 1.0, duration)

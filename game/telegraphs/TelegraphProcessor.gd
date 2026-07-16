@@ -37,12 +37,12 @@ static func LookAtMouse(telegraph: Telegraph):
 	target.y = telegraph.global_position.y
 	telegraph.look_at(target)
 
-static func ApplyCollisionRules(telegraph: RectangularTelegraph):
+static func ApplyCollisionRules(telegraph: BeamTelegraph):
 	return ApplyCollisionRulesCustom(telegraph, 0.1)
 
-static func ApplyCollisionRulesCustom(telegraph: RectangularTelegraph, wallPenetration: float = 0.0, bufferDist: float = 0.0) -> Array[Actor]:
+static func ApplyCollisionRulesCustom(telegraph: BeamTelegraph, wallPenetration: float = 0.0, bufferDist: float = 0.0) -> Array[Actor]:
 	var definition = telegraph.definition
-	var mask = CollisionLayer.FULL_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.LOW_COVER | CollisionLayer.ACTOR
+	var mask = telegraph.definition.collisionMask
 	var excludeMask = CollisionLayer.IGNORED_COVER
 
 	var initialExclude: Array[RID] = [telegraph.ParentSkill.parent.get_rid()]

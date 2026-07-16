@@ -10,7 +10,6 @@ Name = "Low Cover"
 PerceivedThreat = 0
 physicalSize = 0.1
 healthMaximum = 3
-ManaMaximum = null
 ActionPointsMax = 0
 MovementSpeedPerActionPoint = 0.0
 showHoverInfo = false

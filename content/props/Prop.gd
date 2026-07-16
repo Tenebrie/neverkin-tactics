@@ -11,7 +11,3 @@ func _ready() -> void:
 		movementSpeedPerAction = 0
 		definition.PerceivedThreat = ThreatLevel.Harmless
 	super._ready()
-
-func fadeOut(_duration: float = 0.3):
-	super.fadeOut()
-	queue_free()

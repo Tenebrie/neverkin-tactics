@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://game/telegraphs/capsule/CapsuleDecal.gd" id="1_capdc"]
+[ext_resource type="Shader" path="res://game/telegraphs/capsule/CapsuleDecal.gdshader" id="2_capsh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_capdc"]
+render_priority = 0
+shader = ExtResource("2_capsh")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_capdc"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_capdc")
+size = Vector2(1, 1)
+
+[node name="CapsuleDecal" type="MeshInstance3D"]
+instance_shader_parameters/COLOR_B = 1.0
+instance_shader_parameters/COLOR_G = 1.0
+instance_shader_parameters/COLOR_R = 0.0
+instance_shader_parameters/OUTER_WIDTH = 0.05
+instance_shader_parameters/PROGRESS = 0.5
+instance_shader_parameters/RADIUS = 0.5
+mesh = SubResource("PlaneMesh_capdc")
+script = ExtResource("1_capdc")

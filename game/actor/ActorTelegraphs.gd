@@ -52,6 +52,7 @@ func _process(_delta: float) -> void:
 			telegraph.global_position = updatedTarget
 
 		telegraph.Tint = TelegraphColor.NoTarget
+		telegraph.SelfTint = Color.WHITE
 		#if telegraph.ParentSkill.preparingInfuse:
 			#telegraph.Tint = TelegraphColor.NoTargetInfused
 		for processor in telegraph.definition.Processors:
@@ -100,6 +101,13 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 		rect.length = def.RectLength
 		rect.lengthOrigin = def.RectOrigin
 		telegraph = rect
+
+	elif def.Shape == Telegraph.Shape.Capsule:
+		var capsule = Asset.Instantiate(CapsuleTelegraph)
+		capsule.width = def.RectWidth
+		capsule.length = def.RectLength
+		capsule.lengthOrigin = def.RectOrigin
+		telegraph = capsule
 
 	telegraph.growPercentage = 1.0
 	telegraph.definition = def

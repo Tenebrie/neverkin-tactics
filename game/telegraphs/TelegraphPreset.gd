@@ -32,7 +32,7 @@ class SingleActor extends TelegraphDefinition:
 		Validators.push_back(TelegraphValidator.MaximumSkillRangeTargetingActor)
 		Validators.push_back(TelegraphValidator.AtLeastOneTarget)
 
-		PostProcessors.push_back(TelegraphProcessor.SnapToHoveredActor)
+		Processors.push_back(TelegraphProcessor.SnapToHoveredActor)
 		PostProcessors.push_back(TelegraphProcessor.OutOfRangeTint)
 		PostProcessors.push_back(TelegraphProcessor.TargetFactionTint)
 		PostProcessors.push_back(TelegraphProcessor.NoTransparency)
@@ -52,7 +52,7 @@ class Projectile extends TelegraphDefinition:
 	func _init():
 		Shape = Telegraph.Shape.Rect
 		Attachment = Telegraph.Attachment.Caster
-		RectOrigin = RectangularTelegraph.Origin.Start
+		RectOrigin = BeamTelegraph.Origin.Start
 		ShootFromCover = true
 
 		Processors.push_back(TelegraphProcessor.LookAtMouse)

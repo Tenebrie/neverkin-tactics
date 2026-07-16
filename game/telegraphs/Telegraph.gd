@@ -13,11 +13,19 @@ var definition: TelegraphDefinition
 
 var childText: TelegraphText
 
+## Tint applied to the telegraph and all children
 @export var Tint: Color = Color.GRAY:
 	set(value):
 		Tint = value
 		if isReady:
-			setColor(value)
+			setColor(Tint * SelfTint)
+
+## Tint applied to telegraph only
+@export var SelfTint: Color = Color.WHITE:
+	set(value):
+		SelfTint = value
+		if isReady:
+			setColor(Tint * SelfTint)
 
 @export var GeneralValidator: Callable
 @export var TargetValidator: Callable
@@ -29,6 +37,8 @@ var _targets: Array[Actor] = []
 var Targets: Array[Actor]
 ## Per-target validation only
 var FilteredOnlyTargets: Array[Actor]
+
+var TargetIcons: Dictionary[Actor, TelegraphIcon]
 
 func _ready():
 	setColor(Tint)
@@ -48,6 +58,15 @@ func checkTargetsDiff() -> void:
 			BuffManaPromise.AddToActor(target, definition.ManaPromiseSelector.call(target), self)
 			BuffActionPointThreat.AddToActor(target, definition.ActionPointThreatSelector.call(target), self)
 			BuffActionPointPromise.AddToActor(target, definition.ActionPointPromiseSelector.call(target), self)
+			if definition.IconPerTarget:
+				TargetIcons[target] = Asset.Instantiate(TelegraphIcon)
+				add_child(TargetIcons[target])
+				TargetIcons[target].SetIcon(definition.IconPerTarget)
+				TargetIcons[target].SetSize(Vector2(0.75, 0.75))
+				TargetIcons[target].SetTint(Tint)
+				TargetIcons[target].followTarget = target
+				TargetIcons[target].global_position = target.global_position
+				TargetIcons[target].global_position.y = RenderHeight.AboveWalls
 		else:
 			BuffHealthThreat.EnsureIntensity(target, definition.HealthThreatSelector.call(target), self)
 			BuffHealthPromise.EnsureIntensity(target, definition.HealthPromiseSelector.call(target), self)
@@ -64,6 +83,10 @@ func checkTargetsDiff() -> void:
 			BuffManaPromise.RemoveByOwner(target, self)
 			BuffActionPointThreat.RemoveByOwner(target, self)
 			BuffActionPointPromise.RemoveByOwner(target, self)
+			if TargetIcons.has(target):
+				TargetIcons[target].queue_free()
+				TargetIcons.erase(target)
+
 	if current != previousSeenTargets:
 		TargetsChanged.emit(current)
 		definition.targetsChanged.emit(current)
@@ -124,6 +147,7 @@ func isPointOnNavmesh(map: RID, point: Vector3, threshold: float) -> bool:
 enum Shape {
 	Circle,
 	Rect,
+	Capsule,
 }
 
 enum Attachment {

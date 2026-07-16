@@ -65,6 +65,7 @@ func _process(delta: float) -> void:
 		return
 	var current = fuse.growPercentage
 	var target = clampf(apSpentTotal / (fuseDuration - 0.05), 0.0, 1.0)
+	fuse.pollTargets()
 	if target == current:
 		return
 
@@ -74,10 +75,12 @@ func _process(delta: float) -> void:
 		fuse.growPercentage = clampf(current - delta * fuseDuration, target, current)
 
 func explode():
+	var targets = fuse.Targets
+	fuse.pollTargets()
 	fuse.cleanUp()
 	fuse.tree_exiting.connect(queue_free)
 	PlayExplosionEffect()
-	for target in fuse.Targets:
+	for target in targets:
 		target.stats.dealDamage(DamageInstance.ForDelayedTelegraph(target, TriggeringSkill, fuse))
 
 func PlayExplosionEffect():

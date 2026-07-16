@@ -4,9 +4,6 @@ class_name ActorBuffs
 signal Changed()
 
 func Add(buff: Buff) -> void:
-	if buff.definition:
-		print(buff.definition.stackType)
-
 	add_child(buff)
 	if buff.definition and buff.definition.stackType == Buff.StackType.None:
 		_removeSameExceptOne(buff)

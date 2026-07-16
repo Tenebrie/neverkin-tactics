@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://game/telegraphs/capsule/CapsuleTelegraph.gd" id="1_captg"]
+[ext_resource type="PackedScene" path="res://game/telegraphs/capsule/CapsuleDecal.tscn" id="2_capdc"]
+
+[node name="CapsuleTelegraph" type="Node3D"]
+script = ExtResource("1_captg")
+
+[node name="CapsuleDecal" parent="." instance=ExtResource("2_capdc")]
+
+[node name="Hitbox" type="Area3D" parent="."]
+input_ray_pickable = false

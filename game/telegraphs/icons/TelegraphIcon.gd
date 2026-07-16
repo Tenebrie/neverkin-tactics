@@ -3,6 +3,8 @@ class_name TelegraphIcon
 
 @onready var parent: Telegraph = get_parent()
 
+var followTarget: Actor
+
 func SetIcon(icon: Texture2D):
 	var material = get_surface_override_material(0) as StandardMaterial3D
 	material.albedo_texture = icon
@@ -17,3 +19,6 @@ func SetTint(tint: Color):
 
 func _process(_d):
 	SetTint(parent.Tint)
+	if followTarget:
+		global_position = followTarget.global_position
+		global_position.y = RenderHeight.AboveWalls

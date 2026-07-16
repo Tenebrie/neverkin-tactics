@@ -1,10 +1,5 @@
 class_name RectangularTelegraph
-extends Telegraph
-
-enum Origin {
-	Center,
-	Start,
-}
+extends BeamTelegraph
 
 var decal: RectDecal
 var hitbox: Area3D
@@ -12,27 +7,6 @@ var collisionShape: CollisionShape3D
 
 var queryShape = BoxShape3D.new()
 var crossSectionShape = BoxShape3D.new()
-
-var width: float = 1.0:
-	set(value):
-		width = value
-		updateSize()
-
-var length: float = 1.0:
-	set(value):
-		length = value
-		updateSize()
-		updateOrigin()
-
-var height: float = 5.0:
-	set(value):
-		height = value
-		updateSize()
-
-var lengthOrigin: Origin = Origin.Center:
-	set(value):
-		lengthOrigin = value
-		updateOrigin()
 
 func _enter_tree():
 	hitbox = get_node("Hitbox") as Area3D
@@ -74,12 +48,6 @@ func pollTargets():
 	checkTargetsDiff()
 
 #region Collision query
-func queryBasis() -> Basis:
-	return global_basis.orthonormalized()
-
-func queryOrigin() -> Vector3:
-	return Vector3(global_position.x, height / 2.0, global_position.z)
-
 func measureAlongBeam() -> func(Vector3) -> float:
 	var origin = queryOrigin()
 	var direction = -queryBasis().z

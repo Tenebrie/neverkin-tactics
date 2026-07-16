@@ -41,7 +41,7 @@ func _prepare() -> void:
 			telegraph.global_position = Vector3(_pinnedOrigin.x, telegraph.global_position.y, _pinnedOrigin.z)
 	)
 	damageTelegraph.Processors.push_back(func(telegraph: Telegraph):
-		var rect = telegraph as RectangularTelegraph
+		var rect = telegraph as BeamTelegraph
 		_lastTravelLength = rect.length
 		_lastEndpoint = rect.global_position + (-rect.global_basis.z) * rect.length
 	)

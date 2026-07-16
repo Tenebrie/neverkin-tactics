@@ -174,6 +174,8 @@ class TargetData:
 	var mousePoint: Vector3
 
 	var pointPerTelegraph: Dictionary[TelegraphDefinition, Vector3]
+	var endpointPerTelegraph: Dictionary[TelegraphDefinition, Vector3]
+	var lengthPerTelegraph: Dictionary[TelegraphDefinition, float]
 	var perTelegraph: Dictionary[TelegraphDefinition, Array[Actor]]
 	var perTelegraphIndex: Array[Array[Actor]]
 
@@ -188,6 +190,10 @@ class TargetData:
 		targetData.mousePoint = actor.InputProvider.CursorPosition
 		for telegraph in actor.telegraphs.telegraphs:
 			targetData.pointPerTelegraph[telegraph.definition] = ActorUtils.flatPositionOf(telegraph)
+			if telegraph is BeamTelegraph:
+				var beam = telegraph as BeamTelegraph
+				targetData.endpointPerTelegraph[telegraph.definition] = beam.Endpoint()
+				targetData.lengthPerTelegraph[telegraph.definition] = beam.length
 		targetData.perTelegraph = actor.telegraphs.TargetsPerTelegraphDefinition
 		targetData.perTelegraphIndex = targetData.perTelegraph.values()
 		targetData.infusedCast = targetData.sourceSkill.preparingInfuse
