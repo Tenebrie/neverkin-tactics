@@ -10,6 +10,8 @@ extends Camera3D
 @export var zoomMax = 30.0
 @export var zoomStep = 2.0
 
+@onready var sounds: CameraSounds = $CameraSounds
+
 var cameraTarget: Vector3
 var targetZoom: float
 
@@ -23,7 +25,6 @@ func _ready() -> void:
 	targetZoom = size
 	cameraTarget = position
 	position = Vector3(-1000, position.y, -1000)
-	add_child(CameraMotionBlur.new())
 	TurnManager.Instance.CurrentActorChanged.connect(func(_a):
 		var actor = TurnManager.Instance.activeActor
 		if actor != null:
@@ -33,8 +34,12 @@ func _ready() -> void:
 	)
 
 func snapToTarget(worldPos: Vector3) -> void:
-	cameraTarget.x = clampf(worldPos.x, offsetRangeMinX, offsetRangeMaxX)
-	cameraTarget.z = clampf(worldPos.z, offsetRangeMinZ, offsetRangeMaxZ)
+	var newCameraTarget = cameraTarget
+	newCameraTarget.x = clampf(worldPos.x, offsetRangeMinX, offsetRangeMaxX)
+	newCameraTarget.z = clampf(worldPos.z, offsetRangeMinZ, offsetRangeMaxZ)
+	if newCameraTarget.distance_to(cameraTarget) > 1.0:
+		sounds.playSweep()
+	cameraTarget = newCameraTarget
 
 func _unhandled_input(event: InputEvent) -> void:
 	var button = event as InputEventMouseButton
@@ -104,11 +109,11 @@ func _process(delta: float) -> void:
 	cameraTarget.z = clampf(cameraTarget.z, offsetRangeMinZ, offsetRangeMaxZ)
 	var targetPosition = Vector3(cameraTarget.x, position.y, cameraTarget.z)
 	if isMovingKeyboard:
-		var lerpSpeed = 200.0
-		position = position.lerp(targetPosition, minf(delta * lerpSpeed, 1.0))
+		#var lerpSpeed = 200.0
+		#position = position.lerp(targetPosition, minf(delta * lerpSpeed, 1.0))
+		position = targetPosition
 	elif isDragging:
-		var lerpSpeed = 200.0
-		position = position.lerp(targetPosition, minf(delta * lerpSpeed, 1.0))
+		position = targetPosition
 	else:
 		var lerpSpeed = 12.0 if isPlayerTurn and not lockedTarget else 5.0
 		position = position.lerp(targetPosition, minf(delta * lerpSpeed, 1.0))

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://br6t7ri07sgw2"]
 
 [ext_resource type="Script" uid="uid://dheb7w3ek6fi2" path="res://game/scene/GameScene.gd" id="1_6ytau"]
-[ext_resource type="Script" uid="uid://bimanig80yrro" path="res://game/camera/MainCamera.gd" id="2_cxv17"]
+[ext_resource type="PackedScene" uid="uid://cdq5o6e7xd2f5" path="res://game/camera/MainCamera.tscn" id="2_pynjx"]
 [ext_resource type="PackedScene" uid="uid://ylc6aguob6mn" path="res://content/actors/Ivera/Ivera.tscn" id="2_xy3my"]
 [ext_resource type="PackedScene" uid="uid://cxoxb77d1144u" path="res://content/actors/WolfpackTrooper/WolfpackTrooper.tscn" id="5_7s5hy"]
 [ext_resource type="PackedScene" uid="uid://dmyet57hfpj6u" path="res://content/actors/Kamilla/Kamilla.tscn" id="6_xs4ih"]
@@ -32,13 +32,12 @@ func _ready() -> void:
 [node name="GameScene" type="Node3D" unique_id=1981852205]
 script = ExtResource("1_6ytau")
 
-[node name="MainCamera" type="Camera3D" parent="." unique_id=1185739265]
+[node name="MainCamera" parent="." unique_id=1352197218 instance=ExtResource("2_pynjx")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -3.241, 4, 0)
-visible = false
+doppler_tracking = 1
 projection = 1
 size = 8.0
 far = 5.0
-script = ExtResource("2_cxv17")
 offsetRangeMinX = -10.0
 offsetRangeMaxX = 10.0
 offsetRangeMinZ = -12.0

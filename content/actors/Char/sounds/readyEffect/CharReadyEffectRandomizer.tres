@@ -1,0 +1,11 @@
+[gd_resource type="AudioStreamRandomizer" format=3 uid="uid://p4rtvew4er3i"]
+
+[ext_resource type="AudioStream" uid="uid://w0j7vungpqea" path="res://content/actors/Char/sounds/readyEffect/GunFoleyPistol_BW.55411.wav" id="1_su7dd"]
+[ext_resource type="AudioStream" uid="uid://cb5modcn1xu4y" path="res://content/actors/Char/sounds/readyEffect/GunFoleyPistol_BW.55421.wav" id="2_clx3m"]
+
+[resource]
+random_pitch = 1.1892071
+random_volume_offset_db = 2.0
+streams_count = 2
+stream_0/stream = ExtResource("1_su7dd")
+stream_1/stream = ExtResource("2_clx3m")

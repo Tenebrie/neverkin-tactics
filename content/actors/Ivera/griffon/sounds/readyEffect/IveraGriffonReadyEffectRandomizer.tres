@@ -1,0 +1,16 @@
+[gd_resource type="AudioStreamRandomizer" format=3 uid="uid://l67fjukxcmci"]
+
+[ext_resource type="AudioStream" uid="uid://d2eliukkx4kcm" path="res://content/actors/Ivera/griffon/sounds/readyEffect/BirdRavenScreech_S08AN.23.wav" id="1_nhhnd"]
+[ext_resource type="AudioStream" uid="uid://ded2a301tit31" path="res://content/actors/Ivera/griffon/sounds/readyEffect/BirdRavenScreech_S08AN.24.wav" id="2_4k2lm"]
+[ext_resource type="AudioStream" uid="uid://drlt55eg88yfp" path="res://content/actors/Ivera/griffon/sounds/readyEffect/BirdRavenSquawk_S08AN.29.wav" id="3_xhg16"]
+[ext_resource type="AudioStream" uid="uid://pn0anf8vbpao" path="res://content/actors/Ivera/griffon/sounds/readyEffect/BirdRavenThroat_S08AN.32.wav" id="4_778ab"]
+
+[resource]
+random_pitch = 1.2599211
+random_volume_offset_db = 2.0
+streams_count = 4
+stream_0/stream = ExtResource("1_nhhnd")
+stream_0/weight = 0.2
+stream_1/stream = ExtResource("2_4k2lm")
+stream_2/stream = ExtResource("3_xhg16")
+stream_3/stream = ExtResource("4_778ab")

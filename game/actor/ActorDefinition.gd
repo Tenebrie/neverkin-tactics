@@ -33,3 +33,6 @@ class_name ActorDefinition
 
 @export_group("User Interface")
 @export var showHoverInfo = true
+
+@export_group("Sounds", "sound")
+@export var soundReadyEffectStream: AudioStream

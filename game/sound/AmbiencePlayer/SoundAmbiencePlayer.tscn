@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://b8d8ksd57wlg1"]
+
+[ext_resource type="Script" uid="uid://ds1qfleronj6k" path="res://game/sound/AmbiencePlayer/SoundAmbiencePlayer.gd" id="1_s8x4n"]
+[ext_resource type="AudioStream" uid="uid://c2l2n3ulsdn8e" path="res://assets/sounds/BRS_Roomtone_Air_Suburb.wav" id="2_lpvx4"]
+
+[node name="AmbiencePlayer" type="Node2D" unique_id=55866245]
+script = ExtResource("1_s8x4n")
+
+[node name="AudioStreamPlayerA" type="AudioStreamPlayer" parent="." unique_id=447347831]
+stream = ExtResource("2_lpvx4")
+bus = &"Ambience"
+
+[node name="AudioStreamPlayerB" type="AudioStreamPlayer" parent="." unique_id=1381538934]
+stream = ExtResource("2_lpvx4")
+bus = &"Ambience"

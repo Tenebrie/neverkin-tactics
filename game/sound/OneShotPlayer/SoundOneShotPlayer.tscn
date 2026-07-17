@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c1thflcqs6w5e"]
+
+[ext_resource type="Script" uid="uid://c07erm1c4p54c" path="res://game/sound/OneShotPlayer/SoundOneShotPlayer.gd" id="1_j6d0q"]
+
+[node name="SoundOneShotPlayer" type="Node2D" unique_id=1526920505]
+script = ExtResource("1_j6d0q")

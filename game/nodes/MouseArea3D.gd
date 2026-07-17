@@ -33,7 +33,7 @@ func _findCollisionShape() -> CollisionShape3D:
 
 static func updateHoverStates() -> void:
 	var tree = Engine.get_main_loop() as SceneTree
-	if tree == null:
+	if tree == null or Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE):
 		return
 	var viewport = tree.root.get_viewport()
 	var camera = viewport.get_camera_3d()

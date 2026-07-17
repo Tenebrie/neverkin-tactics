@@ -15,6 +15,10 @@ run/main_scene="uid://br6t7ri07sgw2"
 config/features=PackedStringArray("4.8", "Forward Plus")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://biovk6eljcdma"
+
 [autoload]
 
 PerformanceUtilsInstance="*uid://dghocsyibug02"
@@ -31,6 +35,7 @@ LineOfSightVisualizationLayer="*uid://c4kmoemm6iqu1"
 CoverVisualizationLayer="*uid://cd5xxxahr1i53"
 ProximityVisualizationLayer="*uid://blafccyolmd7y"
 KeywordManagerInstance="*uid://r6w3dqxegpf3"
+SoundManagerInstance="*uid://b6pnvjt3k267k"
 
 [debug]
 

@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://c23c6w60lgxia" path="res://content/skills/SkillFragGrenade/SkillFragGrenade.gd" id="4_12fl6"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="4_20xv1"]
 [ext_resource type="Script" uid="uid://dxwwtirxpl5p7" path="res://content/skills/SkillSecondWind/SkillSecondWind.gd" id="5_nkwvk"]
+[ext_resource type="AudioStream" uid="uid://do5s2c0expiga" path="res://content/actors/Kamilla/sounds/readyEffect/KamillaReadyEffectRandomizer.tres" id="8_pr1i2"]
 
 [resource]
 script = ExtResource("4_20xv1")
@@ -20,4 +21,5 @@ healthMaximum = 12
 healthHumanityThreshold = 2
 ActionPointsMax = 3
 Skills = Array[GDScript]([ExtResource("2_nkwvk"), null, ExtResource("4_12fl6"), null, ExtResource("3_12fl6"), null, null, ExtResource("5_nkwvk")])
+soundReadyEffectStream = ExtResource("8_pr1i2")
 metadata/_custom_type_script = "uid://xdmrao02bm7l"
