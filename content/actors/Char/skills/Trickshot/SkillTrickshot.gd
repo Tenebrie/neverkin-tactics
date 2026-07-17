@@ -12,8 +12,10 @@ var _hasPinnedOrigin: bool = false
 var _lastEndpoint: Vector3
 var _lastTravelLength: float = 0.0
 
+var _cameraReturnPosition: Vector3
+
 func _prepare() -> void:
-	damageTelegraph = TelegraphPreset.Projectile.new().WithWidth(HitboxWidth)
+	damageTelegraph = TelegraphPreset.CasterProjectile.new().WithWidth(HitboxWidth)
 
 	damageTelegraph.HealthThreatSelector = func(actor: Actor) -> int:
 		return Damage if ActorUtils.isTargetableBy(actor, parent) else 0
@@ -83,10 +85,15 @@ func _cast(targets: Skill.TargetData) -> void:
 	for actor in targets.perTelegraph[damageTelegraph]:
 		actor.stats.dealSkillDamage(targets)
 
+	if parent.actions.recastsRemaining == getRecastCount():
+		_cameraReturnPosition = MainCamera.Instance.cameraTarget
+
 	_pinnedOrigin = endpoint
 	_hasPinnedOrigin = true
 	if parent.actions.recastsRemaining > 0:
 		MainCamera.Instance.snapToTarget(endpoint)
+	else:
+		MainCamera.Instance.snapToTarget(_cameraReturnPosition)
 	damageTelegraph.ShootFromCoverOrigin = _pinnedOrigin
 	damageTelegraph.projectileCanHitCaster = true
 

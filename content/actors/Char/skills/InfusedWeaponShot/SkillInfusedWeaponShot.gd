@@ -5,8 +5,8 @@ var Damage = 2
 var Healing = 2
 var HitboxWidth = 0.04
 
-var damageTelegraph: TelegraphDefinition = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
-var healingTelegraph: TelegraphDefinition = TelegraphPreset.Projectile.new().TargetingAllies().WithHealing(Healing).WithWidth(HitboxWidth)
+var damageTelegraph: TelegraphDefinition = TelegraphPreset.CasterProjectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
+var healingTelegraph: TelegraphDefinition = TelegraphPreset.CasterProjectile.new().TargetingAllies().WithHealing(Healing).WithWidth(HitboxWidth)
 
 func _prepare() -> void:
 	definition.keywords = [Keyword.Reloadable]
@@ -33,7 +33,7 @@ func _cast(allTargets: Skill.TargetData) -> void:
 	var effect = SkillInfusedWeaponShotEffect.new()
 	get_parent().add_child(effect)
 	effect.global_position = parent.global_position
-	effect.position.y += 0.5
+	effect.position.y = RenderHeight.SkillTrails
 	effect.infused = allTargets.infusedCast
 
 	var targets: Array[Actor]

@@ -77,5 +77,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.7117405, 0.0005002022, 2.68
 [node name="Brawler2" parent="." unique_id=168031144 instance=ExtResource("8_vijgj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.4807982, 0.00049972534, 5.102641)
 
-[node name="Actor" parent="." unique_id=807014692 instance=ExtResource("8_pynjx")]
+[node name="Brawler3" parent="." unique_id=807014692 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6860404, 0.00049972534, 4.5071654)
+
+[node name="Brawler4" parent="." unique_id=622429627 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7706494, 0.00049972534, 5.631793)
+
+[node name="Brawler5" parent="." unique_id=23020445 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8919444, 0.00049972534, 5.86147)
+
+[node name="Brawler6" parent="." unique_id=799938060 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.004291, 0.00049972534, 6.85285)
+
+[node name="Brawler7" parent="." unique_id=1390579545 instance=ExtResource("8_vijgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17332506, 0.00049972534, 6.739717)
+
+[node name="Actor" parent="." unique_id=406430329 instance=ExtResource("8_pynjx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.23481, 0.0005002022, 0.30139947)

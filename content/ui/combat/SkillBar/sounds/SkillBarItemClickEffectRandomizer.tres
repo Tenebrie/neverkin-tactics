@@ -1,0 +1,9 @@
+[gd_resource type="AudioStreamRandomizer" format=3 uid="uid://cjusnjxi6h13e"]
+
+[ext_resource type="AudioStream" uid="uid://baaxgxq0lq3ff" path="res://content/ui/combat/SkillBar/sounds/ESM_Cool_UI_Button_10_Game_Click_Switch_UI_Classic.wav" id="1_w8kfr"]
+
+[resource]
+random_pitch = 1.0594631
+random_volume_offset_db = 2.0
+streams_count = 1
+stream_0/stream = ExtResource("1_w8kfr")

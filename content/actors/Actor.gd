@@ -15,15 +15,6 @@ func _ready() -> void:
 	Repository.All.Register(self)
 	Repository.Alive.Register(self)
 
-	#if has_node("TokenMeshInstance3D"):
-		#TurnManager.Instance.CurrentActorChanged.connect(func(actor):
-			#if actor == self:
-				##$TokenMeshInstance3D.position.y = RenderHeight.SelectedActor
-				#$TokenMeshInstance3D.position.y = 0
-			#else:
-				#$TokenMeshInstance3D.position.y = 0
-	#)
-
 	_setupProxySignals()
 
 func _exit_tree() -> void:
@@ -98,6 +89,7 @@ func _setupProxySignals():
 @onready var Behaviour: ActorBehaviour = GetComponent(ActorBehaviour)
 @onready var InputProvider: ActorInputProvider = GetComponent(ActorInputProvider)
 @onready var telegraphs: ActorTelegraphs = GetComponent(ActorTelegraphs)
+@onready var query: ActorQuery = GetComponent(ActorQuery)
 
 func GetComponent(type: GDScript[Component]) -> Component:
 	for child in get_children():

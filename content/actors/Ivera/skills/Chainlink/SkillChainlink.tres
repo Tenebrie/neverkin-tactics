@@ -7,6 +7,9 @@
 script = ExtResource("1_skdef")
 Name = "Chainlink"
 Category = 1
+Description = "Send out a wave of mystical feedback travelling from one target affected by $Soulbind to another, propagating to the closest target within %{PropagationDistance}m from the current.
+
+The wave consumes $Soulbind to deal %Damage damage to enemies or restore %Healing health to allies, up to %MaxTargets total targets."
 IconTexture = ExtResource("1_dsdlh")
 TargetingMaxRange = 5.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

@@ -2,8 +2,8 @@ extends Control
 class_name InitiativePortrait
 
 @onready var nameLabel: Label = $%NameLabel
-@onready var hotkeyLabel: Label = $%HotkeyLabel
 @onready var portrait: TextureButton = $TextureButton
+@onready var actionPointsBar: SegmentedBar = $ActionPointsBar
 
 var TrackedActor: Actor = null
 var HotkeyIndex: int = 0
@@ -19,6 +19,25 @@ func _ready():
 	portrait.button_up.connect(updateModulate)
 	portrait.button_down.connect(updateModulate)
 	$TextureButton.pressed.connect(onPortraitClick)
+
+	_updateActionPointBar()
+	actionPointsBar.colorTheme = SegmentedBar.ColorTheme.ActionPoints
+	ActorActions.SignalBus.ActionPointsChanged.connect(func(actor):
+		if actor == TrackedActor:
+			_updateActionPointBar()
+	)
+
+func _process(_delta: float) -> void:
+	_updateActionPointBar()
+
+func _updateActionPointBar():
+	if not TrackedActor:
+		return
+	actionPointsBar.Value = TrackedActor.actions.ActionPointsAvailable
+	actionPointsBar.MaxValue = TrackedActor.actions.ActionPointsMax
+	actionPointsBar.InhumanValue = TrackedActor.actions.ActionPointsTemporary
+	actionPointsBar.ThreatValue = TrackedActor.actions.ActionPointsThreatened
+	actionPointsBar.PromiseValue = 0
 
 func onPortraitClick() -> void:
 	TurnManager.Instance.activatePlayerActorByHotkey(HotkeyIndex)
@@ -41,7 +60,6 @@ func update() -> void:
 	nameLabel.label_settings.outline_size = 2
 	nameLabel.label_settings.outline_color = behaviour.PortraitColor
 	nameLabel.label_settings.shadow_size = 1
-	hotkeyLabel.text = "F" + str(HotkeyIndex + 1)
 	portrait.texture_normal = TrackedActor.definition.AvatarTexture
 	updateModulate()
 

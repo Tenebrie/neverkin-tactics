@@ -5,7 +5,11 @@ var damagePerShot = 1
 var shotCount = 3
 var hitboxWidth = 0.04
 
-var damageTelegraph: TelegraphDefinition = TelegraphPreset.StandardProjectile.new().WithDamage(damagePerShot).WithWidth(hitboxWidth)
+var damageTelegraph: TelegraphDefinition = TelegraphPreset.CasterProjectile.new()
+	.TargetingHostiles()
+	.WithDamage(damagePerShot)
+	.WithWidth(hitboxWidth)
+
 var shotsRemainingTelegraph: TelegraphDefinition = TelegraphPreset.MouseText.new("")
 
 func _prepare() -> void:

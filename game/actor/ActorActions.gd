@@ -27,17 +27,20 @@ func ConsumeActionPoints(value: int):
 	ActionPointsUsed += value
 	MovementBuffer = 0.0
 	ActionPointsChanged.emit(ActionPointsAvailable)
+	SignalBus.ActionPointsChanged.emit(parent, ActionPointsAvailable)
 	SignalBus.ActionPointsConsumedPermanently.emit(parent, value)
 
 func ConsumeActionPointsRefundable(value: int):
 	ActionPointsUsed += value
 	ActionPointsChanged.emit(ActionPointsAvailable)
+	SignalBus.ActionPointsChanged.emit(parent, ActionPointsAvailable)
 
 func RefundActionPoints(value: int):
 	while ActionPointsUsed > 0 && value > 0:
 		value -= 1
 		ActionPointsUsed -= 1
 	ActionPointsChanged.emit(ActionPointsAvailable)
+	SignalBus.ActionPointsChanged.emit(parent, ActionPointsAvailable)
 
 #region Movement
 var MovementSpeedPerAP: float:
@@ -195,4 +198,5 @@ class ActorActionQueue:
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 class SignalBusImplementation:
+	signal ActionPointsChanged(actor: Actor, current: int)
 	signal ActionPointsConsumedPermanently(actor: Actor, value: int)

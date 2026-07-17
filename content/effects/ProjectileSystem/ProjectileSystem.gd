@@ -41,8 +41,8 @@ func play(origin: Variant, target: Variant, def: Definition = Definition.new(), 
 		origin = origin.global_position
 	if target is Node3D:
 		target = target.global_position
-	origin.y += 0.5
-	target.y += 0.5
+	origin.y = RenderHeight.SkillTrails
+	target.y = RenderHeight.SkillTrails
 	for i in count:
 		_createProjectileTrail(theme, origin, target, def, i)
 		if timeBetweenShots > 0.0:

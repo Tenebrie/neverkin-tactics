@@ -11,7 +11,6 @@ Description = "Release a kinetic projectile at your enemy dealing %Damage damage
 
 $Infuse: Turn damage into healing. Projectile targets allies instead."
 IconTexture = ExtResource("1_y64a7")
-HealthCost = 2
 ChargesCost = 1
 ChargesMaximum = 5
 TargetingMaxRange = 10.0

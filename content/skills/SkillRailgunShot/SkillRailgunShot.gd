@@ -1,15 +1,15 @@
 extends Skill
 class_name SkillRailgunShot
 
-var Damage = 3
+var Damage = 5
 var HitboxWidth = 0.1
 
-var damageTelegraph = TelegraphPreset.Projectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
+var damageTelegraph = TelegraphPreset.CasterProjectile.new().TargetingHostiles().WithDamage(Damage).WithWidth(HitboxWidth)
 
 func _ready() -> void:
 	definition = preload("res://content/skills/SkillRailgunShot/SkillRailgunShot.tres").duplicate()
 	damageTelegraph.PenetrationPower = 9
-	damageTelegraph.PiercingPower = 1
+	damageTelegraph.PiercingPower = 2
 	definition.telegraphs = [
 		damageTelegraph
 	]

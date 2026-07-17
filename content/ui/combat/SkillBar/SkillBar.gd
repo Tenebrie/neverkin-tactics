@@ -3,6 +3,7 @@ class_name SkillBar
 
 @onready var commonBarContainer: Control = $%CommonBarContainer
 @onready var mainBarContainer: Control = $%MainBarContainer
+@onready var sounds: SkillBarSounds = $SkillBarSounds
 
 @onready var activePlayerActor = SignalTracker.new(
 	func(actor: Actor): return actor.Skills.SkillsChanged,
@@ -11,10 +12,23 @@ class_name SkillBar
 
 func _ready() -> void:
 	TurnManager.Instance.CurrentPlayerActorChanged.connect(connectSignals)
+	for index in commonBarContainer.get_child_count():
+		var child = commonBarContainer.get_child(index)
+		if child is SkillBarItem item:
+			_connectBarItemSignals(item, index)
+	for index in mainBarContainer.get_child_count():
+		var child = mainBarContainer.get_child(index)
+		if child is SkillBarItem item:
+			_connectBarItemSignals(item, index)
 
 func connectSignals(actor: Actor) -> void:
 	activePlayerActor.Track(actor)
 	rebuildItems()
+
+func _connectBarItemSignals(item: SkillBarItem, index: int) -> void:
+	item.pressed.connect(sounds.playPressed)
+	item.released.connect(sounds.playReleased)
+	item.declined.connect(sounds.playDeclined.bind(index))
 
 func rebuildItems() -> void:
 	if not TurnManager.Instance.activePlayerActor:
@@ -26,6 +40,7 @@ func rebuildItems() -> void:
 			newItem = commonBarContainer.get_child(i)
 		else:
 			newItem = Asset.Instantiate(SkillBarItem)
+			_connectBarItemSignals(newItem, i)
 			commonBarContainer.add_child(newItem)
 		var skill = controller.commonSkillGroup.GetByIndex(i)
 		newItem.Transparent = skill == null
@@ -38,6 +53,7 @@ func rebuildItems() -> void:
 			newItem = mainBarContainer.get_child(i)
 		else:
 			newItem = Asset.Instantiate(SkillBarItem)
+			_connectBarItemSignals(newItem, i)
 			mainBarContainer.add_child(newItem)
 		var skill = controller.GetByIndex(i)
 		var hotkey: InputEventKey = null

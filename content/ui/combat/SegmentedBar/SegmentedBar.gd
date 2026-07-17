@@ -45,7 +45,10 @@ class_name SegmentedBar
 	set(v): TickColor = v; queue_redraw()
 
 @export var MediumTickColor = Color(0, 0, 0, 0.7):
-	set(v): MediumTickColor = v; queue_redraw()
+	set(v): MediumTickColor = v; queue_redraw();
+
+@export var colorTheme: ColorTheme = ColorTheme.Custom:
+	set(v): colorTheme = v; _applyColorTheme(v)
 
 var _animValue: float = 0.0
 var _ghostDelayLeft: float = 0.0
@@ -145,3 +148,28 @@ func _draw():
 			draw_line(Vector2(px, 1.5), Vector2(px, size.y - 1.5), MediumTickColor, 1.0, true)
 		else:
 			draw_line(Vector2(px, linePadding), Vector2(px, size.y - linePadding), TickColor, 1.0, true)
+
+#region Theme presets
+enum ColorTheme {
+	Custom,
+	Health,
+	Mana,
+	ActionPoints
+}
+
+func _applyColorTheme(theme: ColorTheme):
+	match (theme):
+		ColorTheme.Health:
+			FillColor = Color(0.0, 0.6, 0.2)
+			ThreatColor = Color(0.0, 0.4, 0.2)
+			InhumanColor = Color(0.8, 0.6, 0.0)
+		ColorTheme.Mana:
+			FillColor = Color(0.4, 0.5, 1.0)
+			ThreatColor = FillColor.darkened(0.5)
+			InhumanColor = Color(0.0, 0.8, 0.6)
+		ColorTheme.ActionPoints:
+			FillColor = Color(0.8, 0.8, 0.0)
+			ThreatColor = Color(0.6, 0.4, 0.0)
+			InhumanColor = Color(1.6, 0.6, 0.0)
+	pass
+#endregion

@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://b6a6h03eelb80" path="res://content/ui/combat/SkillBar/SkillBar.gd" id="1_qwbel"]
 [ext_resource type="PackedScene" uid="uid://u7dn2gxvlbkk" path="res://content/ui/combat/SkillBar/SkillBarItem.tscn" id="2_7foaf"]
+[ext_resource type="Script" uid="uid://bbd5immmek6gq" path="res://content/ui/combat/SkillBar/sounds/SkillBarSounds.gd" id="3_x5bw2"]
+[ext_resource type="AudioStream" uid="uid://cjusnjxi6h13e" path="res://content/ui/combat/SkillBar/sounds/SkillBarItemClickEffectRandomizer.tres" id="4_qiro7"]
+[ext_resource type="AudioStream" uid="uid://csirb1xylwwp7" path="res://content/ui/combat/SkillBar/sounds/SkillBarItemDeclinedEffectRandomizer.tres" id="5_qiro7"]
 
 [node name="SkillBar" type="Control" unique_id=251878758]
 layout_mode = 3
@@ -71,3 +74,26 @@ layout_mode = 2
 
 [node name="SkillBarItem5" parent="Margin/VBoxContainer/MainBar/MainBarContainer" unique_id=1883617568 instance=ExtResource("2_7foaf")]
 layout_mode = 2
+
+[node name="SkillBarSounds" type="Node" parent="." unique_id=633703848]
+script = ExtResource("3_x5bw2")
+
+[node name="SkillPressedPlayer" type="AudioStreamPlayer" parent="SkillBarSounds" unique_id=1195967344]
+stream = ExtResource("4_qiro7")
+volume_db = -6.0
+pitch_scale = 0.8
+max_polyphony = 2
+bus = &"UI"
+
+[node name="SkillReleasedPlayer" type="AudioStreamPlayer" parent="SkillBarSounds" unique_id=203800932]
+stream = ExtResource("4_qiro7")
+volume_db = -6.0
+pitch_scale = 0.7
+max_polyphony = 2
+bus = &"UI"
+
+[node name="SkillDeclinedPlayer" type="AudioStreamPlayer" parent="SkillBarSounds" unique_id=1018923002]
+stream = ExtResource("5_qiro7")
+volume_db = -12.0
+max_polyphony = 2
+bus = &"UI"

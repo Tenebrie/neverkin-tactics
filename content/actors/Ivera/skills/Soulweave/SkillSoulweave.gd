@@ -5,7 +5,7 @@ const Damage = 1
 const Healing = 1
 const HitboxWidth = 0.06
 
-var mainTelegraph: TelegraphDefinition = TelegraphPreset.Projectile.new().WithWidth(HitboxWidth)
+var mainTelegraph: TelegraphDefinition = TelegraphPreset.CasterProjectile.new().WithWidth(HitboxWidth)
 
 func _prepare() -> void:
 	definition.telegraphs = [
@@ -23,6 +23,12 @@ func _prepare() -> void:
 
 func _cast(targets: Skill.TargetData) -> void:
 	var effect = ProjectileSystem.Create(self)
+
+	var theme = ProjectileSystem.ProjectileTheme.new()
+	theme.trailColorGradient = preload("../Chainlink/effect/SkillChainlinkTrailGradient.tres")
+	theme.trailTimeColorGradient = preload("../Chainlink/effect/SkillChainlinkTrailTimeGradient.tres")
+	effect.theme = theme
+
 	var projectile = ProjectileSystem.Definition.new()
 	projectile.width = HitboxWidth
 

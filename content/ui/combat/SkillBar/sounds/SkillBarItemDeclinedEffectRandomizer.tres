@@ -1,0 +1,8 @@
+[gd_resource type="AudioStreamRandomizer" format=3 uid="uid://csirb1xylwwp7"]
+
+[ext_resource type="AudioStream" uid="uid://csdgfxttphw1q" path="res://content/ui/combat/SkillBar/sounds/SO_CA_bass_beginning_short_moog_Db.wav" id="1_1dnw0"]
+
+[resource]
+random_volume_offset_db = 2.0
+streams_count = 1
+stream_0/stream = ExtResource("1_1dnw0")

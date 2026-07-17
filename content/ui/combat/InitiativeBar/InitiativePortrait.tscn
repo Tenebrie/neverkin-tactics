@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c5lclst24baif" path="res://content/ui/combat/InitiativeBar/InitiativePortrait.gd" id="1_0nlr4"]
 [ext_resource type="Texture2D" uid="uid://dnx6v7s1conns" path="res://content/actors/Kamilla/kamilla.Avatar.webp" id="2_xmgn0"]
+[ext_resource type="Script" uid="uid://dmo5esx2f3neu" path="res://content/ui/combat/SegmentedBar/SegmentedBar.gd" id="3_ne4c4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lqa7y"]
 content_margin_left = 0.0
@@ -36,39 +37,36 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -24.0
+offset_top = -29.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
+mouse_behavior_recursive = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_lqa7y")
 
-[node name="NameLabel" type="Label" parent="Panel" unique_id=624669307]
-unique_name_in_owner = true
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=507216257]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
+offset_bottom = 24.0
 grow_horizontal = 2
-grow_vertical = 2
+theme_override_constants/margin_left = 3
+
+[node name="NameLabel" type="Label" parent="Panel/MarginContainer" unique_id=624669307]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Character"
-vertical_alignment = 1
 
-[node name="HotkeyLabel" type="Label" parent="Panel" unique_id=272396443]
-unique_name_in_owner = true
-visible = false
+[node name="ActionPointsBar" type="Control" parent="." unique_id=847837192]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 76.0
-offset_top = -1.0
-offset_right = -0.5
-offset_bottom = -1.0
+offset_top = -7.0
 grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 16
-text = "F1"
-horizontal_alignment = 1
-vertical_alignment = 1
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("3_ne4c4")
+metadata/_custom_type_script = "uid://dmo5esx2f3neu"

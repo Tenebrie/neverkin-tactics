@@ -7,17 +7,23 @@ class_name SkillBarItem
 @onready var tooltip: SkillBarItemTooltip = %SkillBarItemTooltip
 @onready var infusedOverlay: Panel = %InfusedOverlay
 
+signal pressed
+signal released
+signal declined
+
 var TrackedSkill: Skill:
 	set(value):
 		if TrackedSkill != null:
 			TrackedSkill.cooldownChanged.disconnect(updateModulate)
 			TrackedSkill.Controller.SelectedSkillChanged.disconnect(updateModulate)
+			TrackedSkill.Controller.SelectedSkillChanged.disconnect(_onOtherSkillSelected)
 			TrackedSkill.Controller.parent.actions.ActionPointsChanged.disconnect(updateModulate)
 			TrackedSkill.Controller.parent.actions.MovementPointsChanged.disconnect(updateModulate)
 		TrackedSkill = value
 		if TrackedSkill != null:
 			TrackedSkill.cooldownChanged.connect(updateModulate)
 			TrackedSkill.Controller.SelectedSkillChanged.connect(updateModulate)
+			TrackedSkill.Controller.SelectedSkillChanged.connect(_onOtherSkillSelected)
 			TrackedSkill.Controller.parent.actions.ActionPointsChanged.connect(updateModulate)
 			TrackedSkill.Controller.parent.actions.MovementPointsChanged.connect(updateModulate)
 		if is_node_ready():
@@ -27,16 +33,17 @@ var TrackedSkill: Skill:
 var Transparent: bool = false
 var Hotkey: InputEventKey
 
-var isHovered: bool = false
+var isHovered = false
+var isDisabled = false
+var canKeyboardClick = false
 
 func _ready():
 	update()
-	#TurnManager.Instance.CurrentPlayerActorChanged.connect(update)
 	TurnManager.Instance.TurnChanged.connect(updateModulate)
 	$Button.mouse_entered.connect(func(): isHovered = true; updateModulate())
 	$Button.mouse_exited.connect(func(): isHovered = false; updateModulate())
-	$Button.button_up.connect(updateModulate)
-	$Button.button_down.connect(updateModulate)
+	$Button.button_up.connect(_onReleased)
+	$Button.button_down.connect(_onPressed)
 	updateModulate()
 	$Button.pressed.connect(onPortraitClick)
 
@@ -52,19 +59,46 @@ func onPortraitClick() -> void:
 		TrackedSkill.Controller.ScrollSkillOptions()
 		return
 
-	var validationResult: Variant = TrackedSkill.isCastable()
-	if validationResult is Error:
-		MessageLog.PrintErrorObject(validationResult)
-		return
-
-	if validationResult is bool and validationResult == false:
+	if isDisabled:
 		return
 
 	TrackedSkill.Controller.Select(TrackedSkill)
 
+func _onOtherSkillSelected():
+	canKeyboardClick = false
+
+func _onPressed():
+	updateModulate()
+	canKeyboardClick = true
+	var validationResult: Variant = TrackedSkill.isCastable()
+	if validationResult is Error:
+		MessageLog.PrintErrorObject(validationResult)
+		isDisabled = true
+		declined.emit()
+		return
+	elif validationResult is bool and validationResult == false:
+		isDisabled = true
+		declined.emit()
+		return
+	else:
+		pressed.emit()
+
+func _onReleased(isKeyboard: bool = false):
+	if not isDisabled:
+		released.emit()
+
+	if isKeyboard and canKeyboardClick:
+		onPortraitClick()
+
+	updateModulate()
+	canKeyboardClick = false
+
 func _unhandled_input(event: InputEvent) -> void:
 	if Hotkey != null and event.is_match(Hotkey) and not event.is_echo() and event.is_pressed():
-		onPortraitClick()
+		_onPressed()
+
+	if Hotkey != null and event.is_match(Hotkey) and not event.is_echo() and event.is_released():
+		_onReleased(true)
 
 func update() -> void:
 	if TrackedSkill == null:
@@ -164,15 +198,17 @@ func updateModulate() -> void:
 
 	var isActive = TrackedSkill.Controller.SelectedSkill == TrackedSkill
 	var base = Color.WHITE
+	isDisabled = false
 
 	if isActive:
 		base = base.blend(Color(0, 1, 0, 0.5))
 	if isHovered:
 		base = base.darkened(0.15)
-	if mainButton.button_pressed:
+	if mainButton.button_pressed or Input.is_physical_key_pressed(Hotkey.keycode):
 		base = base.darkened(0.2)
 
 	if not Error.AsBoolean(TrackedSkill.isCastable()):
 		base = Color(0.4, 0.4, 0.4)
+		isDisabled = true
 
 	mainButton.modulate = base

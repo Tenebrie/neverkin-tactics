@@ -48,52 +48,46 @@ class SingleActor extends TelegraphDefinition:
 		)
 		return self
 
-class Projectile extends TelegraphDefinition:
+class WorldProjectile extends TelegraphDefinition:
 	func _init():
 		Shape = Telegraph.Shape.Rect
-		Attachment = Telegraph.Attachment.Caster
 		RectOrigin = BeamTelegraph.Origin.Start
-		ShootFromCover = true
 
-		Processors.push_back(TelegraphProcessor.LookAtMouse)
 		Processors.push_back(TelegraphProcessor.ApplyCollisionRules)
 		PostProcessors.push_back(TelegraphProcessor.TargetFactionTint)
 
-	func Load(skill: Skill):
-		RectLength = skill.definition.TargetingMaxRange
-
-	func WithDamage(damage: int) -> Projectile:
+	func WithDamage(damage: int) -> WorldProjectile:
 		HealthThreat = damage
 		return self
 
-	func WithHealing(healing: int) -> Projectile:
+	func WithHealing(healing: int) -> WorldProjectile:
 		HealthPromise = healing
 		return self
 
-	func TargetingAllies() -> Projectile:
+	func TargetingAllies() -> WorldProjectile:
 		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
 			return ActorUtils.isAlliedTo(actor, ParentSkill.parent)
 		)
 		return self
 
-	func TargetingHostiles() -> Projectile:
+	func TargetingHostiles() -> WorldProjectile:
 		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
 			return ActorUtils.isTargetableBy(actor, ParentSkill.parent) && (actor.collision_layer & CollisionLayer.IGNORED_COVER) == 0
 		)
 		return self
 
-	func WithWidth(width: float) -> Projectile:
+	func WithWidth(width: float) -> WorldProjectile:
 		RectWidth = width
 		return self
 
-	func Invisible() -> Projectile:
+	func Invisible() -> WorldProjectile:
 		Processors.push_back(TelegraphProcessor.InvisibleTint)
 		return self
 
-class StandardProjectile extends Projectile:
-	func Load(skill: Skill):
-		super.Load(skill)
-		TargetingHostiles()
+#class StandardProjectile extends Projectile:
+	#func Load(skill: Skill):
+		#super.Load(skill)
+		#TargetingHostiles()
 
 class PointArea extends TelegraphDefinition:
 	func _init(radius: float):
@@ -125,3 +119,19 @@ class MouseText extends TelegraphDefinition:
 			telegraph.childText.offset = telegraph.get_viewport().get_mouse_position() - Vector2(telegraph.childText.size.x / 2, telegraph.childText.size.y + 8)
 			telegraph.Tint = Color.WHITE
 		)
+
+class CasterProjectile extends WorldProjectile:
+	func _init():
+		super._init()
+		ShootFromCover = true
+		Attachment = Telegraph.Attachment.Caster
+
+		Processors.push_front(TelegraphProcessor.LookAtMouse)
+
+		addTargetFilter(func(actor):
+			return projectileCanHitCaster or actor != ParentSkill.parent
+		)
+
+	func Load(skill: Skill):
+		super.Load(skill)
+		RectLength = skill.definition.TargetingMaxRange

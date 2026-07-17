@@ -14,15 +14,9 @@ class_name ActorOverheadStats
 static var GloballyVisible = true
 
 func _ready():
-	healthBar.FillColor = Color(0.0, 0.6, 0.2)
-	healthBar.ThreatColor = Color(0.0, 0.4, 0.2)
-	healthBar.InhumanColor = Color(0.8, 0.6, 0.0)
-	manaBar.FillColor = Color(0.4, 0.5, 1.0)
-	manaBar.ThreatColor = manaBar.FillColor.darkened(0.5)
-	manaBar.InhumanColor = Color(0.0, 0.8, 0.6)
-	actionPointBar.FillColor = Color(0.8, 0.8, 0.0)
-	actionPointBar.ThreatColor = Color(0.6, 0.4, 0.0)
-	actionPointBar.InhumanColor = Color(1.6, 0.6, 0.0)
+	healthBar.colorTheme = SegmentedBar.ColorTheme.Health
+	manaBar.colorTheme = SegmentedBar.ColorTheme.Mana
+	actionPointBar.colorTheme = SegmentedBar.ColorTheme.ActionPoints
 	nameLabel.label_settings.outline_color = ActorUtils.getFactionColor(parent.faction)
 	await get_tree().process_frame
 	parent.buffs.Changed.connect(rebuildBuffs)
