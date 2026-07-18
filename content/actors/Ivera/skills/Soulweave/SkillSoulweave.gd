@@ -36,5 +36,6 @@ func _cast(targets: Skill.TargetData) -> void:
 	effect.play(parent, parent.global_position + furthestPoint, projectile)
 
 	for target in targets.perTelegraph[mainTelegraph]:
-		target.buffs.Add(BuffSoulbind.new())
+		if ActorUtils.isHostileTo(target, parent):
+			target.buffs.Add(BuffSoulbind.new())
 		target.stats.dealSkillDamage(targets)

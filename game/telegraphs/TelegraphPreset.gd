@@ -117,6 +117,69 @@ class MouseText extends TelegraphDefinition:
 			telegraph.Tint = Color.WHITE
 		)
 
+class ForcePush:
+	var Travel: TelegraphDefinition
+	var Impact: TelegraphDefinition
+
+	var Victim: Actor
+	var Hits: Array[Actor] = []
+
+	var VictimSelector = func() -> Actor: return null
+	var DirectionSelector = func(_victim: Actor) -> Vector3: return Vector3.FORWARD
+
+	func _init(maxDistance: float):
+		Travel = TelegraphDefinition.new()
+		Travel.collideWithObstacles()
+		Travel.projectileCanHitCaster = true
+		Travel.Shape = Telegraph.Shape.Capsule
+		Travel.RectOrigin = BeamTelegraph.Origin.Start
+		Travel.RectLength = maxDistance
+		Travel.addProcessor(func(telegraph: BeamTelegraph):
+			Hits = []
+			Victim = VictimSelector.call()
+			if not Victim:
+				telegraph.Tint = Color.TRANSPARENT
+				return
+
+			telegraph.width = Victim.physicalSize * 2
+			telegraph.global_position = ActorUtils.flatPositionOf(Victim)
+			telegraph.look_at(telegraph.global_position + DirectionSelector.call(Victim))
+
+			Hits = TelegraphProcessor.ApplyCollisionRulesCustom(telegraph, 0.0, 0.0)
+			if Hits.is_empty():
+				return
+
+			telegraph.Tint = TelegraphColor.TargetAcquired
+		)
+		Travel.addTargetFilter(func(actor, telegraph):
+			return ActorUtils.flatDistanceBetween(actor, telegraph) >= 0.01
+		)
+
+		Impact = TelegraphDefinition.new()
+		Impact.collideWithObstacles()
+		Impact.Shape = Telegraph.Shape.Circle
+		Impact.addTargetFilter(func(actor):
+			return actor != Victim
+		)
+		Impact.addProcessor(func(telegraph: CircularTelegraph):
+			if Victim:
+				telegraph.radius = Victim.physicalSize
+		)
+		Impact.addPostProcessor(func(telegraph: CircularTelegraph):
+			if not Victim or Hits.is_empty():
+				telegraph.Tint = Color.TRANSPARENT
+				telegraph.global_position = Vector3(100000, 100000, 100000)
+				return
+
+			var travel: BeamTelegraph = Travel.getInstance()
+			var forward = -travel.global_basis.z
+
+			var impactOffset = forward * (travel.length + Victim.physicalSize / 2.0)
+			telegraph.Tint = TelegraphColor.Invalid
+			telegraph.global_position = ActorUtils.flatPositionOf(Victim) + impactOffset
+			telegraph.global_position.y -= 0.01
+		)
+
 class CasterProjectile extends WorldProjectile:
 	func _init():
 		super._init()

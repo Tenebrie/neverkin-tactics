@@ -5,8 +5,10 @@
 [ext_resource type="Script" uid="uid://c6txfqbi3tpo" path="res://content/actors/Ivera/griffon/skills/GriffonFlight/SkillGriffonFlight.gd" id="3_3rd3g"]
 [ext_resource type="Script" uid="uid://cl7dg242eqiye" path="res://content/actors/Ivera/shapeshift/HumanForm/SkillIveraHumanForm.gd" id="3_6x3wb"]
 [ext_resource type="Script" uid="uid://5fpiocikuyvr" path="res://content/actors/Ivera/griffon/skills/GriffonGrip/SkillGriffonGrip.gd" id="3_i04aw"]
+[ext_resource type="Script" uid="uid://i7wgs4gqjt5q" path="res://content/actors/Ivera/griffon/skills/Headbutt/SkillHeadbutt.gd" id="3_x32ac"]
 [ext_resource type="Texture2D" uid="uid://dc6h1yjmt6g8x" path="res://content/actors/Ivera/griffon/IveraGriffonToken.webp" id="4_mpfqu"]
 [ext_resource type="Script" uid="uid://dug3s4ovy83ja" path="res://content/actors/Ivera/griffon/skills/GriffonToss/SkillGriffonToss.gd" id="4_x1qaf"]
+[ext_resource type="Script" uid="uid://bta47g75j0pue" path="res://content/actors/Ivera/griffon/skills/GriffonSmash/SkillGriffonSmash.gd" id="5_4rmtl"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="5_7bfqy"]
 [ext_resource type="AudioStream" uid="uid://l67fjukxcmci" path="res://content/actors/Ivera/griffon/sounds/readyEffect/IveraGriffonReadyEffectRandomizer.tres" id="9_1wgl8"]
 
@@ -25,7 +27,7 @@ healthMaximum = 20
 healthHumanityThreshold = 10
 ActionPointsMax = 4
 MovementSpeedPerActionPoint = 6.5
-Skills = Array[GDScript]([ExtResource("2_p5t07"), ExtResource("3_i04aw"), ExtResource("4_x1qaf"), null, null, null, ExtResource("3_3rd3g"), ExtResource("3_6x3wb")])
+Skills = Array[GDScript]([ExtResource("2_p5t07"), ExtResource("3_x32ac"), ExtResource("3_i04aw"), ExtResource("5_4rmtl"), ExtResource("4_x1qaf"), null, ExtResource("3_3rd3g"), ExtResource("3_6x3wb")])
 enablesShifted = true
 soundReadyEffectStream = ExtResource("9_1wgl8")
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

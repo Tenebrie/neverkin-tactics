@@ -67,6 +67,7 @@ func _parentReady() -> void:
 			_actionPointsThreatenedFromSkill = skill.definition.ActionPointCost
 
 	)
+	TurnManager.Instance.FactionTurnStarted.connect(onTurnStarted)
 	TurnManager.Instance.FactionTurnEnded.connect(onTurnEnded)
 
 func ConsumeMovement(value: float):
@@ -107,6 +108,11 @@ func IsPerformingAnyAction() -> bool:
 	return ActionQueue.Busy()
 
 #endregion
+
+func onTurnStarted(faction: Actor.Faction) -> void:
+	if faction != parent.faction:
+		return
+	MovementBuffer = StutterStepMovement
 
 func onTurnEnded(faction: Actor.Faction) -> void:
 	if faction != parent.faction:

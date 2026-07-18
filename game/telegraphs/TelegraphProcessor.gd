@@ -19,6 +19,9 @@ static func TargetFactionTint(telegraph: Telegraph):
 static func InvisibleTint(telegraph: Telegraph):
 	telegraph.Tint = Color.TRANSPARENT
 
+static func InvisibleSelfTint(telegraph: Telegraph):
+	telegraph.SelfTint = Color.TRANSPARENT
+
 static func OutOfRangeTint(telegraph: Telegraph):
 	var parent = telegraph.ParentSkill.parent
 	var parentPosition = parent.global_position

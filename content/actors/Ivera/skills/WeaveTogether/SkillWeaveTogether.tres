@@ -9,5 +9,5 @@ Name = "Weave Together"
 Category = 1
 Description = "Consume $Soulbind stacks on enemies to pull ALL of them towards the chosen point. Enemies hitting an obstacle take %BonkDamage damage and deal %BonkReceiverDamage damage to the obstacle."
 IconTexture = ExtResource("1_jdbn0")
-TargetingMaxRange = 5.0
+TargetingMaxRange = 1000.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

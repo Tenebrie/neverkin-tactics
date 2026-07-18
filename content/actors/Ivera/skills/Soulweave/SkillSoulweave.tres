@@ -7,7 +7,7 @@
 script = ExtResource("1_skdef")
 Name = "Soulweave"
 Category = 1
-Description = "Release a projectile that ignores walls and $Pierces all targets, applying $Soulbind to all.
+Description = "Release a projectile that ignores walls and $Pierces all targets, applying $Soulbind to enemies.
 
 Enemies hit take %Damage damage, while allies restore %Healing health."
 IconTexture = ExtResource("1_ghv1l")

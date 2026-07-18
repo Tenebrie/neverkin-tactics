@@ -7,7 +7,10 @@
 script = ExtResource("1_skdef")
 Name = "Pull the Thread"
 Category = 1
-Description = "Consume $Soulbind on a target to pull them toward yourself. Enemies hitting an obstacle take %BonkDamage damage and get $Stunned."
+Description = "Consume $Soulbind on an enemy to pull them toward yourself. Deal %BonkDamage damage and apply $Stunned if they hit a wall.
+
+Allies can be pulled without damage or $Soulbind."
 IconTexture = ExtResource("1_sky12")
+Cooldown = 1
 TargetingMaxRange = 5.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

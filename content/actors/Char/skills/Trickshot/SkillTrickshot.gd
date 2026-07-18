@@ -96,6 +96,3 @@ func _cast(targets: Skill.TargetData) -> void:
 		MainCamera.Instance.snapToTarget(_cameraReturnPosition)
 	damageTelegraph.ShootFromCoverOrigin = _pinnedOrigin
 	damageTelegraph.projectileCanHitCaster = true
-
-	if preparingInfuse:
-		cooldownRemaining += 1

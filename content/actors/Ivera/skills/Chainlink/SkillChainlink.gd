@@ -11,6 +11,7 @@ var chainLinks: Array[TelegraphPreset.WorldProjectile]
 
 func _prepare() -> void:
 	var chainTargets: Array[Actor]
+	cursorTelegraph.PenetrationPower = 1000
 	for i in MaxTargets:
 		var link = TelegraphPreset.WorldProjectile.new().WithWidth(0.04)
 		link.RectLength = 50.0
@@ -34,7 +35,7 @@ func _prepare() -> void:
 			return Healing if ActorUtils.isAlliedTo(actor, parent) else 0
 
 	cursorTelegraph.addTargetFilter(func(actor):
-		return actor is not Prop
+		return actor is not Prop and actor.buffs.Has(BuffSoulbind)
 	)
 
 	cursorTelegraph.addProcessor(func(telegraph):
@@ -52,7 +53,7 @@ func _prepare() -> void:
 				.allLivingActors
 				.exceptFor(excludedTargets)
 				.inRange(PropagationDistance)
-				#.withBuff(BuffSoulbind)
+				.withBuff(BuffSoulbind)
 				.nearest()
 			if not nextTarget:
 				break
@@ -110,5 +111,6 @@ func _cast(targets: TargetData) -> void:
 		effect.play(currentTarget, nextTarget, projectileDef)
 		await get_tree().create_timer(projectileDef.travelTime).timeout
 		nextTarget.stats.dealSkillDamage(targets)
+		nextTarget.buffs.RemoveAll(BuffSoulbind)
 
 		currentTarget = nextTarget
