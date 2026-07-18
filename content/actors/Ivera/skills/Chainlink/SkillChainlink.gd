@@ -24,7 +24,7 @@ func _prepare() -> void:
 		return Healing if ActorUtils.isAlliedTo(actor, parent) else 0
 
 	for link in chainLinks:
-		link.addTargetFilterOnTelegraph(func(actor, telegraph):
+		link.addTargetFilter(func(actor, telegraph):
 			var index = chainLinks.find(telegraph.definition)
 			return chainTargets.size() > index and actor == chainTargets[index]
 		)
@@ -40,8 +40,7 @@ func _prepare() -> void:
 	cursorTelegraph.addProcessor(func(telegraph):
 		chainTargets.clear()
 		for link in chainLinks:
-			var linkInstance = parent.telegraphs.FindTelegraph(link)
-			linkInstance.Tint = Color.TRANSPARENT
+			link.getInstance().Tint = Color.TRANSPARENT
 
 		if telegraph.Targets.size() == 0:
 			return
@@ -50,7 +49,7 @@ func _prepare() -> void:
 		var excludedTargets: Array[Actor] = [currentTarget, parent]
 		for link in chainLinks:
 			var nextTarget = currentTarget.query
-				.AllLivingActors
+				.allLivingActors
 				.exceptFor(excludedTargets)
 				.inRange(PropagationDistance)
 				#.withBuff(BuffSoulbind)
@@ -58,7 +57,7 @@ func _prepare() -> void:
 			if not nextTarget:
 				break
 
-			var linkInstance = parent.telegraphs.FindTelegraph(link) as BeamTelegraph
+			var linkInstance = link.getInstance() as BeamTelegraph
 			linkInstance.definition.RectLength = PropagationDistance
 			linkInstance.global_position = ActorUtils.flatPositionOf(currentTarget)
 			linkInstance.look_at(ActorUtils.flatPositionOf(nextTarget))
@@ -93,7 +92,7 @@ func _cast(targets: TargetData) -> void:
 	effect.theme = theme
 
 	var projectileDef = ProjectileSystem.Definition.new()
-	projectileDef.lingerTime = 2.0
+	projectileDef.lingerTime = 1.0
 	projectileDef.pointCount = 200
 
 	var allLinks = chainLinks.slice(0)

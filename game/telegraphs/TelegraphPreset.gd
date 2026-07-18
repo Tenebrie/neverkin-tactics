@@ -16,7 +16,8 @@ class MaxCastRange extends TelegraphDefinition:
 	func _init():
 		Shape = Telegraph.Shape.Circle
 		Attachment = Telegraph.Attachment.Caster
-		TargetFilters.push_back(func(_a): return false)
+		collisionMask = 0
+
 		Processors.push_back(TelegraphProcessor.ConstantTint(TelegraphColor.MaxRange))
 
 	func Load(skill: Skill):
@@ -52,6 +53,7 @@ class WorldProjectile extends TelegraphDefinition:
 	func _init():
 		Shape = Telegraph.Shape.Rect
 		RectOrigin = BeamTelegraph.Origin.Start
+		collisionMask = CollisionLayer.SKILL_TARGETABLE
 
 		Processors.push_back(TelegraphProcessor.ApplyCollisionRules)
 		PostProcessors.push_back(TelegraphProcessor.TargetFactionTint)
@@ -83,11 +85,6 @@ class WorldProjectile extends TelegraphDefinition:
 	func Invisible() -> WorldProjectile:
 		Processors.push_back(TelegraphProcessor.InvisibleTint)
 		return self
-
-#class StandardProjectile extends Projectile:
-	#func Load(skill: Skill):
-		#super.Load(skill)
-		#TargetingHostiles()
 
 class PointArea extends TelegraphDefinition:
 	func _init(radius: float):
@@ -125,6 +122,7 @@ class CasterProjectile extends WorldProjectile:
 		super._init()
 		ShootFromCover = true
 		Attachment = Telegraph.Attachment.Caster
+		collisionMask = CollisionLayer.SKILL_TARGETABLE
 
 		Processors.push_front(TelegraphProcessor.LookAtMouse)
 

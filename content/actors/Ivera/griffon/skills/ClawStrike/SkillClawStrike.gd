@@ -14,7 +14,7 @@ var currentMaxBleedStacks:
 func _prepare() -> void:
 	definition.telegraphs = [
 		TelegraphPreset.MaxCastRange.new(),
-		TelegraphPreset.SingleActor.new().WithDamageToHostiles(Damage)
+		TelegraphPreset.SingleActor.new().WithDamageToHostiles(Damage).collideWithObstacles()
 	]
 
 func _cast(targets: Skill.TargetData) -> void:

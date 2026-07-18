@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b4hot5gvbnv2x"
-path.s3tc="res://.godot/imported/emission.jpg-83648698ead05277a412fa48f4ae70b0.s3tc.ctex"
+path.s3tc="res://.godot/imported/emission.jpg-d7b5a76209aeed46de716595af206c10.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,13 +11,14 @@ metadata={
 
 [deps]
 
-source_file="res://scenes/StreetCentral/emission.jpg"
-dest_files=["res://.godot/imported/emission.jpg-83648698ead05277a412fa48f4ae70b0.s3tc.ctex"]
+source_file="res://content/scenes/StreetCentral/emission.jpg"
+dest_files=["res://.godot/imported/emission.jpg-d7b5a76209aeed46de716595af206c10.s3tc.ctex"]
 
 [params]
 
 compress/mode=2
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

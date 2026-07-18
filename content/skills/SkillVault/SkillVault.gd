@@ -1,7 +1,7 @@
 extends Skill
 class_name SkillVault
 
-var targetSelectorTelegraph = TelegraphPreset.SingleActor.new().allowObstacles()
+var targetSelectorTelegraph = TelegraphPreset.SingleActor.new().collideWithObstacles()
 var landingAreaTelegraph: TelegraphDefinition = TelegraphPreset.PointArea.new(0.0)
 var targetedActor: Actor
 

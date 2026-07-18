@@ -9,14 +9,11 @@ var damageTelegraph: TelegraphDefinition = TelegraphPreset.CasterProjectile.new(
 	.WithDamage(Damage)
 	.WithWidth(HitboxWidth)
 
-func _ready() -> void:
-	definition = preload("res://content/skills/SkillPistolShot/SkillPistolShot.tres").duplicate()
-
+func _prepare() -> void:
 	definition.keywords = [Keyword.Reloadable]
 	definition.telegraphs = [
 		damageTelegraph
 	]
-	super._ready()
 
 func _cast(targets: Skill.TargetData) -> void:
 	var effect = SkillPistolShotEffect.new()

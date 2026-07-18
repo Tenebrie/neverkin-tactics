@@ -60,6 +60,15 @@ project/assembly_name="NeverkinTactics"
 
 enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
 
+[file_customization]
+
+folder_colors={
+"res://addons/": "purple",
+"res://assets/": "pink",
+"res://content/": "blue",
+"res://game/": "orange"
+}
+
 [global_group]
 
 navigation_mesh_source_group=""

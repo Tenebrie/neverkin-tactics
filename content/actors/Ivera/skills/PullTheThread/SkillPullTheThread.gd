@@ -12,7 +12,7 @@ var _travelHits: Array[Actor] = []
 
 func _prepare() -> void:
 	mainTelegraph.addTargetFilter(func(actor):
-		return actor != parent and actor is not Prop and actor.buffs
+		return actor != parent
 	)
 	mainTelegraph.addPostProcessor(func(telegraph):
 		if telegraph.Targets.is_empty():
@@ -29,7 +29,7 @@ func _prepare() -> void:
 	)
 
 	travelTelegraph = TelegraphDefinition.new()
-	travelTelegraph.allowObstacles()
+	travelTelegraph.collideWithObstacles()
 	travelTelegraph.projectileCanHitCaster = true
 	travelTelegraph.Shape = Telegraph.Shape.Capsule
 	travelTelegraph.RectOrigin = BeamTelegraph.Origin.Start
@@ -42,7 +42,7 @@ func _prepare() -> void:
 
 	travelTelegraph.addProcessor(func(telegraph):
 		_travelHits = []
-		var main = parent.telegraphs.FindTelegraph(mainTelegraph)
+		var main = mainTelegraph.getInstance()
 		if main.Targets.size() == 0:
 			telegraph.Tint = Color.TRANSPARENT
 			return
@@ -56,12 +56,12 @@ func _prepare() -> void:
 
 		telegraph.Tint = TelegraphColor.TargetAcquired
 	)
-	travelTelegraph.addTargetFilterOnTelegraph(func(actor, telegraph):
+	travelTelegraph.addTargetFilter(func(actor, telegraph):
 		return ActorUtils.flatDistanceBetween(actor, telegraph) >= 0.01
 	)
 
 	impactTelegraph = TelegraphDefinition.new()
-	impactTelegraph.allowObstacles()
+	impactTelegraph.collideWithObstacles()
 	impactTelegraph.Shape = Telegraph.Shape.Circle
 	impactTelegraph.CircleRadius = 0.4
 	impactTelegraph.HealthThreatSelector = func():
@@ -82,12 +82,12 @@ func _prepare() -> void:
 			telegraph.global_position = Vector3(100000, 100000, 100000)
 			return
 
-		var travel: BeamTelegraph = parent.telegraphs.FindTelegraph(travelTelegraph)
+		var travel: BeamTelegraph = travelTelegraph.getInstance()
 		var forward = -travel.global_basis.z
 
+		var impactOffset = forward * (travel.length + _pullVictim.physicalSize / 2.0)
 		telegraph.Tint = TelegraphColor.Invalid
-		#telegraph.SelfTint = Color.TRANSPARENT
-		telegraph.global_position = ActorUtils.flatPositionOf(_pullVictim) + forward * (travel.length + _pullVictim.physicalSize / 2.0)
+		telegraph.global_position = ActorUtils.flatPositionOf(_pullVictim) + impactOffset
 		telegraph.global_position.y -= 0.01
 	)
 

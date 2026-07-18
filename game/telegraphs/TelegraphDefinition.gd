@@ -39,12 +39,12 @@ signal targetsChanged(targets: Array[Actor])
 @export var TargetSnapping: bool = false
 @export var LookAtMouse: bool = false
 
-## Processors run before targets are checked
+## Update functions ran BEFORE targets are acquired
 @export var Processors: Array[func(Telegraph) -> void] = []
-## PostProcessors run after targets are checked
+## Update functions ran AFTER targets are acquired
 @export var PostProcessors: Array[func(Telegraph) -> void] = []
 
-@export var collisionMask: int = CollisionLayer.SKILL_TARGETABLE
+@export var collisionMask: int = CollisionLayer.ACTOR
 
 @export_group("Projectile", "Projectile")
 @export var projectileCanHitCaster = false
@@ -57,38 +57,46 @@ signal targetsChanged(targets: Array[Actor])
 @export var RectLength: float = 1.0
 @export var RectOrigin: BeamTelegraph.Origin = BeamTelegraph.Origin.Center
 
+var ParentSkill: Skill
+
+func getInstance() -> Telegraph:
+	return ParentSkill.parent.telegraphs.FindTelegraph(self)
+
 func Load(_skill: Skill) -> void:
 	pass
-var ParentSkill: Skill
 
 func coerce() -> TelegraphDefinition:
 	return self
 
+## Returns whether the telegraph as a whole is valid
 func addValidator(filter: func(Telegraph) -> Variant) -> TelegraphDefinition:
 	Validators.push_back(filter)
 	return self
 
-func addTargetFilter(filter: func(Actor) -> bool) -> TelegraphDefinition:
-	TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph):
-		return filter.call(actor)
-	)
-	return self
-
-func addTargetFilterOnTelegraph(filter: func(Actor, Telegraph) -> bool) -> TelegraphDefinition:
+## Returns whether an individual actor is a valid target
+func addTargetFilter(filter: func(Actor, Telegraph) -> bool) -> TelegraphDefinition:
 	TargetFilters.push_back(filter)
 	return self
 
+## Processors are update functions ran BEFORE targets are acquired
 func addProcessor(processor: func(Telegraph) -> void) -> TelegraphDefinition:
 	Processors.push_back(processor)
 	return self
 
+## Post processors are update functions ran AFTER the targets are acquired
 func addPostProcessor(processor: func(Telegraph) -> void) -> TelegraphDefinition:
 	PostProcessors.push_back(processor)
 	return self
 
+## Allow a certain collision layer to be targeted
 func addCollisionLayer(layer: int) -> TelegraphDefinition:
 	collisionMask |= layer
 	return self
 
-func allowObstacles() -> TelegraphDefinition:
-	return addCollisionLayer(CollisionLayer.OBSTACLE)
+## Allow cover to be explicitly targeted
+func collideWithCover() -> TelegraphDefinition:
+	return addCollisionLayer(CollisionLayer.LOW_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.FULL_COVER)
+
+## Allow obstacles and cover to be explicitly targeted
+func collideWithObstacles() -> TelegraphDefinition:
+	return addCollisionLayer(CollisionLayer.OBSTACLE | CollisionLayer.LOW_COVER | CollisionLayer.HIGH_COVER | CollisionLayer.FULL_COVER)

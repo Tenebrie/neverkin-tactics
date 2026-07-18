@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://ylc6aguob6mn" path="res://content/actors/Ivera/Ivera.tscn" id="2_xy3my"]
 [ext_resource type="PackedScene" uid="uid://cxoxb77d1144u" path="res://content/actors/WolfpackTrooper/WolfpackTrooper.tscn" id="5_7s5hy"]
 [ext_resource type="PackedScene" uid="uid://dmyet57hfpj6u" path="res://content/actors/Kamilla/Kamilla.tscn" id="6_xs4ih"]
-[ext_resource type="PackedScene" uid="uid://2ohwekfgbpuc" path="res://scenes/PrototypeScene/PrototypeScene.tscn" id="7_6ytau"]
+[ext_resource type="PackedScene" uid="uid://2ohwekfgbpuc" path="res://content/scenes/PrototypeScene/PrototypeScene.tscn" id="7_6ytau"]
 [ext_resource type="PackedScene" uid="uid://gpma5d48l6ft" path="res://content/actors/Char/Char.tscn" id="8_pynjx"]
 [ext_resource type="PackedScene" uid="uid://bm6mqj82bco5k" path="res://content/actors/WolfpackBrawler/WolfpackBrawler.tscn" id="8_vijgj"]
 

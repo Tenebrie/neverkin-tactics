@@ -1,6 +1,8 @@
 extends Component
 class_name ActorActions
 
+const StutterStepMovement = 1.0
+
 signal ActionPointsChanged(current: int)
 signal MovementPointsChanged(current: float)
 
@@ -25,7 +27,7 @@ func AddTemporaryActionPoints(value: int):
 
 func ConsumeActionPoints(value: int):
 	ActionPointsUsed += value
-	MovementBuffer = 0.0
+	MovementBuffer = StutterStepMovement
 	ActionPointsChanged.emit(ActionPointsAvailable)
 	SignalBus.ActionPointsChanged.emit(parent, ActionPointsAvailable)
 	SignalBus.ActionPointsConsumedPermanently.emit(parent, value)
@@ -109,7 +111,7 @@ func IsPerformingAnyAction() -> bool:
 func onTurnEnded(faction: Actor.Faction) -> void:
 	if faction != parent.faction:
 		return
-	MovementBuffer = 0.0
+	MovementBuffer = StutterStepMovement
 	ActionPointsUsed = 0
 	ActionPointsTemporary = ActionPointsForNextTurn
 	ActionPointsForNextTurn = 0

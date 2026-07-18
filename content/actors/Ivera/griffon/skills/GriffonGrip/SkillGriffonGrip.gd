@@ -5,7 +5,7 @@ var targetTelegraph = TelegraphPreset.SingleActor.new()
 
 func _prepare() -> void:
 	targetTelegraph.addTargetFilter(func(actor):
-		return actor is not Prop and actor != parent
+		return actor != parent
 	)
 	definition.telegraphs = [
 		TelegraphPreset.MaxCastRange.new(),

@@ -8,7 +8,7 @@ var GriffonSize = griffonDefinition.physicalSize
 var LandingAreaSize = 1.8
 var LandingMaxDist = LandingAreaSize - GriffonSize
 
-var damageArea = TelegraphPreset.PointArea.new(LandingAreaSize).WithDamageToHostiles(Damage)
+var damageArea = TelegraphPreset.PointArea.new(LandingAreaSize).WithDamageToHostiles(Damage).collideWithObstacles()
 var exclusionArea = TelegraphPreset.PointArea.new(GriffonSize)
 
 func _prepare() -> void:

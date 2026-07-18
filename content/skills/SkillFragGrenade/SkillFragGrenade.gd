@@ -4,7 +4,7 @@ class_name SkillFragGrenade
 var Damage = 2
 var Radius = 1.5
 
-var damageTelegraph: TelegraphDefinition = TelegraphPreset.PointArea.new(Radius).WithDamageToHostiles(Damage).allowObstacles()
+var damageTelegraph: TelegraphDefinition = TelegraphPreset.PointArea.new(Radius).WithDamageToHostiles(Damage).collideWithObstacles()
 
 func _ready() -> void:
 	definition = preload("./SkillFragGrenade.tres").duplicate()

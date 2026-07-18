@@ -1,7 +1,7 @@
 extends Component
 class_name ActorQuery
 
-var AllLivingActors:
+var allLivingActors:
 	get:
 		return Builder.new(ActorUtils.flatPositionOf(parent)).exceptFor(Prop)
 
