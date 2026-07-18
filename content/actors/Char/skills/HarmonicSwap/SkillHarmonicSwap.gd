@@ -45,7 +45,7 @@ func _prepare() -> void:
 		var diff = _getHealthDiff(actor, firstTarget)
 		return diff
 
-	mainTelegraph.HealthThreatSelector s= func(actor):
+	mainTelegraph.HealthThreatSelector = func(actor):
 		var damageIfEnemy = Damage if ActorUtils.isHostileTo(parent, actor) else 0
 
 		if not firstTarget:
