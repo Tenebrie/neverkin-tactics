@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://qtp6i3pkw2x4" path="res://content/actors/Char/skills/StealTime/SkillStealTime.gd" id="4_ofhwb"]
 [ext_resource type="Script" uid="uid://bir3dr48cnhdg" path="res://content/actors/Char/skills/DebtOfTime/SkillDebtOfTime.gd" id="5_j6rah"]
 [ext_resource type="Script" uid="uid://b5yqf5sj1wguc" path="res://content/skills/SkillManaDrain/SkillManaDrain.gd" id="6_7e6o6"]
+[ext_resource type="Script" uid="uid://q832o3vft1aa" path="res://content/actors/Char/skills/HarmonicSwap/SkillHarmonicSwap.gd" id="7_j6rah"]
 [ext_resource type="Texture2D" uid="uid://bvxy7yhcljeal" path="res://content/actors/Char/CharToken.webp" id="8_ofhwb"]
 [ext_resource type="AudioStream" uid="uid://p4rtvew4er3i" path="res://content/actors/Char/sounds/readyEffect/CharReadyEffectRandomizer.tres" id="10_ofhwb"]
 
@@ -21,6 +22,6 @@ TokenTexture = ExtResource("8_ofhwb")
 AvatarTexture = ExtResource("1_hjdp6")
 ManaMaximum = 5
 ActionPointsMax = 3
-Skills = Array[GDScript]([ExtResource("1_0pl1p"), ExtResource("2_7e6o6"), ExtResource("3_hjdp6"), ExtResource("4_ofhwb"), ExtResource("5_j6rah"), null, null, ExtResource("6_7e6o6")])
+Skills = Array[GDScript]([ExtResource("1_0pl1p"), ExtResource("2_7e6o6"), ExtResource("3_hjdp6"), ExtResource("4_ofhwb"), ExtResource("5_j6rah"), ExtResource("7_j6rah"), null, ExtResource("6_7e6o6")])
 soundReadyEffectStream = ExtResource("10_ofhwb")
 metadata/_custom_type_script = "uid://xdmrao02bm7l"

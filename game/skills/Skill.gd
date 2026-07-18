@@ -169,6 +169,7 @@ class TargetData:
 
 	## Actors matching normal telegraphs
 	var actors: Array[Actor]
+	var damageInstances: Dictionary[Actor, DamageInstance]
 
 	## World point under cursor
 	var mousePoint: Vector3
@@ -197,6 +198,10 @@ class TargetData:
 		targetData.perTelegraph = actor.telegraphs.TargetsPerTelegraphDefinition
 		targetData.perTelegraphIndex = targetData.perTelegraph.values()
 		targetData.infusedCast = targetData.sourceSkill.preparingInfuse
+
+		for target in actor.telegraphs.Targets:
+			targetData.damageInstances[target] = DamageInstance.ForSkillCast(target, targetData)
+
 		return targetData
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()

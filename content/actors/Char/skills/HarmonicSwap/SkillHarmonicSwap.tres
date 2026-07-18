@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://c12jcmqakjfi3"]
+
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_asywv"]
+[ext_resource type="Texture2D" uid="uid://cq7rnh433487h" path="res://content/actors/Char/skills/HarmonicSwap/SkillHarmonicSwapIcon.png" id="1_fcx0h"]
+
+[resource]
+script = ExtResource("1_asywv")
+Name = "Harmonic Swap"
+Category = 2
+Description = "Select 2 different targets and swap their missing health around up to %Cap.
+
+After that deal %Damage damage to enemies and restore %Healing health to allies."
+IconTexture = ExtResource("1_fcx0h")
+ManaCost = 4
+ChargesCost = 1
+ChargesMaximum = 2
+TargetingMaxRange = 7.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

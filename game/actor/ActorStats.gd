@@ -55,6 +55,12 @@ var healthCurrent: int:
 var healthThreatened: int = 0
 var healthPromised: int = 0
 
+func applyDamageInstance(damage: DamageInstance):
+	if damage.Value > 0:
+		dealDamage(damage)
+	else:
+		restoreHealth(-damage.Value)
+
 func dealDamage(damage: DamageInstance):
 	healthDamageTaken = clampi(healthDamageTaken + damage.Value, 0, healthMaximum)
 	if healthCurrent <= 0:

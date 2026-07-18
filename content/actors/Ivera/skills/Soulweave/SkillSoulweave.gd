@@ -17,7 +17,7 @@ func _prepare() -> void:
 		return actor != parent and actor is not Prop
 	)
 	mainTelegraph.HealthThreatSelector = func(actor):
-		return Damage if not ActorUtils.isAlliedTo(actor, parent) else 0
+		return Damage if ActorUtils.isHostileTo(actor, parent) else 0
 	mainTelegraph.HealthPromiseSelector = func(actor):
 		return Healing if ActorUtils.isAlliedTo(actor, parent) else 0
 

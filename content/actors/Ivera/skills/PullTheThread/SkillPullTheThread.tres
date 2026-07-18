@@ -11,6 +11,6 @@ Description = "Consume $Soulbind on an enemy to pull them toward yourself. Deal 
 
 Allies can be pulled without damage or $Soulbind."
 IconTexture = ExtResource("1_sky12")
-Cooldown = 1
+Cooldown = 2
 TargetingMaxRange = 5.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

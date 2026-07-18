@@ -11,5 +11,6 @@ Description = "Release a projectile that ignores walls and $Pierces all targets,
 
 Enemies hit take %Damage damage, while allies restore %Healing health."
 IconTexture = ExtResource("1_ghv1l")
+HealthCost = 4
 TargetingMaxRange = 5.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

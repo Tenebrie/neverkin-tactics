@@ -135,6 +135,15 @@ func IssueOrder_MoveThroughPath(path: PackedVector3Array):
 
 func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	if recastsRemaining > 0:
+		for telegraph in parent.telegraphs.telegraphs:
+			for validator in telegraph.definition.Validators:
+				var result: Variant = validator.call(telegraph)
+				if result is bool and result == false:
+					return
+				if result is Error:
+					MessageLog.PrintErrorObject(result)
+					return
+
 		recastsRemaining -= 1
 		await skill.PerformCast(targets)
 		parent.Skills.Reselect()
