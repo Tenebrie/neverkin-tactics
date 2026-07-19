@@ -58,9 +58,11 @@ static func ApplyCollisionRulesCustom(telegraph: BeamTelegraph, wallPenetration:
 	var piercingLeft = definition.PiercingPower
 	var penetrationLeft = definition.PenetrationPower
 
-	var hitGroups: Dictionary[StringName, bool] = {}
+	var ignoredGroups: Dictionary[StringName, bool] = {}
 	for group in telegraph.IgnoredObstacleGroups:
-		hitGroups[group] = true
+		ignoredGroups[group] = true
+
+	var piercedGroups: Dictionary[StringName, bool] = {}
 
 	var targetsHit: Array[Actor]
 
@@ -72,7 +74,10 @@ static func ApplyCollisionRulesCustom(telegraph: BeamTelegraph, wallPenetration:
 		if collider.collision_layer & excludeMask > 0:
 			continue
 
-		if isInHitGroup(collider, hitGroups):
+		if isInHitGroup(collider, ignoredGroups):
+			continue
+
+		if isInHitGroup(collider, piercedGroups):
 			targetsHit.push_back(collider)
 			continue
 
@@ -87,25 +92,25 @@ static func ApplyCollisionRulesCustom(telegraph: BeamTelegraph, wallPenetration:
 
 		if isActor and piercingLeft > 0:
 			piercingLeft -= 1
-			rememberGroups(collider, hitGroups)
+			rememberGroups(collider, piercedGroups)
 			targetsHit.push_back(collider)
 			continue
 
 		if isLowCover and penetrationLeft > 0:
 			penetrationLeft -= 1
-			rememberGroups(collider, hitGroups)
+			rememberGroups(collider, piercedGroups)
 			targetsHit.push_back(collider)
 			continue
 
 		if isHighCover and penetrationLeft >= 2:
 			penetrationLeft -= 2
-			rememberGroups(collider, hitGroups)
+			rememberGroups(collider, piercedGroups)
 			targetsHit.push_back(collider)
 			continue
 
 		if isFullCover and penetrationLeft >= 4:
 			penetrationLeft -= 4
-			rememberGroups(collider, hitGroups)
+			rememberGroups(collider, piercedGroups)
 			targetsHit.push_back(collider)
 			continue
 

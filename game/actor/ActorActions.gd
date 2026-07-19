@@ -59,6 +59,8 @@ var MovementAvailable: float:
 func _parentReady() -> void:
 	parent.Skills.SelectedSkillChanged.connect(func(skill):
 		if not skill:
+			isCastingMode = false
+			precastsRemaining = 0
 			recastsRemaining = 0
 			_actionPointsThreatenedFromSkill = 0
 		elif isFreeRecast():
@@ -98,11 +100,13 @@ func GetMovementActionPointCost(value: float) -> int:
 #endregion
 
 #region ActionQueue
+var isCastingMode = false
+var precastsRemaining: int = 0
 var recastsRemaining: int = 0
 var ActionQueue: ActorActionQueue = ActorActionQueue.new()
 
 func isFreeRecast() -> bool:
-	return recastsRemaining > 0
+	return precastsRemaining > 0 or recastsRemaining > 0
 
 func IsPerformingAnyAction() -> bool:
 	return ActionQueue.Busy()
@@ -134,6 +138,21 @@ func IssueOrder_MoveThroughPath(path: PackedVector3Array):
 	CONNECT_ONE_SHOT)
 
 func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
+	if precastsRemaining > 0:
+		for telegraph in parent.telegraphs.telegraphs:
+			for validator in telegraph.definition.Validators:
+				var result: Variant = validator.call(telegraph)
+				if result is bool and result == false:
+					return
+				if result is Error:
+					MessageLog.PrintErrorObject(result)
+					return
+
+		precastsRemaining -= 1
+		await skill.PerformCast(targets)
+		parent.Skills.Reselect()
+		return
+
 	if recastsRemaining > 0:
 		for telegraph in parent.telegraphs.telegraphs:
 			for validator in telegraph.definition.Validators:
@@ -163,6 +182,14 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 				MessageLog.PrintErrorObject(result)
 				return
 
+	if not isCastingMode and skill.getPrecastCount() > 0:
+		isCastingMode = true
+		precastsRemaining = skill.getPrecastCount()
+		await skill.PerformCast(targets)
+		precastsRemaining -= 1
+		parent.Skills.Reselect()
+		return
+
 	recastsRemaining = skill.getRecastCount()
 
 	if skill.HealthCost > 0:
@@ -177,6 +204,8 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	await skill.PerformCast(targets)
 	if recastsRemaining > 0:
 		parent.Skills.Reselect()
+	else:
+		isCastingMode = false
 
 func IssueOrder_Stop():
 	if ActionQueue.Empty():

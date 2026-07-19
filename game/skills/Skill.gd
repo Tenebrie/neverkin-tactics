@@ -82,6 +82,8 @@ func isInfusable() -> bool:
 #endregion
 
 #region Recast
+func getPrecastCount() -> int:
+	return 0
 func getRecastCount() -> int:
 	return 0
 #endregion

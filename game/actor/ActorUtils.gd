@@ -183,7 +183,7 @@ static func flatDistanceTo(node: Node3D, point: Vector3) -> float:
 	point.y = 0.0
 	return flatPositionOf(node).distance_to(point)
 
-static func flatDirectionTo(from: Actor, toPoint: Vector3) -> Vector3:
+static func flatDirectionTo(from: Node3D, toPoint: Vector3) -> Vector3:
 	var origin = from.global_position
 	origin.y = 0.0
 	toPoint.y = 0.0

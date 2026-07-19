@@ -5,12 +5,12 @@ var closingTheGameAt = Time.get_ticks_msec()
 func _input(event: InputEvent) -> void:
 	if event is not InputEventKey key or event.is_echo() or event.is_released():
 		return
-		
+
 	if key.keycode == Key.KEY_ESCAPE:
 		if TurnManager.Instance.activePlayerActor?.Skills.SelectedSkill:
 			TurnManager.Instance.activePlayerActor.Skills.Unselect()
 			return
-			
+
 		if Time.get_ticks_msec() - closingTheGameAt < 1000:
 			get_tree().quit()
 		else:

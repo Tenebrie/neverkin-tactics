@@ -1,9 +1,15 @@
 [gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://bxrp2tl7fl50r"]
 
+[ext_resource type="Texture2D" uid="uid://dqt78ro8e0yqb" path="res://content/actors/Ivera/griffon/skills/Headbutt/SkillHeadbuttIcon.png" id="1_fb2my"]
 [ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_skdef"]
 
 [resource]
 script = ExtResource("1_skdef")
 Name = "Headbutt"
-TargetingMaxRange = 20.0
+Category = 2
+Description = "Dash forward pushing the target hit up to %{PushDist}m away with powerful force, while also dealing %PrimaryDamage damage to it and everything in the vicinity.
+
+If the pushed target hits any obstacle, it takes extra %SecondaryDamage damage and receives $Stunned, while the obstacle takes %BonkDamage damage."
+IconTexture = ExtResource("1_fb2my")
+TargetingMaxRange = 5.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

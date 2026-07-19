@@ -123,8 +123,6 @@ class ForcePush:
 
 	var Hits: Array[Actor] = []
 
-	var DirectionSelector = func(_victim: Actor) -> Vector3: return Vector3.FORWARD
-
 	func _init(maxDistance: float):
 		Travel = TelegraphDefinition.new()
 		Travel.collideWithObstacles()
@@ -157,7 +155,7 @@ class ForcePush:
 			var travel: BeamTelegraph = Travel.getInstance()
 			var forward = -travel.global_basis.z
 
-			var impactOffset = forward * (travel.length + travel.width / 4.0) 
+			var impactOffset = forward * (travel.length + travel.width / 4.0)
 			telegraph.Tint = TelegraphColor.Invalid
 			telegraph.global_position = travel.global_position + impactOffset
 			telegraph.global_position.y -= 0.01

@@ -97,7 +97,7 @@ func _getHealthDiff(mine: Actor, other: Actor) -> int:
 	return healthDiff
 
 func _cast(targets: TargetData) -> void:
-	if parent.actions.recastsRemaining > 0:
+	if parent.actions.precastsRemaining > 0:
 		firstTarget = targets.actor
 		return
 
@@ -132,5 +132,5 @@ func _cast(targets: TargetData) -> void:
 
 	firstTarget = null
 
-func getRecastCount() -> int:
+func getPrecastCount() -> int:
 	return 1
