@@ -33,6 +33,11 @@ var childText: TelegraphText
 
 var growPercentage: float = 0.0
 var _targets: Array[Actor] = []
+var FirstTarget: Actor:
+	get:
+		if Targets.is_empty():
+			return null
+		return Targets[0]
 ## Both general and per-target validation
 var Targets: Array[Actor]
 ## Per-target validation only

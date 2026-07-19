@@ -32,5 +32,5 @@ static func _buildPrefix(level: Level, category: String) -> String:
 	return "%s %s%s" % [stamp, lvl, cat]
 
 static func _colorize(level: Level, line: String) -> String:
-	var color = ["gray", "cyan", "yellow", "red"][level]
+	var color = ["#888888", "cyan", "yellow", "red"][level]
 	return "[color=%s]%s[/color]" % [color, line]

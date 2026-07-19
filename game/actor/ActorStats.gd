@@ -74,11 +74,8 @@ func reduceHealthMaximum(value: int):
 	healthChanged.emit(healthCurrent)
 
 func dealSkillDamage(targets: Skill.TargetData):
-	var instance = DamageInstance.ForSkillCast(parent, targets)
-	if instance.Value > 0:
-		dealDamage(instance)
-	else:
-		restoreHealth(-instance.Value)
+	if targets.damageInstances.has(parent):
+		applyDamageInstance(targets.damageInstances[parent])
 
 func restoreHealth(value: int):
 	healthDamageTaken = clampi(healthDamageTaken - value, 0, healthMaximum)

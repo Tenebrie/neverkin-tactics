@@ -10,7 +10,7 @@ Name = "Griffon Shape"
 Category = 2
 Description = "Jump towards the target point while rapidly shifting into a majestic griffon form.
 
-All enemies up to %{LandingMaxDist}m away from the landing griffon get buffeted by the wind and claws, taking %Damage damage."
+All enemies up to %{LandingMaxDist}m away from the landing griffon get buffeted by the wind and claws, taking %Damage damage and receive $Bleeding."
 IconTexture = ExtResource("1_g6k8k")
 ActionPointCost = 2
 TargetingMaxRange = 6.0

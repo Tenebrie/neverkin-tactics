@@ -418,7 +418,7 @@ func sort_tabs_by_temperature():
 	if (tabs.size() <= 1):
 		return
 
-	tabs.sort_custom(func(a: CustomTab, b: CustomTab) -> bool:
+	tabs.sort_custom(func(a, b) -> bool:
 		var time_a: int = tab_select_times.get(a.item_index, 0)
 		var time_b: int = tab_select_times.get(b.item_index, 0)
 		if (time_a != time_b):

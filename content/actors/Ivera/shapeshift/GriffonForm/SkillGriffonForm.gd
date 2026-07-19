@@ -42,6 +42,7 @@ func _cast(targets: Skill.TargetData) -> void:
 				effect.global_position.y = 2
 				effect.Play())
 			.AddStep(0.4, func(): target.stats.dealSkillDamage(targets))
+			.AddStep(0.4, func(): target.buffs?.Add(BuffBleeding.new())) 
 
 	parent.definition = definition.ShapeshiftTargetActor
 	create_tween().tween_property(parent, "global_position", targets.mousePoint, 0.3)

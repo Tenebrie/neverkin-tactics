@@ -23,7 +23,7 @@ var base: SkillDefinition = self
 @export var Cooldown: int = 0
 
 @export_group("Skill Targeting", "Targeting")
-@export var TargetingMaxRange: float = 0.0
+@export var TargetingMaxRange: float = 1000
 @export var TargetingResolvesNextTurn: bool = false
 
 @export_group("Shapeshifting", "Shapeshift")

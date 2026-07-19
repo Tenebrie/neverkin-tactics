@@ -29,14 +29,10 @@ func _ready() -> void:
 	beforeCast.connect(func():
 		if parent.Skills.SelectedSkill != self or parent.actions.isFreeRecast():
 			return
-		if not Error.AsBoolean(isVisible()) or not Error.AsBoolean(isCastable()):
-			parent.Skills.Unselect()
-	)
-
-	afterCast.connect(func():
-		if parent.Skills.SelectedSkill != self or parent.actions.isFreeRecast():
-			return
-		if not Error.AsBoolean(isVisible()) or not Error.AsBoolean(isCastable()):
+		var isShiftPressed = Input.is_key_pressed(KEY_SHIFT)
+		var isSkillVisible = Error.AsBoolean(isVisible())
+		var isSkillCastable = Error.AsBoolean(isCastable())
+		if not isShiftPressed or not isSkillVisible or not isSkillCastable:
 			parent.Skills.Unselect()
 	)
 

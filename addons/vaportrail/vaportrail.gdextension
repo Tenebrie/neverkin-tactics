@@ -8,8 +8,8 @@ VaporTrail = "res://addons/vaportrail/icons/VaporTrail.svg"
 
 [libraries]
 
-macos.debug = "bin/macos/libvaportrail.macos.template_debug.framework"
-macos.release = "bin/macos/libvaportrail.macos.template_release.framework"
+macos.debug = "bin/macos/macos.framework/libvaportrail.macos.template_debug"
+macos.release = "bin/macos/macos.framework/libvaportrail.macos.template_release"
 
 ios.debug = "bin/ios/libvaportrail.ios.template_debug.framework"
 ios.release = "bin/ios/libvaportrail.ios.template_release.framework"
