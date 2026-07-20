@@ -1,6 +1,6 @@
 extends Node
 
-var closingTheGameAt = Time.get_ticks_msec()
+var closingTheGameAt = -1000
 
 func _input(event: InputEvent) -> void:
 	if event is not InputEventKey key or event.is_echo() or event.is_released():

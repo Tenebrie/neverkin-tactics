@@ -57,8 +57,11 @@ var MovementAvailable: float:
 		return MovementBuffer + MovementSpeedPerAP * ActionPointsAvailable
 
 func _parentReady() -> void:
-	parent.Skills.SelectedSkillChanged.connect(func(skill):
-		if not skill:
+	parent.Skills.SelectedSkillChanged.connect(func(skill, previous):
+		if skill == previous:
+			return
+
+		if not skill or (skill and skill != previous):
 			isCastingMode = false
 			precastsRemaining = 0
 			recastsRemaining = 0
@@ -137,35 +140,37 @@ func IssueOrder_MoveThroughPath(path: PackedVector3Array):
 		ActionQueue.ConsumeFirst(),
 	CONNECT_ONE_SHOT)
 
+func _validateSkillCast():
+	for telegraph in parent.telegraphs.telegraphs:
+		if telegraph.definition.DisabledSelector.call():
+			continue
+
+		for validator in telegraph.definition.Validators:
+			var result: Variant = validator.call(telegraph)
+			if result is bool and result == false:
+				return false
+			if result is Error:
+				MessageLog.PrintErrorObject(result)
+				return false
+	return true
+
 func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	if precastsRemaining > 0:
-		for telegraph in parent.telegraphs.telegraphs:
-			for validator in telegraph.definition.Validators:
-				var result: Variant = validator.call(telegraph)
-				if result is bool and result == false:
-					return
-				if result is Error:
-					MessageLog.PrintErrorObject(result)
-					return
+		if not _validateSkillCast():
+			return
 
-		precastsRemaining -= 1
 		await skill.PerformCast(targets)
-		parent.Skills.Reselect()
+		precastsRemaining -= 1
+		parent.Skills.NotifyRecast()
 		return
 
 	if recastsRemaining > 0:
-		for telegraph in parent.telegraphs.telegraphs:
-			for validator in telegraph.definition.Validators:
-				var result: Variant = validator.call(telegraph)
-				if result is bool and result == false:
-					return
-				if result is Error:
-					MessageLog.PrintErrorObject(result)
-					return
+		if not _validateSkillCast():
+			return
 
 		recastsRemaining -= 1
 		await skill.PerformCast(targets)
-		parent.Skills.Reselect()
+		parent.Skills.NotifyRecast()
 		return
 
 	var validationResult: Variant = skill.isCastable()
@@ -173,21 +178,15 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		MessageLog.PrintErrorObject(validationResult)
 		return
 
-	for telegraph in parent.telegraphs.telegraphs:
-		for validator in telegraph.definition.Validators:
-			var result: Variant = validator.call(telegraph)
-			if result is bool and result == false:
-				return
-			if result is Error:
-				MessageLog.PrintErrorObject(result)
-				return
+	if not _validateSkillCast():
+		return
 
 	if not isCastingMode and skill.getPrecastCount() > 0:
 		isCastingMode = true
 		precastsRemaining = skill.getPrecastCount()
 		await skill.PerformCast(targets)
 		precastsRemaining -= 1
-		parent.Skills.Reselect()
+		parent.Skills.NotifyRecast()
 		return
 
 	recastsRemaining = skill.getRecastCount()
@@ -203,9 +202,10 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	skill.startCooldown()
 	await skill.PerformCast(targets)
 	if recastsRemaining > 0:
-		parent.Skills.Reselect()
+		parent.Skills.NotifyRecast()
 	else:
 		isCastingMode = false
+		skill.cleanUp.emit()
 
 func IssueOrder_Stop():
 	if ActionQueue.Empty():

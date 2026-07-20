@@ -28,6 +28,9 @@ signal targetsChanged(targets: Array[Actor])
 @export var ManaPromiseSelector = func(_actor: Actor) -> int: return ManaPromise
 @export var ActionPointPromise: int = 0
 @export var ActionPointPromiseSelector = func(_actor: Actor) -> int: return ActionPointPromise
+## Whether the telegraph is hidden and ignored for targeting/casting validation
+@export var Disabled: bool = false
+@export var DisabledSelector = func() -> bool: return Disabled
 
 ## While this telegraph is active, close cover is disabled
 @export var ShootFromCover: bool = false

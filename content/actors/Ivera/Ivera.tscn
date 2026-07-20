@@ -1,32 +1,33 @@
 [gd_scene format=3 uid="uid://ylc6aguob6mn"]
 
 [ext_resource type="PackedScene" uid="uid://bdgt33qjttv1o" path="res://content/actors/Actor.tscn" id="1_hssp6"]
-[ext_resource type="Resource" uid="uid://dnf8uhhthqlbx" path="res://content/actors/Ivera/Ivera.tres" id="2_puyvs"]
-[ext_resource type="Texture2D" uid="uid://ctn3qalpptmrd" path="res://content/actors/Ivera/IveraToken.webp" id="3_05s0d"]
+[ext_resource type="Resource" uid="uid://x5sms1i1tc64" path="res://content/actors/Ivera/griffon/IveraGriffon.tres" id="2_gigfr"]
+[ext_resource type="Texture2D" uid="uid://dc6h1yjmt6g8x" path="res://content/actors/Ivera/griffon/IveraGriffonToken.webp" id="3_82vx7"]
 [ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/actor/behaviour/ActorBehaviourPlayerControlled.gd" id="4_ijibt"]
 [ext_resource type="Script" uid="uid://dyb56fck8ougp" path="res://game/actor/ActorSounds.gd" id="5_82vx7"]
-[ext_resource type="AudioStream" uid="uid://6gdiustrxp58" path="res://content/actors/Ivera/sounds/readyEffect/IveraReadyEffectRandomizer.tres" id="6_lht7o"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4fpiw"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lht7o"]
 resource_local_to_scene = true
 transparency = 1
-albedo_texture = ExtResource("3_05s0d")
+albedo_texture = ExtResource("3_82vx7")
 texture_repeat = false
 point_size = 111.1
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_nybu8"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4fpiw"]
 resource_local_to_scene = true
 height = 0.2
 radius = 0.4
 
 [node name="Ivera" unique_id=807014692 instance=ExtResource("1_hssp6")]
-definition = ExtResource("2_puyvs")
+definition = ExtResource("2_gigfr")
 
 [node name="TokenMeshInstance3D" parent="." index="0" unique_id=405721016]
-material_override = SubResource("StandardMaterial3D_4fpiw")
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0.01, -0.08)
+material_override = SubResource("StandardMaterial3D_lht7o")
 
 [node name="CollisionShape3D" parent="." index="1" unique_id=1364732436]
-shape = SubResource("CylinderShape3D_nybu8")
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0.1, 0)
+shape = SubResource("CylinderShape3D_4fpiw")
 
 [node name="PlayerController" type="Node" parent="." index="10" unique_id=80011005]
 script = ExtResource("4_ijibt")
@@ -34,4 +35,3 @@ PortraitColor = Color(0.165, 0.55, 0.22274996, 1)
 
 [node name="ActorSounds" type="Node3D" parent="." index="14" unique_id=1333748212]
 script = ExtResource("5_82vx7")
-readyEffect = ExtResource("6_lht7o")

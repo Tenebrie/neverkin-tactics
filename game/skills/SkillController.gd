@@ -21,6 +21,7 @@ var SelectedSkill: Skill = null:
 signal BeforeSelectedSkillChanged(current: Skill, previous: Skill)
 signal SkillsChanged
 signal SelectedSkillChanged(current: Skill, previous: Skill)
+signal SelectedSkillRecast(current: Skill)
 
 func _parentReady() -> void:
 	add_child(commonSkillGroup)
@@ -129,8 +130,10 @@ func Select(skill: Skill) -> void:
 		SelectedSkill.preparingInfuse = false
 	SelectedSkill = skill
 
-func Reselect() -> void:
-	SelectedSkillChanged.emit(SelectedSkill, SelectedSkill)
+func NotifyRecast() -> void:
+	#BeforeSelectedSkillChanged.emit(SelectedSkill, SelectedSkill)
+	#SelectedSkillChanged.emit(SelectedSkill, SelectedSkill)
+	SelectedSkillRecast.emit(SelectedSkill)
 
 func Unselect() -> void:
 	if SelectedSkill:

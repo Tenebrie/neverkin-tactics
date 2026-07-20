@@ -8,8 +8,18 @@ var hello_world := func() -> void:
 
 var duration: float = 0.3
 
+var system: ProjectileSystem
+
 func _init() -> void:
 	scale = Vector3(1.7,1.7,1.7)
+
+func _ready() -> void:
+	system = ProjectileSystem.new()
+	add_child(system)
+	system.theme.trailSizeCurve = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailCurve.tres")
+	system.theme.trailColorGradient = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailGradient.tres")
+	system.theme.trailTimeSizeCurve = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailTimeCurve.tres")
+	system.theme.trailTimeColorGradient = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailTimeGradient.tres")
 
 func Play() -> void:
 	createSwipeTrail(Vector3(-0.3, 0, -0.33), Vector3(0.2, 0, 0.2), 0.1)
@@ -26,32 +36,11 @@ func PlayInverted() -> void:
 	createSwipeTrail(Vector3(-0.2, 0, -0.39), Vector3(0.28, 0, 0.0), -0.05)
 
 func createSwipeTrail(from: Vector3, to: Vector3, arc: float) -> void:
-	var trail := VaporTrail.new()
-	trail.position = from
-	trail.size = 0.12
-	trail.emitting = true
-	trail.num_points = 50
-	trail.update_interval = 0.003
-	trail.material = preload("res://addons/vaportrail/example/SmokyMaterial.tres")
-	trail.size_curve = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailCurve.tres")
-	trail.time_curve = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailTimeCurve.tres")
-	trail.color_gradient = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailGradient.tres")
-	trail.time_color_gradient = preload("res://content/effects/NeverkinClawTrail/NeverkinClawTrailTimeGradient.tres")
-	add_child(trail)
-
-	var direction := (from - to).normalized()
-	var sideways := Vector3(-direction.z, 1.0, direction.x)
-
-	var tween := create_tween()
-	tween.tween_method(func(t: float) -> void:
-		var pos := from.lerp(to, t)
-		pos -= sideways * arc * 4.0 * t * (1.0 - t)
-		trail.position = pos
-		trail.current_time = t
-	, 0.0, 1.0, duration).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-	tween.tween_callback(func() -> void:
-		trail.emitting = false
-	)
-
-	await get_tree().create_timer(5.0).timeout
-	trail.queue_free()
+	var def = ProjectileSystem.Definition.new()
+	def.width = 0.06 * scale.x
+	def.arc = arc * scale.x
+	def.travelTime = duration
+	def.lingerTime = 0.15
+	def.tweenEaseType = Tween.EASE_IN_OUT
+	def.renderHeight = global_position.y
+	system.play(to_global(from), to_global(to), def)

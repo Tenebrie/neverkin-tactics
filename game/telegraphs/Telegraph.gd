@@ -12,6 +12,7 @@ var ParentSkill: Skill
 var definition: TelegraphDefinition
 
 var childText: TelegraphText
+var childIcon: TelegraphIcon
 
 ## Tint applied to the telegraph and all children
 @export var Tint: Color = Color.GRAY:

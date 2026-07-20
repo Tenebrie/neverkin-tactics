@@ -80,7 +80,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if isRightMouseClick and isSkillSelected:
 		# Cancel current targeting
 		lockedMode = TargetMode.None
-		parent.Skills.Select(null)
+		parent.Skills.Unselect()
 	elif isMouseRelease and isSkillSelected:
 		PerformAction_CastSelectedSkill()
 

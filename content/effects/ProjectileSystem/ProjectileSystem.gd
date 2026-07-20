@@ -25,6 +25,8 @@ class Definition:
 	## Time it takes for each trail segment to dissipate, in seconds
 	@export var lingerTime = 0.7
 	@export var lingerTimeSelector = func(_index: int) -> float: return lingerTime
+	## Height at which the trail travels
+	@export var renderHeight = RenderHeight.SkillTrails
 
 static func Create(parent: Node, lifetime = 30.0) -> ProjectileSystem:
 	var system = ProjectileSystem.new()
@@ -41,12 +43,12 @@ func play(origin: Variant, target: Variant, def: Definition = Definition.new(), 
 		origin = origin.global_position
 	if target is Node3D:
 		target = target.global_position
-	origin.y = RenderHeight.SkillTrails
-	target.y = RenderHeight.SkillTrails
+	origin.y = def.renderHeight
+	target.y = def.renderHeight
 	for i in count:
 		_createProjectileTrail(theme, origin, target, def, i)
 		if timeBetweenShots > 0.0:
-			await get_tree().create_timer(timeBetweenShots)
+			await get_tree().create_timer(timeBetweenShots).timeout
 
 func _createProjectileTrail(theme: ProjectileTheme, from: Vector3, to: Vector3, def: Definition, index: int) -> void:
 	var arc = def.arcSelector.call(index)
@@ -62,7 +64,7 @@ func _createProjectileTrail(theme: ProjectileTheme, from: Vector3, to: Vector3, 
 	trail.size_curve = theme.trailSizeCurve
 	trail.color_gradient = theme.trailColorGradient
 	trail.time_curve = theme.trailTimeSizeCurve
-	trail.time_color_gradient = theme.trailColorGradient
+	trail.time_color_gradient = theme.trailTimeColorGradient
 	add_child(trail)
 
 	var direction = (from - to).normalized()

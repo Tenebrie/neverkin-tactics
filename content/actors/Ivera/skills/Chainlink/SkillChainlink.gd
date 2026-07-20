@@ -50,7 +50,7 @@ func _prepare() -> void:
 		var excludedTargets: Array[Actor] = [currentTarget, parent]
 		for link in chainLinks:
 			var nextTarget = currentTarget.query
-				.allLivingActors
+				.allLivingAgents
 				.exceptFor(excludedTargets)
 				.inRange(PropagationDistance)
 				.withBuff(BuffSoulbind)

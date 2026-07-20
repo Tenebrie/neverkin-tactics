@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="2_o1alc"]
 [ext_resource type="Script" uid="uid://bwyipm7pkrsw1" path="res://game/actor/ActorStats.gd" id="3_o1alc"]
 [ext_resource type="Script" uid="uid://bibsejet712xq" path="res://game/actor/ActorHoverArea.gd" id="4_mki2f"]
-[ext_resource type="Script" uid="uid://c11kvr63hrpvd" path="res://game/prop/PropBuffs.gd" id="5_4tpe0"]
+[ext_resource type="Script" uid="uid://k2fnsxqpv5dn" path="res://game/actor/ActorQuery.gd" id="5_4tpe0"]
 
 [sub_resource type="Resource" id="Resource_o1alc"]
 script = ExtResource("2_o1alc")
@@ -22,5 +22,5 @@ metadata/_custom_type_script = "uid://bwyipm7pkrsw1"
 [node name="HoverArea" type="Area3D" parent="." unique_id=487349543]
 script = ExtResource("4_mki2f")
 
-[node name="PropBuffs" type="Node" parent="." unique_id=722850314]
+[node name="ActorQuery" type="Node" parent="." unique_id=1980554206]
 script = ExtResource("5_4tpe0")

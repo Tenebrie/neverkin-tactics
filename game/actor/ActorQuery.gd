@@ -1,9 +1,13 @@
 extends Component
 class_name ActorQuery
 
-var allLivingActors:
+var allLivingAgents: Builder:
 	get:
 		return Builder.new(ActorUtils.flatPositionOf(parent)).exceptFor(Prop)
+
+var allLivingActors: Builder:
+	get:
+		return Builder.new(ActorUtils.flatPositionOf(parent))
 
 class Builder:
 	var _currentPosition: Vector3
@@ -17,6 +21,21 @@ class Builder:
 		_currentList = _currentList.filter(func(actor):
 			return actor.global_position.distance_squared_to(_currentPosition) <= rangeSquared
 		)
+		return self
+
+	func includingOnly(included: Variant) -> Builder:
+		if included is Array includedArray:
+			_currentList = _currentList.filter(func(actor):
+				return includedArray.has(actor)
+			)
+		elif included is Actor includedActor:
+			_currentList = _currentList.filter(func(actor):
+				return actor == includedActor
+			)
+		elif included is GDScript includedClass:
+			_currentList = _currentList.filter(func(actor):
+				return Utils.IsNodeDescendantOf(actor, includedClass)
+			)
 		return self
 
 	func exceptFor(excluded: Variant) -> Builder:

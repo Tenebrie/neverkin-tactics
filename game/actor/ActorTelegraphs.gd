@@ -39,9 +39,8 @@ func _parentReady() -> void:
 		if previous == parent and parent.faction == Actor.PlayerFaction:
 			resetState()
 	)
-	parent.Skills.SelectedSkillChanged.connect(func(skill):
-		onSkillSelected(skill)
-	)
+	parent.Skills.SelectedSkillChanged.connect(onSkillSelected)
+	parent.Skills.SelectedSkillRecast.connect(onSkillSelected)
 
 func _process(_delta: float) -> void:
 	for telegraph in telegraphs:
@@ -50,12 +49,19 @@ func _process(_delta: float) -> void:
 			var updatedTarget = target
 			updatedTarget.y = 1
 			telegraph.global_position = updatedTarget
-		telegraph.Tint = TelegraphColor.NoTarget
-		telegraph.SelfTint = Color.WHITE
+
+		if telegraph.definition.DisabledSelector.call():
+			telegraph.Tint = Color.TRANSPARENT
+		else:
+			telegraph.Tint = TelegraphColor.NoTarget
+			telegraph.SelfTint = Color.WHITE
 		#if telegraph.ParentSkill.preparingInfuse:
 			#telegraph.Tint = TelegraphColor.NoTargetInfused
 
 	for telegraph in telegraphs:
+		if telegraph.definition.DisabledSelector.call():
+			continue
+
 		for processor in telegraph.definition.Processors:
 			processor.call(telegraph)
 		telegraph.pollTargets()
@@ -115,6 +121,8 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 	telegraph.GeneralValidator = func() -> bool:
 		if telegraph.IsLeaving:
 			return false
+		if telegraph.definition.DisabledSelector.call():
+			return true
 		for validator in def.Validators:
 			var result: Variant = validator.call(telegraph)
 			if result is Error or result is bool and result == false:
@@ -124,6 +132,8 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 	telegraph.TargetValidator = func(actor: Actor) -> bool:
 		if telegraph.IsLeaving:
 			return false
+		if telegraph.definition.DisabledSelector.call():
+			return true
 		if actor.collision_layer & def.collisionMask == 0:
 			return false
 		for group in telegraph.IgnoredObstacleGroups:
@@ -152,6 +162,7 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 		icon.SetIcon(def.Icon)
 		icon.SetSize(Vector2(0.8, 0.8))
 		telegraph.add_child(icon)
+		telegraph.childIcon = icon
 		icon.transparency = 1.0
 		## TODO: Rewrite physics or something so that intersect happened same frame?
 		skill.get_tree().physics_frame.connect(func():

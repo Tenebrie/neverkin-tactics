@@ -1,60 +1,71 @@
 extends Skill
 class_name SkillGriffonToss
 
-var landingDamage = 3
+var LandingDamage = 3
 
-var casterTelegraph = TelegraphPreset.PointArea.new(0.1)
+var grabTelegraph = TelegraphPreset.SingleActor.new()
+var landingPointTelegraph = TelegraphPreset.PointArea.new(0.1)
 var currentTossTarget: Actor
 
+const GrabRange = 1.0
+
 func _prepare() -> void:
-	parent.Skills.BeforeSelectedSkillChanged.connect(func(current):
-		if current != self:
-			return
-
-		var validTargets = Actor.Repository.Alive.List.filter(func(actor):
-			return actor.buffs and actor.buffs.Has(SkillGriffonGripBuff) and ActorUtils.flatDistanceBetweenActors(actor, parent) <= 1.0
-		)
-		if validTargets.is_empty():
-			return
-
-		currentTossTarget = validTargets[0]
-		casterTelegraph.CircleRadius = currentTossTarget.physicalSize
+	var maxCastRange = TelegraphPreset.MaxCastRange.new()
+	maxCastRange.addProcessor(func(telegraph: CircularTelegraph):
+		definition.TargetingMaxRange = definition.base.TargetingMaxRange if currentTossTarget else GrabRange
+		telegraph.radius = parent.physicalSize + definition.TargetingMaxRange
 	)
-	casterTelegraph.Validators.push_back(func(telegraph: Telegraph):
-		if not telegraph.IsPathable(parent.physicalSize):
+
+	cleanUp.connect(func():
+		currentTossTarget = null
+	)
+
+	grabTelegraph.addProcessor(func(telegraph):
+		if currentTossTarget:
+			telegraph.global_position = currentTossTarget.global_position
+	)
+	grabTelegraph.DisabledSelector = func():
+		return currentTossTarget != null
+
+	landingPointTelegraph.Validators.push_back(func(telegraph: Telegraph):
+		if not currentTossTarget:
+			return true
+		if not telegraph.IsPathable(currentTossTarget.physicalSize):
 			return Error.new("Not enough free space at destination.")
 		return true
 	)
 
-	casterTelegraph.Processors = []
-	casterTelegraph.Processors.push_back(func(telegraph: Telegraph):
-		if telegraph.IsPathable(parent.physicalSize):
+	landingPointTelegraph.Processors = []
+	landingPointTelegraph.Processors.push_back(func(telegraph: CircularTelegraph):
+		if not currentTossTarget:
+			telegraph.Tint = Color.TRANSPARENT
+			return
+		if telegraph.IsPathable(currentTossTarget.physicalSize):
 			telegraph.Tint = TelegraphColor.ExclusionGood
 		else:
 			telegraph.Tint = TelegraphColor.ExclusionOccupied
+		telegraph.radius = currentTossTarget.physicalSize
 	)
-	casterTelegraph.Processors.push_back(TelegraphProcessor.OutOfRangeTint)
+	landingPointTelegraph.Processors.push_back(TelegraphProcessor.OutOfRangeTint)
+
+	landingPointTelegraph.DisabledSelector = func():
+		return currentTossTarget == null
 
 	definition.telegraphs = [
-		casterTelegraph,
-		TelegraphPreset.MaxCastRange.new()
+		maxCastRange,
+		grabTelegraph,
+		landingPointTelegraph,
 	]
 
-func isCastable() -> Variant:
-	var validTargets = Actor.Repository.Alive.List.filter(func(actor):
-		return actor.buffs and actor.buffs.Has(SkillGriffonGripBuff) and ActorUtils.flatDistanceBetweenActors(actor, parent) <= 1.0
-	)
-	if validTargets.is_empty():
-		return Error.new("No grabbed target")
-	return super.isCastable()
+func getPrecastCount() -> int:
+	return 1
 
 func _cast(targets: TargetData) -> void:
 	if not currentTossTarget:
+		currentTossTarget = targets.perTelegraph[grabTelegraph].front()
 		return
 
-	var collision = currentTossTarget.collision_layer
-	currentTossTarget.collision_layer = 0
-	await create_tween().tween_property(currentTossTarget, "global_position", targets.mousePoint, 0.4).finished
-	currentTossTarget.collision_layer = collision
-	currentTossTarget.stats.dealDamage(DamageInstance.ForSkill(self, landingDamage))
-	currentTossTarget.buffs.RemoveAll(SkillGriffonGripBuff)
+	#currentTossTarget.buffs.RemoveAll(SkillGriffonGripBuff)
+	await SkillUtils.forceMoveTo(currentTossTarget, targets.pointPerTelegraph[landingPointTelegraph], 15.0)
+	currentTossTarget.stats.dealDamage(DamageInstance.ForSkill(self, LandingDamage))
+	currentTossTarget.buffs.Add(BuffCrippled.new())

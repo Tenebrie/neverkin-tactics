@@ -166,7 +166,7 @@ func fadeOut(duration: float = 0.3):
 	if has_node("TokenMeshInstance3D"):
 		var tween = create_tween()
 		tween.tween_property($TokenMeshInstance3D, "transparency", 1.0, duration)
-		$MeshInstance3D.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		$TokenMeshInstance3D.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 	if has_node("ActorOverheadStats"):
 		var stats: ActorOverheadStats = $ActorOverheadStats

@@ -5,16 +5,13 @@
 
 [resource]
 script = ExtResource("1_cmf57")
-Name = "Griffon Toss"
+Name = "Flight Lessons"
 Category = 2
-Description = "Send your grabbed target flying across the sky.
+Description = "Pick up a character in melee range and send them flying overhead in a direction of your choice.
 
-Deals %landingDamage upon landing to the target regardless if it's an ally or an enemy.
-
-Requires a target grabbed by $Griffon Grip."
+Upon landing, deal %LandingDamage damage and apply $Crippled."
 IconTexture = ExtResource("1_ekdc7")
-Cooldown = 2
-TargetingMaxRange = 12.0
+TargetingMaxRange = 4.0
 BehaviourRequireLineOfSight = false
 BehaviourTargetsGround = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

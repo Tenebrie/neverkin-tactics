@@ -4,6 +4,7 @@ class_name Skill
 signal selected
 signal beforeCast(targets: TargetData)
 signal afterCast(targets: TargetData)
+signal cleanUp
 
 @export var definition: SkillDefinition
 
@@ -25,6 +26,11 @@ func _ready() -> void:
 
 	if definition:
 		name = definition.Name
+
+	parent.Skills.BeforeSelectedSkillChanged.connect(func(current, previous):
+		if current == self and previous != self:
+			cleanUp.emit()
+	)
 
 	beforeCast.connect(func():
 		if parent.Skills.SelectedSkill != self or parent.actions.isFreeRecast():

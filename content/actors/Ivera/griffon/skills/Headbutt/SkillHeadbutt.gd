@@ -18,6 +18,8 @@ var _isPushedIntoObstacle = false
 var _pushedVictims: Array[Actor]
 
 func _prepare() -> void:
+	definition.keywords = [Keyword.Reloadable]
+
 	dashTelegraph.Travel.RectLength = definition.TargetingMaxRange
 	dashTelegraph.Travel.addTargetFilter(func(actor):
 		return actor != parent
