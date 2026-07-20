@@ -96,7 +96,7 @@ static func populateSkillValues(text: String, skill: Skill) -> String:
 	description = skill.parent.pronouns.evaluate(description)
 
 	var commonLines: Array[String]
-	if skill.definition.TargetingMaxRange > 0.0:
+	if skill.definition.TargetingMaxRange > 0.0 and skill.definition.TargetingMaxRange < 1000.0:
 		commonLines.push_back("[color=orange]$Range:[/color] %.2fm"%skill.definition.TargetingMaxRange)
 	if skill.definition.HealthCost > 0.0:
 		commonLines.push_back("[color=#FF5555]$Health Cost:[/color] %d"%skill.HealthCost)

@@ -60,6 +60,7 @@ func _process(_delta: float) -> void:
 
 	for telegraph in telegraphs:
 		if telegraph.definition.DisabledSelector.call():
+			telegraph.Tint = Color.TRANSPARENT
 			continue
 
 		for processor in telegraph.definition.Processors:

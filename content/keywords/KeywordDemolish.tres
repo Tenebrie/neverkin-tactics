@@ -6,7 +6,5 @@
 script = ExtResource("1_rfl1q")
 name = "Demolish"
 category = "Keyword"
-description = "Triggers when hitting the destructible walls with a damaging ability.
-
-Demolishing skills always destroy the walls immediately."
+description = "Triggers when hitting the destructible walls with a damaging ability."
 metadata/_custom_type_script = "uid://cn1ot2ynri57j"

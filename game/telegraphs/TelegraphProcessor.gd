@@ -5,10 +5,10 @@ static func ConstantTint(color: Color):
 		telegraph.Tint = color
 
 static func SnapToHoveredActor(telegraph: Telegraph):
-	var hovered = telegraph.FilteredOnlyTargets
-	if hovered.is_empty():
-		return
-	telegraph.global_position = hovered[0].global_position
+	for actor in Actor.Repository.Hovered.List:
+		if not telegraph.TargetValidator or telegraph.TargetValidator.call(actor):
+			telegraph.global_position = actor.global_position
+			return
 
 static func TargetFactionTint(telegraph: Telegraph):
 	if telegraph.ParentSkill.preparingInfuse and telegraph.Targets.size() > 0:

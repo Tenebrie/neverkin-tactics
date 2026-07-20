@@ -23,9 +23,11 @@ func _prepare() -> void:
 	)
 
 	demolishTelegraph.addTargetFilter(func(actor):
+		if actor.get_parent() is PropWall wall:
+			return wall.CanBeIgnored
 		return actor is Prop
 	)
-	demolishTelegraph.collisionMask = CollisionLayer.SKILL_TARGETABLE
+	demolishTelegraph.collisionMask = CollisionLayer.SKILL_TARGETABLE | CollisionLayer.OBSTACLE
 	demolishTelegraph.DisabledSelector = func():
 		return not mainTelegraph.getInstance().FirstTarget or mainTelegraph.getInstance().FirstTarget is not Prop
 	demolishTelegraph.Attachment = Telegraph.Attachment.None
