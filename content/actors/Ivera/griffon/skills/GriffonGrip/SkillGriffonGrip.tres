@@ -11,6 +11,8 @@ Description = "Grab another creature with your talons, keeping them nice and clo
 
 Grabbed enemies are unable to use any movement actions until they break free.
 
+$Alternate: Lift your target above your head and bodyslam them into the ground, dealing %BodyslamDamage damage. Costs +1 action point.
+
 Applies ${Griffon Grip!buff}."
 IconTexture = ExtResource("1_2pflu")
 TargetingMaxRange = 1.0
