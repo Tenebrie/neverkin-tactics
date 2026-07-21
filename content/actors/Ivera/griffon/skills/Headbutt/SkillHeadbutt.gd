@@ -117,8 +117,10 @@ func _cast(targets: TargetData) -> void:
 	if targets.perTelegraph[dashTelegraph.Impact].is_empty():
 		return
 
+	var isPushingWalls = targets.perTelegraph[dashTelegraph.Impact].all(func(actor): return actor is Prop)
 	for target in targets.perTelegraph[dashTelegraph.Impact]:
-		target.stats.dealDamage(DamageInstance.ForSkill(self, PrimaryDamage))
+		if not isPushingWalls:
+			target.stats.dealDamage(DamageInstance.ForSkill(self, PrimaryDamage))
 
 	var maxDuration = 0.0
 	for i in _pushedVictims.size():

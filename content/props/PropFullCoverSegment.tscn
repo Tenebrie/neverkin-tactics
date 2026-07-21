@@ -10,10 +10,8 @@ Name = "Full Cover"
 PerceivedThreat = 0
 physicalSize = 0.1
 healthMaximum = 9999
-ManaMaximum = null
 ActionPointsMax = 0
 MovementSpeedPerActionPoint = 0.0
-showHoverInfo = null
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqugx"]
 albedo_texture = ExtResource("3_3vya2")
@@ -21,7 +19,6 @@ uv1_scale = Vector3(2, 2, 2)
 uv1_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_yelxp"]
-resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_vqugx")
 size = Vector3(0.2, 1, 0.2)
 

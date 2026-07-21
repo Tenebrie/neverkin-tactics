@@ -9,7 +9,8 @@ func _ready() -> void:
 	if definition != null:
 		loadDefinition()
 
-	pronouns = Pronouns.FromPreset(definition.pronouns)
+	if definition != null:
+		pronouns = Pronouns.FromPreset(definition.pronouns)
 	if Engine.is_editor_hint():
 		return
 	Repository.All.Register(self)

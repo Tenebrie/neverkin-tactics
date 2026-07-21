@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://bg4x5cqts33r6" path="res://game/skills/SkillController.gd" id="8_ocm0e"]
 [ext_resource type="Script" uid="uid://bibsejet712xq" path="res://game/actor/ActorHoverArea.gd" id="9_m37al"]
 [ext_resource type="Script" uid="uid://jcfo153okts8" path="res://game/actor/inputProvider/ActorInputProvider.gd" id="12_pe7q2"]
+[ext_resource type="Script" uid="uid://7fsvmyq6nybe" path="res://game/actor/ActorImpactEffects.gd" id="14_ernrv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
 resource_local_to_scene = true
@@ -84,3 +85,6 @@ script = ExtResource("9_m37al")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HoverArea" unique_id=933098665]
 shape = SubResource("SphereShape3D_kq5px")
 debug_color = Color(0.58431375, 0.54901963, 0, 0.21568628)
+
+[node name="ActorImpactEffects" type="Node" parent="." unique_id=59241259]
+script = ExtResource("14_ernrv")

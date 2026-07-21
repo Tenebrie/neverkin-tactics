@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bwyipm7pkrsw1" path="res://game/actor/ActorStats.gd" id="3_o1alc"]
 [ext_resource type="Script" uid="uid://bibsejet712xq" path="res://game/actor/ActorHoverArea.gd" id="4_mki2f"]
 [ext_resource type="Script" uid="uid://k2fnsxqpv5dn" path="res://game/actor/ActorQuery.gd" id="5_4tpe0"]
+[ext_resource type="Script" uid="uid://bm7noyr5c7iv3" path="res://game/prop/PropImpactEffects.gd" id="6_o1alc"]
 
 [sub_resource type="Resource" id="Resource_o1alc"]
 script = ExtResource("2_o1alc")
@@ -24,3 +25,6 @@ script = ExtResource("4_mki2f")
 
 [node name="ActorQuery" type="Node" parent="." unique_id=1980554206]
 script = ExtResource("5_4tpe0")
+
+[node name="PropImpactEffects" type="Node" parent="." unique_id=926030232]
+script = ExtResource("6_o1alc")
