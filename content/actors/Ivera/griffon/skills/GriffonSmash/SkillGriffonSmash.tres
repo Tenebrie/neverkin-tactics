@@ -1,8 +1,17 @@
-[gd_resource type="Resource" script_class="SkillDefinition" format=3]
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://c4d46dqk5i1w3"]
 
 [ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="1_skdef"]
+[ext_resource type="Texture2D" uid="uid://4wml0ejeohyl" path="res://content/actors/Ivera/griffon/skills/GriffonSmash/SkillGriffonSmashIcon.png" id="1_ws3td"]
 
 [resource]
 script = ExtResource("1_skdef")
-Name = "Griffon Smash"
+Name = "Rain of Feathers"
+Category = 2
+Description = "Spin around, dealing %Damage damage and applying $Bleeding to enemies in range.
+
+If you have an enemy gripped with $Griffon Grip, use them as a blunt weapon instead of your wings. Do not apply $Bleeding.
+
+For each character or %GrabbedVictimWallsPerDamage wall segments hit, the victim takes %GrabbedVictimDamage damage."
+IconTexture = ExtResource("1_ws3td")
+TargetingMaxRange = 1.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

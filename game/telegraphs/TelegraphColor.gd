@@ -1,6 +1,6 @@
 @abstract class_name TelegraphColor
 
-const MaxRange = Color(0, 1, 1, 0.05)
+const MaxRange = Color(0, 1, 1, 0.25)
 const NoTarget = Color(1, 1, 1, 0.3)
 const TargetAcquired = Color(2, 0.5, 0.0, 0.9)
 const TargetAcquiredInfused = Color(0.4, 0.7, 2, 0.9)

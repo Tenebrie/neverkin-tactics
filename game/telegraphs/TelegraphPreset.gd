@@ -17,6 +17,7 @@ class MaxCastRange extends TelegraphDefinition:
 		Shape = Telegraph.Shape.Circle
 		Attachment = Telegraph.Attachment.Caster
 		collisionMask = 0
+		fillFraction = 0.0
 
 		Processors.push_back(TelegraphProcessor.ConstantTint(TelegraphColor.MaxRange))
 

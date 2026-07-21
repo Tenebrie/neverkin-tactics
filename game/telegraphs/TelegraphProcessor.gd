@@ -4,6 +4,9 @@ static func ConstantTint(color: Color):
 	return func(telegraph: Telegraph):
 		telegraph.Tint = color
 
+static func Unfilled(telegraph: Telegraph):
+	telegraph.growPercentage = 0.0
+
 static func SnapToHoveredActor(telegraph: Telegraph):
 	for actor in Actor.Repository.Hovered.List:
 		if not telegraph.TargetValidator or telegraph.TargetValidator.call(actor):

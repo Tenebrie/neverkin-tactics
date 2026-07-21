@@ -7,13 +7,9 @@
 script = ExtResource("1_khmqf")
 Name = "Griffon Grip"
 Category = 2
-Description = "Grab another creature with your talons, keeping them nice and close.
+Description = "Lift another creature with your talons and slam them into the ground behind you, dealing %SlamDamage damage.
 
-Grabbed enemies are unable to use any movement actions until they break free.
-
-$Alternate: Lift your target above your head and bodyslam them into the ground, dealing %BodyslamDamage damage. Costs +1 action point.
-
-Applies ${Griffon Grip!buff}."
+Until they $Break Free or you move away, they are unable to move."
 IconTexture = ExtResource("1_2pflu")
-TargetingMaxRange = 1.0
+TargetingMaxRange = 0.5
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

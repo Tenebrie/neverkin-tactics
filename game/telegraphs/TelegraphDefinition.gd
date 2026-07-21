@@ -9,6 +9,7 @@ signal targetsChanged(targets: Array[Actor])
 @export var Icon: Texture2D
 @export var IconPerTarget: Texture2D
 @export var TextMessage: String
+@export var fillFraction: float = 1.0
 
 ## Returns whether the telegraph as a whole is valid
 @export var Validators: Array[func(Telegraph) -> Variant] = [func(_t): return true]
@@ -38,9 +39,6 @@ signal targetsChanged(targets: Array[Actor])
 
 @export var PiercingPower = 0
 @export var PenetrationPower = 0
-
-@export var TargetSnapping: bool = false
-@export var LookAtMouse: bool = false
 
 ## Update functions ran BEFORE targets are acquired
 @export var Processors: Array[func(Telegraph) -> void] = []

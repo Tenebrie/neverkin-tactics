@@ -41,6 +41,9 @@ var movementSpeedPerAction: float:
 		var base = definition.MovementSpeedPerActionPoint
 		if not buffs:
 			return base
+		if buffs.Has(SkillGriffonGripBuff):
+			return 0
+
 		if buffs.Has(BuffCrippled):
 			base /= 2.0
 		if buffs.Has(BuffStim):

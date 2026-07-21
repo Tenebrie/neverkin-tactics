@@ -41,7 +41,9 @@ func toKeyword(script: GDScript) -> KeywordDefinition:
 	var keyword = KeywordDefinition.new()
 	keyword.source = KeywordDefinition.Source.Skill
 	keyword.name = Name
-	keyword.category = StringUtils.getSkillCategoryString(Category)
+
+	keyword.category = StringUtils.getSkillCategoryString(Category) ?? "Ability"
+
 	keyword.description = Description
 	keyword.sourceScript = script
 	# Allow using !skill to force resolution

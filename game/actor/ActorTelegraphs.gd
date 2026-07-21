@@ -117,7 +117,7 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 		capsule.lengthOrigin = def.RectOrigin
 		telegraph = capsule
 
-	telegraph.growPercentage = 1.0
+	telegraph.growPercentage = def.fillFraction
 	telegraph.definition = def
 	telegraph.GeneralValidator = func() -> bool:
 		if telegraph.IsLeaving:

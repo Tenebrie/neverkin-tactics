@@ -5,16 +5,15 @@
 [ext_resource type="Texture2D" uid="uid://bvxy7yhcljeal" path="res://content/actors/Char/CharToken.webp" id="3_cv7rp"]
 [ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/actor/behaviour/ActorBehaviourPlayerControlled.gd" id="4_cv7rp"]
 [ext_resource type="Script" uid="uid://dyb56fck8ougp" path="res://game/actor/ActorSounds.gd" id="5_b4xcf"]
-[ext_resource type="AudioStream" uid="uid://p4rtvew4er3i" path="res://content/actors/Char/sounds/readyEffect/CharReadyEffectRandomizer.tres" id="6_a0gu8"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b4xcf"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hyna7"]
 resource_local_to_scene = true
 transparency = 1
 albedo_texture = ExtResource("3_cv7rp")
 texture_repeat = false
 point_size = 111.1
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_a0gu8"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_b4xcf"]
 resource_local_to_scene = true
 height = 0.2
 radius = 0.4
@@ -24,11 +23,11 @@ definition = ExtResource("2_yck5y")
 
 [node name="TokenMeshInstance3D" parent="." index="0" unique_id=405721016]
 transform = Transform3D(0.95, 0, 0, 0, 1, 0, 0, 0, 0.95, 0, 0.01, 0)
-material_override = SubResource("StandardMaterial3D_b4xcf")
+material_override = SubResource("StandardMaterial3D_hyna7")
 
 [node name="CollisionShape3D" parent="." index="1" unique_id=1364732436]
 transform = Transform3D(0.95, 0, 0, 0, 1, 0, 0, 0, 0.95, 0, 0.1, 0)
-shape = SubResource("CylinderShape3D_a0gu8")
+shape = SubResource("CylinderShape3D_b4xcf")
 
 [node name="ActorBehaviourPlayerControlled" type="Node" parent="." index="10" unique_id=115520659]
 script = ExtResource("4_cv7rp")
@@ -36,4 +35,3 @@ PortraitColor = Color(0.165, 0.55, 0.55, 1)
 
 [node name="ActorSounds" type="Node3D" parent="." index="14" unique_id=1302844920]
 script = ExtResource("5_b4xcf")
-readyEffect = ExtResource("6_a0gu8")
