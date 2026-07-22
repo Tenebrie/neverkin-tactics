@@ -36,6 +36,8 @@ func _cast(allTargets: Skill.TargetData) -> void:
 	effect.position.y = RenderHeight.SkillTrails
 	effect.infused = allTargets.infusedCast
 
+	SoundManager.playOneShot(preload("res://content/skills/SkillPistolShot/sounds/SkillPistolShotCastSound.tres"), parent.global_position)
+
 	var targets: Array[Actor]
 	if allTargets.perTelegraph.has(damageTelegraph):
 		targets = allTargets.perTelegraph[damageTelegraph]

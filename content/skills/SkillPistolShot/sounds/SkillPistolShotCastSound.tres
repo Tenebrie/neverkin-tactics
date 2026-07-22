@@ -1,0 +1,11 @@
+[gd_resource type="AudioStreamRandomizer" format=3 uid="uid://dcxf02sudfltj"]
+
+[ext_resource type="AudioStream" uid="uid://cyycm2fj360x6" path="res://content/skills/SkillPistolShot/sounds/GunshotPistol_BW.56965.wav" id="1_7ps75"]
+[ext_resource type="AudioStream" uid="uid://ce72vgpppa625" path="res://content/skills/SkillPistolShot/sounds/GunshotPistol_BW.57107.wav" id="2_kagip"]
+
+[resource]
+random_pitch = 1.1892071
+random_volume_offset_db = 2.0
+streams_count = 2
+stream_0/stream = ExtResource("1_7ps75")
+stream_1/stream = ExtResource("2_kagip")
