@@ -9,7 +9,7 @@ class ProjectileTheme:
 
 class Definition:
 	## Number of points that forms the trail; higher is better, but more performance expensive
-	@export var pointCount = 50
+	@export var pointCount = 200
 	## Tween parameters
 	@export var tweenEaseType: Tween.EaseType = Tween.EASE_OUT
 	@export var tweenTransitionType: Tween.TransitionType = Tween.TRANS_SINE
