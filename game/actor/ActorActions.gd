@@ -6,13 +6,15 @@ const StutterStepMovement = 1.0
 signal ActionPointsChanged(current: int)
 signal MovementPointsChanged(current: float)
 
-var ActionPointsUsed: int = 0
+var ActionPointsUsed: int:
+	get: return _data.actionPointsUsed
+var ActionPointsTemporary: int:
+	get: return _data.actionPointsTemporary
+var ActionPointsForNextTurn: int:
+	get: return _data.actionPointsForNextTurn
 
 var ActionPointsMax: int:
 	get: return parent.definition.ActionPointsMax + ActionPointsTemporary
-var ActionPointsTemporary: int = 0
-var ActionPointsForNextTurn: int = 0
-
 var ActionPointsAvailable: int:
 	get:
 		return ActionPointsMax - ActionPointsUsed
@@ -23,34 +25,52 @@ var ActionPointsThreatened: int:
 		return _actionPointsThreatenedFromSkill + parent.buffs.Count(BuffActionPointThreat)
 
 func AddTemporaryActionPoints(value: int):
-	ActionPointsForNextTurn += value
+	_data.actionPointsForNextTurn += value
 
 func ConsumeActionPoints(value: int):
-	ActionPointsUsed += value
+	_data.actionPointsUsed += value
 	MovementBuffer = StutterStepMovement
 	ActionPointsChanged.emit(ActionPointsAvailable)
 	SignalBus.ActionPointsChanged.emit(parent, ActionPointsAvailable)
 	SignalBus.ActionPointsConsumedPermanently.emit(parent, value)
 
 func ConsumeActionPointsRefundable(value: int):
-	ActionPointsUsed += value
+	_data.actionPointsUsed += value
 	ActionPointsChanged.emit(ActionPointsAvailable)
 	SignalBus.ActionPointsChanged.emit(parent, ActionPointsAvailable)
 
 func RefundActionPoints(value: int):
 	while ActionPointsUsed > 0 && value > 0:
 		value -= 1
-		ActionPointsUsed -= 1
+		_data.actionPointsUsed -= 1
 	ActionPointsChanged.emit(ActionPointsAvailable)
 	SignalBus.ActionPointsChanged.emit(parent, ActionPointsAvailable)
+
+#region Storage
+var _data = Storage.new()
+
+class Storage extends Resource:
+	var actionPointsUsed = 0
+	var actionPointsTemporary = 0
+	var actionPointsForNextTurn = 0
+	var movementBuffer = 0.0
+
+func createSnapshot() -> Storage:
+	return _data.duplicate()
+
+func restoreSnapshot(snapshot: Variant):
+	assert(snapshot is Storage)
+	_data = (snapshot as Storage).duplicate()
+#endregion
 
 #region Movement
 var MovementSpeedPerAP: float:
 	get:
 		return parent.movementSpeedPerAction
-var MovementBuffer: float = 0.0:
+var MovementBuffer: float:
+	get: return _data.movementBuffer
 	set(v):
-		MovementBuffer = v
+		_data.movementBuffer = v
 		MovementPointsChanged.emit(v)
 var MovementAvailable: float:
 	get:
@@ -62,13 +82,14 @@ func _parentReady() -> void:
 			return
 
 		if not skill or (skill and skill != previous):
-			isCastingMode = false
+			isLockedInTargeting = false
 			precastsRemaining = 0
 			recastsRemaining = 0
 			_actionPointsThreatenedFromSkill = 0
 		elif isFreeRecast():
 			_actionPointsThreatenedFromSkill = 0
-		else:
+
+		if skill:
 			_actionPointsThreatenedFromSkill = skill.definition.ActionPointCost
 
 	)
@@ -85,7 +106,7 @@ func ConsumeMovement(value: float):
 
 		if ActionPointsAvailable < 0:
 			MovementBuffer = 0.0
-			ActionPointsUsed = ActionPointsMax
+			_data.actionPointsUsed = ActionPointsMax
 			return
 
 func RefundMovement(value: float):
@@ -103,7 +124,7 @@ func GetMovementActionPointCost(value: float) -> int:
 #endregion
 
 #region ActionQueue
-var isCastingMode = false
+var isLockedInTargeting = false
 var precastsRemaining: int = 0
 var recastsRemaining: int = 0
 var ActionQueue: ActorActionQueue = ActorActionQueue.new()
@@ -125,9 +146,9 @@ func onTurnEnded(faction: Actor.Faction) -> void:
 	if faction != parent.faction:
 		return
 	MovementBuffer = StutterStepMovement
-	ActionPointsUsed = 0
-	ActionPointsTemporary = ActionPointsForNextTurn
-	ActionPointsForNextTurn = 0
+	_data.actionPointsUsed = 0
+	_data.actionPointsTemporary = ActionPointsForNextTurn
+	_data.actionPointsForNextTurn = 0
 
 #region Orders
 func IssueOrder_MoveThroughPath(path: PackedVector3Array):
@@ -181,8 +202,8 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	if not _validateSkillCast():
 		return
 
-	if not isCastingMode and skill.getPrecastCount() > 0:
-		isCastingMode = true
+	if not isLockedInTargeting and skill.getPrecastCount() > 0:
+		isLockedInTargeting = true
 		precastsRemaining = skill.getPrecastCount()
 		await skill.PerformCast(targets)
 		precastsRemaining -= 1
@@ -204,7 +225,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	if recastsRemaining > 0:
 		parent.Skills.NotifyRecast()
 	else:
-		isCastingMode = false
+		isLockedInTargeting = false
 		skill.cleanUp.emit()
 
 func IssueOrder_Stop():

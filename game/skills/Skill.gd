@@ -74,6 +74,21 @@ func isCastable() -> Variant:
 func isVisible() -> bool:
 	return true
 
+#region Snapshot
+var _data = Storage.new()
+
+class Storage extends Resource:
+	var chargesUsed = 0
+	var cooldownRemaining = 0
+
+func createSnapshot() -> Storage:
+	return _data.duplicate()
+
+func restoreSnapshot(param: Variant):
+	assert(param is Storage snapshot)
+	_data = snapshot.duplicate()
+#endregion
+
 #region Infuse
 signal preparingInfuseChanged
 var preparingInfuse: bool:
@@ -110,11 +125,15 @@ var ChargesRequired:
 	get:
 		return definition.ChargesCost
 
+var activeCastCount = 0
+
 func PerformCast(targets: TargetData) -> void:
 	MessageLog.PrintActorMessage(definition.Name, parent)
+	activeCastCount += 1
 	SignalUtils.emitAsync([beforeCast, SignalBus.beforeCast], targets)
 	await _cast(targets)
 	SignalUtils.emitAsync([afterCast, SignalBus.afterCast], targets)
+	activeCastCount -= 1
 
 func _cast(_targets: TargetData) -> void:
 	pass
@@ -123,7 +142,9 @@ func StartSequence() -> Sequencer:
 	return Sequencer.Start(self)
 
 #region Charges
-var chargesUsed = 0
+var chargesUsed: int:
+	get: return _data.chargesUsed
+	set(v): _data.chargesUsed = v
 
 var chargesLeft:
 	get:
@@ -143,9 +164,10 @@ func restoreCharges(count: int) -> void:
 #region Cooldown
 signal cooldownChanged(current: int)
 
-var cooldownRemaining = 0:
+var cooldownRemaining: int:
+	get: return _data.cooldownRemaining
 	set(v):
-		cooldownRemaining = v
+		_data.cooldownRemaining = v
 		cooldownChanged.emit(v)
 
 func startCooldown():

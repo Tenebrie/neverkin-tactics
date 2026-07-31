@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://wntn4ni6cd7h"]
 
 [ext_resource type="PackedScene" uid="uid://bvxvnc3sify1j" path="res://content/props/Prop.tscn" id="1_vxb7g"]
+[ext_resource type="Script" uid="uid://by54t7ws8itkr" path="res://content/props/PropFullCoverSegment.gd" id="2_3vya2"]
 [ext_resource type="Script" uid="uid://xdmrao02bm7l" path="res://game/actor/ActorDefinition.gd" id="2_4f2ks"]
 [ext_resource type="Texture2D" uid="uid://bw1fcol7nmhx8" path="res://addons/prototype-textures/light/texture_03.png" id="3_3vya2"]
 
@@ -28,6 +29,7 @@ size = Vector3(0.2, 1, 0.2)
 
 [node name="PropFullCoverSegment" unique_id=842978226 instance=ExtResource("1_vxb7g")]
 collision_layer = 1025
+script = ExtResource("2_3vya2")
 definition = SubResource("Resource_vxb7g")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="0" unique_id=1419426634]

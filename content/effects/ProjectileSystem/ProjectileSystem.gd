@@ -82,5 +82,4 @@ func _createProjectileTrail(theme: ProjectileTheme, from: Vector3, to: Vector3, 
 		trail.emitting = false
 	)
 
-	await get_tree().create_timer(travelTime + lingerTime).timeout
-	trail.queue_free()
+	await get_tree().create_timer((travelTime + lingerTime) * 2).timeout

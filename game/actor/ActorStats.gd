@@ -11,6 +11,22 @@ var Name: String:
 var Faction: Actor.Faction:
 	get: return parent.faction
 
+#region Storage
+var _data = Storage.new()
+
+class Storage extends Resource:
+	var healthDamageTaken = 0
+	var healthMaximumDamageTaken = 0
+	var manaMissing = 0
+
+func createSnapshot() -> Storage:
+	return _data.duplicate()
+
+func restoreSnapshot(snapshot: Variant):
+	assert(snapshot is Storage)
+	_data = (snapshot as Storage).duplicate()
+#endregion
+
 #region Engine events
 func _parentReady() -> void:
 	if parent.buffs:
@@ -41,8 +57,10 @@ func _parentReady() -> void:
 #endregion
 
 #region Health
-var healthDamageTaken: int = 0
-var healthMaximumDamageTaken: int = 0
+var healthDamageTaken: int:
+	get: return _data.healthDamageTaken
+var healthMaximumDamageTaken: int:
+	get: return _data.healthMaximumDamageTaken
 var healthMaximum: int:
 	get: return parent.definition.healthMaximum - healthMaximumDamageTaken
 var healthHumanityThreshold: int:
@@ -62,14 +80,14 @@ func applyDamageInstance(damage: DamageInstance):
 		restoreHealth(-damage.Value)
 
 func dealDamage(damage: DamageInstance):
-	healthDamageTaken = clampi(healthDamageTaken + damage.Value, 0, healthMaximum)
+	_data.healthDamageTaken = clampi(healthDamageTaken + damage.Value, 0, healthMaximum)
 	if healthCurrent <= 0:
 		parent.Destroy()
 	damageTaken.emit(damage)
 	healthChanged.emit(healthCurrent)
 
 func reduceHealthMaximum(value: int):
-	healthMaximumDamageTaken += value
+	_data.healthMaximumDamageTaken += value
 	healthDamageTaken -= mini(healthDamageTaken, value)
 	healthChanged.emit(healthCurrent)
 
@@ -78,12 +96,13 @@ func dealSkillDamage(targets: Skill.TargetData):
 		applyDamageInstance(targets.damageInstances[parent])
 
 func restoreHealth(value: int):
-	healthDamageTaken = clampi(healthDamageTaken - value, 0, healthMaximum)
+	_data.healthDamageTaken = clampi(healthDamageTaken - value, 0, healthMaximum)
 	healthChanged.emit(healthCurrent)
 #endregion
 
 #region Mana
-var manaMissing: int = 0
+var manaMissing: int:
+	get: return _data.manaMissing
 var manaMaximum: int:
 	get: return parent.definition.ManaMaximum
 
@@ -95,12 +114,12 @@ var manaThreatened: int = 0
 var manaPromised: int = 0
 
 func consumeMana(damage: DamageInstance):
-	manaMissing = clampi(manaMissing + damage.Value, 0, manaMaximum)
+	_data.manaMissing = clampi(manaMissing + damage.Value, 0, manaMaximum)
 	manaSpent.emit(damage)
 	manaChanged.emit(manaCurrent)
 
 func restoreMana(value: int):
-	manaMissing = clampi(manaMissing - value, 0, manaMaximum)
+	_data.manaMissing = clampi(manaMissing - value, 0, manaMaximum)
 	manaChanged.emit(manaCurrent)
 #endregion
 

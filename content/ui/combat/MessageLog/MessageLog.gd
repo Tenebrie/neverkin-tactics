@@ -36,18 +36,21 @@ func printMessage(message: String) -> void:
 
 static func PrintChatMessage(message: String) -> void:
 	instance.printMessage(message)
+	Log.info(message)
 
 static func PrintMessage(message: String) -> void:
 	var item = Asset.Instantiate(MessageLogFloatingItem)
 	item.text = message
 	item.global_position = instance.get_viewport().get_mouse_position() - Vector2(instance.get_viewport_rect().size.x / 2, 24)
 	instance.get_tree().root.add_child(item)
+	Log.info(message)
 
 static func PrintErrorObject(error: Error) -> void:
 	var item = Asset.Instantiate(MessageLogFloatingItem)
 	item.text = error.Message
 	item.global_position = instance.get_viewport().get_mouse_position() - Vector2(instance.get_viewport_rect().size.x / 2, 24)
 	instance.get_tree().root.add_child(item)
+	Log.info(error.Message)
 
 static func PrintWorldMessage(message: String, point: Vector3) -> void:
 	var item = Asset.Instantiate(MessageLogFloatingItem)
@@ -56,6 +59,7 @@ static func PrintWorldMessage(message: String, point: Vector3) -> void:
 	item.worldPosition = point
 	instance.get_tree().root.add_child(item)
 	item.screenOffset = -Vector2(item.size.x / 2, 24)
+	Log.info(message)
 
 static func PrintActorMessage(message: String, actor: Actor) -> void:
 	PrintWorldMessage(message, actor.global_position)

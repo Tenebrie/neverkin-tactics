@@ -67,10 +67,10 @@ func Get(buffClass: GDScript[Buff]) -> Buff:
 			return child
 	return null
 
-func GetAll(buffClass: GDScript[Buff]) -> Array[Buff]:
+func GetAll(buffClass: GDScript[Buff] = null) -> Array[Buff]:
 	var out: Array[Buff]
 	for child in get_children():
-		if child is Buff buff and Utils.IsNodeDescendantOf(child, buffClass) and not child.is_queued_for_deletion():
+		if child is Buff buff and (buffClass == null or Utils.IsNodeDescendantOf(child, buffClass)) and not child.is_queued_for_deletion():
 			out.push_back(buff)
 	return out
 
@@ -117,3 +117,35 @@ func RemoveAll(buffClass: GDScript[Buff]) -> void:
 	for child in get_children():
 		if child is Buff buff and Utils.IsNodeDescendantOf(child, buffClass) and not child.is_queued_for_deletion():
 			Remove(buff)
+
+#region Snapshot
+class Snapshot extends Resource:
+	var buffs: Dictionary[int, BuffSnapshot]
+
+class BuffSnapshot:
+	var className = ""
+	var data: Variant
+
+func createSnapshot() -> Snapshot:
+	var snapshot = Snapshot.new()
+	for buff in GetAll():
+		var buffSnapshot = BuffSnapshot.new()
+		print(buff.get_class())
+		#buffSnapshot.className =
+		buffSnapshot.data = buff.createSnapshot()
+		#snapshot.buffs[buff.get_instance_id()] =
+
+	return snapshot
+
+func restoreSnapshot(param: Variant):
+	pass
+	#assert(param is Snapshot snapshot)
+	#var allSkills = activeSkillGroup.GetAll()
+	#allSkills.append_array(commonSkillGroup.GetAll())
+	#allSkills.append_array(inactiveSkillGroup.GetAll())
+	#for skill in allSkills:
+		#if not snapshot.skills.has(skill.get_instance_id()):
+			#continue
+		#skill.restoreSnapshot(snapshot.skills[skill.get_instance_id()])
+	#SkillsChanged.emit()
+#endregion

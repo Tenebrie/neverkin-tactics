@@ -38,7 +38,7 @@ func _cast(targets: TargetData) -> void:
 	var duration = 0.85
 
 	var grabTimer: Timer
-	var grabbedActors = Actor.Repository.Alive.List.filter(func(a):
+	var grabbedActors = Actor.Repository.Alive.asList().filter(func(a):
 		return a.buffs and a.buffs.Has(SkillGriffonGripBuff)
 	)
 	if grabbedActors.size() > 0:

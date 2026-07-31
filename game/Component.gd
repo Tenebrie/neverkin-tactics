@@ -17,3 +17,9 @@ func createChild(object: Object):
 		object = object.new()
 	add_child(object)
 	return object
+
+func createSnapshot() -> Variant:
+	return null
+
+func restoreSnapshot(_snapshot: Variant):
+	pass

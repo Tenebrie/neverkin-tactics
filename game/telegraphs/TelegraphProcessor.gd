@@ -8,7 +8,7 @@ static func Unfilled(telegraph: Telegraph):
 	telegraph.growPercentage = 0.0
 
 static func SnapToHoveredActor(telegraph: Telegraph):
-	for actor in Actor.Repository.Hovered.List:
+	for actor in Actor.Repository.Hovered.asList():
 		if not telegraph.TargetValidator or telegraph.TargetValidator.call(actor):
 			telegraph.global_position = actor.global_position
 			return

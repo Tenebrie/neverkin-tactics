@@ -16,7 +16,7 @@ func performPlayerTurnStart():
 	pass
 
 func performFactionTurn(faction: Actor.Faction):
-	var factionActors = Actor.Repository.Alive.List.filter(func(actor):
+	var factionActors = Actor.Repository.Alive.asList().filter(func(actor):
 		return actor.faction == faction and actor.Behaviour
 	)
 	factionActors.sort_custom(func(a, b):

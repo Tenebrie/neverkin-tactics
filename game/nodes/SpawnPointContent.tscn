@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://6lc12cyku7yl"]
+
+[ext_resource type="Texture2D" uid="uid://bu6tnj71j2v0t" path="res://addons/prototype-textures/red/texture_09.png" id="1_5c05g"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0y05n"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.45882353)
+albedo_texture = ExtResource("1_5c05g")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nvo6o"]
+material = SubResource("StandardMaterial3D_0y05n")
+radius = 0.4
+height = 1.0
+
+[node name="SpawnPoint" type="Node3D" unique_id=216202846]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=126720672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("CapsuleMesh_nvo6o")

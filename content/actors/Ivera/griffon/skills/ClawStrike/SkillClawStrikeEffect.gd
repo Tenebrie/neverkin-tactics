@@ -2,10 +2,6 @@
 extends Node3D
 class_name SkillClawStrikeEffect
 
-@export_tool_button("Play")
-var hello_world := func() -> void:
-	Play()
-
 var duration: float = 0.3
 
 var system: ProjectileSystem

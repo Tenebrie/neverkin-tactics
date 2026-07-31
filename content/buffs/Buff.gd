@@ -57,6 +57,22 @@ func _prepare() -> void:
 		Owner = v
 		Owner.tree_exited.connect(queue_free)
 
+#region Snapshot
+var _data = Storage.new()
+
+class Storage extends Resource:
+	var intensity = 1
+	var duration = 1
+	var ownerNodeId = 0
+
+func createSnapshot() -> Storage:
+	return _data.duplicate()
+
+func restoreSnapshot(param: Variant):
+	assert(param is Storage snapshot)
+	_data = snapshot.duplicate()
+#endregion
+
 enum Alignment {
 	Neutral,
 	Positive,

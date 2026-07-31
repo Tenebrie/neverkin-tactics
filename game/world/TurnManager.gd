@@ -26,14 +26,15 @@ signal TurnChanged
 var activeFaction: Actor.Faction = Actor.PlayerFaction
 
 func _ready():
-	await get_tree().process_frame
-	loadPlayerControlledActors()
+	Actor.SignalBus.ActorCreated.connect(func():
+		loadPlayerControlledActors()
+	)
 	await get_tree().process_frame
 	startTurnForCurrentFaction()
 
 func setPlayerFaction(faction: Actor.Faction):
 	var factionHasActors = false
-	for actor in Actor.Repository.All.List:
+	for actor in Actor.Repository.All.asList():
 		if actor.faction == faction and actor.Behaviour:
 			factionHasActors = true
 			break
@@ -46,7 +47,7 @@ func setPlayerFaction(faction: Actor.Faction):
 
 func loadPlayerControlledActors():
 	playerControlledActors = []
-	for actor in Actor.Repository.All.List:
+	for actor in Actor.Repository.All.asList():
 		if actor.faction == Actor.PlayerFaction:
 			playerControlledActors.push_back(actor)
 	playerControlledActors.sort_custom(func(a, b):
@@ -82,7 +83,7 @@ func advanceTurn():
 	activeFaction = (activeFaction + 1) as Actor.Faction
 	if activeFaction >= Actor.Faction.size() - 1:
 		activeFaction = Actor.Faction.Kin
-	var factionHasActors = Actor.Repository.Alive.List.any(func(a):
+	var factionHasActors = Actor.Repository.Alive.asList().any(func(a):
 		return a.stats.Faction == activeFaction and a.HasComponent(ActorBehaviour)
 	)
 	if not factionHasActors:

@@ -36,6 +36,7 @@ CoverVisualizationLayer="*uid://cd5xxxahr1i53"
 ProximityVisualizationLayer="*uid://blafccyolmd7y"
 KeywordManagerInstance="*uid://r6w3dqxegpf3"
 SoundManagerInstance="*uid://b6pnvjt3k267k"
+SnapshotManager="*uid://b55acymdvlw1b"
 
 [debug]
 

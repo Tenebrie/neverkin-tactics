@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://cyjrqnqmxpad3"]
+
+[ext_resource type="Script" uid="uid://dlq7la1a228ok" path="res://content/scenes/GeneratedEncounterScene/EncounterControls/EncounterControls.gd" id="1_qglye"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_qglye"]
+device = -1
+alt_pressed = true
+ctrl_pressed = true
+keycode = 83
+unicode = 115
+
+[sub_resource type="Shortcut" id="Shortcut_qglye"]
+events = [SubResource("InputEventKey_qglye")]
+
+[node name="EncounterControls" type="Control" unique_id=839016252]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_behavior_recursive = 1
+script = ExtResource("1_qglye")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1325441699]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -44.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=636649971]
+layout_mode = 2
+
+[node name="ToggleVisibilityButton" type="CheckButton" parent="MarginContainer/VBoxContainer" unique_id=370304333]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+custom_maximum_size = Vector2(200, -1)
+layout_mode = 2
+mouse_behavior_recursive = 2
+text = "Controls"
+
+[node name="ControlsContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1847840995]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_behavior_recursive = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ControlsContainer" unique_id=1020195823]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer" unique_id=1918631489]
+layout_mode = 2
+
+[node name="CreateSnapshotButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=826463685]
+layout_mode = 2
+shortcut = SubResource("Shortcut_qglye")
+text = "Create Snapshot (Ctrl+Alt+S)"
+
+[node name="RestartEncounterButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=322872092]
+layout_mode = 2
+shortcut = SubResource("Shortcut_qglye")
+text = "Restart Encounter (Ctrl+R)"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ToggleVisibilityButton" to="." method="_onToggleVisibilityButtonPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/CreateSnapshotButton" to="." method="_onCreateSnapshotButtonPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/RestartEncounterButton" to="." method="_onRestartEncounterButtonPressed"]

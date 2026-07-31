@@ -51,6 +51,32 @@ func _parentReady() -> void:
 			#Select(null)
 	#)
 
+#region Snapshot
+class Snapshot extends Resource:
+	var skills: Dictionary[int, Variant]
+
+func createSnapshot() -> Snapshot:
+	var snapshot = Snapshot.new()
+	var allSkills = activeSkillGroup.GetAll()
+	allSkills.append_array(commonSkillGroup.GetAll())
+	allSkills.append_array(inactiveSkillGroup.GetAll())
+	for skill in allSkills:
+		snapshot.skills[skill.get_instance_id()] = skill.createSnapshot()
+
+	return snapshot
+
+func restoreSnapshot(param: Variant):
+	assert(param is Snapshot snapshot)
+	var allSkills = activeSkillGroup.GetAll()
+	allSkills.append_array(commonSkillGroup.GetAll())
+	allSkills.append_array(inactiveSkillGroup.GetAll())
+	for skill in allSkills:
+		if not snapshot.skills.has(skill.get_instance_id()):
+			continue
+		skill.restoreSnapshot(snapshot.skills[skill.get_instance_id()])
+	SkillsChanged.emit()
+#endregion
+
 func LoadCommonSkills() -> void:
 	commonSkillGroup.Add(SkillMove.new())
 	commonSkillGroup.Add(SkillVault.new())
@@ -149,6 +175,9 @@ func ScrollSkillOptions() -> void:
 	SelectedSkill.preparingInfuse = false
 	Unselect()
 
+func isAnySkillBeingCast() -> bool:
+	return activeSkillGroup.isAnyBeingCast() || commonSkillGroup.isAnyBeingCast()
+
 class ControlGroup extends Node3D:
 	func Add(ability: Skill) -> void:
 		add_child(ability)
@@ -212,6 +241,13 @@ class ControlGroup extends Node3D:
 
 	func Remove(skill: Skill) -> void:
 		remove_child(skill)
+
+	func isAnyBeingCast() -> bool:
+		for child in get_children():
+			if child is Skill skill:
+				if skill.activeCastCount > 0:
+					return true
+		return false
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 class SignalBusImplementation extends NodeSignalBus:

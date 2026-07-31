@@ -2,12 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dheb7w3ek6fi2" path="res://game/scene/GameScene.gd" id="1_6ytau"]
 [ext_resource type="PackedScene" uid="uid://cdq5o6e7xd2f5" path="res://game/camera/MainCamera.tscn" id="2_pynjx"]
-[ext_resource type="PackedScene" uid="uid://ylc6aguob6mn" path="res://content/actors/Ivera/Ivera.tscn" id="2_xy3my"]
-[ext_resource type="PackedScene" uid="uid://cxoxb77d1144u" path="res://content/actors/WolfpackTrooper/WolfpackTrooper.tscn" id="5_7s5hy"]
-[ext_resource type="PackedScene" uid="uid://dmyet57hfpj6u" path="res://content/actors/Kamilla/Kamilla.tscn" id="6_xs4ih"]
-[ext_resource type="PackedScene" uid="uid://2ohwekfgbpuc" path="res://content/scenes/PrototypeScene/PrototypeScene.tscn" id="7_6ytau"]
-[ext_resource type="PackedScene" uid="uid://gpma5d48l6ft" path="res://content/actors/Char/Char.tscn" id="8_pynjx"]
-[ext_resource type="PackedScene" uid="uid://bm6mqj82bco5k" path="res://content/actors/WolfpackBrawler/WolfpackBrawler.tscn" id="8_vijgj"]
+[ext_resource type="PackedScene" uid="uid://ddnvuns1ns3o4" path="res://content/scenes/GeneratedEncounterScene/GeneratedEncounterScene.tscn" id="3_k6aph"]
 
 [sub_resource type="Environment" id="Environment_vh257"]
 glow_enabled = true
@@ -46,7 +41,7 @@ offsetRangeMaxZ = 12.0
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=941600512]
 environment = SubResource("Environment_vh257")
 
-[node name="PrototypeScene" parent="." unique_id=1259424146 instance=ExtResource("7_6ytau")]
+[node name="GeneratedEncounterScene" parent="." unique_id=608149629 instance=ExtResource("3_k6aph")]
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=1025560660]
 transform = Transform3D(0.40049446, 0.38302597, -0.8324033, 0, 0.90844053, 0.4180141, 0.91629916, -0.16741234, 0.3638254, -13.579832, 4.538994, 5.370343)
@@ -58,24 +53,3 @@ directional_shadow_mode = 0
 directional_shadow_fade_start = 1.0
 directional_shadow_max_distance = 25.0
 script = SubResource("GDScript_6ytau")
-
-[node name="Ivera" parent="." unique_id=197562730 instance=ExtResource("2_xy3my")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.898436, 0.00049996376, 3.5417547)
-
-[node name="Kamilla" parent="." unique_id=220179378 instance=ExtResource("6_xs4ih")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0874615, 0.00049996376, -2.004982)
-
-[node name="Trooper" parent="." unique_id=410591199 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8937922, 0.00050091743, 5.1751)
-
-[node name="Trooper2" parent="." unique_id=611624937 instance=ExtResource("5_7s5hy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.832835, 0.0005002022, 6.2261996)
-
-[node name="Brawler" parent="." unique_id=141319436 instance=ExtResource("8_vijgj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.677247, 0.0005002022, 3.1518621)
-
-[node name="Brawler2" parent="." unique_id=168031144 instance=ExtResource("8_vijgj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7083254, 0.00049972534, 4.8072424)
-
-[node name="Actor" parent="." unique_id=406430329 instance=ExtResource("8_pynjx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.23481, 0.0005002022, 0.30139947)

@@ -17,12 +17,14 @@ func _ready() -> void:
 	Repository.Alive.Register(self)
 
 	_setupProxySignals()
+	SignalBus.ActorCreated.emit(self)
 
 func _exit_tree() -> void:
 	if not Engine.is_editor_hint():
 		Repository.All.Unregister(self)
 		Repository.Alive.Unregister(self)
 		Repository.Hovered.Unregister(self)
+		Repository.Destroyed.Register(self)
 #endregion
 
 #region Proxy Getters
@@ -95,6 +97,13 @@ func _setupProxySignals():
 @onready var telegraphs: ActorTelegraphs = GetComponent(ActorTelegraphs)
 @onready var query: ActorQuery = GetComponent(ActorQuery)
 
+func GetAllComponents() -> Array[Component]:
+	var components: Array[Component]
+	for child in get_children():
+		if Utils.IsNodeDescendantOf(child, Component):
+			components.push_back(child)
+	return components
+
 func GetComponent(type: GDScript[Component]) -> Component:
 	for child in get_children():
 		if Utils.IsNodeDescendantOf(child, type):
@@ -142,6 +151,41 @@ func loadDefinition():
 		$TokenMeshInstance3D.position.z = definition.TokenOffset.y
 #endregion
 
+#region Snapshots
+class Snapshot:
+	var position: Vector3
+	var definition: ActorDefinition
+	var isDestroyed: bool
+	var components: Dictionary[int, Variant]
+
+func createSnapshot() -> Snapshot:
+	var snapshot = Snapshot.new()
+	snapshot.position = ActorUtils.flatPositionOf(self)
+	snapshot.definition = definition.duplicate()
+	snapshot.isDestroyed = isDead
+	for component in GetAllComponents():
+		snapshot.components[component.get_instance_id()] = component.createSnapshot()
+
+	return snapshot
+
+func restoreSnapshot(snapshot: Variant):
+	assert(snapshot is Snapshot)
+	var typedSnapshot: Snapshot = snapshot
+	definition = typedSnapshot.definition
+	global_position = typedSnapshot.position
+	if typedSnapshot.isDestroyed:
+		Destroy()
+	else:
+		resurrect()
+	for component in GetAllComponents():
+		if not typedSnapshot.components.has(component.get_instance_id()):
+			continue
+		var componentSnapshot = typedSnapshot.components[component.get_instance_id()]
+		if not componentSnapshot:
+			continue
+		component.restoreSnapshot(componentSnapshot)
+#endregion
+
 #region Lifecycle (Game)
 signal destroyed
 
@@ -150,16 +194,51 @@ var isAlive: bool:
 		return stats.healthCurrent > 0 and not isDead
 var isDead = false
 
+func resurrect() -> void:
+	if not isDead:
+		return
+	isDead = false
+	fadeIn()
+	collision_mask = originalCollisionMask
+	collision_layer = originalCollisionLayer
+	Repository.Alive.Register(self)
+	Repository.Destroyed.Unregister(self)
+
+## Mark the actor as destroyed without freeing.
+## It may only be resurrected through snapshot undo.
+var originalCollisionMask = 0
+var originalCollisionLayer = 0
+
 func Destroy() -> void:
 	if isDead:
 		return
 	isDead = true
+	originalCollisionMask = collision_mask
+	originalCollisionLayer = collision_layer
 	collision_mask = 0
 	collision_layer = 0
 	Repository.Alive.Unregister(self)
 	fadeOut()
 	destroyed.emit()
 	SignalBus.ActorDestroyed.emit(self)
+
+## Remove the actor and free resources
+func finalize():
+	Repository.Destroyed.Unregister(self)
+	queue_free()
+
+func fadeIn():
+	if has_node("MeshInstance3D"):
+		$MeshInstance3D.transparency = 0.0
+		$MeshInstance3D.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+
+	if has_node("TokenMeshInstance3D"):
+		$TokenMeshInstance3D.transparency = 0.0
+		$TokenMeshInstance3D.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+
+	if has_node("ActorOverheadStats"):
+		var stats: ActorOverheadStats = $ActorOverheadStats
+		stats.fadeIn()
 
 func fadeOut(duration: float = 0.3):
 	if has_node("MeshInstance3D"):
@@ -182,17 +261,32 @@ class Repository:
 	static var All: Implementation = Implementation.new()
 	static var Alive: Implementation = Implementation.new()
 	static var Hovered: Implementation = Implementation.new()
+	static var Destroyed: Implementation = Implementation.new()
 
 	class Implementation:
 		var List: Array[Actor] = []
 
-		func Register(actor: Actor):
+		func asList() -> Array[Actor]:
+			return List
+
+		func isEmpty() -> bool:
+			return List.is_empty()
+
+		func first() -> Actor:
+			if isEmpty():
+				return null
+			return List[0]
+
+		func any(callable: func(actor: Actor) -> bool) -> bool:
+			return List.any(callable)
+
+		func Register(actor: Actor) -> void:
 			var index = List.find(actor)
 			if index >= 0:
 				return
 			List.push_back(actor)
 
-		func Unregister(actor: Actor):
+		func Unregister(actor: Actor) -> void:
 			var index = List.find(actor)
 			if index < 0:
 				return
@@ -232,5 +326,6 @@ enum ThreatLevel {
 
 static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 class SignalBusImplementation extends NodeSignalBus:
+	signal ActorCreated(actor: Actor)
 	signal ActorDefinitionChanged(actor: Actor)
 	signal ActorDestroyed(actor: Actor)

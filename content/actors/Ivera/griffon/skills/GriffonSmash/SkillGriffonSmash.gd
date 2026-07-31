@@ -16,7 +16,7 @@ func _prepare() -> void:
 	mainTelegraph.collideWithObstacles()
 	mainTelegraph.Attachment = Telegraph.Attachment.Caster
 	mainTelegraph.addTargetFilter(func(actor):
-		return actor != parent
+		return actor != parent and ActorUtils.isHostileTo(actor, parent)
 	)
 	mainTelegraph.HealthThreatSelector = func(actor):
 		var grabbedTarget = _findGrabbedTarget()
@@ -61,3 +61,5 @@ func _cast(targets: TargetData) -> void:
 
 	for target in targets.actors:
 		target.stats.dealSkillDamage(targets)
+		if not victim:
+			target.buffs?.Add(BuffBleeding.new())

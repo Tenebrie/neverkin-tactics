@@ -2,7 +2,7 @@ extends Skill
 class_name SkillChromaShot
 
 var damagePerShot = 1
-var shotCount = 3
+var shotCount = 2
 var hitboxWidth = 0.04
 
 var damageTelegraph: TelegraphDefinition = TelegraphPreset.CasterProjectile.new()

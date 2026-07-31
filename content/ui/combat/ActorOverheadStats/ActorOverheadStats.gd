@@ -65,7 +65,7 @@ func updateValues():
 	actionPointBar.ThreatValue = parent.targeting.PredictedActionPointCost + actions.ActionPointsThreatened
 	actionPointBar.PromiseValue = 0
 
-	var focusedTargets = Actor.Repository.Alive.List.filter(func(actor):
+	var focusedTargets = Actor.Repository.Alive.asList().filter(func(actor):
 		if actor.Behaviour is ActorBehaviourWorldControlled behaviour:
 			return behaviour.FocusedTarget == parent
 		return false
@@ -82,6 +82,10 @@ func rebuildBuffs():
 		buffView.parent = parent
 		buffContainer.add_child(buffView)
 		buffView.loadBuff(buff)
+
+func fadeIn():
+	var container: Control = $VBoxContainer
+	create_tween().tween_property(container, "modulate:a", 1.0, 0.0)
 
 func fadeOut(duration: float = 0.3):
 	var container: Control = $VBoxContainer

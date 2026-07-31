@@ -40,7 +40,7 @@ class SingleActor extends TelegraphDefinition:
 		PostProcessors.push_back(TelegraphProcessor.NoTransparency)
 
 		addTargetFilter(func(actor: Actor) -> bool:
-			return TurnManager.Instance.activeFaction != Actor.PlayerFaction or Actor.Repository.Hovered.List.has(actor)
+			return TurnManager.Instance.activeFaction != Actor.PlayerFaction or Actor.Repository.Hovered.asList().has(actor)
 		)
 
 	func WithDamageToHostiles(damage: int):

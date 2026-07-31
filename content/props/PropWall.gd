@@ -195,7 +195,7 @@ static func GetIgnoredWallsAt(walls: Array[BehaviourUtils.MapTask.WallData], at:
 
 static func collectBehaviourMapTaskData(includeFullCover: bool = false) -> Array[BehaviourUtils.MapTask.WallData]:
 	var out: Array[BehaviourUtils.MapTask.WallData] = []
-	for wall in PropWall.Repository.List:
+	for wall in PropWall.Repository.asList():
 		if not includeFullCover and not wall.CanBeIgnored:
 			continue
 		var wallData = BehaviourUtils.MapTask.WallData.new()
@@ -214,7 +214,7 @@ static func collectBehaviourMapTaskData(includeFullCover: bool = false) -> Array
 
 static func collectPhysicsFieldObstacles() -> Array[PhysicsFieldObstacle]:
 	var out: Array[PhysicsFieldObstacle]
-	for wall in PropWall.Repository.List:
+	for wall in PropWall.Repository.asList():
 		if wall.physicsFieldObstacle:
 			out.push_back(wall.physicsFieldObstacle)
 	return out
@@ -225,13 +225,16 @@ static func collectPhysicsFieldObstacles() -> Array[PhysicsFieldObstacle]:
 static var Repository = RepositoryImplementation.new()
 static func FindAllIgnoredFor(origin: Vector3, physicalSize: float = 0.4) -> Array[StringName]:
 	var ignored: Array[StringName]
-	for wall in Repository.List:
+	for wall in Repository.asList():
 		if wall.IsIgnoredFor(origin, physicalSize):
 			ignored.push_back(wall.WallGroupName)
 	return ignored
 
 class RepositoryImplementation:
 	var List: Array[PropWall] = []
+
+	func asList() -> Array[PropWall]:
+		return List
 
 	func Register(prop: PropWall):
 		var index = List.find(prop)

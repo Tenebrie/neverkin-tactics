@@ -14,8 +14,8 @@ func updateRender():
 		return
 
 	var actor: Actor
-	if not Actor.Repository.Hovered.List.is_empty():
-		actor = Actor.Repository.Hovered.List[0]
+	if not Actor.Repository.Hovered.isEmpty():
+		actor = Actor.Repository.Hovered.first()
 	elif lastSeenActor and is_instance_valid(lastSeenActor):
 		actor = lastSeenActor
 	else:

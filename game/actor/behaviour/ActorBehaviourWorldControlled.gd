@@ -152,7 +152,7 @@ func RefocusOn(target: Actor, reason: String) -> void:
 
 func _computeRanking() -> Array[RankedTarget]:
 	var result: Array[RankedTarget] = []
-	var targets = Actor.Repository.Alive.List.filter(func(actor):
+	var targets = Actor.Repository.Alive.asList().filter(func(actor):
 		return ActorUtils.isHostileTo(actor, parent) and actor.isAlive
 	)
 	if targets.size() == 0:

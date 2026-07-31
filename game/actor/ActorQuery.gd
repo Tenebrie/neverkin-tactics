@@ -11,7 +11,7 @@ var allLivingActors: Builder:
 
 class Builder:
 	var _currentPosition: Vector3
-	var _currentList: Array[Actor] = Actor.Repository.Alive.List.slice(0)
+	var _currentList: Array[Actor] = Actor.Repository.Alive.asList().slice(0)
 
 	func _init(origin: Vector3) -> void:
 		_currentPosition = origin
