@@ -173,8 +173,12 @@ static func isHostileTo(a: Actor, b: Actor) -> bool:
 static func flatPositionOf(node: Node3D) -> Vector3:
 	return Vector3(node.global_position.x, 0.0, node.global_position.z)
 
-static func flatDistanceBetween(a: Node3D, b: Node3D) -> float:
-	return flatPositionOf(a).distance_to(flatPositionOf(b))
+static func flatDistanceBetween(a: Variant, b: Variant) -> float:
+	var pointA: Vector3 = a if a is Vector3 else flatPositionOf(a)
+	var pointB: Vector3 = b if b is Vector3 else flatPositionOf(b)
+	pointA.y = 0.0
+	pointB.y = 0.0
+	return pointA.distance_to(pointB)
 
 static func flatDistanceBetweenActors(a: Actor, b: Actor) -> float:
 	return flatPositionOf(a).distance_to(flatPositionOf(b)) - a.physicalSize - b.physicalSize

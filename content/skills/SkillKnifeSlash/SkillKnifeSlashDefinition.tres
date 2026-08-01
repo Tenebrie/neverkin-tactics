@@ -9,5 +9,6 @@ Name = "Knife Stab"
 IconTexture = ExtResource("1_4qavi")
 GrudgeString = "$They stabbed me"
 TargetingMaxRange = 0.5
+TargetingApproachTarget = null
 BehaviourRequireLineOfSight = false
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

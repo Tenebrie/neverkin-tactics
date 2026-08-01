@@ -27,7 +27,7 @@ static func InvisibleSelfTint(telegraph: Telegraph):
 
 static func OutOfRangeTint(telegraph: Telegraph):
 	var parent = telegraph.ParentSkill.parent
-	var parentPosition = parent.global_position
+	var parentPosition = parent.castApproach.CastOrigin
 	parentPosition.y = 0
 	var telegraphPosition = telegraph.global_position
 	telegraphPosition.y = 0

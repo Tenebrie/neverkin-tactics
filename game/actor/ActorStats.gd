@@ -14,17 +14,20 @@ var Faction: Actor.Faction:
 #region Storage
 var _data = Storage.new()
 
-class Storage extends Resource:
-	var healthDamageTaken = 0
-	var healthMaximumDamageTaken = 0
-	var manaMissing = 0
+class Storage extends SnapshotResource:
+	@export var healthDamageTaken = 0
+	@export var healthMaximumDamageTaken = 0
+	@export var manaMissing = 0
+
+	func _friendlyName() -> String:
+		return "ActorStats::Storage"
 
 func createSnapshot() -> Storage:
 	return _data.duplicate()
 
-func restoreSnapshot(snapshot: Variant):
-	assert(snapshot is Storage)
-	_data = (snapshot as Storage).duplicate()
+func restoreSnapshot(param: Variant):
+	assert(param is Storage snapshot)
+	_data = snapshot.duplicate()
 #endregion
 
 #region Engine events
@@ -88,7 +91,7 @@ func dealDamage(damage: DamageInstance):
 
 func reduceHealthMaximum(value: int):
 	_data.healthMaximumDamageTaken += value
-	healthDamageTaken -= mini(healthDamageTaken, value)
+	_data.healthDamageTaken -= mini(healthDamageTaken, value)
 	healthChanged.emit(healthCurrent)
 
 func dealSkillDamage(targets: Skill.TargetData):

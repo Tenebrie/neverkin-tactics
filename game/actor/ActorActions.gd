@@ -49,11 +49,11 @@ func RefundActionPoints(value: int):
 #region Storage
 var _data = Storage.new()
 
-class Storage extends Resource:
-	var actionPointsUsed = 0
-	var actionPointsTemporary = 0
-	var actionPointsForNextTurn = 0
-	var movementBuffer = 0.0
+class Storage extends SnapshotResource:
+	@export var actionPointsUsed = 0
+	@export var actionPointsTemporary = 0
+	@export var actionPointsForNextTurn = 0
+	@export var movementBuffer = 0.0
 
 func createSnapshot() -> Storage:
 	return _data.duplicate()
@@ -161,7 +161,7 @@ func IssueOrder_MoveThroughPath(path: PackedVector3Array):
 		ActionQueue.ConsumeFirst(),
 	CONNECT_ONE_SHOT)
 
-func _validateSkillCast():
+func validateSkillCast():
 	for telegraph in parent.telegraphs.telegraphs:
 		if telegraph.definition.DisabledSelector.call():
 			continue
@@ -177,7 +177,7 @@ func _validateSkillCast():
 
 func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	if precastsRemaining > 0:
-		if not _validateSkillCast():
+		if not validateSkillCast():
 			return
 
 		await skill.PerformCast(targets)
@@ -186,12 +186,17 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		return
 
 	if recastsRemaining > 0:
-		if not _validateSkillCast():
+		if not validateSkillCast():
 			return
 
 		recastsRemaining -= 1
 		await skill.PerformCast(targets)
-		parent.Skills.NotifyRecast()
+		if recastsRemaining > 0:
+			parent.Skills.NotifyRecast()
+		else:
+			isLockedInTargeting = false
+			skill.cleanUp.emit()
+			SignalBus.allCastsFinished.emit(parent, skill)
 		return
 
 	var validationResult: Variant = skill.isCastable()
@@ -199,7 +204,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		MessageLog.PrintErrorObject(validationResult)
 		return
 
-	if not _validateSkillCast():
+	if not validateSkillCast():
 		return
 
 	if not isLockedInTargeting and skill.getPrecastCount() > 0:
@@ -211,6 +216,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		return
 
 	recastsRemaining = skill.getRecastCount()
+	SignalBus.castCommitted.emit(parent, skill)
 
 	if skill.HealthCost > 0:
 		parent.stats.dealDamage(DamageInstance.ForSkill(skill, skill.HealthCost))
@@ -227,6 +233,7 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	else:
 		isLockedInTargeting = false
 		skill.cleanUp.emit()
+		SignalBus.allCastsFinished.emit(parent, skill)
 
 func IssueOrder_Stop():
 	if ActionQueue.Empty():
@@ -267,3 +274,5 @@ static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
 class SignalBusImplementation:
 	signal ActionPointsChanged(actor: Actor, current: int)
 	signal ActionPointsConsumedPermanently(actor: Actor, value: int)
+	signal castCommitted(actor: Actor, skill: Skill)
+	signal allCastsFinished(actor: Actor, skill: Skill)

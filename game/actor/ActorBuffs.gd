@@ -1,7 +1,7 @@
 extends Component
 class_name ActorBuffs
 
-signal Changed()
+signal Changed
 
 func Add(buff: Buff) -> void:
 	add_child(buff)
@@ -119,33 +119,40 @@ func RemoveAll(buffClass: GDScript[Buff]) -> void:
 			Remove(buff)
 
 #region Snapshot
-class Snapshot extends Resource:
+class Snapshot:
 	var buffs: Dictionary[int, BuffSnapshot]
 
 class BuffSnapshot:
-	var className = ""
+	var originScript: GDScript[Buff]
 	var data: Variant
 
 func createSnapshot() -> Snapshot:
 	var snapshot = Snapshot.new()
 	for buff in GetAll():
+		if buff is SystemBuff:
+			continue
 		var buffSnapshot = BuffSnapshot.new()
-		print(buff.get_class())
-		#buffSnapshot.className =
+		buffSnapshot.originScript = buff.get_script()
 		buffSnapshot.data = buff.createSnapshot()
-		#snapshot.buffs[buff.get_instance_id()] =
+		snapshot.buffs[buff.get_instance_id()] = buffSnapshot
 
 	return snapshot
 
 func restoreSnapshot(param: Variant):
-	pass
-	#assert(param is Snapshot snapshot)
-	#var allSkills = activeSkillGroup.GetAll()
-	#allSkills.append_array(commonSkillGroup.GetAll())
-	#allSkills.append_array(inactiveSkillGroup.GetAll())
-	#for skill in allSkills:
-		#if not snapshot.skills.has(skill.get_instance_id()):
-			#continue
-		#skill.restoreSnapshot(snapshot.skills[skill.get_instance_id()])
-	#SkillsChanged.emit()
+	assert(param is Snapshot snapshot)
+	for buff in GetAll():
+		if not snapshot.buffs.has(buff.get_instance_id()):
+			Remove(buff)
+			continue
+		buff.restoreSnapshot(snapshot.buffs[buff.get_instance_id()].data)
+
+	for buffId in snapshot.buffs.keys():
+		if instance_from_id(buffId):
+			continue
+		var buffSnapshot = snapshot.buffs[buffId]
+		var buff = buffSnapshot.originScript.new() as Buff
+		Add(buff)
+		buff.restoreSnapshot(buffSnapshot.data)
+
+	Changed.emit()
 #endregion

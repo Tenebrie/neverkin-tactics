@@ -113,21 +113,6 @@ func refreshFilteredTargets():
 	else:
 		Targets = []
 
-func onBodyEntered(body: Node3D):
-	if body is not Actor:
-		return
-	var actor = body as Actor
-	_targets.append(actor)
-	checkTargetsDiff()
-
-func onBodyExited(body: Node3D):
-	if body is not Actor:
-		return
-	var actor = body as Actor
-	if _targets.has(actor):
-		_targets.erase(actor)
-		checkTargetsDiff()
-
 @abstract func setColor(color: Color) -> void
 @abstract func IsPathable(agentSize: float) -> bool
 

@@ -62,13 +62,13 @@ func _cast(targets: Skill.TargetData) -> void:
 	effect.global_position = actor.global_position
 	effect.global_position.y = 2
 	effect.Play()
-	get_tree().create_timer(0.1).timeout.connect(func():
-		actor.stats.dealSkillDamage(targets)
-		actor.buffs?.AddUpToMaxIntensity(BuffBleeding.Build(self), MaxBleedStacks)
+	#await get_tree().create_timer(0.1).timeout
 
-		if actor is Prop:
-			actor.stats.dealDamage(DamageInstance.ForSkill(self, actor.stats.healthCurrent))
+	actor.stats.dealSkillDamage(targets)
+	actor.buffs?.AddUpToMaxIntensity(BuffBleeding.Build(self), MaxBleedStacks)
 
-			for toDemolish in targets.perTelegraph[demolishTelegraph]:
-				toDemolish.stats.dealSkillDamage(targets)
-	)
+	if actor is Prop:
+		actor.stats.dealDamage(DamageInstance.ForSkill(self, actor.stats.healthCurrent))
+
+		for toDemolish in targets.perTelegraph[demolishTelegraph]:
+			toDemolish.stats.dealSkillDamage(targets)

@@ -131,6 +131,7 @@ func _cast(targets: TargetData) -> void:
 		effect.play(firstTarget, targets.actor, def)
 
 	firstTarget = null
+	await get_tree().create_timer(0.7).timeout
 
 func getPrecastCount() -> int:
 	return 1

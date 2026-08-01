@@ -5,6 +5,7 @@ class_name ActorTargeting
 @onready var agentPathCommitted: AgentPath = createChild(AgentPath)
 
 var PredictedActionPointCost: int = 0
+var suppressNextRelease = false
 
 enum TargetMode {
 	None,
@@ -71,7 +72,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	var isRightMouseClick = event.button_index == MOUSE_BUTTON_RIGHT && event.is_pressed()
 	var isRightMouseRelease = event.button_index == MOUSE_BUTTON_RIGHT && event.is_released()
 
+	if suppressNextRelease and (isMouseRelease or isRightMouseRelease):
+		suppressNextRelease = false
+		return
+
 	if parent.actions.IsPerformingAnyAction() and (isMouseClick or isRightMouseClick):
+		suppressNextRelease = true
 		parent.actions.IssueOrder_Stop()
 		return
 
@@ -101,8 +107,23 @@ func _unhandled_input(event: InputEvent) -> void:
 		lockedMode = TargetMode.None
 
 func PerformAction_CastSelectedSkill():
+	var skill = parent.Skills.SelectedSkill
 	var targetData = Skill.TargetData.Collect(parent)
-	await parent.actions.IssueOrder_ConfirmCast(parent.Skills.SelectedSkill, targetData)
+
+	## Skill castability is skipped for precasts/recasts
+	if parent.actions.precastsRemaining == 0 and parent.actions.recastsRemaining == 0:
+		var validationResult: Variant = skill.isCastable()
+		if not Error.AsBoolean(skill.isCastable()):
+			MessageLog.PrintErrorObject(validationResult)
+			return
+
+	if not parent.actions.validateSkillCast():
+		return
+
+	SignalBus.castActionStarted.emit(skill)
+	if not await parent.castApproach.ExecuteApproach():
+		return
+	await parent.actions.IssueOrder_ConfirmCast(skill, targetData)
 
 func resetDisplayedElements() -> void:
 	agentPathPreview.ClearPath()
@@ -128,3 +149,7 @@ func getLegalPathTo(target: Vector3) -> PackedVector3Array:
 	return truncatedPath
 
 #endregion
+
+static var SignalBus: SignalBusImplementation = SignalBusImplementation.new()
+class SignalBusImplementation extends NodeSignalBus:
+	signal castActionStarted(skill: Skill)

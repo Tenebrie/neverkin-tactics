@@ -12,4 +12,5 @@ Description = "Lift another creature with your talons and slam them into the gro
 Until they $Break Free or you move away, they are unable to move."
 IconTexture = ExtResource("1_2pflu")
 TargetingMaxRange = 0.5
+TargetingApproachTarget = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

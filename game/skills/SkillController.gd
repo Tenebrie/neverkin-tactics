@@ -52,7 +52,7 @@ func _parentReady() -> void:
 	#)
 
 #region Snapshot
-class Snapshot extends Resource:
+class Snapshot:
 	var skills: Dictionary[int, Variant]
 
 func createSnapshot() -> Snapshot:

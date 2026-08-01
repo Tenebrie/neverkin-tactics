@@ -1,12 +1,6 @@
 extends Buff
 class_name SkillGriffonGripBuff
 
-func _prepare() -> void:
-	assert(Owner != null)
-	assert(Owner is Actor)
-	if Owner is not Actor actor:
-		return
-
 func _process(_delta: float) -> void:
 	if Owner is not Actor actor:
 		return

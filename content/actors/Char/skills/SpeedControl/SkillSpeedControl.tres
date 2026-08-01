@@ -14,4 +14,5 @@ IconTexture = ExtResource("1_yirsa")
 ManaCost = 1
 Cooldown = 1
 TargetingMaxRange = 1.0
+TargetingApproachTarget = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

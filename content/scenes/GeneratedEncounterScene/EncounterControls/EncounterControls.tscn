@@ -4,13 +4,28 @@
 
 [sub_resource type="InputEventKey" id="InputEventKey_qglye"]
 device = -1
-alt_pressed = true
 ctrl_pressed = true
-keycode = 83
-unicode = 115
+keycode = 90
+unicode = 122
 
 [sub_resource type="Shortcut" id="Shortcut_qglye"]
 events = [SubResource("InputEventKey_qglye")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_l65vc"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 90
+unicode = 90
+
+[sub_resource type="InputEventKey" id="InputEventKey_350sw"]
+device = -1
+ctrl_pressed = true
+keycode = 89
+unicode = 121
+
+[sub_resource type="Shortcut" id="Shortcut_6vk7y"]
+events = [SubResource("InputEventKey_l65vc"), SubResource("InputEventKey_350sw")]
 
 [node name="EncounterControls" type="Control" unique_id=839016252]
 layout_mode = 3
@@ -41,7 +56,9 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 custom_maximum_size = Vector2(200, -1)
 layout_mode = 2
+focus_mode = 0
 mouse_behavior_recursive = 2
+button_pressed = true
 text = "Controls"
 
 [node name="ControlsContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1847840995]
@@ -58,17 +75,47 @@ theme_override_constants/margin_bottom = 8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer" unique_id=1918631489]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="CreateSnapshotButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=826463685]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=1178982886]
 layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1498305822]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Snapshots"
+
+[node name="SnapshotCountLabel" type="Label" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=838573507]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(30)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=14103180]
+layout_mode = 2
+
+[node name="SnapshotUndoButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=576200275]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
 shortcut = SubResource("Shortcut_qglye")
-text = "Create Snapshot (Ctrl+Alt+S)"
+text = "<-"
+
+[node name="SnapshotRedoButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1065750645]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+shortcut = SubResource("Shortcut_6vk7y")
+text = "->"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=626863056]
+layout_mode = 2
 
 [node name="RestartEncounterButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=322872092]
 layout_mode = 2
-shortcut = SubResource("Shortcut_qglye")
-text = "Restart Encounter (Ctrl+R)"
+focus_mode = 0
+text = "Restart Encounter"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ToggleVisibilityButton" to="." method="_onToggleVisibilityButtonPressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/CreateSnapshotButton" to="." method="_onCreateSnapshotButtonPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer/SnapshotUndoButton" to="." method="_onUndoSnapshotPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer/SnapshotRedoButton" to="." method="_onRedoSnapshotPressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/RestartEncounterButton" to="." method="_onRestartEncounterButtonPressed"]

@@ -21,7 +21,7 @@ func _prepare() -> void:
 	landingTelegraph.PostProcessors = []
 	landingTelegraph.addProcessor(func(telegraph: CircularTelegraph):
 		var victim = targetTelegraph.getInstance().FirstTarget
-		var parentPosition = ActorUtils.flatPositionOf(parent)
+		var parentPosition = parent.castApproach.CastOrigin
 		var victimPosition = ActorUtils.flatPositionOf(victim)
 		var jumpVector = (parentPosition - victimPosition).normalized()
 		var landingSpot = parentPosition + jumpVector * (parent.physicalSize + 0.1 + victim.physicalSize)

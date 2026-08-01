@@ -1,13 +1,8 @@
 extends Node3D
 
-var encounterStartSnapshot: SnapshotManager.Snapshot
-
 func _ready() -> void:
 	_generateEncounter()
 	_startEncounter()
-	await get_tree().process_frame
-	encounterStartSnapshot = SnapshotManager.GenerateSnapshot()
-
 
 func _generateEncounter():
 	pass
@@ -42,18 +37,5 @@ func _clearEncounter():
 
 
 func _onEncounterRestarted() -> void:
-	var isLockedInTargeting = Actor.Repository.Alive.any(func(actor):
-		return actor.actions?.isLockedInTargeting ?? false
-	)
-	if isLockedInTargeting:
-		MessageLog.PrintMessage("Can't restart while targeting a skill")
-		return
-
-	var isCastingAnySkill = Actor.Repository.Alive.any(func(actor):
-		return actor.Skills?.isAnySkillBeingCast() ?? false
-	)
-	if isCastingAnySkill:
-		MessageLog.PrintMessage("Can't restart during animation")
-		return
-
-	SnapshotManager.RestoreSnapshot(encounterStartSnapshot)
+	#SnapshotManager.RestoreSnapshot(encounterStartSnapshot)
+	pass

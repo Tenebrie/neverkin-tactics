@@ -1,16 +1,28 @@
 extends Control
 
-signal snapshotCreated
 signal encounterRestarted
 
 @onready var toggleVisibilityButton: Button = %ToggleVisibilityButton
 @onready var controlsContainer: PanelContainer = %ControlsContainer
+@onready var snapshotCountLabel: Label = %SnapshotCountLabel
+
+func _ready() -> void:
+	_updateSnapshotCount()
+	SnapshotManager.snapshotsChanged.connect(_updateSnapshotCount)
+	SnapshotManager.snapshotRestored.connect(_updateSnapshotCount)
+
+func _updateSnapshotCount():
+	var dirtyFlag = "*" if SnapshotManager.snapshotDirty else " "
+	snapshotCountLabel.text = "%d%s/ %d"%[SnapshotManager.snapshotHead + 1, dirtyFlag, SnapshotManager.snapshots.size()]
 
 func _onToggleVisibilityButtonPressed() -> void:
 	controlsContainer.visible = toggleVisibilityButton.button_pressed
 
-func _onCreateSnapshotButtonPressed() -> void:
-	snapshotCreated.emit()
-
 func _onRestartEncounterButtonPressed() -> void:
 	encounterRestarted.emit()
+
+func _onUndoSnapshotPressed() -> void:
+	SnapshotManager.RestorePreviousSnapshot()
+
+func _onRedoSnapshotPressed() -> void:
+	SnapshotManager.RestoreNextSnapshot()

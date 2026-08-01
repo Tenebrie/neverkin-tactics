@@ -204,7 +204,7 @@ func updateModulate() -> void:
 		base = base.blend(Color(0, 1, 0, 0.5))
 	if isHovered:
 		base = base.darkened(0.15)
-	if mainButton.button_pressed or Input.is_physical_key_pressed(Hotkey.keycode):
+	if mainButton.button_pressed or (Hotkey and Input.is_physical_key_pressed(Hotkey.keycode)):
 		base = base.darkened(0.2)
 
 	if not Error.AsBoolean(TrackedSkill.isCastable()):

@@ -95,6 +95,7 @@ func _setupProxySignals():
 @onready var Behaviour: ActorBehaviour = GetComponent(ActorBehaviour)
 @onready var InputProvider: ActorInputProvider = GetComponent(ActorInputProvider)
 @onready var telegraphs: ActorTelegraphs = GetComponent(ActorTelegraphs)
+@onready var castApproach: ActorCastApproach = GetComponent(ActorCastApproach)
 @onready var query: ActorQuery = GetComponent(ActorQuery)
 
 func GetAllComponents() -> Array[Component]:
@@ -164,7 +165,10 @@ func createSnapshot() -> Snapshot:
 	snapshot.definition = definition.duplicate()
 	snapshot.isDestroyed = isDead
 	for component in GetAllComponents():
-		snapshot.components[component.get_instance_id()] = component.createSnapshot()
+		var componentSnapshot: Variant = component.createSnapshot()
+		if componentSnapshot == null:
+			continue
+		snapshot.components[component.get_instance_id()] = componentSnapshot
 
 	return snapshot
 

@@ -1,4 +1,4 @@
-extends Buff
+extends SystemBuff
 class_name BuffHealthPromise
 
 static func AddToActor(actor: Actor, value: int, buffOwner: Node):

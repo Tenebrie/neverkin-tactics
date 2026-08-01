@@ -25,6 +25,7 @@ var base: SkillDefinition = self
 @export_group("Skill Targeting", "Targeting")
 @export var TargetingMaxRange: float = 1000
 @export var TargetingResolvesNextTurn: bool = false
+@export var TargetingApproachTarget: bool = false
 
 @export_group("Shapeshifting", "Shapeshift")
 @export var ShapeshiftTargetActor: ActorDefinition

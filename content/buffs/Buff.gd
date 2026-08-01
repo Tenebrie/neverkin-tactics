@@ -60,10 +60,10 @@ func _prepare() -> void:
 #region Snapshot
 var _data = Storage.new()
 
-class Storage extends Resource:
-	var intensity = 1
-	var duration = 1
-	var ownerNodeId = 0
+class Storage extends SnapshotResource:
+	@export var intensity = 1
+	@export var duration = 1
+	@export var ownerNodeId = 0
 
 func createSnapshot() -> Storage:
 	return _data.duplicate()

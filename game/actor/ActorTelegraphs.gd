@@ -14,6 +14,13 @@ var Targets: Array[Actor]:
 			targets.append_array(telegraph.Targets)
 		return targets
 
+var FilteredOnlyTargets: Array[Actor]:
+	get:
+		var targets: Array[Actor] = []
+		for telegraph in telegraphs:
+			targets.append_array(telegraph.FilteredOnlyTargets)
+		return targets
+
 var TargetsPerTelegraph: Dictionary[Telegraph, Array[Actor]]:
 	get:
 		var dict: Dictionary[Telegraph, Array[Actor]] = {}
@@ -42,13 +49,35 @@ func _parentReady() -> void:
 	parent.Skills.SelectedSkillChanged.connect(onSkillSelected)
 	parent.Skills.SelectedSkillRecast.connect(onSkillSelected)
 
+var IsFrozen = false
+var frozenPositions: Dictionary[Telegraph, Vector3] = {}
+
+func Freeze() -> void:
+	IsFrozen = true
+	frozenPositions = {}
+	for telegraph in telegraphs:
+		frozenPositions[telegraph] = telegraph.global_position
+
+func Unfreeze() -> void:
+	IsFrozen = false
+	frozenPositions = {}
+
 func _process(_delta: float) -> void:
+	if IsFrozen:
+		for telegraph in telegraphs:
+			if frozenPositions.has(telegraph):
+				telegraph.global_position = frozenPositions[telegraph]
+		return
+
 	for telegraph in telegraphs:
 		var target = telegraph.ParentSkill.parent.InputProvider.CursorPosition
 		if telegraph.definition.Attachment == Telegraph.Attachment.Mouse:
 			var updatedTarget = target
 			updatedTarget.y = 1
 			telegraph.global_position = updatedTarget
+		elif telegraph.definition.Attachment == Telegraph.Attachment.Caster:
+			var offset = telegraph.ParentSkill.parent.castApproach.CastOffset
+			telegraph.position = Vector3(offset.x, telegraph.position.y, offset.z)
 
 		if telegraph.definition.DisabledSelector.call():
 			telegraph.Tint = Color.TRANSPARENT
@@ -70,6 +99,7 @@ func _process(_delta: float) -> void:
 			processor.call(telegraph)
 
 func resetState() -> void:
+	Unfreeze()
 	for telegraph in telegraphs:
 		telegraph.cleanUp()
 	telegraphs = []

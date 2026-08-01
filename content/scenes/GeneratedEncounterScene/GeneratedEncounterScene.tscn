@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c1r4d5sm7kjg1" path="res://content/props/PropWallFullCover.tscn" id="4_ucje2"]
 [ext_resource type="PackedScene" uid="uid://cyjrqnqmxpad3" path="res://content/scenes/GeneratedEncounterScene/EncounterControls/EncounterControls.tscn" id="6_rjmx0"]
 [ext_resource type="PackedScene" uid="uid://cxoxb77d1144u" path="res://content/actors/WolfpackTrooper/WolfpackTrooper.tscn" id="7_flsuf"]
+[ext_resource type="PackedScene" uid="uid://5ydgfyqxfb7y" path="res://content/props/PropWallHighCover.tscn" id="8_70k8f"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_wr5mt"]
 vertices = PackedVector3Array(-9.6015625, 0, 9.6015625, 9.6015625, 0, -9.6015625, -9.6015625, 0, -9.6015625, 9.6015625, 0, 9.6015625)
@@ -116,4 +117,10 @@ metadata/_custom_type_script = "uid://c2oho0q8pwi1n"
 [node name="EncounterControls" parent="." unique_id=839016252 instance=ExtResource("6_rjmx0")]
 
 [node name="WolfpackTrooper" parent="." unique_id=807014692 instance=ExtResource("7_flsuf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0778677, -0.09500027, -1.3677466)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6778705, 0, -1.6136961)
+
+[node name="PropWallHighCover" parent="." unique_id=293486725 instance=ExtResource("8_70k8f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1071544, -0.19499978, 1.3090687)
+ObstacleWidth = 10
+
+[connection signal="encounterRestarted" from="EncounterControls" to="." method="_onEncounterRestarted"]

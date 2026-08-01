@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://bibsejet712xq" path="res://game/actor/ActorHoverArea.gd" id="9_m37al"]
 [ext_resource type="Script" uid="uid://jcfo153okts8" path="res://game/actor/inputProvider/ActorInputProvider.gd" id="12_pe7q2"]
 [ext_resource type="Script" uid="uid://7fsvmyq6nybe" path="res://game/actor/ActorImpactEffects.gd" id="14_ernrv"]
+[ext_resource type="Script" uid="uid://dbdorqplfgn5j" path="res://game/actor/ActorCastApproach.gd" id="15_cstap"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
 resource_local_to_scene = true
@@ -66,6 +67,9 @@ script = ExtResource("6_v5lek")
 
 [node name="ActorTelegraphs" type="Node" parent="." unique_id=1823962377]
 script = ExtResource("7_1yc4f")
+
+[node name="ActorCastApproach" type="Node" parent="." unique_id=1298467313]
+script = ExtResource("15_cstap")
 
 [node name="ActorInputProvider" type="Node" parent="." unique_id=224060493]
 script = ExtResource("12_pe7q2")

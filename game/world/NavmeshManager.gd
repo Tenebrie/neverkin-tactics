@@ -20,18 +20,27 @@ var currentMapActor: Actor
 
 func _enter_tree():
 	TurnManager.Instance.CurrentActorChanged.connect(func(actor: Actor):
+		if SnapshotManager.isRestoringSnapshot:
+			return
 		rebakeNavmesh(actor, [])
 	)
 	Actor.SignalBus.ActorDefinitionChanged.connect(func(actor: Actor):
+		if SnapshotManager.isRestoringSnapshot:
+			return
 		if actor == TurnManager.Instance.activeActor:
 			rebakeNavmesh(TurnManager.Instance.activeActor, [actor])
 	)
 	Actor.SignalBus.ActorDestroyed.connect(func(actor: Actor):
+		if SnapshotManager.isRestoringSnapshot:
+			return
 		rebakeNavmesh(TurnManager.Instance.activeActor, [actor])
 	)
-	TurnManager.Instance.FactionTurnStarted.connect(func(_f):
+	TurnManager.Instance.FactionTurnStarted.connect(func():
 		if is_instance_valid(TurnManager.Instance.activeActor):
 			rebakeNavmesh(TurnManager.Instance.activeActor, [])
+	)
+	SnapshotManager.snapshotRestored.connect(func():
+		rebakeNavmeshForCurrentActor()
 	)
 
 func WaitUntilReady():

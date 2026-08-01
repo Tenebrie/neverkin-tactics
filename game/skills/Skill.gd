@@ -77,9 +77,9 @@ func isVisible() -> bool:
 #region Snapshot
 var _data = Storage.new()
 
-class Storage extends Resource:
-	var chargesUsed = 0
-	var cooldownRemaining = 0
+class Storage extends SnapshotResource:
+	@export var chargesUsed = 0
+	@export var cooldownRemaining = 0
 
 func createSnapshot() -> Storage:
 	return _data.duplicate()
@@ -208,6 +208,8 @@ class TargetData:
 
 	var infusedCast: bool
 
+	var castOrigin: Vector3
+
 	static func Collect(actor: Actor) -> Skill.TargetData:
 		var targetData = Skill.TargetData.new()
 		targetData.sourceSkill = actor.Skills.SelectedSkill
@@ -215,6 +217,10 @@ class TargetData:
 			targetData.actor = actor.telegraphs.Targets.get(0)
 		targetData.actors = actor.telegraphs.Targets
 		targetData.mousePoint = actor.InputProvider.CursorPosition
+		targetData.castOrigin = actor.global_position
+		var approach = actor.castApproach.CurrentSolution()
+		if approach and approach.canCast:
+			targetData.castOrigin = approach.castOrigin
 		for telegraph in actor.telegraphs.telegraphs:
 			targetData.pointPerTelegraph[telegraph.definition] = ActorUtils.flatPositionOf(telegraph)
 			if telegraph is BeamTelegraph:

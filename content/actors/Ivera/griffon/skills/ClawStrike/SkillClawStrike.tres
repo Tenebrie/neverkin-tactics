@@ -12,5 +12,6 @@ Description = "Strike an enemy in melee range with your claws dealing %Damage da
 $Demolish: Destroy all wall segments within %{DemolishRange}m from the target."
 IconTexture = ExtResource("1_k3mi7")
 TargetingMaxRange = 0.5
+TargetingApproachTarget = true
 BehaviourRequireLineOfSight = false
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

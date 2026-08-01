@@ -14,4 +14,5 @@ If the pushed target hits any obstacle, it takes an extra %SecondaryDamage damag
 $Demolish: Use the debris as projectiles instead, with each destroyed wall segment dealing %BonkDamage damage to the first target hit."
 IconTexture = ExtResource("1_fb2my")
 TargetingMaxRange = 5.0
+TargetingApproachTarget = true
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"
