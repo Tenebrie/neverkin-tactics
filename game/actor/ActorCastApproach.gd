@@ -6,7 +6,6 @@ const CircleSampleCount = 48
 const ResolveMovementThreshold = 0.0
 
 class Solution:
-	var target: Actor
 	var castOrigin: Vector3
 	var path: PackedVector3Array
 	var pathCost: float
@@ -16,7 +15,7 @@ class Solution:
 
 var solvedSolution: Solution = null
 var solvedSkill: Skill = null
-var solvedTarget: Actor = null
+var solvedCenter: Vector3
 var solvedPosition: Vector3
 var solvedMovement: float
 var showingCursorCost = false
@@ -59,16 +58,27 @@ func CurrentSolution() -> Solution:
 		return null
 	if parent.Behaviour is not ActorBehaviourPlayerControlled:
 		return null
-	var target = findTarget()
-	if target == null:
-		return null
-	if skill == solvedSkill and target == solvedTarget \
+
+	var center: Vector3
+	var targetSize: float
+	if skill.definition.BehaviourTargetsGround:
+		center = parent.InputProvider.CursorPosition
+		center.y = 0.0
+		targetSize = 0.0
+	else:
+		var target = findTarget()
+		if target == null:
+			return null
+		center = ActorUtils.flatPositionOf(target)
+		targetSize = target.physicalSize
+
+	if skill == solvedSkill and center.distance_to(solvedCenter) < 0.01 \
 			and parent.global_position.distance_to(solvedPosition) < ResolveMovementThreshold \
 			and absf(parent.actions.MovementAvailable - solvedMovement) < 0.001:
 		return solvedSolution
-	solvedSolution = solve(skill, target)
+	solvedSolution = solve(skill, center, targetSize)
 	solvedSkill = skill
-	solvedTarget = target
+	solvedCenter = center
 	solvedPosition = parent.global_position
 	solvedMovement = parent.actions.MovementAvailable
 	return solvedSolution
@@ -79,12 +89,11 @@ func findTarget() -> Actor:
 			return target
 	return null
 
-func solve(skill: Skill, target: Actor) -> Solution:
+func solve(skill: Skill, center: Vector3, targetSize: float) -> Solution:
 	var mapRid = parent.navigator.agent.get_navigation_map()
-	var fullRange = skill.definition.TargetingMaxRange + parent.physicalSize + target.physicalSize
+	var fullRange = skill.definition.TargetingMaxRange + parent.physicalSize + targetSize
 	var castRange = fullRange - RangeMargin
 	var acceptRange = fullRange - RangeMargin / 2.0
-	var center = ActorUtils.flatPositionOf(target)
 	if ActorUtils.flatDistanceBetween(parent.global_position, center) <= fullRange:
 		return null
 
@@ -117,7 +126,6 @@ func solve(skill: Skill, target: Actor) -> Solution:
 		return null
 
 	var solution = Solution.new()
-	solution.target = target
 	var castBudget = parent.actions.MovementBuffer + parent.actions.MovementSpeedPerAP * maxi(0, parent.actions.ActionPointsAvailable - skill.ActionPointCost)
 	if bestCost <= castBudget:
 		solution.canCast = true
