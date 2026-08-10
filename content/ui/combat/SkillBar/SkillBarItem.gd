@@ -117,7 +117,8 @@ func update() -> void:
 	iconButton.texture_normal = TrackedSkill.definition.IconTexture
 	setSkillCosts(TrackedSkill)
 	await get_tree().process_frame
-	tooltip.setSkill(self, TrackedSkill)
+	if TrackedSkill:
+		tooltip.setSkill(self, TrackedSkill)
 
 func hideSkillCosts():
 	%ActionPointCost.visible = false

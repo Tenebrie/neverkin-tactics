@@ -123,4 +123,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6778705, 0, -1.6136961)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1071544, -0.19499978, 1.3090687)
 ObstacleWidth = 10
 
-[connection signal="encounterRestarted" from="EncounterControls" to="." method="_onEncounterRestarted"]
+[connection signal="generateNewEncounterRequested" from="EncounterControls" to="." method="_onGenerateNewEncounter"]

@@ -8,7 +8,7 @@ func _ready() -> void:
 
 func spawn(actorScene: PackedScene):
 	var actor = actorScene.instantiate() as Actor
-	Game.Scene.add_child.call_deferred(actor)
+	#Game.Scene.add_child.call_deferred(actor)
 	#await get_tree().process_frame
 	actor.position = ActorUtils.flatPositionOf(self)
 	Game.Scene.add_child(actor)

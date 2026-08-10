@@ -107,15 +107,21 @@ focus_mode = 0
 shortcut = SubResource("Shortcut_6vk7y")
 text = "->"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=626863056]
-layout_mode = 2
-
 [node name="RestartEncounterButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=322872092]
 layout_mode = 2
 focus_mode = 0
 text = "Restart Encounter"
 
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=626863056]
+layout_mode = 2
+
+[node name="GenerateNewEncounterButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=2006852981]
+layout_mode = 2
+focus_mode = 0
+text = "Generate New Encounter"
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ToggleVisibilityButton" to="." method="_onToggleVisibilityButtonPressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer/SnapshotUndoButton" to="." method="_onUndoSnapshotPressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer/SnapshotRedoButton" to="." method="_onRedoSnapshotPressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/RestartEncounterButton" to="." method="_onRestartEncounterButtonPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/GenerateNewEncounterButton" to="." method="_onGenerateNewEncounterButtonPressed"]

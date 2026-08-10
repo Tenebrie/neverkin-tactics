@@ -26,8 +26,13 @@ signal TurnChanged
 var activeFaction: Actor.Faction = Actor.PlayerFaction
 
 func _ready():
-	Actor.SignalBus.ActorCreated.connect(func():
-		loadPlayerControlledActors()
+	Actor.SignalBus.ActorCreated.connect(func(actor):
+		if actor.faction == Actor.PlayerFaction:
+			loadPlayerControlledActors()
+	)
+	Actor.SignalBus.ActorFinalized.connect(func(actor):
+		if actor.faction == Actor.PlayerFaction:
+			loadPlayerControlledActors()
 	)
 	await get_tree().process_frame
 	startTurnForCurrentFaction()

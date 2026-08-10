@@ -24,7 +24,7 @@ func _exit_tree() -> void:
 		Repository.All.Unregister(self)
 		Repository.Alive.Unregister(self)
 		Repository.Hovered.Unregister(self)
-		Repository.Destroyed.Register(self)
+		Repository.Destroyed.Unregister(self)
 #endregion
 
 #region Proxy Getters
@@ -192,6 +192,7 @@ func restoreSnapshot(snapshot: Variant):
 
 #region Lifecycle (Game)
 signal destroyed
+signal finalized
 
 var isAlive: bool:
 	get:
@@ -222,13 +223,19 @@ func Destroy() -> void:
 	collision_mask = 0
 	collision_layer = 0
 	Repository.Alive.Unregister(self)
+	Repository.Destroyed.Register(self)
 	fadeOut()
 	destroyed.emit()
 	SignalBus.ActorDestroyed.emit(self)
 
 ## Remove the actor and free resources
 func finalize():
+	if not is_instance_valid(self):
+		return
+	Repository.All.Unregister(self)
 	Repository.Destroyed.Unregister(self)
+	finalized.emit()
+	SignalBus.ActorFinalized.emit(self)
 	queue_free()
 
 func fadeIn():
@@ -271,7 +278,7 @@ class Repository:
 		var List: Array[Actor] = []
 
 		func asList() -> Array[Actor]:
-			return List
+			return List.slice(0)
 
 		func isEmpty() -> bool:
 			return List.is_empty()
@@ -333,3 +340,4 @@ class SignalBusImplementation extends NodeSignalBus:
 	signal ActorCreated(actor: Actor)
 	signal ActorDefinitionChanged(actor: Actor)
 	signal ActorDestroyed(actor: Actor)
+	signal ActorFinalized(actor: Actor)

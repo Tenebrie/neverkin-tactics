@@ -103,6 +103,17 @@ func RestoreNextSnapshot() -> void:
 	_restoreSnapshot(snapshots[snapshotHead])
 
 
+func RestoreEarliestSnapshot() -> void:
+	if not Error.AsBooleanWithPrint(_isSnapshotAllowed()):
+		return
+
+	if snapshotHead <= 0:
+		return
+
+	snapshotHead = 0
+	_restoreSnapshot(snapshots[snapshotHead])
+
+
 func _restoreSnapshot(snapshot: Snapshot) -> void:
 	isRestoringSnapshot = true
 	var actorsRemoved = 0
@@ -130,6 +141,10 @@ func _pruneRedoHistory():
 	if snapshotHead >= 0 and snapshotsToPrune > 0:
 		Log.info("Pruned %d snapshot%s"%[snapshotsToPrune, "" if snapshotsToPrune == 1 else "s"])
 		snapshots = snapshots.slice(0, snapshotHead + 1)
+
+func PruneAllSnapshots():
+	snapshots = []
+	snapshotHead = -1
 
 func _isSnapshotAllowed() -> Variant:
 	if isRestoringSnapshot:

@@ -8,10 +8,8 @@ func _ready() -> void:
 	Actor.SignalBus.ActorDefinitionChanged.connect(rebuildPortraits)
 
 func rebuildPortraits() -> void:
-	while portraitContainer.get_child_count() > 0:
-		var portrait = portraitContainer.get_child(0)
-		portraitContainer.remove_child(portrait)
-		portrait.queue_free()
+	for child in portraitContainer.get_children():
+		child.queue_free()
 
 	for i in TurnManager.Instance.playerControlledActors.size():
 		var actor = TurnManager.Instance.playerControlledActors[i]

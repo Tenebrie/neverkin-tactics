@@ -1,6 +1,6 @@
 extends Control
 
-signal encounterRestarted
+signal generateNewEncounterRequested
 
 @onready var toggleVisibilityButton: Button = %ToggleVisibilityButton
 @onready var controlsContainer: PanelContainer = %ControlsContainer
@@ -18,11 +18,14 @@ func _updateSnapshotCount():
 func _onToggleVisibilityButtonPressed() -> void:
 	controlsContainer.visible = toggleVisibilityButton.button_pressed
 
-func _onRestartEncounterButtonPressed() -> void:
-	encounterRestarted.emit()
-
 func _onUndoSnapshotPressed() -> void:
 	SnapshotManager.RestorePreviousSnapshot()
 
 func _onRedoSnapshotPressed() -> void:
 	SnapshotManager.RestoreNextSnapshot()
+
+func _onRestartEncounterButtonPressed() -> void:
+	SnapshotManager.RestoreEarliestSnapshot()
+
+func _onGenerateNewEncounterButtonPressed() -> void:
+	generateNewEncounterRequested.emit()
