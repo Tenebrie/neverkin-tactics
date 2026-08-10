@@ -2,9 +2,16 @@
 extends HBoxContainer
 class_name EncounterControlsFactionActor
 
-@export var count = 1
+var count: int:
+	get:
+		return roundi(counter.value)
+	set(value):
+		counter.value = value
 
 var options: Array[EncounterControlsFaction.ActorEntry]
+var selectedOption: EncounterControlsFaction.ActorEntry:
+	get:
+		return options[dropdown.selected]
 
 @onready var removeActorButton: Button = %RemoveActorButton
 @onready var counter: SpinBox = %CountSpinBox
@@ -18,7 +25,6 @@ func _ready():
 
 func select(option: int):
 	dropdown.selected = option
-
 
 func _onRemoveActorButtonPressed() -> void:
 	queue_free()

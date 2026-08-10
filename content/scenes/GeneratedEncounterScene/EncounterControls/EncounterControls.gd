@@ -1,13 +1,22 @@
 extends Control
+class_name EncounterControls
 
 signal generateNewEncounterRequested
 
 @onready var toggleVisibilityButton: Button = %ToggleVisibilityButton
 @onready var controlsContainer: PanelContainer = %ControlsContainer
 @onready var snapshotCountLabel: Label = %SnapshotCountLabel
+@onready var kinFactionControls: EncounterControlsFaction = %EncounterControlsFaction_Kin
+@onready var wolfpackFactionControls: EncounterControlsFaction = %EncounterControlsFaction_Wolfpack
 
 var arenaSize = Vector2i(16, 10)
 
+class FactionToSpawn:
+	var faction: Actor.Faction
+	var actors: Array[PackedScene]
+
+func getFactionsToSpawn() -> Array[FactionToSpawn]:
+	return [kinFactionControls.collect(), wolfpackFactionControls.collect()]
 
 func _ready() -> void:
 	_updateSnapshotCount()

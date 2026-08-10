@@ -15,13 +15,12 @@ const cellSize = 1.0
 const segmentsPerCell = 5
 const floorHeight = -0.1
 const spawnZoneDepthCells = 3
-const spawnPointsPerFaction = 4
 const maxLayoutAttempts = 20
 
-#var minArenaCells = 8
-#var maxArenaCells = 14
 var minArenaSize = Vector2i(8, 14)
 var maxArenaSize = Vector2i(8, 14)
+var factionsToSpawn: Array[EncounterControls.FactionToSpawn]
+var spawnGroups: Array[SpawnPointGroup]
 
 class CoverPiece:
 	var kind: int
@@ -182,20 +181,23 @@ func _commitPiece(layout: ArenaLayout, kind: int, rect: Rect2i, rotationDegrees:
 		layout.occupiedCells[cell] = true
 
 func _chooseSpawnCells(layout: ArenaLayout) -> void:
-	var factions = [Actor.Faction.Kin, Actor.Faction.Wolfpack]
+	var sides = factionsToSpawn.duplicate()
 	if randf() < 0.5:
-		factions.reverse()
-	var westCells = _pickSpawnCells(_spawnZoneRect(layout, true))
+		sides.reverse()
+	var maxActorCount = 0
+	for side in sides:
+		maxActorCount = maxi(maxActorCount, side.actors.size())
+	var westCells = _pickSpawnCells(_spawnZoneRect(layout, true), maxActorCount)
 	var eastCells: Array[Vector2i] = []
 	for cell in westCells:
 		eastCells.append(_mirrorCell(layout, cell))
-	layout.spawnCellsByFaction[factions[0]] = westCells
-	layout.spawnCellsByFaction[factions[1]] = eastCells
+	layout.spawnCellsByFaction[sides[0].faction] = westCells.slice(0, sides[0].actors.size())
+	layout.spawnCellsByFaction[sides[1].faction] = eastCells.slice(0, sides[1].actors.size())
 
-func _pickSpawnCells(zone: Rect2i) -> Array[Vector2i]:
+func _pickSpawnCells(zone: Rect2i, count: int) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
 	var attempts = 0
-	while cells.size() < spawnPointsPerFaction and attempts < 200:
+	while cells.size() < count and attempts < 200:
 		attempts += 1
 		var candidate = Vector2i(
 			randi_range(zone.position.x, zone.end.x - 1),
@@ -214,7 +216,7 @@ func _spawnCellsConnected(layout: ArenaLayout) -> bool:
 	for cells in layout.spawnCellsByFaction.values():
 		allSpawnCells.append_array(cells)
 	if allSpawnCells.is_empty():
-		return false
+		return true
 
 	var visited = {allSpawnCells[0]: true}
 	var frontier: Array[Vector2i] = [allSpawnCells[0]]
@@ -339,8 +341,18 @@ func _buildSpawnGroups(parent: Node3D, layout: ArenaLayout) -> void:
 		var group = SpawnPointGroup.new()
 		group.forcedFaction = faction
 		parent.add_child(group)
+		spawnGroups.push_back(group)
 		for cell in layout.spawnCellsByFaction[faction]:
 			var point = SpawnPoint.new()
 			group.add_child(point)
 			var world = _cellCenterWorld(layout, cell)
 			point.position = Vector3(world.x, 0, world.y)
+
+func spawnActors() -> void:
+	for factionToSpawn in factionsToSpawn:
+		for group in spawnGroups:
+			if group.forcedFaction != factionToSpawn.faction:
+				continue
+			var points = group.spawnPoints
+			for i in mini(points.size(), factionToSpawn.actors.size()):
+				points[i].spawn(factionToSpawn.actors[i])

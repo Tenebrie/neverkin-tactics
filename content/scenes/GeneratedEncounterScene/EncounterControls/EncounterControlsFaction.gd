@@ -13,6 +13,15 @@ class ActorEntry:
 	var actorName: String
 	var asset: PackedScene
 
+func collect() -> EncounterControls.FactionToSpawn:
+	var factionToSpawn = EncounterControls.FactionToSpawn.new()
+	factionToSpawn.faction = faction
+	for entry in actorContainer.get_children():
+		if entry is EncounterControlsFactionActor actor:
+			for i in actor.count:
+				factionToSpawn.actors.push_back(entry.selectedOption.asset)
+	return factionToSpawn
+
 func _ready():
 	_generateOptions()
 	nameLabel.text = ActorUtils.getFactionName(faction)
