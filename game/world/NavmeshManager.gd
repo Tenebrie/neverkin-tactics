@@ -50,6 +50,7 @@ func WaitUntilReady():
 func rebakeNavmeshForCurrentActor():
 	return await rebakeNavmesh(TurnManager.Instance.activeActor)
 
+
 func rebakeNavmesh(actor: Actor, exceptions: Array[Actor] = []):
 	if actor == null:
 		return
