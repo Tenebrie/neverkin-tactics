@@ -16,7 +16,7 @@ func _ready() -> void:
 		audioChannels.push_back(player)
 		add_child(player)
 
-static func playOneShot(sfx: AudioStream, location: Vector3):
+static func playOneShot(sfx: AudioStream, location: Vector3, loudness: float = 0.5):
 	if Instance.audioChannels.is_empty():
 		Log.error("Unable to play SFX - no available channels", "Sound")
 		return
@@ -24,6 +24,7 @@ static func playOneShot(sfx: AudioStream, location: Vector3):
 	var player = Instance.audioChannels.pop_front()
 	player.global_position = location
 	player.stream = sfx
+	player.volume_linear = loudness
 	player.play()
 	await player.finished
 	Instance.audioChannels.push_front(player)

@@ -195,10 +195,7 @@ static func instantiateTelegraph(def: TelegraphDefinition, skill: Skill) -> Tele
 		telegraph.add_child(icon)
 		telegraph.childIcon = icon
 		icon.transparency = 1.0
-		## TODO: Rewrite physics or something so that intersect happened same frame?
 		skill.get_tree().physics_frame.connect(func():
-			await skill.get_tree().physics_frame
-			await skill.get_tree().physics_frame
 			telegraph.create_tween().tween_property(icon, "transparency", 0.0, 0.1)
 			telegraph.cleaningStarted.connect(func():
 				telegraph.create_tween().tween_property(icon, "transparency", 1.0, 0.1)

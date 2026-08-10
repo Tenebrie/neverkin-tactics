@@ -76,3 +76,5 @@ func cleanUp() -> void:
 	fadingOut = true
 	Game.Scene.add_child(self)
 	global_position = selfPosition
+	await get_tree().create_timer(3.0).timeout
+	queue_free()

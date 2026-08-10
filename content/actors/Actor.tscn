@@ -67,11 +67,14 @@ script = ExtResource("5_gmr66")
 [node name="ActorTargeting" type="Node" parent="." unique_id=1741065242]
 script = ExtResource("6_v5lek")
 
-[node name="ActorTelegraphs" type="Node" parent="." unique_id=1823962377]
-script = ExtResource("7_1yc4f")
+[node name="ActorDefaultAction" type="Node" parent="." unique_id=1276943508]
+script = ExtResource("16_dfact")
 
 [node name="ActorCastApproach" type="Node" parent="." unique_id=1298467313]
 script = ExtResource("15_cstap")
+
+[node name="ActorTelegraphs" type="Node" parent="." unique_id=1823962377]
+script = ExtResource("7_1yc4f")
 
 [node name="ActorInputProvider" type="Node" parent="." unique_id=224060493]
 script = ExtResource("12_pe7q2")
@@ -91,9 +94,6 @@ script = ExtResource("9_m37al")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HoverArea" unique_id=933098665]
 shape = SubResource("SphereShape3D_kq5px")
 debug_color = Color(0.58431375, 0.54901963, 0, 0.21568628)
-
-[node name="ActorDefaultAction" type="Node" parent="." unique_id=1276943508]
-script = ExtResource("16_dfact")
 
 [node name="ActorImpactEffects" type="Node" parent="." unique_id=59241259]
 script = ExtResource("14_ernrv")
