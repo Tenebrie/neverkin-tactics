@@ -6,10 +6,14 @@ signal generateNewEncounterRequested
 @onready var controlsContainer: PanelContainer = %ControlsContainer
 @onready var snapshotCountLabel: Label = %SnapshotCountLabel
 
+var arenaSize = Vector2i(16, 10)
+
 func _ready() -> void:
 	_updateSnapshotCount()
 	SnapshotManager.snapshotsChanged.connect(_updateSnapshotCount)
 	SnapshotManager.snapshotRestored.connect(_updateSnapshotCount)
+	%SizeInputX.value = arenaSize.x
+	%SizeInputY.value = arenaSize.y
 
 func _updateSnapshotCount():
 	var dirtyFlag = "*" if SnapshotManager.snapshotDirty else " "
@@ -29,3 +33,9 @@ func _onRestartEncounterButtonPressed() -> void:
 
 func _onGenerateNewEncounterButtonPressed() -> void:
 	generateNewEncounterRequested.emit()
+
+func _onSizeInputXChanged(value: float) -> void:
+	arenaSize.x = roundi(value)
+
+func _onSizeInputYChanged(value: float) -> void:
+	arenaSize.y = roundi(value)

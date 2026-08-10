@@ -13,13 +13,19 @@ const FactionRosters = {
 	],
 }
 
+const EncounterControls = preload("./EncounterControls/EncounterControls.gd")
+@onready var encounterControls: EncounterControls = $EncounterControls
+
 func _ready() -> void:
 	_generateEncounter()
 	await get_tree().process_frame
 	_startEncounter()
 
 func _generateEncounter():
-	ArenaGenerator.new().generate($GeometryParent)
+	var currentGenerator = ArenaGenerator.new()
+	currentGenerator.minArenaSize = encounterControls.arenaSize
+	currentGenerator.maxArenaSize = encounterControls.arenaSize
+	currentGenerator.generate($GeometryParent)
 
 func _startEncounter():
 	_populateSpawnGroups()

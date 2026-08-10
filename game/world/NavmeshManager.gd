@@ -99,7 +99,7 @@ func bakeOnce(actor: Actor, exceptions: Array[Actor]) -> Array[RID]:
 				continue
 			var col: CollisionShape3D = c.get_node_or_null("CollisionShape3D")
 			if col and col.shape:
-				addObstruction(source, c, col, actor.physicalSize)
+				addObstruction(source, c, col)
 		touchedMaps.push_back(region.get_navigation_map())
 		activeBakeCount += 1
 		NavigationServer3D.bake_from_source_geometry_data_async(navMesh, source, onRegionBakeFinished)
@@ -135,7 +135,7 @@ func waitForMapSync(maps: Array[RID]):
 		var synced: RID = await NavigationServer3D.map_changed
 		pending.erase(synced)
 
-func addObstruction(source: NavigationMeshSourceGeometryData3D, other: Actor, col: CollisionShape3D, agentRadius: float):
+func addObstruction(source: NavigationMeshSourceGeometryData3D, other: Actor, col: CollisionShape3D):
 	var shape = col.shape
 	var transform = col.global_transform
 	var origin = transform.origin
@@ -143,14 +143,10 @@ func addObstruction(source: NavigationMeshSourceGeometryData3D, other: Actor, co
 	var horizontalScale = maxf(absf(colScale.x), absf(colScale.z))
 
 	if shape is BoxShape3D:
-		var heightA = shape.size.y * absf(colScale.y)
-		var half = shape.size * 0.5 + Vector3(
-			agentRadius / maxf(absf(colScale.x), 0.001),
-			0,
-			agentRadius / maxf(absf(colScale.z), 0.001)
-		)
+		var boxHeight = shape.size.y * absf(colScale.y)
+		var half = shape.size * 0.5
 		var basis = transform.basis
-		var verticesA = PackedVector3Array()
+		var boxVertices = PackedVector3Array()
 		for corner in [
 			Vector3(-half.x, 0, -half.z),
 			Vector3(half.x, 0, -half.z),
@@ -158,8 +154,8 @@ func addObstruction(source: NavigationMeshSourceGeometryData3D, other: Actor, co
 			Vector3(-half.x, 0, half.z),
 		]:
 			var rotated = basis * corner
-			verticesA.push_back(Vector3(origin.x + rotated.x, 0, origin.z + rotated.z))
-		source.add_projected_obstruction(verticesA, origin.y - heightA * 0.5, heightA, true)
+			boxVertices.push_back(Vector3(origin.x + rotated.x, 0, origin.z + rotated.z))
+		source.add_projected_obstruction(boxVertices, origin.y - boxHeight * 0.5, boxHeight, false)
 		return
 
 	var shapeRadius = 0.0
@@ -180,13 +176,12 @@ func addObstruction(source: NavigationMeshSourceGeometryData3D, other: Actor, co
 	var footprint = maxf(shapeRadius * horizontalScale, other.physicalSize)
 	height = height * absf(colScale.y)
 
-	var carveRadius = footprint + agentRadius
 	var vertices = PackedVector3Array()
 	for i in CIRCLE_SEGMENTS:
 		var angle = TAU * i / CIRCLE_SEGMENTS
 		vertices.push_back(Vector3(
-			origin.x + cos(angle) * carveRadius,
+			origin.x + cos(angle) * footprint,
 			0,
-			origin.z + sin(angle) * carveRadius
+			origin.z + sin(angle) * footprint
 		))
-	source.add_projected_obstruction(vertices, origin.y - height * 0.5, height, true)
+	source.add_projected_obstruction(vertices, origin.y - height * 0.5, height, false)

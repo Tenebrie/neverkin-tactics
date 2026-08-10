@@ -14,11 +14,14 @@ const floorTexture = preload("res://addons/prototype-textures/dark/texture_08.pn
 const cellSize = 1.0
 const segmentsPerCell = 5
 const floorHeight = -0.1
-const minArenaCells = 16
-const maxArenaCells = 26
 const spawnZoneDepthCells = 3
 const spawnPointsPerFaction = 4
 const maxLayoutAttempts = 20
+
+#var minArenaCells = 8
+#var maxArenaCells = 14
+var minArenaSize = Vector2i(8, 14)
+var maxArenaSize = Vector2i(8, 14)
 
 class CoverPiece:
 	var kind: int
@@ -28,6 +31,7 @@ class CoverPiece:
 class ArenaLayout:
 	var widthCells: int
 	var depthCells: int
+	var isVertical: bool
 	var pieces: Array[CoverPiece] = []
 	var occupiedCells = {}
 	var reservedCells = {}
@@ -48,10 +52,11 @@ func _createValidatedLayout() -> ArenaLayout:
 
 func _createLayout() -> ArenaLayout:
 	var layout = ArenaLayout.new()
-	var sizeRollA = randi_range(minArenaCells, maxArenaCells)
-	var sizeRollB = randi_range(minArenaCells, maxArenaCells)
+	var sizeRollA = randi_range(minArenaSize.x, maxArenaSize.x)
+	var sizeRollB = randi_range(minArenaSize.y, maxArenaSize.y)
 	layout.widthCells = maxi(sizeRollA, sizeRollB)
 	layout.depthCells = mini(sizeRollA, sizeRollB)
+	layout.isVertical = sizeRollA < sizeRollB
 	_reserveSpawnZones(layout)
 	_placeCenterWall(layout)
 	_placeWallRuns(layout)
@@ -261,6 +266,8 @@ func _buildArena(layout: ArenaLayout, geometryParent: Node3D) -> void:
 	var container = Node3D.new()
 	container.name = "GeneratedArena"
 	geometryParent.add_child(container)
+	if layout.isVertical:
+		container.rotation_degrees = Vector3(0.0, 90.0, 0.0)
 	_buildFloor(container, layout)
 	_buildPerimeter(container, layout)
 	for piece in layout.pieces:
