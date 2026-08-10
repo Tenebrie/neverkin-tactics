@@ -91,7 +91,7 @@ func advanceTurn():
 	var factionHasActors = Actor.Repository.Alive.asList().any(func(a):
 		return a.stats.Faction == activeFaction and a.HasComponent(ActorBehaviour)
 	)
-	if not factionHasActors:
+	if activeFaction != Actor.PlayerFaction and not factionHasActors:
 		advanceTurn()
 		return
 	startTurnForCurrentFaction()

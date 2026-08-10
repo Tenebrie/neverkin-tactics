@@ -28,6 +28,9 @@ func _clearEncounter():
 	SnapshotManager.PruneAllSnapshots()
 
 func _onGenerateNewEncounter() -> void:
+	if TurnManager.Instance.activeFaction != Actor.PlayerFaction:
+		MessageLog.PrintMessage("Can only change encounter on the player's turn")
+		return
 	_clearEncounter()
 	_generateEncounter()
 	_startEncounter()
