@@ -32,7 +32,8 @@ static func Create(parent: Node, lifetime = 30.0) -> ProjectileSystem:
 	var system = ProjectileSystem.new()
 	parent.add_child(system)
 	(Engine.get_main_loop() as SceneTree).create_timer(lifetime).timeout.connect(func():
-		system.queue_free()
+		if system:
+			system.queue_free()
 	)
 	return system
 

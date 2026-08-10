@@ -62,4 +62,4 @@ func _cast(targets: TargetData) -> void:
 	for target in targets.actors:
 		target.stats.dealSkillDamage(targets)
 		if not victim:
-			target.buffs?.Add(BuffBleeding.new())
+			target.buffs?.Add(BuffBleeding.Build(self))
