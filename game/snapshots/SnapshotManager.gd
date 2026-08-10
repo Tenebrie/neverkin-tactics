@@ -56,9 +56,11 @@ func CreateSnapshot(force: bool = false) -> Snapshot:
 	if not force and not Error.AsBooleanWithPrint(_isSnapshotAllowed()):
 		return null
 
+	var measure = PerformanceUtils.startMeasure("Snapshot collection")
 	var before = OS.get_static_memory_usage()
 	var snapshot = Snapshot.Collect()
 	var after = OS.get_static_memory_usage()
+	measure.endMeasure()
 	var kilobytesConsumed = (after - before) / 1024.0
 	var megabytesConsumed = (after - before) / 1024.0 / 1024.0
 	var actorCount = snapshot.actors.values().filter(func(value): return value != null).size()
@@ -119,6 +121,7 @@ func _restoreSnapshot(snapshot: Snapshot) -> void:
 	var actorsRemoved = 0
 	var actorsRestored = 0
 	var immutablesSkipped = 0
+	var measure = PerformanceUtils.startMeasure("Snapshot restoration")
 	for actor in Actor.Repository.All.asList():
 		if not snapshot.actors.has(actor.get_instance_id()):
 			actor.queue_free()
@@ -130,6 +133,7 @@ func _restoreSnapshot(snapshot: Snapshot) -> void:
 			continue
 		actor.restoreSnapshot(snapshot.actors[actor.get_instance_id()])
 		actorsRestored += 1
+	measure.endMeasure()
 
 	snapshotDirty = false
 	isRestoringSnapshot = false

@@ -10,3 +10,11 @@ func _ready() -> void:
 		movementSpeedPerAction = 0
 		definition.PerceivedThreat = ThreatLevel.Harmless
 	super._ready()
+
+#region Snapshots
+func createSnapshot() -> Snapshot:
+	return super._createSnapshot(collectDefinition: false)
+
+func restoreSnapshot(snapshot: Variant):
+	return super.restoreSnapshot(snapshot)
+#endregion

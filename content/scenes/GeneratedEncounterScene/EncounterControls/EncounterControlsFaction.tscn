@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://bpg2o5xj7n6sv"]
+
+[ext_resource type="Script" uid="uid://dhivi00ioaj4g" path="res://content/scenes/GeneratedEncounterScene/EncounterControls/EncounterControlsFaction.gd" id="1_rjusb"]
+
+[node name="EncounterControlsFaction" type="PanelContainer" unique_id=1509892829]
+script = ExtResource("1_rjusb")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1199078377]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1111132147]
+layout_mode = 2
+
+[node name="FactionNameLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=632420890]
+unique_name_in_owner = true
+layout_mode = 2
+text = "None"
+
+[node name="ActorContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=2044531661]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AddActorButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=205713709]
+layout_mode = 2
+text = "+"
+flat = true
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/AddActorButton" to="." method="_onAddActorButtonPressed"]

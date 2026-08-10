@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://b2a1rlvisrgic"]
+
+[ext_resource type="Script" uid="uid://dmvhe6pbg2jk2" path="res://content/scenes/GeneratedEncounterScene/EncounterControls/EncounterControlsFactionActor.gd" id="1_ol16e"]
+
+[node name="EncounterControlsFactionActor" type="HBoxContainer" unique_id=128284241]
+offset_right = 270.0
+offset_bottom = 47.0
+script = ExtResource("1_ol16e")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1199078377]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1539930467]
+layout_mode = 2
+
+[node name="RemoveActorButton" type="Button" parent="MarginContainer/HBoxContainer" unique_id=520292551]
+unique_name_in_owner = true
+layout_mode = 2
+text = "X"
+flat = true
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer" unique_id=1236096251]
+layout_mode = 2
+
+[node name="CountSpinBox" type="SpinBox" parent="MarginContainer/HBoxContainer" unique_id=1643142635]
+unique_name_in_owner = true
+layout_mode = 2
+focus_behavior_recursive = 1
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+alignment = 2
+
+[node name="OptionsDropdown" type="OptionButton" parent="MarginContainer/HBoxContainer" unique_id=1899994940]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+search_bar_enabled = true
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/RemoveActorButton" to="." method="_onRemoveActorButtonPressed"]

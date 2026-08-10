@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cyjrqnqmxpad3"]
 
 [ext_resource type="Script" uid="uid://dlq7la1a228ok" path="res://content/scenes/GeneratedEncounterScene/EncounterControls/EncounterControls.gd" id="1_qglye"]
+[ext_resource type="PackedScene" uid="uid://bpg2o5xj7n6sv" path="res://content/scenes/GeneratedEncounterScene/EncounterControls/EncounterControlsFaction.tscn" id="2_l65vc"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_qglye"]
 device = -1
@@ -53,8 +54,8 @@ layout_mode = 2
 
 [node name="ToggleVisibilityButton" type="CheckButton" parent="MarginContainer/VBoxContainer" unique_id=370304333]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
-custom_maximum_size = Vector2(200, -1)
+custom_minimum_size = Vector2(300, 0)
+custom_maximum_size = Vector2(300, -1)
 layout_mode = 2
 focus_mode = 0
 mouse_behavior_recursive = 2
@@ -115,10 +116,9 @@ text = "Restart Encounter"
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=626863056]
 layout_mode = 2
 
-[node name="GenerateNewEncounterButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=2006852981]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=729038102]
 layout_mode = 2
-focus_mode = 0
-text = "Generate New Encounter"
+text = "Encounter Wizard"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=662891184]
 layout_mode = 2
@@ -143,10 +143,23 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_behavior_recursive = 1
 
+[node name="EncounterControlsFaction_Kin" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=43008170 instance=ExtResource("2_l65vc")]
+layout_mode = 2
+faction = 0
+
+[node name="EncounterControlsFaction_Wolfpack" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=1509892829 instance=ExtResource("2_l65vc")]
+layout_mode = 2
+faction = 4
+
+[node name="GenerateNewEncounterButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=2006852981]
+layout_mode = 2
+focus_mode = 0
+text = "Generate New Encounter"
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ToggleVisibilityButton" to="." method="_onToggleVisibilityButtonPressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer/SnapshotUndoButton" to="." method="_onUndoSnapshotPressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer/SnapshotRedoButton" to="." method="_onRedoSnapshotPressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/RestartEncounterButton" to="." method="_onRestartEncounterButtonPressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/GenerateNewEncounterButton" to="." method="_onGenerateNewEncounterButtonPressed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer3/SizeInputX" to="." method="_onSizeInputXChanged"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer3/SizeInputY" to="." method="_onSizeInputYChanged"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/GenerateNewEncounterButton" to="." method="_onGenerateNewEncounterButtonPressed"]

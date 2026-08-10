@@ -8,6 +8,7 @@ signal generateNewEncounterRequested
 
 var arenaSize = Vector2i(16, 10)
 
+
 func _ready() -> void:
 	_updateSnapshotCount()
 	SnapshotManager.snapshotsChanged.connect(_updateSnapshotCount)

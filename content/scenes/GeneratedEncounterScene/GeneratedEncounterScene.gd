@@ -18,8 +18,8 @@ const EncounterControls = preload("./EncounterControls/EncounterControls.gd")
 
 func _ready() -> void:
 	_generateEncounter()
-	await get_tree().process_frame
-	_startEncounter()
+	#await get_tree().process_frame
+	_startEncounter.call_deferred()
 
 func _generateEncounter():
 	var currentGenerator = ArenaGenerator.new()

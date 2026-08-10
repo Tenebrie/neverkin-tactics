@@ -160,9 +160,13 @@ class Snapshot:
 	var components: Dictionary[int, Variant]
 
 func createSnapshot() -> Snapshot:
+	return _createSnapshot()
+
+func _createSnapshot(collectDefinition: bool = true) -> Snapshot:
 	var snapshot = Snapshot.new()
-	snapshot.position = ActorUtils.flatPositionOf(self)
-	snapshot.definition = definition.duplicate()
+	snapshot.position = global_position
+	if collectDefinition:
+		snapshot.definition = definition.duplicate()
 	snapshot.isDestroyed = isDead
 	for component in GetAllComponents():
 		var componentSnapshot: Variant = component.createSnapshot()
@@ -175,7 +179,8 @@ func createSnapshot() -> Snapshot:
 func restoreSnapshot(snapshot: Variant):
 	assert(snapshot is Snapshot)
 	var typedSnapshot: Snapshot = snapshot
-	definition = typedSnapshot.definition
+	if typedSnapshot.definition:
+		definition = typedSnapshot.definition
 	global_position = typedSnapshot.position
 	if typedSnapshot.isDestroyed:
 		Destroy()
