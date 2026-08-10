@@ -206,6 +206,26 @@ func _maxAttackRange() -> float:
 		out = maxf(out, skill.TargetingMaxRange)
 	return out
 
+func canCast(skill: GDScript[Skill]) -> bool:
+	var instance = parent.Skills.Get(skill)
+	return instance and Error.AsBoolean(instance.isCastable())
+
+func tryReload() -> TurnAction:
+	var reloadableSkill = parent.Skills.GetByKeyword(Keyword.Reloadable)
+	if not reloadableSkill or reloadableSkill.chargesLeft >= reloadableSkill.definition.ChargesCost:
+		return null
+	if not canCast(SkillReload):
+		return null
+	return TurnAction.UseSkillOnSelf(SkillReload)
+
+func fallbackAction() -> TurnAction:
+	var reload = tryReload()
+	if reload:
+		return reload
+	if canCast(SkillHunkerDown):
+		return TurnAction.UseSkillOnSelf(SkillHunkerDown)
+	return TurnAction.Skip()
+
 @abstract func evaluateTargetValue(actor: Actor) -> ExplainedThreatValue
 @abstract func PlanTurnActions() -> Array[TurnAction]
 

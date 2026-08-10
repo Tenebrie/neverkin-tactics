@@ -47,7 +47,7 @@ func planMovementAction() -> TurnAction:
 		if ActorUtils.flatDistanceBetweenActors(parent, target) <= SkillRoundhouseSlash.AttackArea:
 			adjacentTargetCount += 1
 
-	if adjacentTargetCount >= 2:
+	if adjacentTargetCount >= 2 and canCast(SkillRoundhouseSlash):
 		return TurnAction.UseSkillOnSelf(SkillRoundhouseSlash)
 
 	var maps = await BehaviourUtils.createActorValueMaps(parent)
@@ -76,10 +76,10 @@ func planMovementAction() -> TurnAction:
 				return planCombatAction()
 			return TurnAction.MoveTo(bestShot.point)
 
-	if currentScore >= bestOverall.score and adjacentTargetCount >= 1:
+	if currentScore >= bestOverall.score and adjacentTargetCount >= 1 and canCast(SkillRoundhouseSlash):
 		return TurnAction.UseSkillOnSelf(SkillRoundhouseSlash)
 	elif currentScore >= bestOverall.score:
-		return TurnAction.UseSkillOnSelf(SkillHunkerDown)
+		return fallbackAction()
 
 	return TurnAction.MoveTo(bestOverall.point)
 
@@ -87,7 +87,7 @@ func tryAttack(target: Actor) -> TurnAction:
 	if not target or target.isDead:
 		return null
 	var knifeRange = parent.Skills.Get(SkillKnifeSlash).definition.TargetingMaxRange
-	if ActorUtils.flatDistanceBetweenActors(parent, target) < knifeRange:
+	if canCast(SkillKnifeSlash) and ActorUtils.flatDistanceBetweenActors(parent, target) < knifeRange:
 		return TurnAction.UseSkillOnActor(SkillKnifeSlash, target)
 	return null
 
@@ -104,4 +104,6 @@ func planCombatAction() -> TurnAction:
 			RefocusOn(rankedTarget.Target, "Target of opportunity!")
 			return fallbackAttack
 
-	return TurnAction.UseSkillOnSelf(SkillStim)
+	if canCast(SkillStim):
+		return TurnAction.UseSkillOnSelf(SkillStim)
+	return fallbackAction()

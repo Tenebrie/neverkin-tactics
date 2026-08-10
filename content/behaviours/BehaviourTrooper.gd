@@ -60,7 +60,7 @@ func planMovementAction() -> TurnAction:
 
 	if not FocusedTarget:
 		if bestOverall.score <= currentScore:
-			return TurnAction.UseSkillOnSelf(SkillHunkerDown)
+			return fallbackAction()
 		return TurnAction.MoveTo(bestOverall.point)
 
 	var bestShotIndex = valueMap.scoredPoints.find_custom(func(point: FloatFieldMap.ScoredPoint):
@@ -73,7 +73,7 @@ func planMovementAction() -> TurnAction:
 		if not approaching:
 			MessageLog.PrintActorMessage("Pinned down!", parent)
 		if bestOverall.score <= currentScore:
-			return TurnAction.UseSkillOnSelf(SkillHunkerDown)
+			return fallbackAction()
 		return TurnAction.MoveTo(bestOverall.point)
 
 	var bestShot = valueMap.scoredPoints[bestShotIndex]
@@ -88,11 +88,15 @@ func tryAttack(target: Actor) -> TurnAction:
 
 	var pistolRange = parent.Skills.Get(SkillPistolShot).definition.TargetingMaxRange
 	if ActorUtils.flatDistanceBetweenActors(parent, target) < pistolRange and ActorUtils.hasLineOfSight(parent, target):
-		return TurnAction.UseSkillOnActor(SkillPistolShot, target)
+		if canCast(SkillPistolShot):
+			return TurnAction.UseSkillOnActor(SkillPistolShot, target)
+		var reload = tryReload()
+		if reload:
+			return reload
 
 	var grenadeDefinition = parent.Skills.Get(SkillFragGrenade).definition
 	var grenadeReach = grenadeDefinition.TargetingMaxRange + BehaviourUtils.groundSkillBlastRadius(grenadeDefinition) + target.physicalSize
-	if ActorUtils.flatDistanceBetween(parent, target) < grenadeReach:
+	if canCast(SkillFragGrenade) and ActorUtils.flatDistanceBetween(parent, target) < grenadeReach:
 		return TurnAction.UseSkillOnActor(SkillFragGrenade, target)
 	return null
 
@@ -109,4 +113,7 @@ func planCombatAction() -> TurnAction:
 			RefocusOn(rankedTarget.Target, "Target of opportunity!")
 			return fallbackAttack
 
+	var reload = tryReload()
+	if reload:
+		return reload
 	return TurnAction.Skip()
