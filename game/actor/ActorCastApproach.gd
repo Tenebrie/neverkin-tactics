@@ -73,7 +73,7 @@ func CurrentSolution() -> Solution:
 		targetSize = target.physicalSize
 
 	if skill == solvedSkill and center.distance_to(solvedCenter) < 0.01 \
-			and parent.global_position.distance_to(solvedPosition) < ResolveMovementThreshold \
+			and parent.global_position.distance_to(solvedPosition) < 0.01 \
 			and absf(parent.actions.MovementAvailable - solvedMovement) < 0.001:
 		return solvedSolution
 	solvedSolution = solve(skill, center, targetSize)

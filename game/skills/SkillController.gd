@@ -148,13 +148,20 @@ func Deactivate(skill: Skill) -> bool:
 	inactiveSkillGroup.add_child(skill)
 	return true
 
+var IsAutoSelected = false
+
 func SelectByIndex(index: int) -> void:
 	Select(GetByIndex(index))
 
 func Select(skill: Skill) -> void:
 	if SelectedSkill:
 		SelectedSkill.preparingInfuse = false
+	IsAutoSelected = false
 	SelectedSkill = skill
+
+func SelectAuto(skill: Skill) -> void:
+	Select(skill)
+	IsAutoSelected = true
 
 func NotifyRecast() -> void:
 	#BeforeSelectedSkillChanged.emit(SelectedSkill, SelectedSkill)
@@ -164,9 +171,14 @@ func NotifyRecast() -> void:
 func Unselect() -> void:
 	if SelectedSkill:
 		SelectedSkill.preparingInfuse = false
+	IsAutoSelected = false
 	SelectedSkill = null
 
 func ScrollSkillOptions() -> void:
+	if IsAutoSelected:
+		Select(SelectedSkill)
+		return
+
 	if SelectedSkill.isInfusable() and not SelectedSkill.preparingInfuse:
 		SelectedSkill.preparingInfuse = true
 		SelectedSkillChanged.emit(SelectedSkill, SelectedSkill)

@@ -21,30 +21,25 @@ static var GloballyVisible = true
 
 func _ready() -> void:
 	super._ready()
-	ActorHoverArea.SignalBus.MouseEntered.connect(func(actor):
-		if TurnManager.Instance.activePlayerActor and TurnManager.Instance.activePlayerActor.Skills.SelectedSkill != null:
-			return
-		if not actor.definition.showHoverInfo:
-			return
-		loadActorData(actor)
-	)
-	ActorHoverArea.SignalBus.MouseExited.connect(func(actor):
-		if actor == trackedActor:
-			trackedActor = null
-	)
 
 func _process(delta: float):
 	if isLocked:
 		super._process(delta)
 		return
 
-	if TurnManager.Instance.activePlayerActor and TurnManager.Instance.activePlayerActor.Skills.SelectedSkill != null or not GloballyVisible:
-		visible = false
-		trackedActor = null
-	elif not trackedActor:
+	updateTrackedActor()
+	if not trackedActor:
 		visible = false
 
 	super._process(delta)
+
+func updateTrackedActor() -> void:
+	var hovered = Actor.Repository.Hovered.first()
+	var isSkillSelected = TurnManager.Instance.activePlayerActor and TurnManager.Instance.activePlayerActor.Skills.SelectedSkill != null
+	if hovered == null or isSkillSelected or not GloballyVisible or not ActorDefaultAction.isModifierHeld() or not hovered.definition.showHoverInfo:
+		trackedActor = null
+		return
+	loadActorData(hovered)
 
 func _input(event: InputEvent):
 	if not trackedActor:

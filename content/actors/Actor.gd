@@ -147,7 +147,7 @@ func loadDefinition():
 		var scaleMod = definition.physicalSize / 0.4
 		var tween = create_tween().set_parallel()
 		tween.tween_property($TokenMeshInstance3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
-		tween.tween_property($CollisionShape3D, "scale", Vector3(scaleMod, 1, scaleMod), 0.3)
+		tween.tween_property($HoverArea, "scale", Vector3(scaleMod, scaleMod, scaleMod), 0.3)
 		$TokenMeshInstance3D.position.x = definition.TokenOffset.x
 		$TokenMeshInstance3D.position.z = definition.TokenOffset.y
 #endregion

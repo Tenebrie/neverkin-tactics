@@ -70,5 +70,9 @@ func SetOuterWidth(value: float) -> void:
 
 func cleanUp() -> void:
 	#fadeValue = 1.0
+	var selfPosition = global_position
+	get_parent().remove_child(self)
 	fadingIn = false
 	fadingOut = true
+	Game.Scene.add_child(self)
+	global_position = selfPosition

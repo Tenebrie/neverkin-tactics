@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://jcfo153okts8" path="res://game/actor/inputProvider/ActorInputProvider.gd" id="12_pe7q2"]
 [ext_resource type="Script" uid="uid://7fsvmyq6nybe" path="res://game/actor/ActorImpactEffects.gd" id="14_ernrv"]
 [ext_resource type="Script" uid="uid://dbdorqplfgn5j" path="res://game/actor/ActorCastApproach.gd" id="15_cstap"]
+[ext_resource type="Script" uid="uid://cvn8q4hml3ap" path="res://game/actor/ActorDefaultAction.gd" id="16_dfact"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukbnj"]
 resource_local_to_scene = true
@@ -32,6 +33,7 @@ height = 0.2
 radius = 0.4
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_kq5px"]
+radius = 0.4
 
 [node name="Actor" type="CharacterBody3D" unique_id=807014692]
 collision_layer = 3
@@ -89,6 +91,9 @@ script = ExtResource("9_m37al")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HoverArea" unique_id=933098665]
 shape = SubResource("SphereShape3D_kq5px")
 debug_color = Color(0.58431375, 0.54901963, 0, 0.21568628)
+
+[node name="ActorDefaultAction" type="Node" parent="." unique_id=1276943508]
+script = ExtResource("16_dfact")
 
 [node name="ActorImpactEffects" type="Node" parent="." unique_id=59241259]
 script = ExtResource("14_ernrv")

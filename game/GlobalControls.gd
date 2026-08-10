@@ -7,7 +7,7 @@ func _input(event: InputEvent) -> void:
 		return
 
 	if key.keycode == Key.KEY_ESCAPE:
-		if TurnManager.Instance.activePlayerActor?.Skills.SelectedSkill:
+		if TurnManager.Instance.activePlayerActor?.Skills.SelectedSkill and not TurnManager.Instance.activePlayerActor.Skills.IsAutoSelected:
 			TurnManager.Instance.activePlayerActor.Skills.Unselect()
 			return
 

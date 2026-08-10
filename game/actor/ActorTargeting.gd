@@ -83,7 +83,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	var isSkillSelected = parent.Skills.SelectedSkill != null
 
-	if isRightMouseClick and isSkillSelected:
+	if isRightMouseClick and isSkillSelected and not parent.Skills.IsAutoSelected:
 		# Cancel current targeting
 		lockedMode = TargetMode.None
 		parent.Skills.Unselect()
