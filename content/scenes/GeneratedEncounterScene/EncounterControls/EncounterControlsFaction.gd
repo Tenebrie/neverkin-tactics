@@ -42,18 +42,35 @@ func _pushOption(actorName: String, asset: PackedScene) -> void:
 	entry.asset = asset
 	options.push_back(entry)
 
-func _publishOptions():
+func getRows() -> Array[EncounterControlsActorRow]:
+	var rows: Array[EncounterControlsActorRow] = []
+	for entry in actorContainer.get_children():
+		if entry is EncounterControlsFactionActor actor:
+			rows.push_back(_makeRow(actor.count, actor.dropdown.selected))
+	return rows
+
+func setRows(rows: Array[EncounterControlsActorRow]) -> void:
 	for child in actorContainer.get_children():
 		child.queue_free()
+	for row in rows:
+		_addActorEntry(row.count, row.selected)
 
+func reset() -> void:
+	_publishOptions()
+
+func _publishOptions():
+	var rows: Array[EncounterControlsActorRow] = []
 	if faction == Actor.Faction.Kin:
-		_addActorEntry(1, 0)
-		_addActorEntry(1, 1)
-		_addActorEntry(1, 2)
+		rows = [_makeRow(count: 1, selected: 0), _makeRow(count: 1, selected: 1), _makeRow(count: 1, selected: 2)]
+	elif faction == Actor.Faction.Wolfpack:
+		rows = [_makeRow(count: 1, selected: 0), _makeRow(count: 2, selected: 1)]
+	setRows(rows)
 
-	if faction == Actor.Faction.Wolfpack:
-		_addActorEntry(1, 0)
-		_addActorEntry(2, 1)
+func _makeRow(count: int, selected: int) -> EncounterControlsActorRow:
+	var row = EncounterControlsActorRow.new()
+	row.count = count
+	row.selected = selected
+	return row
 
 func _onAddActorButtonPressed() -> void:
 	_addActorEntry()

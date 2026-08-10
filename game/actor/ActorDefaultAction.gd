@@ -23,4 +23,7 @@ func shouldAutoSelect() -> bool:
 		return false
 	if parent.Skills.isAnySkillBeingCast() or parent.actions.IsPerformingAnyAction():
 		return false
-	return parent.Skills.GetByIndex(0) != null
+	var defaultSkill = parent.Skills.GetByIndex(0)
+	if not defaultSkill:
+		return false
+	return Error.AsBoolean(defaultSkill.isCastable())

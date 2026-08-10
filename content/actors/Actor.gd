@@ -221,7 +221,7 @@ var originalCollisionMask = 0
 var originalCollisionLayer = 0
 
 func Destroy() -> void:
-	if isDead:
+	if isDead or not is_instance_valid(self):
 		return
 	isDead = true
 	originalCollisionMask = collision_mask

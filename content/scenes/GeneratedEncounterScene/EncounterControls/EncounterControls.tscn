@@ -154,10 +154,19 @@ unique_name_in_owner = true
 layout_mode = 2
 faction = 4
 
-[node name="GenerateNewEncounterButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=2006852981]
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer" unique_id=643570918]
 layout_mode = 2
+
+[node name="GenerateNewEncounterButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=2006852981]
+layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 text = "Generate New Encounter"
+
+[node name="ResetEncounterButton" type="Button" parent="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=32101921]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reset"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ToggleVisibilityButton" to="." method="_onToggleVisibilityButtonPressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer/SnapshotUndoButton" to="." method="_onUndoSnapshotPressed"]
@@ -165,4 +174,5 @@ text = "Generate New Encounter"
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/RestartEncounterButton" to="." method="_onRestartEncounterButtonPressed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer3/SizeInputX" to="." method="_onSizeInputXChanged"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer3/SizeInputY" to="." method="_onSizeInputYChanged"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/GenerateNewEncounterButton" to="." method="_onGenerateNewEncounterButtonPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer4/GenerateNewEncounterButton" to="." method="_onGenerateNewEncounterButtonPressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ControlsContainer/MarginContainer/VBoxContainer/HBoxContainer4/ResetEncounterButton" to="." method="_onResetEncounterButtonPressed"]

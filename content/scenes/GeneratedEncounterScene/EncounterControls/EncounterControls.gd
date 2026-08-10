@@ -9,7 +9,9 @@ signal generateNewEncounterRequested
 @onready var kinFactionControls: EncounterControlsFaction = %EncounterControlsFaction_Kin
 @onready var wolfpackFactionControls: EncounterControlsFaction = %EncounterControlsFaction_Wolfpack
 
-var arenaSize = Vector2i(16, 10)
+const DEFAULT_ARENA_SIZE = Vector2i(16, 10)
+
+var arenaSize = DEFAULT_ARENA_SIZE
 
 class FactionToSpawn:
 	var faction: Actor.Faction
@@ -19,6 +21,7 @@ func getFactionsToSpawn() -> Array[FactionToSpawn]:
 	return [kinFactionControls.collect(), wolfpackFactionControls.collect()]
 
 func _ready() -> void:
+	EncounterControlsPrefs.Load(self)
 	_updateSnapshotCount()
 	SnapshotManager.snapshotsChanged.connect(_updateSnapshotCount)
 	SnapshotManager.snapshotRestored.connect(_updateSnapshotCount)
@@ -42,7 +45,20 @@ func _onRestartEncounterButtonPressed() -> void:
 	SnapshotManager.RestoreEarliestSnapshot()
 
 func _onGenerateNewEncounterButtonPressed() -> void:
+	if kinFactionControls.getRows().is_empty():
+		MessageLog.PrintMessage("You need at least one playable character")
+		return
+
+	EncounterControlsPrefs.Save(self)
 	generateNewEncounterRequested.emit()
+
+func _onResetEncounterButtonPressed() -> void:
+	EncounterControlsPrefs.Reset()
+	arenaSize = DEFAULT_ARENA_SIZE
+	%SizeInputX.value = arenaSize.x
+	%SizeInputY.value = arenaSize.y
+	kinFactionControls.reset()
+	wolfpackFactionControls.reset()
 
 func _onSizeInputXChanged(value: float) -> void:
 	arenaSize.x = roundi(value)

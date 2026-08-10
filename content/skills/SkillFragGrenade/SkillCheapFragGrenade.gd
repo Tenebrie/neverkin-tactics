@@ -4,3 +4,4 @@ class_name SkillCheapFragGrenade
 func _ready() -> void:
 	super._ready()
 	definition.ChargesMaximum = 3
+	definition.Cooldown = 1
