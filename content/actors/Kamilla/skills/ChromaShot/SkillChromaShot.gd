@@ -45,9 +45,7 @@ func _prepare() -> void:
 
 func _cast(targets: Skill.TargetData) -> void:
 	var effect = SkillPistolShotEffect.new()
-	get_parent().add_child(effect)
-	effect.global_position = parent.global_position
-	effect.position.y += 0.5
+	parent.add_child(effect)
 
 	for i in shotCount:
 		if targets.perTelegraph[damageTelegraphs[i]].size() == 0:
@@ -65,12 +63,12 @@ func _cast(targets: Skill.TargetData) -> void:
 			var distance = furthest.global_position.distance_to(parent.global_position)
 			var furthestPoint = (targets.mousePoint - parent.global_position).normalized() * distance
 			var effectDuration = furthestPoint.length() / distance
-			effect.Play(furthestPoint, 0.2 * effectDuration)
+			effect.Play(furthestPoint, 0.05 * effectDuration)
 
 		if shotCount == NormalShotCount:
 			await get_tree().create_timer(0.15).timeout
 		else:
-			await get_tree().create_timer(0.06).timeout
+			await get_tree().create_timer(0.08).timeout
 
 func getChromaComponent() -> ChromaComponent:
 	return parent.GetComponent(ChromaComponent)

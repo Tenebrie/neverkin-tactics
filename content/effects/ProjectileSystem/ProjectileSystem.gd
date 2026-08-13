@@ -58,7 +58,7 @@ func _createProjectileTrail(theme: ProjectileTheme, from: Vector3, to: Vector3, 
 	var trail = VaporTrail.new()
 	trail.position = from
 	trail.size = def.widthSelector.call(index)
-	trail.emitting = true
+	trail.emitting = false
 	trail.num_points = def.pointCount
 	trail.update_interval = lingerTime / def.pointCount
 	trail.material = preload("res://addons/vaportrail/example/SmokyMaterial.tres")
@@ -69,18 +69,22 @@ func _createProjectileTrail(theme: ProjectileTheme, from: Vector3, to: Vector3, 
 	add_child(trail)
 
 	var direction = (from - to).normalized()
+	direction.y = 0.0
 	var sideways = Vector3(-direction.z, 0.0, direction.x)
 
-	var tween = create_tween()
-	tween.tween_method(func(t: float) -> void:
-		var pos = from.lerp(to, t)
-		pos -= sideways * arc * 4.0 * t * (1.0 - t)
-		trail.position = pos
-		trail.current_time = t
-	, 0.0, 1.0, travelTime).set_ease(def.tweenEaseType).set_trans(def.tweenTransitionType)
+	get_tree().process_frame.connect(func():
+		var tween = create_tween()
+		tween.tween_method(func(t: float) -> void:
+			var pos = from.lerp(to, t)
+			pos -= sideways * arc * 4.0 * t * (1.0 - t)
+			trail.position = pos
+			trail.current_time = t
+			trail.emitting = pos != from
+		, 0.0, 1.0, travelTime).set_ease(def.tweenEaseType).set_trans(def.tweenTransitionType)
 
-	tween.tween_callback(func() -> void:
-		trail.emitting = false
-	)
+		tween.tween_callback(func() -> void:
+			trail.emitting = false
+		)
+	, CONNECT_ONE_SHOT)
 
 	await get_tree().create_timer((travelTime + lingerTime) * 2).timeout
