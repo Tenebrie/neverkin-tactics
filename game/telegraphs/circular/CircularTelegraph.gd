@@ -20,9 +20,7 @@ func _ready() -> void:
 	super._ready()
 	updateRadius()
 
-func _process(_delta: float):
-	if IsLeaving:
-		return
+func applyGrowth():
 	decal.set_instance_shader_parameter(&"PROGRESS", growPercentage)
 
 func pollTargets():
@@ -53,10 +51,14 @@ func GatherContacts(mask: int, exclude: Array[RID] = []) -> Array[RaycastUtils.S
 #endregion
 
 func setColor(color: Color):
-	decal.set_instance_shader_parameter(&"COLOR_R", color.r)
-	decal.set_instance_shader_parameter(&"COLOR_G", color.g)
-	decal.set_instance_shader_parameter(&"COLOR_B", color.b)
-	decal.set_instance_shader_parameter(&"COLOR_A", color.a)
+	if color.a <= 0.0:
+		visible = false
+	else:
+		visible = true
+		decal.set_instance_shader_parameter(&"COLOR_R", color.r)
+		decal.set_instance_shader_parameter(&"COLOR_G", color.g)
+		decal.set_instance_shader_parameter(&"COLOR_B", color.b)
+		decal.set_instance_shader_parameter(&"COLOR_A", color.a)
 
 func cleanUp():
 	super.cleanUp()

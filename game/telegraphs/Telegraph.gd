@@ -32,7 +32,13 @@ var childIcon: TelegraphIcon
 @export var TargetValidator: Callable
 @export var IgnoredObstacleGroups: Array[StringName]
 
-var growPercentage: float = 0.0
+var growPercentage: float = 0.0:
+	set(value):
+		if value == growPercentage:
+			return
+		growPercentage = value
+		if isReady:
+			applyGrowth()
 var _targets: Array[Actor] = []
 var FirstTarget: Actor:
 	get:
@@ -48,6 +54,7 @@ var TargetIcons: Dictionary[Actor, TelegraphIcon]
 
 func _ready():
 	setColor(Tint)
+	applyGrowth()
 	definition.created.emit(self)
 
 @abstract func pollTargets() -> void
@@ -114,10 +121,8 @@ func refreshFilteredTargets():
 		Targets = []
 
 @abstract func setColor(color: Color) -> void
+@abstract func applyGrowth() -> void
 @abstract func IsPathable(agentSize: float) -> bool
-
-## Colliders overlapping this telegraph's query volume, sorted near-to-far. What "far" means
-## is per-shape: distance along the beam for a rect, distance from the center for a circle.
 @abstract func GatherContacts(mask: int, exclude: Array[RID] = []) -> Array[RaycastUtils.ShapeContact]
 
 signal cleaningStarted

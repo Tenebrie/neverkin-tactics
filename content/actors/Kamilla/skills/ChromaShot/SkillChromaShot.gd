@@ -34,7 +34,7 @@ func _prepare() -> void:
 			return actorVirtualHealth > 0
 		)
 		newTelegraph.addPostProcessor(func(telegraph):
-			if shotIndex >= shotCount:
+			if shotIndex != shotCount - 1:
 				telegraph.Tint = Color.TRANSPARENT
 		)
 		damageTelegraphs.push_back(newTelegraph)

@@ -17,7 +17,7 @@ func _ready():
 	updateSize()
 	updateOrigin()
 
-func _process(_delta: float):
+func applyGrowth():
 	decal.set_instance_shader_parameter(&"PROGRESS", growPercentage)
 
 func radius() -> float:
@@ -101,10 +101,14 @@ func pollTargets():
 	checkTargetsDiff()
 
 func setColor(color: Color):
-	decal.set_instance_shader_parameter(&"COLOR_R", color.r)
-	decal.set_instance_shader_parameter(&"COLOR_G", color.g)
-	decal.set_instance_shader_parameter(&"COLOR_B", color.b)
-	decal.set_instance_shader_parameter(&"COLOR_A", color.a)
+	if color.a <= 0.0:
+		visible = false
+	else:
+		visible = true
+		decal.set_instance_shader_parameter(&"COLOR_R", color.r)
+		decal.set_instance_shader_parameter(&"COLOR_G", color.g)
+		decal.set_instance_shader_parameter(&"COLOR_B", color.b)
+		decal.set_instance_shader_parameter(&"COLOR_A", color.a)
 
 func cleanUp():
 	super.cleanUp()

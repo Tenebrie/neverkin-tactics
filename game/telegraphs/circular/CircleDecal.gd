@@ -49,12 +49,17 @@ func _process(delta: float) -> void:
 		fadeValue -= float(delta) * (1.0 / fadeOutDuration)
 		fadeValue = clampf(fadeValue, 0.0, 1.0)
 		set_instance_shader_parameter(&"FADE", fadeValue)
+		if fadeValue <= 0.0:
+			fadingOut = false
+			visible = false
+			set_process(false)
 	elif fadingIn:
 		fadeValue += float(delta) * (1.0 / fadeInDuration)
 		set_instance_shader_parameter(&"FADE", fadeValue)
 		if fadeValue >= 1.0:
 			fadeValue = 1.0
 			fadingIn = false
+			set_process(false)
 
 func SetProgress(value: float) -> void:
 	set_instance_shader_parameter(&"PROGRESS", value)
@@ -69,11 +74,11 @@ func SetOuterWidth(value: float) -> void:
 	set_instance_shader_parameter(&"OUTER_WIDTH", value / 20.0)
 
 func cleanUp() -> void:
-	#fadeValue = 1.0
 	var selfPosition = global_position
 	get_parent().remove_child(self)
 	fadingIn = false
 	fadingOut = true
+	set_process(true)
 	Game.Scene.add_child(self)
 	global_position = selfPosition
 	await get_tree().create_timer(3.0).timeout
