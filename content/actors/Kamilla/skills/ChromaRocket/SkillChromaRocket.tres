@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SkillDefinition" format=3 uid="uid://dkl4y6sphyqr0"]
+
+[ext_resource type="Texture2D" uid="uid://cpuu8icm12nwe" path="res://content/actors/Kamilla/skills/ChromaRocket/SkillChromaShotIcon.png" id="1_sxsh5"]
+[ext_resource type="Script" uid="uid://bbecckeuc1ovf" path="res://game/skills/SkillDefinition.gd" id="2_ex742"]
+
+[resource]
+script = ExtResource("2_ex742")
+Name = "Chromatic Missile"
+Category = 1
+Description = "Fire an immaterial rocket at an enemy. Deal %{NormalDamage} damage and $push the first target hit up to %{NormalMetersPushed}m.
+
+Generates %chargesGenerated $Chroma Charge.
+
+$Fully Charged: Overcharge the projectile to explode on impact for %ChargedAoeDamage damage within %{ChargedAoeRadius}m. Also increase push distance to %{ChargedMetersPushed}m."
+IconTexture = ExtResource("1_sxsh5")
+ChargesMaximum = 1
+Cooldown = 1
+TargetingMaxRange = 7.0
+metadata/_custom_type_script = "uid://bbecckeuc1ovf"

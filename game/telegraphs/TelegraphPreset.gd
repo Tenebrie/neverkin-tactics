@@ -105,6 +105,28 @@ class PointArea extends TelegraphDefinition:
 		)
 		return self
 
+class ExplosionArea extends TelegraphDefinition:
+	func _init(radius: float):
+		Shape = Telegraph.Shape.Circle
+		Attachment = Telegraph.Attachment.None
+		CircleRadius = radius
+		fillFraction = 0.0
+
+		addPostProcessor(func(telegraph: CircularTelegraph):
+			if getInstance().Targets.is_empty():
+				telegraph.Tint = Color.TRANSPARENT
+				telegraph.global_position = Vector3(0, 100000, 0)
+				return
+
+			telegraph.Tint = TelegraphColor.DangerArea
+		)
+
+	func TargetingHostiles() -> ExplosionArea:
+		TargetFilters.push_back(func(actor: Actor, _telegraph: Telegraph) -> bool:
+			return ActorUtils.isTargetableBy(actor, ParentSkill.parent)
+		)
+		return self
+
 class MouseText extends TelegraphDefinition:
 	func _init(text: String):
 		Shape = Telegraph.Shape.Circle
@@ -119,6 +141,7 @@ class MouseText extends TelegraphDefinition:
 		)
 
 class ForcePush:
+	var currentTarget: Actor
 	var Travel: TelegraphDefinition
 	var Impact: TelegraphDefinition
 
@@ -147,6 +170,7 @@ class ForcePush:
 		Impact.collideWithObstacles()
 		Impact.Shape = Telegraph.Shape.Circle
 		Impact.IconPerTarget = preload("res://assets/icons/IconBonkVictim64.svg")
+		Impact.HealthThreat = 1
 		Impact.addProcessor(func(telegraph: CircularTelegraph):
 			if Hits.is_empty():
 				telegraph.Tint = Color.TRANSPARENT
@@ -162,6 +186,49 @@ class ForcePush:
 			telegraph.global_position.y -= 0.01
 			telegraph.radius = travel.width / 2.0
 		)
+
+	func setTargetFromSelector(targetSelector: func() -> Actor) -> ForcePush:
+		Travel.addProcessor(func(telegraph):
+			currentTarget = targetSelector.call()
+			if currentTarget:
+				telegraph.global_position = ActorUtils.flatPositionOf(currentTarget)
+		)
+		return self
+
+	func setDistanceFromSelector(distSelector: func() -> float) -> ForcePush:
+		Travel.addProcessor(func(telegraph: BeamTelegraph):
+			telegraph.definition.RectLength = distSelector.call()
+		)
+		return self
+
+	func setWidthFromSelector(widthSelector: func() -> float) -> ForcePush:
+		Travel.addProcessor(func(telegraph: BeamTelegraph):
+			telegraph.width = widthSelector.call()
+		)
+		return self
+
+	func setDirectionPushFromCaster() -> ForcePush:
+		Travel.addProcessor(func(telegraph):
+			var target = telegraph.ParentSkill.parent.global_position
+			target.y = telegraph.global_position.y
+			telegraph.look_at(target)
+			telegraph.rotate(Vector3.UP, deg_to_rad(180.0))
+		)
+		return self
+
+	func setHiddenWithoutTarget() -> ForcePush:
+		Travel.addPostProcessor(func(telegraph):
+			if not currentTarget:
+				telegraph.Tint = Color.TRANSPARENT
+		)
+		Impact.addPostProcessor(func(telegraph):
+			if not currentTarget:
+				telegraph.Tint = Color.TRANSPARENT
+		)
+		Travel.addTargetFilter(func(): return currentTarget != null)
+		Impact.addTargetFilter(func(): return currentTarget != null)
+
+		return self
 
 class CasterProjectile extends WorldProjectile:
 	func _init():

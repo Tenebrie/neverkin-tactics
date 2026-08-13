@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://2x22wr8axwri"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_6bun0"]
+
+[resource]
+script = ExtResource("1_6bun0")
+name = "Chroma (Weapon)"
+category = "Item"
+description = "(Description pending)"
+aliases = Array[String](["Chroma Charge", "Fully Charged"])
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

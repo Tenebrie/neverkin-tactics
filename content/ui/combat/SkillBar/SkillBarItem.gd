@@ -50,6 +50,9 @@ func _ready():
 	Skill.SignalBus.afterCast.connect(func(_t):
 		updateModulate()
 	)
+	ActorActions.SignalBus.castResolved.connect(func():
+		updateModulate()
+	)
 
 func onPortraitClick() -> void:
 	if TrackedSkill == null or not TrackedSkill.isVisible():

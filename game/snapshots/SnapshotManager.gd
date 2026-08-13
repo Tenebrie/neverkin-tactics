@@ -32,7 +32,7 @@ func _ready() -> void:
 				_pruneRedoHistory()
 				snapshotsChanged.emit()
 	)
-	ActorActions.SignalBus.allCastsFinished.connect(func():
+	ActorActions.SignalBus.castResolved.connect(func():
 		if TurnManager.Instance.activeFaction == Actor.PlayerFaction:
 			CreateSnapshot()
 	)
@@ -66,9 +66,9 @@ func CreateSnapshot(force: bool = false) -> Snapshot:
 	var actorCount = snapshot.actors.values().filter(func(value): return value != null).size()
 	var immutablesCount = snapshot.actors.size() - actorCount
 	if megabytesConsumed > 1.0:
-		Log.info("Snapshot created: %.1fMB of memory (%d actors, %d immutables)"%[megabytesConsumed, actorCount, immutablesCount])
+		Log.debug("Snapshot created: %.1fMB of memory (%d actors, %d immutables)"%[megabytesConsumed, actorCount, immutablesCount])
 	else:
-		Log.info("Snapshot created: %.1fKB of memory (%d actors, %d immutables)"%[kilobytesConsumed, actorCount, immutablesCount])
+		Log.debug("Snapshot created: %.1fKB of memory (%d actors, %d immutables)"%[kilobytesConsumed, actorCount, immutablesCount])
 
 	_pruneRedoHistory()
 

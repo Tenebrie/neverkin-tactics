@@ -125,6 +125,9 @@ func GetByName(skillName: String) -> Skill:
 func GetByKeyword(keyword: KeywordDefinition) -> Skill:
 	return activeSkillGroup.GetByKeyword(keyword)
 
+func GetAllByKeyword(keyword: KeywordDefinition) -> Array[Skill]:
+	return activeSkillGroup.GetAllByKeyword(keyword)
+
 func Simulate(skillScript: GDScript[Skill], cb: func(skill: Skill) -> void) -> void:
 	var skill = skillScript.new()
 	simulationSkillGroup.Add(skill)
@@ -250,6 +253,16 @@ class ControlGroup extends Node3D:
 				return skill
 
 		return null
+
+	func GetAllByKeyword(keyword: KeywordDefinition) -> Array[Skill]:
+		var skills: Array[Skill]
+		for child in get_children():
+			if child is not Skill skill:
+				continue
+			if skill.definition.keywords.has(keyword):
+				skills.push_back(skill)
+
+		return skills
 
 	func Remove(skill: Skill) -> void:
 		remove_child(skill)

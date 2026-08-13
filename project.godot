@@ -37,6 +37,7 @@ ProximityVisualizationLayer="*uid://blafccyolmd7y"
 KeywordManagerInstance="*uid://r6w3dqxegpf3"
 SoundManagerInstance="*uid://b6pnvjt3k267k"
 SnapshotManager="*uid://b55acymdvlw1b"
+RegenSpamTest="*res://regen_spam_test.gd"
 
 [debug]
 

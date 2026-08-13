@@ -5,6 +5,8 @@ const StutterStepMovement = 1.0
 
 signal ActionPointsChanged(current: int)
 signal MovementPointsChanged(current: float)
+signal castCommitted(skill: Skill)
+signal castResolved(skill: Skill)
 
 var ActionPointsUsed: int:
 	get: return _data.actionPointsUsed
@@ -127,6 +129,7 @@ func GetMovementActionPointCost(value: float) -> int:
 var isLockedInTargeting = false
 var precastsRemaining: int = 0
 var recastsRemaining: int = 0
+var recastsTotal: int = 0
 var ActionQueue: ActorActionQueue = ActorActionQueue.new()
 
 func isFreeRecast() -> bool:
@@ -196,7 +199,8 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		else:
 			isLockedInTargeting = false
 			skill.cleanUp.emit()
-			SignalBus.allCastsFinished.emit(parent, skill)
+			castResolved.emit(skill)
+			SignalBus.castResolved.emit(parent, skill)
 		return
 
 	var validationResult: Variant = skill.isCastable()
@@ -216,6 +220,8 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 		return
 
 	recastsRemaining = skill.getRecastCount()
+	recastsTotal = recastsRemaining
+	castCommitted.emit(skill)
 	SignalBus.castCommitted.emit(parent, skill)
 
 	if skill.HealthCost > 0:
@@ -233,7 +239,8 @@ func IssueOrder_ConfirmCast(skill: Skill, targets: Skill.TargetData):
 	else:
 		isLockedInTargeting = false
 		skill.cleanUp.emit()
-		SignalBus.allCastsFinished.emit(parent, skill)
+		castResolved.emit(skill)
+		SignalBus.castResolved.emit(parent, skill)
 
 func IssueOrder_Stop():
 	if ActionQueue.Empty():
@@ -275,4 +282,4 @@ class SignalBusImplementation:
 	signal ActionPointsChanged(actor: Actor, current: int)
 	signal ActionPointsConsumedPermanently(actor: Actor, value: int)
 	signal castCommitted(actor: Actor, skill: Skill)
-	signal allCastsFinished(actor: Actor, skill: Skill)
+	signal castResolved(actor: Actor, skill: Skill)

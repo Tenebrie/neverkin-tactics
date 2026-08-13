@@ -98,6 +98,11 @@ func dealSkillDamage(targets: Skill.TargetData):
 	if targets.damageInstances.has(parent):
 		applyDamageInstance(targets.damageInstances[parent])
 
+func dealSkillTelegraphDamage(targets: Skill.TargetData, def: TelegraphDefinition):
+	var instances = targets.damageInstancesPerTelegraph.get(def)
+	if instances?.has(parent):
+		applyDamageInstance(instances[parent])
+
 func restoreHealth(value: int):
 	_data.healthDamageTaken = clampi(healthDamageTaken - value, 0, healthMaximum)
 	healthChanged.emit(healthCurrent)

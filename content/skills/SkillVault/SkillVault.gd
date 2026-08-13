@@ -10,7 +10,7 @@ func _prepare() -> void:
 		telegraph.radius = parent.physicalSize
 	)
 
-	landingAreaTelegraph.Processors.push_back(func(telegraph: Telegraph):
+	landingAreaTelegraph.PostProcessors.push_back(func(telegraph: Telegraph):
 		var targetTint = Color.TRANSPARENT
 		if targetedActor:
 			var partnerPosition = ActorUtils.flatPositionOf(targetedActor)

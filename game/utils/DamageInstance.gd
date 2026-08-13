@@ -30,6 +30,19 @@ static func ForSkillCast(target: Actor, targetData: Skill.TargetData) -> DamageI
 		instance.Value -= maxi(0, def.HealthPromiseSelector.call(target))
 	return instance
 
+static func ForSkillCastTelegraph(target: Actor, def: TelegraphDefinition, targetData: Skill.TargetData) -> DamageInstance:
+	var instance = DamageInstance.new()
+	instance.sourceSkill = targetData.sourceSkill
+	instance.sourceActor = targetData.sourceSkill.parent
+
+	var telegraphTargets = targetData.perTelegraph[def]
+	if not telegraphTargets.has(target):
+		return instance
+
+	instance.Value += maxi(0, def.HealthThreatSelector.call(target))
+	instance.Value -= maxi(0, def.HealthPromiseSelector.call(target))
+	return instance
+
 static func ForAggroGeneration(sourceSkill: Skill, value: int) -> DamageInstance:
 	var instance = DamageInstance.new()
 	instance.sourceSkill = sourceSkill

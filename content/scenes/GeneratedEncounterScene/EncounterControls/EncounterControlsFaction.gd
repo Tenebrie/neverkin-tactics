@@ -51,6 +51,7 @@ func getRows() -> Array[EncounterControlsActorRow]:
 
 func setRows(rows: Array[EncounterControlsActorRow]) -> void:
 	for child in actorContainer.get_children():
+		actorContainer.remove_child(child)
 		child.queue_free()
 	for row in rows:
 		_addActorEntry(row.count, row.selected)

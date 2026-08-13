@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="KeywordDefinition" format=3 uid="uid://cucvkt3iaolip"]
+
+[ext_resource type="Script" uid="uid://cn1ot2ynri57j" path="res://game/keywords/KeywordDefinition.gd" id="1_1rv1j"]
+
+[resource]
+script = ExtResource("1_1rv1j")
+name = "Forced Movement"
+category = "Mechanic"
+description = "Forcefully move the target in a specified direction, representing a powerful strike, a throw or some other action the enemy is not able to defend against.
+
+[color=orange]Push[/color] effects move the target away from the caster or projectile, while [color=orange]Pull[/color] effects are the opposite.
+
+If a forcefully moved enemy collides with another obstacle or enemy, they both take at least [color=orange]1[/color] damage and may suffer other negative effects."
+aliases = Array[String](["Push", "Pull"])
+metadata/_custom_type_script = "uid://cn1ot2ynri57j"

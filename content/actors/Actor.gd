@@ -191,7 +191,7 @@ func restoreSnapshot(snapshot: Variant):
 		if not typedSnapshot.components.has(component.get_instance_id()):
 			continue
 		var componentSnapshot = typedSnapshot.components[component.get_instance_id()]
-		if not componentSnapshot:
+		if componentSnapshot == null:
 			continue
 		component.restoreSnapshot(componentSnapshot)
 #endregion

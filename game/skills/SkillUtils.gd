@@ -30,4 +30,6 @@ static func forceMoveTo(actor: Actor, destination: Vector3, speed: float = 10.0,
 
 	await tween.finished
 	actor.collision_layer = collision
+	print("Restore collision!")
+	print(collision)
 	NavmeshManager.Instance.rebakeNavmeshForCurrentActor()

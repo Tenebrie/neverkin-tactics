@@ -62,12 +62,25 @@ func Unfreeze() -> void:
 	IsFrozen = false
 	frozenPositions = {}
 
+var lastUpdateAt = 0
+var lastMousePosition = Vector2.ZERO
+var lastCasterPosition = Vector3.ZERO
 func _process(_delta: float) -> void:
 	if IsFrozen:
 		for telegraph in telegraphs:
 			if frozenPositions.has(telegraph):
 				telegraph.global_position = frozenPositions[telegraph]
 		return
+
+	var currentTime = Time.get_ticks_msec()
+	var currentMouse = get_viewport().get_mouse_position()
+	var currentCaster = parent.global_position
+	if currentTime - lastUpdateAt < 16 and currentMouse.distance_to(lastMousePosition) < 1 and currentCaster.distance_to(lastCasterPosition) < 0.05:
+		return
+
+	lastUpdateAt = currentTime
+	lastMousePosition = currentMouse
+	lastCasterPosition = currentCaster
 
 	for telegraph in telegraphs:
 		var target = telegraph.ParentSkill.parent.InputProvider.CursorPosition
@@ -103,6 +116,7 @@ func resetState() -> void:
 	for telegraph in telegraphs:
 		telegraph.cleanUp()
 	telegraphs = []
+	lastUpdateAt = 0
 
 func onSkillSelected(skill: Skill):
 	resetState()

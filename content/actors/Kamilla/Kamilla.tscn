@@ -4,16 +4,17 @@
 [ext_resource type="Resource" uid="uid://86yotqi3o76i" path="res://content/actors/Kamilla/KamillaDefinition.tres" id="2_q0caw"]
 [ext_resource type="Texture2D" uid="uid://dvn23v5qlr8h2" path="res://content/actors/Kamilla/kamilla.Token.webp" id="2_s4ik7"]
 [ext_resource type="Script" uid="uid://dyb56fck8ougp" path="res://game/actor/ActorSounds.gd" id="5_cacnw"]
+[ext_resource type="Script" uid="uid://cxrtxo6ljsjha" path="res://content/actors/Kamilla/components/ChromaComponent.gd" id="6_f3ktg"]
 [ext_resource type="Script" uid="uid://dok717qosedbe" path="res://game/actor/behaviour/ActorBehaviourPlayerControlled.gd" id="8_o02g8"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cacnw"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7wrhd"]
 resource_local_to_scene = true
 transparency = 1
 albedo_texture = ExtResource("2_s4ik7")
 texture_repeat = false
 point_size = 111.1
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_f3ktg"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_mlvxv"]
 resource_local_to_scene = true
 height = 0.2
 radius = 0.4
@@ -22,10 +23,10 @@ radius = 0.4
 definition = ExtResource("2_q0caw")
 
 [node name="TokenMeshInstance3D" parent="." index="0" unique_id=405721016]
-material_override = SubResource("StandardMaterial3D_cacnw")
+material_override = SubResource("StandardMaterial3D_7wrhd")
 
 [node name="CollisionShape3D" parent="." index="1" unique_id=1364732436]
-shape = SubResource("CylinderShape3D_f3ktg")
+shape = SubResource("CylinderShape3D_mlvxv")
 
 [node name="PlayerController" type="Node" parent="." index="10" unique_id=40309796]
 script = ExtResource("8_o02g8")
@@ -36,3 +37,6 @@ script = ExtResource("5_cacnw")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="ActorSounds" index="0" unique_id=968926219]
 doppler_tracking = 1
+
+[node name="ChromaComponent" type="Node" parent="." index="19" unique_id=52400828]
+script = ExtResource("6_f3ktg")

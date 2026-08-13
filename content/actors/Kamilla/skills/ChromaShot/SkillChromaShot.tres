@@ -5,13 +5,14 @@
 
 [resource]
 script = ExtResource("1_tjk31")
-Name = "Chroma Shot"
+Name = "Burst of Color"
 Category = 1
-Description = "Release a short burst of fire from your rifle towards an enemy. Deal %damagePerShot damage to the target %shotCount times and generate $Heat per shot.
+Description = "Release a short burst of fire from your rifle towards an enemy. Deal %damagePerShot damage to the target %NormalShotCount times.
 
-All charges replenish at the end of your turn."
+Generates %chargesGenerated $Chroma Charge.
+
+$Fully Charged: Shoot %ChargedShotCount times instead."
 IconTexture = ExtResource("1_kfe7t")
-ChargesCost = 1
-ChargesMaximum = 3
+ChargesMaximum = 1
 TargetingMaxRange = 10.0
 metadata/_custom_type_script = "uid://bbecckeuc1ovf"

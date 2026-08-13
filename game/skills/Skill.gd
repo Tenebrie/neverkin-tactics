@@ -2,6 +2,7 @@
 class_name Skill
 
 signal selected
+signal castCommitted()
 signal beforeCast(targets: TargetData)
 signal afterCast(targets: TargetData)
 signal cleanUp
@@ -30,6 +31,11 @@ func _ready() -> void:
 	parent.Skills.BeforeSelectedSkillChanged.connect(func(current, previous):
 		if current == self and previous != self:
 			cleanUp.emit()
+	)
+
+	parent.actions.castCommitted.connect(func(skill):
+		if skill == self:
+			castCommitted.emit()
 	)
 
 	beforeCast.connect(func():
@@ -146,9 +152,11 @@ var chargesUsed: int:
 	get: return _data.chargesUsed
 	set(v): _data.chargesUsed = v
 
-var chargesLeft:
+var chargesLeft: int:
 	get:
 		return definition.ChargesMaximum - chargesUsed
+	set(v):
+		chargesUsed = clampi(definition.ChargesMaximum - v, 0, definition.ChargesMaximum)
 
 var chargesMaximum:
 	get:
@@ -196,6 +204,7 @@ class TargetData:
 	## Actors matching normal telegraphs
 	var actors: Array[Actor]
 	var damageInstances: Dictionary[Actor, DamageInstance]
+	var damageInstancesPerTelegraph: Dictionary[TelegraphDefinition, Dictionary[Actor, DamageInstance]]
 
 	## World point under cursor
 	var mousePoint: Vector3
@@ -233,6 +242,14 @@ class TargetData:
 
 		for target in actor.telegraphs.Targets:
 			targetData.damageInstances[target] = DamageInstance.ForSkillCast(target, targetData)
+
+		for telegraph in actor.telegraphs.telegraphs:
+			var def = telegraph.definition
+			var targets = actor.telegraphs.TargetsPerTelegraphDefinition.get(def, [])
+			var dict: Dictionary[Actor, DamageInstance]
+			for target in targets:
+				dict.set(target, DamageInstance.ForSkillCastTelegraph(target, def, targetData))
+			targetData.damageInstancesPerTelegraph.set(def, dict)
 
 		return targetData
 
